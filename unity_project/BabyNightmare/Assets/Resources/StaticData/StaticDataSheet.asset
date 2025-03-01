@@ -1,0 +1,168 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1074520cc557b4e5a840683acafa1145, type: 3}
+  m_Name: StaticDataSheet
+  m_EditorClassIdentifier: 
+  WaveDataList:
+  - ID: 1
+    Stage: 1
+    Wave: 1
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
+  - ID: 2
+    Stage: 1
+    Wave: 2
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Stage: 1
+    Wave: 3
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
+  EquipmentDataList:
+  - ID: 1001
+    Grade: 0
+    Name: Pacifier
+    Level: 1
+    Damage: 5
+    CoolTime: 3
+    SlotDataID: 1
+  - ID: 1002
+    Grade: 0
+    Name: Pacifier
+    Level: 2
+    Damage: 7
+    CoolTime: 3
+    SlotDataID: 1
+  - ID: 1003
+    Grade: 0
+    Name: Pacifier
+    Level: 3
+    Damage: 15
+    CoolTime: 3
+    SlotDataID: 1
+  - ID: 1004
+    Grade: 0
+    Name: Fork
+    Level: 1
+    Damage: 5
+    CoolTime: 3
+    SlotDataID: 2
+  - ID: 1005
+    Grade: 0
+    Name: Fork
+    Level: 2
+    Damage: 12
+    CoolTime: 3
+    SlotDataID: 2
+  - ID: 1006
+    Grade: 0
+    Name: Fork
+    Level: 3
+    Damage: 24
+    CoolTime: 3
+    SlotDataID: 2
+  - ID: 1007
+    Grade: 0
+    Name: TeddyBear
+    Level: 1
+    Damage: 15
+    CoolTime: 3
+    SlotDataID: 3
+  - ID: 1008
+    Grade: 0
+    Name: TeddyBear
+    Level: 2
+    Damage: 30
+    CoolTime: 3
+    SlotDataID: 3
+  - ID: 1009
+    Grade: 0
+    Name: TeddyBear
+    Level: 3
+    Damage: 50
+    CoolTime: 3
+    SlotDataID: 3
+  EquipmentProbDataList:
+  - ID: 1
+    Group: 101
+    EquipmentID: 1001
+    Prob: 1
+  - ID: 2
+    Group: 101
+    EquipmentID: 1004
+    Prob: 1
+  - ID: 3
+    Group: 101
+    EquipmentID: 1006
+    Prob: 1
+  - ID: 4
+    Group: 102
+    EquipmentID: 1001
+    Prob: 1
+  - ID: 5
+    Group: 102
+    EquipmentID: 1002
+    Prob: 1
+  - ID: 6
+    Group: 102
+    EquipmentID: 1004
+    Prob: 1
+  - ID: 7
+    Group: 102
+    EquipmentID: 1007
+    Prob: 1
+  EnemyDataList:
+  - ID: 101
+    Name: Sullivan
+    Damage: 4
+    Health: 40
+    Move_Speed: 3
+    Attack_Interval: 3
+  - ID: 102
+    Name: Mike
+    Damage: 3
+    Health: 45
+    Move_Speed: 4
+    Attack_Interval: 2.5
+  - ID: 103
+    Name: Roz
+    Damage: 10
+    Health: 60
+    Move_Speed: 2.5
+    Attack_Interval: 3.5
+  EnemySpawnDataList:
+  - ID: 1
+    Group: 101
+    EnemyID: 101
+    Prob: 5
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+    Prob: 4
+  - ID: 1
+    Group: 101
+    EnemyID: 103
+    Prob: 1
+  SlotDataList:
+  - ID: 1
+    Rows: 2
+    Columns: 1
+    EnableList: 0101
+  - ID: 2
+    Rows: 1
+    Columns: 2
+    EnableList: 0101
+  - ID: 3
+    Rows: 2
+    Columns: 2
+    EnableList: 01010001
