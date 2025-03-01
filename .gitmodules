@@ -1,0 +1,3 @@
+[submodule "Assets/Supercent/Util"]
+	path = Assets/Supercent/Util
+	url = https://github.com/supercent-io/Supercent_Util.git
