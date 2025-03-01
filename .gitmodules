@@ -1,3 +1,6 @@
-[submodule "Assets/Supercent/Util"]
-	path = Assets/Supercent/Util
+[submodule "unity_project/BabyNightmare/Asset/Supercent/UI"]
+	path = unity_project/BabyNightmare/Asset/Supercent/UI
+	url = https://github.com/supercent-io/Supercent_UI.git
+[submodule "unity_project/BabyNightmare/Asset/Supercent/Util"]
+	path = unity_project/BabyNightmare/Asset/Supercent/Util
 	url = https://github.com/supercent-io/Supercent_Util.git
