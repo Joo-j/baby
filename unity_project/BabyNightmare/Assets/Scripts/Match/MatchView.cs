@@ -86,7 +86,7 @@ namespace BabyNightmare.Match
             _fightBTN.gameObject.SetActive(false);
 
             _outside.RemoveAll();
-            _inventory.StartCoolDownLoop(_context.OnCoolDown);
+            _inventory.StartCoolDown(_context.OnCoolDown);
 
             _context.StartWave?.Invoke();
         }

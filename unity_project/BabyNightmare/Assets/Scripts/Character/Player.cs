@@ -67,7 +67,10 @@ namespace BabyNightmare.Character
                 var factor = elapsed / duration;
 
                 if (null == targetTF)
+                {
+                    Destroy(objTF.gameObject);
                     yield break;
+                }
 
                 var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
