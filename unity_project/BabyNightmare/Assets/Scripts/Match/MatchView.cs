@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
+using BabyNightmare.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,8 +37,7 @@ namespace BabyNightmare.Match
     {
         [SerializeField] private Canvas _canvas;
         [SerializeField] private RawImage _fieldIMG;
-        [SerializeField] private Image _progressIMG;
-        [SerializeField] private TextMeshProUGUI _waveTMP;
+        [SerializeField] private SimpleProgress _waveProgress;
         [SerializeField] private RectTransform _topRTF;
         [SerializeField] private RectTransform _bottomRTF;
         [SerializeField] private RectTransform _bagViewRTF;
@@ -63,8 +63,7 @@ namespace BabyNightmare.Match
 
         public void RefreshWave(int curWave, int maxWave)
         {
-            _waveTMP.text = $"{curWave}/{maxWave}";
-            _progressIMG.fillAmount = curWave / maxWave;
+            _waveProgress.Refresh(curWave, maxWave, false);
             _rerollBTN.gameObject.SetActive(true);
             _fightBTN.gameObject.SetActive(true);
             _inventory.StopCoolDown();
