@@ -83,15 +83,15 @@ MonoBehaviour:
   - ID: 101
     Name: Sullivan
     Damage: 4
-    Health: 40
+    Health: 50
     Attack_Interval: 3
-    Move_Step_Duration: 1
-    Move_Step_Speed: 4
-    Stop_Step_Duration: 1
+    Move_Step_Duration: 1.2
+    Move_Step_Speed: 2
+    Stop_Step_Duration: 1.2
   - ID: 102
     Name: Mike
     Damage: 3
-    Health: 45
+    Health: 25
     Attack_Interval: 2.5
     Move_Step_Duration: 0.8
     Move_Step_Speed: 3
