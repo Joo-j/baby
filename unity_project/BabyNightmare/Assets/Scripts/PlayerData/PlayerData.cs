@@ -8,7 +8,45 @@ namespace BabyNightmare
     {
         public int Stage = 1;
         public float Health = 100;
-        public bool[,] EnableSlotArr = new bool[3, 3] { { true, true, true }, { true, true, true }, { true, true, true } };
+        private int _coin = 0;
+        private int _gem = 0;
+
+
+        public class ChangedCoinEvent : UnityEngine.Events.UnityEvent<int> { }
+        public ChangedCoinEvent OnChangedCoinEvent { get; private set; } = new ChangedCoinEvent();
+
+        public int Coin
+        {
+            get => _coin;
+            set
+            {
+                _coin = value;
+                if (_coin < 0)
+                    _coin = 0;
+
+                OnChangedGemEvent?.Invoke(_coin);
+            }
+        }
+
+
+
+        public class ChangedGemEvent : UnityEngine.Events.UnityEvent<int> { }
+        public ChangedGemEvent OnChangedGemEvent { get; private set; } = new ChangedGemEvent();
+
+        public int Gem
+        {
+            get => _gem;
+            set
+            {
+                _gem = value;
+                if (_gem < 0)
+                    _gem = 0;
+
+                OnChangedGemEvent?.Invoke(_gem);
+            }
+        }
+
+
 
         public void Init()
         {
