@@ -16,5 +16,6 @@ namespace BabyNightmare.StaticData
         public float Move_Step_Duration;
         public float Move_Step_Speed;
         public float Stop_Step_Duration;
+        public float Attack_Radius;
     }
 }

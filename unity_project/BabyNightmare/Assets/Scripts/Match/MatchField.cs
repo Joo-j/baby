@@ -62,9 +62,8 @@ namespace BabyNightmare.Match
             for (var i = 0; i < enemyDataList.Count; i++)
             {
                 var data = enemyDataList[i];
-                var res = Resources.Load<EnemyBase>($"{PATH_ENEMY}{data.Name}");
-                var enemy = GameObject.Instantiate(res, _enemySpawnTF);
-                var enemyContext = new EnemyContext(data, _playerTF, () => OnDieEnemy(enemy));
+                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTF);
+                var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy));
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);

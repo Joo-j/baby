@@ -6,6 +6,12 @@ using UnityEngine;
 
 namespace BabyNightmare.Character
 {
+    public interface ICharacter
+    {
+        public Transform TF { get; }
+        public void ReceiveAttack(float damage);
+    }
+
     public interface ICharacterContext
     {
         public float Health { get; }

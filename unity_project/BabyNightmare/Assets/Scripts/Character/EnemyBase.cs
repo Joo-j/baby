@@ -9,7 +9,7 @@ namespace BabyNightmare.Character
     public class EnemyContext : ICharacterContext
     {
         public EnemyData EnemyData { get; }
-        public Transform TargetTF { get; }
+        public ICharacter Player { get; }
         public Action OnDie { get; }
 
         public float Health { get; }
@@ -17,12 +17,12 @@ namespace BabyNightmare.Character
         public EnemyContext
         (
             EnemyData enemyData,
-            Transform targetTF,
+            ICharacter player,
             Action onDie
         )
         {
             EnemyData = enemyData;
-            TargetTF = targetTF;
+            Player = player;
             OnDie = onDie;
 
             Health = enemyData.Health;
@@ -54,24 +54,25 @@ namespace BabyNightmare.Character
 
         private IEnumerator Co_IntervalMove()
         {
-            var targetTF = _context.TargetTF;
+            var player = _context.Player;
             var moveStepDuration = _context.EnemyData.Move_Step_Duration;
             var moveStepSpeed = _context.EnemyData.Move_Step_Speed;
             var stopStepDuration = _context.EnemyData.Stop_Step_Duration;
+            var attackRadius = _context.EnemyData.Attack_Radius;
 
             while (true)
             {
                 var elapsed = 0f;
                 var startPos = transform.position;
-                var dir = (targetTF.position - startPos).normalized;
+                var dir = (player.TF.position - startPos).normalized;
 
-                var moveDist = moveStepSpeed * moveStepDuration;
-                var targetPos = startPos + dir * moveDist;
+                var stepDist = moveStepSpeed * moveStepDuration;
+                var targetPos = startPos + dir * stepDist;
 
-                var dist = Vector3.Distance(startPos, targetTF.position);
-                if (dist < moveDist)
+                var totalDist = Vector3.Distance(startPos, player.TF.position);
+                if (totalDist - attackRadius < stepDist)// 공격 범위 바깥에서 멈추도록 보정
                 {
-                    targetPos = targetTF.position;
+                    targetPos = player.TF.position - dir * attackRadius;
                 }
 
                 while (elapsed < moveStepDuration)
@@ -80,26 +81,37 @@ namespace BabyNightmare.Character
                     elapsed += Time.deltaTime;
                     var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
                     transform.position = Vector3.Lerp(startPos, targetPos, factor);
+
+                    if (Vector3.Distance(transform.position, player.TF.position) <= 0.1f)
+                    {
+                        transform.position = player.TF.position;
+                        StartAttack();
+                        yield break;
+                    }
                 }
 
                 yield return CoroutineUtil.WaitForSeconds(stopStepDuration);
             }
         }
-        private void StartAttack(Player player)
+        private void StartAttack()
         {
             if (null != _coAct)
                 StopCoroutine(_coAct);
 
-            var interval = _context.EnemyData.Attack_Interval;
 
-            _coAct = StartCoroutine(Co_Attack(player, interval));
+            _coAct = StartCoroutine(Co_Attack());
         }
 
-        private IEnumerator Co_Attack(Player player, float interval)
+        private IEnumerator Co_Attack()
         {
+            var interval = _context.EnemyData.Attack_Interval;
+            var player = _context.Player;
+
             while (true)
             {
                 yield return new WaitForSeconds(interval);
+
+                _animator.Play(HASH_ANI_ATTACK);
 
                 var damage = _context.EnemyData.Damage;
                 player.ReceiveAttack(damage);
@@ -109,14 +121,6 @@ namespace BabyNightmare.Character
         public override void Die()
         {
             _context.OnDie?.Invoke();
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (false == other.TryGetComponent<Player>(out var player))
-                return;
-
-            StartAttack(player);
         }
     }
 }
