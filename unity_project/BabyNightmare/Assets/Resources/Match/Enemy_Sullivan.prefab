@@ -141,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 0}
-  _renderer: {fileID: 0}
+  _animator: {fileID: 884783193645212740}
+  _renderer: {fileID: 3559445806318282128}
   _hpTF: {fileID: 282789300057083436}
   _moveCurve:
     serializedVersion: 2
@@ -499,5 +499,15 @@ PrefabInstance:
 --- !u!4 &272610412633242770 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3545723726826389570, guid: 1bb36d53197d04c2792714201b19dfd0, type: 3}
+  m_PrefabInstance: {fileID: 3673935951659990224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &884783193645212740 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4520225240257632404, guid: 1bb36d53197d04c2792714201b19dfd0, type: 3}
+  m_PrefabInstance: {fileID: 3673935951659990224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &3559445806318282128 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 259449914065426752, guid: 1bb36d53197d04c2792714201b19dfd0, type: 3}
   m_PrefabInstance: {fileID: 3673935951659990224}
   m_PrefabAsset: {fileID: 0}
