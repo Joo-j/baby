@@ -51,7 +51,7 @@ namespace BabyNightmare.Match
             var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
             var matchViewContext = new MatchViewContext(_matchField.RT, initEM, Reroll, OnStartWave, _matchField.AttackEnemy);
             _matchView.Init(matchViewContext);
-            _matchView.RefreshWave(_currentWave + 1, _maxWave);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave, true);
 
             Reroll();
         }
@@ -117,7 +117,7 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            _matchView.RefreshWave(_currentWave + 1, _maxWave);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave, false);
         }
 
         private List<EquipmentData> Reroll()
