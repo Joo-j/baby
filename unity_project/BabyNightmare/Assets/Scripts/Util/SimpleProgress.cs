@@ -8,18 +8,27 @@ namespace BabyNightmare.Util
 {
     public class SimpleProgress : MonoBehaviour
     {
+        [SerializeField] private Image _bgIMG;
         [SerializeField] private Image _progressIMG;
         [SerializeField] private TextMeshProUGUI _progressTMP;
         [SerializeField] private float _fillDuration = 1f;
 
         private Coroutine _coFill = null;
+        private RectTransform _progressRTF = null;
+        private Vector2 _bgSize = default;
+
+        private void Awake()
+        {
+            _progressRTF = _progressIMG.rectTransform;
+            _bgSize = _bgIMG.rectTransform.rect.size;
+        }
 
         public void Refresh(float current, float max, bool immediate)
         {
             if (true == immediate)
             {
                 _progressTMP.text = $"{current}/ {max}";
-                _progressIMG.fillAmount = current / max;
+                _progressRTF.sizeDelta = new Vector2(Mathf.Lerp(0, _bgSize.x, current / max), _bgSize.y);
                 return;
             }
 
@@ -32,18 +41,17 @@ namespace BabyNightmare.Util
         private IEnumerator Co_Fill(float current, float max)
         {
             var elapsed = 0f;
-
-            var startAmount = _progressIMG.fillAmount;
-            var targetAmount = current / max;
+            var startSize = _progressRTF.sizeDelta;
+            var targetSize = new Vector2(Mathf.Lerp(0, _bgSize.x, current / max), _bgSize.y);
             while (elapsed < _fillDuration)
             {
                 yield return null;
                 elapsed += Time.deltaTime;
                 var factor = elapsed / _fillDuration;
-                _progressIMG.fillAmount = Mathf.Lerp(startAmount, targetAmount, factor);
+                _progressRTF.sizeDelta = Vector2.Lerp(startSize, targetSize, factor);
             }
 
-            _progressIMG.fillAmount = targetAmount;
+            _progressRTF.sizeDelta = targetSize;
             _progressTMP.text = $"{current} / {max}";
 
             _coFill = null;

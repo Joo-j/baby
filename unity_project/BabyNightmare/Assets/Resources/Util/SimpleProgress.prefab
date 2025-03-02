@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4948268987589365394}
   - component: {fileID: 3714852751113813838}
   - component: {fileID: 212549452827448073}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: IMG_Progress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32,11 +32,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4911859585667069030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 2, y: 0.8}
+  m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3714852751113813838
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -58,15 +58,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 3
+  m_Sprite: {fileID: 21300000, guid: 92efe4372f8c1474c9869282a25cdc80, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 8778283402821709674}
   - component: {fileID: 3413220310399649628}
   - component: {fileID: 2805253706641668072}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,10 +107,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 4911859585667069030}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 2, y: 0.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3413220310399649628
 CanvasRenderer:
@@ -134,14 +134,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 3
+  m_Sprite: {fileID: 21300000, guid: b4a848b48429c464895120a216fe82de, type: 3}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 2317554252398321973}
   - component: {fileID: 388402144650346652}
   - component: {fileID: 3273095020475951253}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: SimpleProgress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,10 +187,10 @@ RectTransform:
   - {fileID: 1043872736746393041}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.4000244}
-  m_SizeDelta: {x: 1.5, y: 0.2}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 2, y: 0.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2372663174922149820
 Canvas:
@@ -237,7 +237,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &388402144650346652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,6 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b041b308ddfb4cee8f4fde430e8f4ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bgIMG: {fileID: 2805253706641668072}
   _progressIMG: {fileID: 212549452827448073}
   _progressTMP: {fileID: 4754576719308537788}
   _fillDuration: 0.3
@@ -281,7 +282,7 @@ GameObject:
   - component: {fileID: 1043872736746393041}
   - component: {fileID: 4307642520483668691}
   - component: {fileID: 4754576719308537788}
-  m_Layer: 6
+  m_Layer: 9
   m_Name: TMP_Progress
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,7 +306,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2, y: 0.2}
+  m_SizeDelta: {x: 1.5, y: 0.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4307642520483668691
 CanvasRenderer:
@@ -337,8 +338,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1/5
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3520f0354d1ca4af087ccd460f96f17d, type: 2}
+  m_sharedMaterial: {fileID: -2172190575063829588, guid: 3520f0354d1ca4af087ccd460f96f17d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -362,7 +363,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.15
+  m_fontSize: 0.55
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
