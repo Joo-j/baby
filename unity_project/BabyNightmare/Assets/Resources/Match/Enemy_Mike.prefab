@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2923941540571091805}
   - component: {fileID: 6010352579816549538}
   - component: {fileID: 1096807660319560227}
-  - component: {fileID: 3713471470500097783}
   m_Layer: 7
   m_Name: Enemy_Mike
   m_TagString: Untagged
@@ -99,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 3713471470500097783}
-  _renderer: {fileID: 4996269271530450120}
+  _animator: {fileID: 0}
+  _renderer: {fileID: 0}
   _hpTF: {fileID: 4076110215470964464}
   _moveCurve:
     serializedVersion: 2
@@ -126,27 +125,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &3713471470500097783
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256515925568622462}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 33df7e93824fc43c696483e956a6c3b0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5941220174451447399
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,11 +217,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
---- !u!23 &4996269271530450120 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3708895175824439766, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
-  m_PrefabInstance: {fileID: 8516013245556413726}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6133195375652788135 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
