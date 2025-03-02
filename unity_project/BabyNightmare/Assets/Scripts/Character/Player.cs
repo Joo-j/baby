@@ -5,6 +5,7 @@ using UnityEngine;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using Supercent.Util;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.Character
 {
@@ -20,17 +21,34 @@ namespace BabyNightmare.Character
         }
     }
 
+    public class AttackInfo
+    {
+        public EquipmentData EquipmentData { get; }
+        public ICharacter Character { get; }
+
+        public AttackInfo(EquipmentData equipmentData, ICharacter character)
+        {
+            EquipmentData = equipmentData;
+            Character = character;
+        }
+    }
+
     public class Player : CharacterBase
     {
+        [SerializeField] private Transform _throwStartTF;
+        [SerializeField] private AnimationTrigger _aniTrigger;
+
         private PlayerContext _context = null;
-        private HashSet<EnemyBase> _detectedEnemies = null;
+        private Queue<AttackInfo> _attackInfoQueue = null;
 
         public override void Init(ICharacterContext context)
         {
             base.Init(context);
 
             _context = context as PlayerContext;
-            _detectedEnemies = new HashSet<EnemyBase>();
+            _attackInfoQueue = new Queue<AttackInfo>();
+
+            _aniTrigger.AddAction(1, OnAnimationAction);
         }
 
         public override void Die()
@@ -38,13 +56,38 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
         }
 
-        public void Attack(EquipmentData equipmentData, CharacterBase enemy)
+        public void Attack(EquipmentData equipmentData, ICharacter enemy)
         {
+            Debug.Log($"Attack {_attackInfoQueue.Count}");
+            _attackInfoQueue.Enqueue(new AttackInfo(equipmentData, enemy));
+
+            _animator.speed = _attackInfoQueue.Count;
+
+            _animator.Rebind();
             _animator.Play(HASH_ANI_ATTACK);
+        }
+
+        private void OnAnimationAction()
+        {
+            Debug.Log($"OnAnimationAction {_attackInfoQueue.Count}");
+
+            if (_attackInfoQueue.Count == 0)
+                return;
+
+            var info = _attackInfoQueue.Dequeue();
+
+            ThrowObj(info);
+        }
+
+        private void ThrowObj(AttackInfo info)
+        {
+            var equipmentData = info.EquipmentData;
+            var enemy = info.Character;
+            if (null == enemy || null == enemy.GO)
+                return;
 
             var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
-            obj.Init();
-            obj.transform.position = transform.position;
+            obj.transform.position = _throwStartTF.position;
 
             StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration,
             () =>
@@ -82,15 +125,6 @@ namespace BabyNightmare.Character
             Destroy(objTF.gameObject);
 
             doneCallback?.Invoke();
-        }
-
-
-        private void OnTriggerEnter(Collider other)
-        {
-            if (false == other.TryGetComponent<EnemyBase>(out var enemy))
-                return;
-
-            _detectedEnemies.Add(enemy);
         }
     }
 }

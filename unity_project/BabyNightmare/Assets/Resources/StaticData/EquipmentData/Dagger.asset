@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: Dagger
   Level: 1
   Damage: 4
-  CoolTime: 0.5
+  CoolTime: 1
   ThrowDuration: 0.5
   Grade: 0
   _type: 1
@@ -25,4 +25,4 @@ MonoBehaviour:
     _height: 1
     _shape: 0101
   _sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
-  Position: {x: 0, y: 6}
+  Position: {x: 0, y: 0}

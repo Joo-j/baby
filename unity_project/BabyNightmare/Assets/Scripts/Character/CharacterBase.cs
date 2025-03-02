@@ -8,6 +8,7 @@ namespace BabyNightmare.Character
 {
     public interface ICharacter
     {
+        public GameObject GO { get; }
         public Transform TF { get; }
         public void ReceiveAttack(float damage);
     }
@@ -31,6 +32,7 @@ namespace BabyNightmare.Character
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
 
+        public GameObject GO => gameObject;
         public Transform TF => transform;
 
         public virtual void Init(ICharacterContext context)
