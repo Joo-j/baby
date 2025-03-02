@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2923941540571091805}
   - component: {fileID: 6010352579816549538}
   - component: {fileID: 1096807660319560227}
-  - component: {fileID: 3713471470500097783}
   m_Layer: 7
   m_Name: Enemy_Sullivan
   m_TagString: Untagged
@@ -142,7 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 3713471470500097783}
+  _animator: {fileID: 0}
   _renderer: {fileID: 1406158160037431293}
   _hpTF: {fileID: 282789300057083436}
   _moveCurve:
@@ -169,27 +168,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &3713471470500097783
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256515925568622462}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 33df7e93824fc43c696483e956a6c3b0, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4312241945184703507
 GameObject:
   m_ObjectHideFlags: 0
