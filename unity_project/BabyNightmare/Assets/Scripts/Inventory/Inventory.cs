@@ -8,10 +8,8 @@ using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 using Supercent.Util;
 
-
 namespace BabyNightmare.InventorySystem
 {
-
     public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private RectTransform _rtf;
@@ -497,7 +495,6 @@ namespace BabyNightmare.InventorySystem
 
         void Update()
         {
-
             if (null == _currentEventData)
                 return;
 

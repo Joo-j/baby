@@ -84,20 +84,26 @@ MonoBehaviour:
     Name: Sullivan
     Damage: 4
     Health: 40
-    Move_Speed: 0.3
     Attack_Interval: 3
+    Move_Step_Duration: 1
+    Move_Step_Speed: 4
+    Stop_Step_Duration: 1
   - ID: 102
     Name: Mike
     Damage: 3
     Health: 45
-    Move_Speed: 0.4
     Attack_Interval: 2.5
+    Move_Step_Duration: 0.8
+    Move_Step_Speed: 3
+    Stop_Step_Duration: 0.8
   - ID: 103
     Name: Roz
     Damage: 10
     Health: 60
-    Move_Speed: 0.5
     Attack_Interval: 3.5
+    Move_Step_Duration: 1.2
+    Move_Step_Speed: 3
+    Stop_Step_Duration: 1.2
   EnemySpawnDataList:
   - ID: 1
     Group: 101

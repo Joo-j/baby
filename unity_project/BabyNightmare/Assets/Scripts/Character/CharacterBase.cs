@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using BabyNightmare.Util;
+using Supercent.Util;
 using UnityEngine;
 
 namespace BabyNightmare.Character
@@ -29,9 +30,9 @@ namespace BabyNightmare.Character
         {
             _currentHealth = _maxHealth = context.Health;
 
-            var res = Resources.Load<SimpleProgress>(PATH_SIMPLE_PROGRESS);
-            _hpBar = GameObject.Instantiate(res, transform);
+            _hpBar = ObjectUtil.LoadAndInstantiate<SimpleProgress>(PATH_SIMPLE_PROGRESS, transform);
             _hpBar.transform.localPosition = new Vector3(0, 1.4f, 0);
+            _hpBar.transform.rotation = Quaternion.Euler(0, 0, 0);
             _hpBar.Refresh(_currentHealth, _maxHealth, true);
         }
 

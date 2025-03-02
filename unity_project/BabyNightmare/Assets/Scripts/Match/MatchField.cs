@@ -16,7 +16,6 @@ namespace BabyNightmare.Match
 
         private const string PATH_PLAYER = "Match/Player";
         private const string PATH_ENEMY = "Match/Enemy_";
-        private readonly WaitForSeconds _spawnInterval = new WaitForSeconds(1f);
 
         private RenderTexture _rt = null;
         private Action _onClearWave = null;
@@ -70,7 +69,8 @@ namespace BabyNightmare.Match
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);
 
-                yield return _spawnInterval;
+                var randomDelay = UnityEngine.Random.Range(1.5f, 3f);
+                yield return CoroutineUtil.WaitForSeconds(randomDelay);
             }
         }
 

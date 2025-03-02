@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using BabyNightmare.StaticData;
+using Supercent.Util;
 
 namespace BabyNightmare.Character
 {
@@ -30,6 +31,8 @@ namespace BabyNightmare.Character
 
     public class EnemyBase : CharacterBase
     {
+        [SerializeField] private AnimationCurve _moveCurve;
+
         private EnemyContext _context = null;
 
         public override void Init(ICharacterContext context)
@@ -46,21 +49,42 @@ namespace BabyNightmare.Character
             if (null != _coAct)
                 StopCoroutine(_coAct);
 
-            var targetTF = _context.TargetTF;
-            var speed = _context.EnemyData.Move_Speed;
-            _coAct = StartCoroutine(Co_Move(targetTF, speed));
+            _coAct = StartCoroutine(Co_IntervalMove());
         }
 
-        private IEnumerator Co_Move(Transform targetTF, float speed)
+        private IEnumerator Co_IntervalMove()
         {
+            var targetTF = _context.TargetTF;
+            var moveStepDuration = _context.EnemyData.Move_Step_Duration;
+            var moveStepSpeed = _context.EnemyData.Move_Step_Speed;
+            var stopStepDuration = _context.EnemyData.Stop_Step_Duration;
+
             while (true)
             {
-                var dir = (targetTF.position - transform.position).normalized;
-                transform.Translate(dir * Time.deltaTime * speed, Space.World);
-                yield return null;
+                var elapsed = 0f;
+                var startPos = transform.position;
+                var dir = (targetTF.position - startPos).normalized;
+
+                var moveDist = moveStepSpeed * moveStepDuration;
+                var targetPos = startPos + dir * moveDist;
+
+                var dist = Vector3.Distance(startPos, targetTF.position);
+                if (dist < moveDist)
+                {
+                    targetPos = targetTF.position;
+                }
+
+                while (elapsed < moveStepDuration)
+                {
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                    var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
+                    transform.position = Vector3.Lerp(startPos, targetPos, factor);
+                }
+
+                yield return CoroutineUtil.WaitForSeconds(stopStepDuration);
             }
         }
-
         private void StartAttack(Player player)
         {
             if (null != _coAct)
