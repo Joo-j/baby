@@ -6,6 +6,12 @@ namespace BabyNightmare
 {
     public class PlayerData : SingletoneBase<PlayerData>
     {
+        private const string FILE_PLAYER_DATA = "player_data";
+        private const string KEY_STAGE = "player_data_stage";
+        private const string KEY_HEALTH = "player_data_health";
+        private const string KEY_COIN = "player_data_coin";
+        private const string KEY_GEM = "player_data_gem";
+
         public int Stage = 1;
         public float Health = 100;
         private int _coin = 0;
