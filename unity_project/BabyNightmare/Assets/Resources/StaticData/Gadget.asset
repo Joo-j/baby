@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: Dagger
+  m_Name: Gadget
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  ID: 1002
+  Name: Gadget
+  Level: 1
+  Damage: 1
+  CoolTime: 2
+  ThrowDuration: 0.5
+  Grade: 0
+  _type: 2
   _shape:
-    _width: 2
-    _height: 1
-    _shape: 01
-  _type: 1
-  _canDrop: 1
-  _position: {x: 0, y: 0}
+    _width: 1
+    _height: 2
+    _shape: 0101
+  _sprite: {fileID: 21300008, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  Position: {x: 0, y: 0}

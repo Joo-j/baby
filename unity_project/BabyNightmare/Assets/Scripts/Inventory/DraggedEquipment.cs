@@ -1,6 +1,7 @@
-using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Diagnostics.CodeAnalysis;
+using BabyNightmare.StaticData;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -17,15 +18,14 @@ namespace BabyNightmare.InventorySystem
             Dropped,
         }
 
-        private readonly Canvas _canvas;
         private readonly RectTransform _canvasRect;
-        private readonly Image _image;
+        private readonly EquipmentImage _image;
         private Vector2 _offset;
 
         public Vector2Int OriginPoint { get; private set; }
-        public Equipment Equipment { get; private set; }
-        public Inventory CurrentInventory;
+        public EquipmentData Equipment { get; private set; }
         public Inventory OriginalInventory { get; private set; }
+        public Inventory CurrentInventory { get; set; }
 
 
         [SuppressMessage("ReSharper", "Unity.InefficientPropertyAccess")]
@@ -33,44 +33,41 @@ namespace BabyNightmare.InventorySystem
             Canvas canvas,
             Inventory originalInventory,
             Vector2Int originPoint,
-            Equipment equipment,
-            Vector2 offset)
+            EquipmentData equipment,
+            Vector2 offset,
+            EquipmentImage image)
         {
-            OriginalInventory = originalInventory;
-            CurrentInventory = OriginalInventory;
+            this.OriginalInventory = originalInventory;
+            this.CurrentInventory = originalInventory;
             this.OriginPoint = originPoint;
             this.Equipment = equipment;
 
-            _canvas = canvas;
             _canvasRect = canvas.transform as RectTransform;
 
             _offset = offset;
 
             // Create an image representing the dragged equipment
-            _image = new GameObject("DraggedEquipment").AddComponent<Image>();
-            _image.raycastTarget = false;
-            _image.transform.SetParent(_canvas.transform);
+            _image = image;
+            _image.transform.SetParent(_canvasRect);
             _image.transform.SetAsLastSibling();
             _image.transform.localScale = Vector3.one;
-            _image.sprite = equipment.Sprite;
-            _image.SetNativeSize();
+            _image.Image.SetNativeSize();
         }
 
         public Vector2 Position
         {
             set
             {
-                // Move the image
-                var camera = _canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : _canvas.worldCamera;
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, value + _offset, camera, out var newValue);
-                _image.rectTransform.localPosition = newValue;
+                // Move the image                
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, value + _offset, null, out var newValue);
+                _image.RTF.localPosition = newValue;
 
 
                 // Make selections
                 if (CurrentInventory != null)
                 {
                     Equipment.Position = CurrentInventory.ScreenToGrid(value + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
-                    var canAdd = CurrentInventory.CanAddAt(Equipment, Equipment.Position) || CanSwap();
+                    var canAdd = CurrentInventory.CanAddAtPoint(Equipment, Equipment.Position) || CanSwap();
                     CurrentInventory.SelectEquipment(Equipment, !canAdd, Color.white);
                 }
 
@@ -87,7 +84,7 @@ namespace BabyNightmare.InventorySystem
                 var grid = CurrentInventory.ScreenToGrid(pos + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
 
                 // Try to add new equipment
-                if (CurrentInventory.CanAddAt(Equipment, grid))
+                if (CurrentInventory.CanAddAtPoint(Equipment, grid))
                 {
                     CurrentInventory.TryAddEquipmentAtPoint(Equipment, grid); // Place the equipment in a new location
                     mode = DropMode.Added;
@@ -95,7 +92,7 @@ namespace BabyNightmare.InventorySystem
                 // Adding did not work, try to swap
                 else if (true == CanSwap())
                 {
-                    var otherEquipment = CurrentInventory.FirstEquipment;
+                    var otherEquipment = CurrentInventory.FirstEquipmentData;
                     CurrentInventory.TryRemove(otherEquipment);
                     OriginalInventory.TryAdd(otherEquipment);
                     CurrentInventory.TryAdd(Equipment);
@@ -114,7 +111,7 @@ namespace BabyNightmare.InventorySystem
             else
             {
                 mode = DropMode.Dropped;
-                if (false == OriginalInventory.TryForceDrop(Equipment)) // Drop the equipment on the ground
+                if (false == OriginalInventory.TryDrop(Equipment)) // Drop the equipment on the ground
                 {
                     OriginalInventory.TryAddEquipmentAtPoint(Equipment, OriginPoint);
                 }
@@ -129,7 +126,7 @@ namespace BabyNightmare.InventorySystem
         /*
          * Returns the offset between dragged equipment and the grid 
          */
-        private Vector2 GetDraggedEquipmentOffset(Inventory manager, Equipment equipment)
+        private Vector2 GetDraggedEquipmentOffset(Inventory manager, EquipmentData equipment)
         {
             var scale = new Vector2(
                 Screen.width / _canvasRect.sizeDelta.x,
@@ -147,9 +144,9 @@ namespace BabyNightmare.InventorySystem
         {
             if (false == CurrentInventory.CanSwap(Equipment))
                 return false;
-                
-            var otherEquipment = CurrentInventory.FirstEquipment;
-            return OriginalInventory.CanAdd(otherEquipment) && CurrentInventory.CanRemove(otherEquipment);
+
+            var otherEquipment = CurrentInventory.FirstEquipmentData;
+            return OriginalInventory.CanAdd(otherEquipment) && CurrentInventory.Contains(otherEquipment);
         }
     }
 }

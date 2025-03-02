@@ -3,24 +3,13 @@ using System.Collections.Generic;
 using BabyNightmare.Util;
 using UnityEngine;
 using BabyNightmare.StaticData;
-using BabyNightmare.InventorySystem;
+using Supercent.Util;
+using Unity.VisualScripting;
 
 namespace BabyNightmare.Match
 {
-    public class MatchManager : MonoBehaviour
+    public class MatchManager : SingletoneBase<MatchManager>
     {
-        private static MatchManager _instance = null;
-        public static MatchManager Instance
-        {
-            get
-            {
-                if (null == _instance)
-                    _instance = new MatchManager();
-
-                return _instance;
-            }
-        }
-
         private const string PATH_MATCH_FIELD = "Match/MatchField";
         private const string PATH_MATCH_VIEW = "Match/MatchView";
         private const string PATH_MATCH_FAIL_VIEW = "Match/MatchFailView";
@@ -34,7 +23,6 @@ namespace BabyNightmare.Match
         private List<WaveData> _waveDataList = null;
         private int _currentWave = 0;
         private int _maxWave = 0;
-        private List<Equipment> _rerollItems = new List<Equipment>();
 
         public void Init(Action enterLobby)
         {
@@ -45,62 +33,28 @@ namespace BabyNightmare.Match
 
         public void StartMatch()
         {
-            _waveDataList = StaticDataManager.Instance.GetWaveDataList(PlayerData.Stage);
+            var stage = PlayerData.Instance.Stage;
+            _waveDataList = StaticDataManager.Instance.GetWaveDataList(stage);
             if (null == _waveDataList)
             {
-                Debug.LogError($"{PlayerData.Stage}stage no wave data");
+                Debug.LogError($"{stage}stage no wave data");
                 return;
             }
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
 
-            var fieldRes = Resources.Load<MatchField>(PATH_MATCH_FIELD);
-            _matchField = GameObject.Instantiate(fieldRes);
+            _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             _matchField.Init(OnClearWave, OnFailMatch);
 
-            var viewRes = Resources.Load<MatchView>(PATH_MATCH_VIEW);
-            _matchView = GameObject.Instantiate(viewRes);
+            _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
-            var matchViewContext = new MatchViewContext(Reroll, OnStartWave);
+            var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
+            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, Reroll, OnStartWave, _matchField.AttackEnemy);
             _matchView.Init(matchViewContext);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave);
 
             Reroll();
         }
-
-
-        private void Reroll()
-        {
-            var waveData = _waveDataList[_currentWave];
-
-            var group = waveData.EquipmentProbDataGroup;
-            var equipmentProbDataList = StaticDataManager.Instance.GetEquipmentProbDataList(group);
-
-            var randomPicker = new WeightedRandomPicker<EquipmentProbData>();
-            for (var i = 0; i < equipmentProbDataList.Count; i++)
-            {
-                var probDataGroup = equipmentProbDataList[i];
-                randomPicker.Add(probDataGroup, probDataGroup.Prob);
-            }
-
-            var equipmentDataList = new List<EquipmentData>();
-            for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
-            {
-                var probData = randomPicker.RandomPick();
-                randomPicker.Remove(probData);
-
-                var equipmentData = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
-
-                equipmentDataList.Add(equipmentData);
-            }
-
-            ClearOutside();
-        }
-
-
-        private void ClearOutside()
-        {
-        }
-
 
         private void OnFailMatch()
         {
@@ -115,16 +69,16 @@ namespace BabyNightmare.Match
             var completeView = GameObject.Instantiate(res);
             completeView.Init(CloseMatch);
 
-            ++PlayerData.Stage;
-            PlayerData.Save();
+            ++PlayerData.Instance.Stage;
+            PlayerData.Instance.Save();
         }
 
         private void CloseMatch()
         {
-            Destroy(_matchField.gameObject);
+            GameObject.Destroy(_matchField.gameObject);
             _matchField = null;
 
-            Destroy(_matchView.gameObject);
+            GameObject.Destroy(_matchView.gameObject);
             _matchView = null;
 
             _enterLobby?.Invoke();
@@ -136,6 +90,11 @@ namespace BabyNightmare.Match
 
             var group = waveData.EnemySpawnDataGroup;
             var enemySpanwDataList = StaticDataManager.Instance.GetEnemySpawnDataList(group);
+            if (null == enemySpanwDataList)
+            {
+                Debug.LogError($"{group}Group enemy spawn data is empty ");
+                return;
+            }
 
             var enemyDataList = new List<EnemyData>();
             for (var i = 0; i < enemySpanwDataList.Count; i++)
@@ -146,9 +105,6 @@ namespace BabyNightmare.Match
             }
 
             _matchField.StartWave(enemyDataList);
-            _matchView.SetActiveButtons(false);
-
-            ClearOutside();
         }
 
         private void OnClearWave()
@@ -161,15 +117,36 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            _matchView.RefreshWave(_currentWave, _maxWave);
-            _matchView.SetActiveButtons(true);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave);
         }
 
-
-        private void ShowInfoPopup(EquipmentData equipmentData)
+        private List<EquipmentData> Reroll()
         {
+            var waveData = _waveDataList[_currentWave];
 
+            var group = waveData.EquipmentProbDataGroup;
+            var equipmentProbDataList = StaticDataManager.Instance.GetEquipmentProbDataList(group);
+
+            var randomPicker = new WeightedRandomPicker<EquipmentProbData>();
+            for (var i = 0; i < equipmentProbDataList.Count; i++)
+            {
+                var probDataGroup = equipmentProbDataList[i];
+                randomPicker.Add(probDataGroup, probDataGroup.Prob);
+            }
+
+            var datalist = new List<EquipmentData>();
+            for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
+            {
+                var probData = randomPicker.RandomPick();
+                randomPicker.Remove(probData);
+
+                var equipment = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
+                datalist.Add(equipment);
+            }
+
+            return datalist;
         }
+
 
         private void Save()
         {

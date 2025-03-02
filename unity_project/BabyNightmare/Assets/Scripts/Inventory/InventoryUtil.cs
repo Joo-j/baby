@@ -1,18 +1,23 @@
 using UnityEngine;
+using BabyNightmare.StaticData;
+using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
     internal static class InventoryUtil
     {
-        internal static Vector2Int GetMinPoint(this Equipment equipment)
+        private const string PATH_EQUIPMENT_INFO_POPUP = "Inventory/EquipmentInfoPopup";
+        private static EquipmentInfoPopup _infoPopup = null;
+
+        internal static Vector2Int GetMinPoint(this EquipmentData equipment)
         {
             return equipment.Position;
         }
-        internal static Vector2Int GetMaxPoint(this Equipment equipment)
+        internal static Vector2Int GetMaxPoint(this EquipmentData equipment)
         {
             return equipment.Position + new Vector2Int(equipment.Width, equipment.Height);
         }
-        internal static bool Contains(this Equipment equipment, Vector2Int inventoryPoint)
+        internal static bool Contains(this EquipmentData equipment, Vector2Int inventoryPoint)
         {
             for (var i = 0; i < equipment.Width; i++)
             {
@@ -23,10 +28,10 @@ namespace BabyNightmare.InventorySystem
                         return true;
                 }
             }
-            
+
             return false;
         }
-        internal static bool Overlaps(this Equipment equipment, Equipment otherEquipment)
+        internal static bool Overlaps(this EquipmentData equipment, EquipmentData otherEquipment)
         {
             for (var i = 0; i < equipment.Width; i++)
             {
@@ -50,6 +55,16 @@ namespace BabyNightmare.InventorySystem
                 }
             }
             return false; // Equipments does not overlap
+        }
+
+        internal static void ShowInfoPopup(EquipmentData data)
+        {
+            if (null == _infoPopup)
+            {
+                _infoPopup = ObjectUtil.LoadAndInstantiate<EquipmentInfoPopup>(PATH_EQUIPMENT_INFO_POPUP, null);                
+            }
+
+            _infoPopup.Show(data);
         }
     }
 }

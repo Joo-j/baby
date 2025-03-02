@@ -28,70 +28,28 @@ MonoBehaviour:
     Wave: 3
     EquipmentProbDataGroup: 101
     EnemySpawnDataGroup: 101
+  - ID: 3
+    Stage: 2
+    Wave: 1
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Stage: 2
+    Wave: 2
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Stage: 2
+    Wave: 3
+    EquipmentProbDataGroup: 101
+    EnemySpawnDataGroup: 101
   EquipmentDataList:
-  - ID: 1001
-    Grade: 0
-    Name: Pacifier
-    Level: 1
-    Damage: 5
-    CoolTime: 3
-    SlotDataID: 1
-  - ID: 1002
-    Grade: 0
-    Name: Pacifier
-    Level: 2
-    Damage: 7
-    CoolTime: 3
-    SlotDataID: 1
-  - ID: 1003
-    Grade: 0
-    Name: Pacifier
-    Level: 3
-    Damage: 15
-    CoolTime: 3
-    SlotDataID: 1
-  - ID: 1004
-    Grade: 0
-    Name: Fork
-    Level: 1
-    Damage: 5
-    CoolTime: 3
-    SlotDataID: 2
-  - ID: 1005
-    Grade: 0
-    Name: Fork
-    Level: 2
-    Damage: 12
-    CoolTime: 3
-    SlotDataID: 2
-  - ID: 1006
-    Grade: 0
-    Name: Fork
-    Level: 3
-    Damage: 24
-    CoolTime: 3
-    SlotDataID: 2
-  - ID: 1007
-    Grade: 0
-    Name: TeddyBear
-    Level: 1
-    Damage: 15
-    CoolTime: 3
-    SlotDataID: 3
-  - ID: 1008
-    Grade: 0
-    Name: TeddyBear
-    Level: 2
-    Damage: 30
-    CoolTime: 3
-    SlotDataID: 3
-  - ID: 1009
-    Grade: 0
-    Name: TeddyBear
-    Level: 3
-    Damage: 50
-    CoolTime: 3
-    SlotDataID: 3
+  - {fileID: 11400000, guid: 53fac397599b9450cb6ffc84b6990844, type: 2}
+  - {fileID: 11400000, guid: a790d8ff8de79447eba65a1c9f328eb1, type: 2}
+  - {fileID: 11400000, guid: 1e71a40542e224abcb0957010541b8c8, type: 2}
+  - {fileID: 11400000, guid: 2103fea2b7f614248bd4e2271871cbf9, type: 2}
+  - {fileID: 11400000, guid: 640085f25f2394070afe43c1edd4b92e, type: 2}
+  - {fileID: 11400000, guid: 57a0e4d113f3d48eeb460a17da5183e4, type: 2}
   EquipmentProbDataList:
   - ID: 1
     Group: 101
@@ -126,19 +84,19 @@ MonoBehaviour:
     Name: Sullivan
     Damage: 4
     Health: 40
-    Move_Speed: 3
+    Move_Speed: 0.3
     Attack_Interval: 3
   - ID: 102
     Name: Mike
     Damage: 3
     Health: 45
-    Move_Speed: 4
+    Move_Speed: 0.4
     Attack_Interval: 2.5
   - ID: 103
     Name: Roz
     Damage: 10
     Health: 60
-    Move_Speed: 2.5
+    Move_Speed: 0.5
     Attack_Interval: 3.5
   EnemySpawnDataList:
   - ID: 1
@@ -157,12 +115,9 @@ MonoBehaviour:
   - ID: 1
     Rows: 2
     Columns: 1
-    EnableList: 0101
   - ID: 2
     Rows: 1
     Columns: 2
-    EnableList: 0101
   - ID: 3
     Rows: 2
     Columns: 2
-    EnableList: 01010001

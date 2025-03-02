@@ -5,6 +5,7 @@ using UnityEngine;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using Supercent.Util;
 
 namespace BabyNightmare.Character
 {
@@ -28,7 +29,7 @@ namespace BabyNightmare.Character
         public override void Init(ICharacterContext context)
         {
             base.Init(context);
-            
+
             _context = context as PlayerContext;
             _detectedEnemies = new HashSet<EnemyBase>();
         }
@@ -42,37 +43,40 @@ namespace BabyNightmare.Character
         {
             _animator.Play(HASH_ANI_ATTACK);
 
-            var res = Resources.Load<Projectile>($"{PATH_PROJECTILE}{equipmentData.Name}");
-            var EquipmentObj = GameObject.Instantiate(res);
-            EquipmentObj.Init();
+            var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
+            obj.Init();
+            obj.transform.position = transform.position;
 
-            StartCoroutine(Co_ThrowObj(EquipmentObj.transform, character.TF,
+            StartCoroutine(Co_ThrowObj(obj.transform, character.TF, equipmentData.ThrowDuration,
             () =>
             {
-                //fx
-                Destroy(EquipmentObj.gameObject);
                 var damage = equipmentData.Damage;
                 character?.ReceiveAttack(damage);
             }));
         }
 
-        private IEnumerator Co_ThrowObj(Transform objTF, Transform targetTF, Action doneCallback)
+        private IEnumerator Co_ThrowObj(Transform objTF, Transform targetTF, float duration, Action doneCallback)
         {
             var startPos = objTF.position;
-            var targetPos = targetTF.position;
-            var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
-            midPos.y *= 2;
 
             var elapsed = 0f;
-            while (elapsed < THROW_EQUIPMENT_DRUATION)
+            while (elapsed < duration)
             {
                 yield return null;
                 elapsed += Time.deltaTime;
-                var factor = elapsed / THROW_EQUIPMENT_DRUATION;
+                var factor = elapsed / duration;
+
+                if (null == targetTF)
+                    yield break;
+
+                var targetPos = targetTF.position;
+                var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
+                midPos.y *= 2;
                 objTF.position = VectorUtil.CalcBezier(startPos, midPos, targetPos, factor);
             }
 
-            objTF.position = targetPos;
+            objTF.position = targetTF.position;
+            Destroy(objTF.gameObject);
 
             doneCallback?.Invoke();
         }

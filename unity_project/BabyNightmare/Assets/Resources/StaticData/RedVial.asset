@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: Green Vial
+  m_Name: RedVial
   m_EditorClassIdentifier: 
-  _sprite: {fileID: 21300018, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  ID: 1005
+  Name: RedVial
+  Level: 1
+  Damage: 1
+  CoolTime: 1
+  ThrowDuration: 0.5
+  Grade: 0
+  _type: 2
   _shape:
     _width: 1
     _height: 1
-    _shape: 01
-  _type: 2
-  _canDrop: 1
-  _position: {x: 0, y: 0}
+    _shape: 0101
+  _sprite: {fileID: 21300006, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  Position: {x: 0, y: 0}

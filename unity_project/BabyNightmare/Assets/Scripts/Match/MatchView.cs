@@ -1,30 +1,41 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BabyNightmare.InventorySystem;
+using BabyNightmare.StaticData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using BabyNightmare.StaticData;
-using BabyNightmare.InventorySystem;
 
 namespace BabyNightmare.Match
 {
     public class MatchViewContext
     {
-        public Action OnClickReroll { get; }
-        public Action OnClickFight { get; }
+        public RenderTexture RT { get; }
+        public EquipmentData InitEquipment { get; }
+        public Func<List<EquipmentData>> GetRerollData { get; }
+        public Action StartWave { get; }
+        public Action<EquipmentData> OnCoolDown { get; }
 
         public MatchViewContext(
-        Action _onClickReroll,
-        Action _onClickFight)
+        RenderTexture rt,
+        EquipmentData initEquipment,
+        Func<List<EquipmentData>> getRerollData,
+        Action startWave,
+        Action<EquipmentData> onCooldown)
         {
-            this.OnClickReroll = _onClickReroll;
-            this.OnClickFight = _onClickFight;
+            this.RT = rt;
+            this.InitEquipment = initEquipment;
+            this.GetRerollData = getRerollData;
+            this.StartWave = startWave;
+            this.OnCoolDown = onCooldown;
         }
     }
 
     public class MatchView : MonoBehaviour
     {
+        [SerializeField] private Canvas _canvas;
+        [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private Image _progressIMG;
         [SerializeField] private TextMeshProUGUI _waveTMP;
         [SerializeField] private RectTransform _topRTF;
@@ -33,42 +44,51 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _rerollRTF;
         [SerializeField] private Button _rerollBTN;
         [SerializeField] private Button _fightBTN;
+        [SerializeField] private Inventory _inventory;
+        [SerializeField] private Inventory _outside;
 
         private MatchViewContext _context = null;
-
-        public RectTransform BagViewRTF => _bagViewRTF;
-        public RectTransform RerollRTF => _rerollRTF;
 
         public void Init(MatchViewContext context)
         {
             _context = context;
-        }
 
-        public void SetActiveButtons(bool active)
-        {
-            _rerollBTN.gameObject.SetActive(active);
-            _fightBTN.gameObject.SetActive(active);
+            _fieldIMG.texture = _context.RT;
+
+            _inventory.Init(_canvas);
+            _outside.Init(_canvas);
+
+            _inventory.TryAdd(_context.InitEquipment);
         }
 
         public void RefreshWave(int curWave, int maxWave)
         {
             _waveTMP.text = $"{curWave}/{maxWave}";
             _progressIMG.fillAmount = curWave / maxWave;
+            _rerollBTN.gameObject.SetActive(true);
+            _fightBTN.gameObject.SetActive(true);
+            _inventory.StopCoolDown();
         }
 
         public void OnClickReroll()
         {
-            Debug.Assert(null != _context, "context is null");
+            _outside.RemoveAll();
 
-            _context.OnClickReroll?.Invoke();
+            var equipmentList = _context.GetRerollData?.Invoke();
+
+            for (var i = 0; i < equipmentList.Count; i++)
+                _outside.TryAdd(equipmentList[i]);
         }
 
         public void OnClickFight()
         {
-            Debug.Assert(null != _context, "context is null");
+            _rerollBTN.gameObject.SetActive(false);
+            _fightBTN.gameObject.SetActive(false);
 
-            _context.OnClickFight?.Invoke();
+            _outside.RemoveAll();
+            _inventory.StartCoolDownLoop(_context.OnCoolDown);
+
+            _context.StartWave?.Invoke();
         }
-
     }
 }

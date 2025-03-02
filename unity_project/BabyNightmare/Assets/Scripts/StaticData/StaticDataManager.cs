@@ -5,20 +5,8 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    public class StaticDataManager
+    public class StaticDataManager : SingletoneBase<StaticDataManager>
     {
-        private static StaticDataManager _instance = null;
-        public static StaticDataManager Instance
-        {
-            get
-            {
-                if (null == _instance)
-                    _instance = new StaticDataManager();
-
-                return _instance;
-            }
-        }
-
         private const string PATH_STATIC_DATA_SHEET = "StaticData/StaticDataSheet";
         private StaticDataSheet _sheet = null;
 
@@ -56,11 +44,11 @@ namespace BabyNightmare.StaticData
             {
                 var waveData = waveDataList[i];
 
-                var wave = waveData.Wave;
-                if (false == _waveDataDict.ContainsKey(wave))
-                    _waveDataDict.Add(wave, new List<WaveData>());
+                var stage = waveData.Stage;
+                if (false == _waveDataDict.ContainsKey(stage))
+                    _waveDataDict.Add(stage, new List<WaveData>());
 
-                _waveDataDict[wave].Add(waveData);
+                _waveDataDict[stage].Add(waveData);
             }
         }
 

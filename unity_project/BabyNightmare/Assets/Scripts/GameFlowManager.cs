@@ -8,24 +8,12 @@ using BabyNightmare.Match;
 
 namespace BabyNightmare
 {
-    public class GameFlowManager
+    public class GameFlowManager : SingletoneBase<GameFlowManager>
     {
-        private static GameFlowManager _instance = null;
-        public static GameFlowManager Instance
-        {
-            get
-            {
-                if (null == _instance)
-                    _instance = new GameFlowManager();
-
-                return _instance;
-            }
-        }
-
         public void AppOpen()
         {
             LayerHelper.Init();
-            PlayerData.Init();
+            PlayerData.Instance.Init();
             StaticDataManager.Instance.Init();
             LobbyManager.Instance.Init(StartMatch);
             MatchManager.Instance.Init(EnterLobby);

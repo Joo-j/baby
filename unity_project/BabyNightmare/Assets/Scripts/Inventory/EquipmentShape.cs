@@ -10,6 +10,9 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] int _height;
         [SerializeField] bool[] _shape;
 
+        public int Width => _width;
+        public int Height => _height;
+        
         public EquipmentShape(int width, int height)
         {
             _width = width;
@@ -31,8 +34,6 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public int Width => _width;
-        public int Height => _height;
 
         public bool IsPartOfShape(Vector2Int localPoint)
         {

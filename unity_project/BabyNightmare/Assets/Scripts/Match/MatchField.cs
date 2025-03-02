@@ -1,14 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Supercent.Util;
 using BabyNightmare.Character;
 using BabyNightmare.StaticData;
-using System;
 
 namespace BabyNightmare.Match
 {
     public class MatchField : MonoBehaviour
     {
+        [SerializeField] private Camera _renderCamera;
         [SerializeField] private Transform _playerTF;
         [SerializeField] private Transform _enemySpawnTF;
 
@@ -16,26 +18,42 @@ namespace BabyNightmare.Match
         private const string PATH_ENEMY = "Match/Enemy_";
         private readonly WaitForSeconds _spawnInterval = new WaitForSeconds(1f);
 
+        private RenderTexture _rt = null;
         private Action _onClearWave = null;
         private Action _onFailWave = null;
         private Player _player = null;
-        private List<EnemyBase> _aliveEnemies = null;
+        private List<EnemyBase> _aliveEnemies = new List<EnemyBase>();
+
+        public RenderTexture RT => _rt;
 
         public void Init(Action onClearWave, Action onFailWave)
         {
+            _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
+            _renderCamera.targetTexture = _rt;
+
             _onClearWave = onClearWave;
             _onFailWave = onFailWave;
 
-            var res = Resources.Load<Player>(PATH_PLAYER);
-            _player = GameObject.Instantiate(res, _playerTF);
+            _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
-            var playerContext = new PlayerContext(PlayerData.Health, OnDiePlayer);
+            var playerContext = new PlayerContext(PlayerData.Instance.Health, OnDiePlayer);
             _player.Init(playerContext);
+        }
+
+        public void Release()
+        {
+            if (null != _rt)
+            {
+                _renderCamera.targetTexture = null;
+                _rt.Release();
+            }
+
+            _rt = null;
         }
 
         public void StartWave(List<EnemyData> enemyDataList)
         {
-            _aliveEnemies = new List<EnemyBase>();
+            _aliveEnemies.Clear();
 
             StartCoroutine(Co_SpawnEnemy(enemyDataList));
         }

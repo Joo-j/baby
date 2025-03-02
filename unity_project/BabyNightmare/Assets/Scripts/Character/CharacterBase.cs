@@ -15,9 +15,8 @@ namespace BabyNightmare.Character
         [SerializeField] protected Animator _animator;
         [SerializeField] protected MeshRenderer _renderer;
 
-        protected const float THROW_EQUIPMENT_DRUATION = 1f;
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
-        protected const string PATH_PROJECTILE = "Equipment/Projectile/Projectile_";
+        protected const string PATH_PROJECTILE = "Inventory/Projectile";
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         private SimpleProgress _hpBar = null;
         protected float _currentHealth = 0;

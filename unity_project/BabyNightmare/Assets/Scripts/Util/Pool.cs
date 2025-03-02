@@ -64,7 +64,7 @@ namespace BabyNightmare.Util
         /// should eventually be returned to the pool by calling Recycle().
         /// </summary>
         /// <returns>An object of type T, or null if nothing could be taken</returns>
-        public T Take()
+        public T Get()
         {
             if (IsEmpty)
             {
@@ -98,7 +98,7 @@ namespace BabyNightmare.Util
 		/// considered dead and should not be used until taken from the pool
 		/// again.
         /// </summary>
-        public void Recycle(T item)
+        public void Return(T item)
         {
             if (!_active.Contains(item)) { throw new InvalidOperationException("An item was recycled even though it was not part of the pool"); }
             _inactive.Add(item);
