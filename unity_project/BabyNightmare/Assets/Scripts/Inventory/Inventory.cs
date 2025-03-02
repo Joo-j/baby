@@ -11,11 +11,6 @@ using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
-    public enum InventoryRenderMode
-    {
-        Grid,
-        Single,
-    }
 
     public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
@@ -27,14 +22,13 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Sprite _cellSpriteSelected = null;
         [SerializeField] private Sprite _cellSpriteBlocked = null;
         [SerializeField] private int _maximumAllowedCount = -1;
-        [SerializeField] private InventoryRenderMode _renderMode = InventoryRenderMode.Grid;
 
         private const string PATH_EQUIPMENT_IMAGE = "Inventory/EquipmentImage";
         private Canvas _grandCanvas = null;
         private Rect _fullRect;
         private EquipmentImage[] _grids;
         private Vector2Int _size = Vector2Int.one;
-        private Dictionary<EquipmentData, EquipmentImage> _equipmentImageDict = new Dictionary<EquipmentData, EquipmentImage>();
+        private Dictionary<EquipmentData, EquipmentImage> _imageDict = new Dictionary<EquipmentData, EquipmentImage>();
         private Pool<EquipmentImage> _imagePool;
         private PointerEventData _currentEventData;
         private List<EquipmentData> _dataList = new List<EquipmentData>();
@@ -123,12 +117,10 @@ namespace BabyNightmare.InventorySystem
 
         private void ReRenderGrid()
         {
-            // Clear the grid
             if (null != _grids)
             {
                 for (var i = 0; i < _grids.Length; i++)
                 {
-                    _grids[i].gameObject.SetActive(false);
                     ReturnEuipmentImage(_grids[i]);
                     _grids[i].transform.SetSiblingIndex(i);
                 }
@@ -138,37 +130,23 @@ namespace BabyNightmare.InventorySystem
             // Render new grid
             var containerSize = new Vector2(CellSize.x * Width, CellSize.y * Height);
             EquipmentImage grid;
-            switch (_renderMode)
+            var topLeft = new Vector3(-containerSize.x / 2, -containerSize.y / 2, 0); // Calculate topleft corner
+            var halfCellSize = new Vector3(CellSize.x / 2, CellSize.y / 2, 0); // Calulcate cells half-size
+            _grids = new EquipmentImage[Width * Height];
+            var c = 0;
+            for (int y = 0; y < Height; y++)
             {
-                case InventoryRenderMode.Single:
+                for (int x = 0; x < Width; x++)
+                {
                     grid = GetEuipmentImage(_cellSpriteEmpty, true);
+                    grid.gameObject.name = "Grid " + c;
                     grid.RTF.SetAsFirstSibling();
                     grid.Image.type = Image.Type.Sliced;
-                    grid.RTF.localPosition = Vector3.zero;
-                    grid.RTF.sizeDelta = containerSize;
-                    _grids = new[] { grid };
-                    break;
-                default:
-                    // Spawn grid images
-                    var topLeft = new Vector3(-containerSize.x / 2, -containerSize.y / 2, 0); // Calculate topleft corner
-                    var halfCellSize = new Vector3(CellSize.x / 2, CellSize.y / 2, 0); // Calulcate cells half-size
-                    _grids = new EquipmentImage[Width * Height];
-                    var c = 0;
-                    for (int y = 0; y < Height; y++)
-                    {
-                        for (int x = 0; x < Width; x++)
-                        {
-                            grid = GetEuipmentImage(_cellSpriteEmpty, true);
-                            grid.gameObject.name = "Grid " + c;
-                            grid.RTF.SetAsFirstSibling();
-                            grid.Image.type = Image.Type.Sliced;
-                            grid.RTF.localPosition = topLeft + new Vector3(CellSize.x * ((Width - 1) - x), CellSize.y * y, 0) + halfCellSize;
-                            grid.RTF.sizeDelta = CellSize;
-                            _grids[c] = grid;
-                            c++;
-                        }
-                    }
-                    break;
+                    grid.RTF.localPosition = topLeft + new Vector3(CellSize.x * ((Width - 1) - x), CellSize.y * y, 0) + halfCellSize;
+                    grid.RTF.sizeDelta = CellSize;
+                    _grids[c] = grid;
+                    c++;
+                }
             }
 
             // Set the size of the main RectTransform
@@ -182,15 +160,15 @@ namespace BabyNightmare.InventorySystem
         */
         private void ReRenderAllEquipments()
         {
-            _equipmentImageDict ??= new Dictionary<EquipmentData, EquipmentImage>();
+            _imageDict ??= new Dictionary<EquipmentData, EquipmentImage>();
 
             // Clear all equipments
-            foreach (var image in _equipmentImageDict.Values)
+            foreach (var image in _imageDict.Values)
             {
                 ReturnEuipmentImage(image);
             }
 
-            _equipmentImageDict.Clear();
+            _imageDict.Clear();
 
             // Add all equipments
             foreach (var data in _dataList)
@@ -202,17 +180,9 @@ namespace BabyNightmare.InventorySystem
         private void AddEquipmentImage(EquipmentData data)
         {
             var img = GetEuipmentImage(data.Image, false);
+            img.RTF.localPosition = GetEquipmentOffset(data);
 
-            if (_renderMode == InventoryRenderMode.Single)
-            {
-                img.RTF.localPosition = _rtf.rect.center;
-            }
-            else
-            {
-                img.RTF.localPosition = GetEquipmentOffset(data);
-            }
-
-            _equipmentImageDict.Add(data, img);
+            _imageDict.Add(data, img);
         }
 
         /*
@@ -220,11 +190,11 @@ namespace BabyNightmare.InventorySystem
         */
         private void RemoveEquipmentImage(EquipmentData data)
         {
-            if (false == _equipmentImageDict.TryGetValue(data, out var image))
+            if (false == _imageDict.TryGetValue(data, out var image))
                 return;
 
             ReturnEuipmentImage(image);
-            _equipmentImageDict.Remove(data);
+            _imageDict.Remove(data);
         }
 
         public void SelectEquipment(EquipmentData data, bool blocked, Color color)
@@ -234,30 +204,21 @@ namespace BabyNightmare.InventorySystem
 
             ClearSelection();
 
-            switch (_renderMode)
+            for (var x = 0; x < data.Width; x++)
             {
-                case InventoryRenderMode.Single:
-                    _grids[0].Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
-                    _grids[0].Image.color = color;
-                    break;
-                default:
-                    for (var x = 0; x < data.Width; x++)
+                for (var y = 0; y < data.Height; y++)
+                {
+                    if (true == data.IsPartOfShape(new Vector2Int(x, y)))
                     {
-                        for (var y = 0; y < data.Height; y++)
+                        var p = data.Position + new Vector2Int(x, y);
+                        if (p.x >= 0 && p.x < Width && p.y >= 0 && p.y < Height)
                         {
-                            if (true == data.IsPartOfShape(new Vector2Int(x, y)))
-                            {
-                                var p = data.Position + new Vector2Int(x, y);
-                                if (p.x >= 0 && p.x < Width && p.y >= 0 && p.y < Height)
-                                {
-                                    var index = p.y * Width + ((Width - 1) - p.x);
-                                    _grids[index].Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
-                                    _grids[index].Image.color = color;
-                                }
-                            }
+                            var index = p.y * Width + ((Width - 1) - p.x);
+                            _grids[index].Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
+                            _grids[index].Image.color = color;
                         }
                     }
-                    break;
+                }
             }
         }
 
@@ -296,17 +257,7 @@ namespace BabyNightmare.InventorySystem
 
             _dataList.Add(data);
 
-            switch (_renderMode)
-            {
-                case InventoryRenderMode.Single:
-                    data.Position = GetCenterPosition(data);
-                    break;
-                case InventoryRenderMode.Grid:
-                    data.Position = point;
-                    break;
-                default:
-                    throw new NotImplementedException($"InventoryRenderMode.{_renderMode} have not yet been implemented");
-            }
+            data.Position = point;
 
             AddEquipmentImage(data);
             return true;
@@ -373,11 +324,6 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public bool CanSwap(EquipmentData data)
-        {
-            return _renderMode == InventoryRenderMode.Single && IsEquipmentFit(data);
-        }
-
         private bool GetFirstFitPoint(EquipmentData data, out Vector2Int point)
         {
             if (true == IsEquipmentFit(data))
@@ -410,12 +356,6 @@ namespace BabyNightmare.InventorySystem
 
         private EquipmentData GetDataAtPoint(Vector2Int point)
         {
-            // Single data override
-            if (_renderMode == InventoryRenderMode.Single && IsInventoryFull && _dataList.Count > 0)
-            {
-                return _dataList[0];
-            }
-
             foreach (var data in _dataList)
             {
                 if (true == data.Contains(point))
@@ -434,12 +374,6 @@ namespace BabyNightmare.InventorySystem
             {
                 Debug.Log("Inventory is Full");
                 return false;
-            }
-
-            if (_renderMode == InventoryRenderMode.Single)
-            {
-                Debug.Log("mode is Single");
-                return true;
             }
 
             var previousPoint = data.Position;
@@ -550,8 +484,6 @@ namespace BabyNightmare.InventorySystem
             {
                 case DraggedEquipment.DropMode.Added:
                     break;
-                case DraggedEquipment.DropMode.Swapped:
-                    break;
                 case DraggedEquipment.DropMode.Returned:
                     break;
                 case DraggedEquipment.DropMode.Dropped:
@@ -625,9 +557,9 @@ namespace BabyNightmare.InventorySystem
             return localPosition;
         }
 
-        public void StartCoolDownLoop(Action<EquipmentData> onCoolDown)
+        public void StartCoolDown(Action<EquipmentData> onCoolDown)
         {
-            foreach (var pair in _equipmentImageDict)
+            foreach (var pair in _imageDict)
             {
                 var data = pair.Key;
                 var image = pair.Value;
@@ -637,7 +569,7 @@ namespace BabyNightmare.InventorySystem
 
         public void StopCoolDown()
         {
-            foreach (var pair in _equipmentImageDict)
+            foreach (var pair in _imageDict)
             {
                 var image = pair.Value;
                 image.ResetCool();

@@ -13,7 +13,6 @@ namespace BabyNightmare.InventorySystem
         public enum DropMode
         {
             Added,
-            Swapped,
             Returned,
             Dropped,
         }
@@ -67,7 +66,7 @@ namespace BabyNightmare.InventorySystem
                 if (CurrentInventory != null)
                 {
                     Equipment.Position = CurrentInventory.ScreenToGrid(value + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
-                    var canAdd = CurrentInventory.CanAddAtPoint(Equipment, Equipment.Position) || CanSwap();
+                    var canAdd = CurrentInventory.CanAddAtPoint(Equipment, Equipment.Position);
                     CurrentInventory.SelectEquipment(Equipment, !canAdd, Color.white);
                 }
 
@@ -88,15 +87,6 @@ namespace BabyNightmare.InventorySystem
                 {
                     CurrentInventory.TryAddEquipmentAtPoint(Equipment, grid); // Place the equipment in a new location
                     mode = DropMode.Added;
-                }
-                // Adding did not work, try to swap
-                else if (true == CanSwap())
-                {
-                    var otherEquipment = CurrentInventory.FirstEquipmentData;
-                    CurrentInventory.TryRemove(otherEquipment);
-                    OriginalInventory.TryAdd(otherEquipment);
-                    CurrentInventory.TryAdd(Equipment);
-                    mode = DropMode.Swapped;
                 }
                 // Could not add or swap, return the equipment
                 else
@@ -135,18 +125,6 @@ namespace BabyNightmare.InventorySystem
             var gx = -(equipment.Width * manager.CellSize.x / 2f) + (manager.CellSize.x / 2);
             var gy = -(equipment.Height * manager.CellSize.y / 2f) + (manager.CellSize.y / 2);
             return new Vector2(gx, gy) * scale;
-        }
-
-        /* 
-         * Returns true if its possible to swap
-         */
-        private bool CanSwap()
-        {
-            if (false == CurrentInventory.CanSwap(Equipment))
-                return false;
-
-            var otherEquipment = CurrentInventory.FirstEquipmentData;
-            return OriginalInventory.CanAdd(otherEquipment) && CurrentInventory.Contains(otherEquipment);
         }
     }
 }
