@@ -98,5 +98,10 @@ namespace BabyNightmare.Match
             var randomEnemy = _aliveEnemies[rand];
             _player.Attack(equipmentData, randomEnemy);
         }
+
+        public void MovePlayer(Action doneCallback)
+        {
+            _player.Move(doneCallback);
+        }
     }
 }

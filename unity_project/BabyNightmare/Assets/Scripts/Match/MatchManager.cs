@@ -117,7 +117,10 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            _matchView.RefreshWave(_currentWave + 1, _maxWave, false);
+            _matchField.MovePlayer(() =>
+            {
+                _matchView.RefreshWave(_currentWave + 1, _maxWave, false);
+            });
         }
 
         private List<EquipmentData> Reroll()

@@ -51,6 +51,18 @@ namespace BabyNightmare.Character
             _aniTrigger.AddAction(1, OnAnimationAction);
         }
 
+        public void Move(Action doneCallback)
+        {
+            _animator.Play(HASH_ANI_IDLE);
+
+            this.Invoke(CoroutineUtil.WaitForSeconds(4f), () =>
+            {
+                _animator.Play(HASH_ANI_MOVE);
+
+                doneCallback?.Invoke();
+            });
+        }
+
         public override void Die()
         {
             _context.OnDiePlayer?.Invoke();
@@ -58,7 +70,6 @@ namespace BabyNightmare.Character
 
         public void Attack(EquipmentData equipmentData, ICharacter enemy)
         {
-            Debug.Log($"Attack {_attackInfoQueue.Count}");
             _attackInfoQueue.Enqueue(new AttackInfo(equipmentData, enemy));
 
             _animator.speed = _attackInfoQueue.Count;
@@ -69,8 +80,6 @@ namespace BabyNightmare.Character
 
         private void OnAnimationAction()
         {
-            Debug.Log($"OnAnimationAction {_attackInfoQueue.Count}");
-
             if (_attackInfoQueue.Count == 0)
                 return;
 
