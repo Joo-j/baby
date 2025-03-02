@@ -858,6 +858,8 @@ MonoBehaviour:
   _waveProgress: {fileID: 1856950325314228636}
   _inventory: {fileID: 3673302449860407023}
   _outside: {fileID: 9054877851490812916}
+  _noMatchTopHeight: 640
+  _matchTopHeight: 820
 --- !u!1 &4793477498486736868
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,6 +945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5205987635103717456}
   - component: {fileID: 9054877851490812916}
+  - component: {fileID: 5255503037858995452}
   m_Layer: 5
   m_Name: Inventory_Outside
   m_TagString: Untagged
@@ -983,12 +986,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rtf: {fileID: 5205987635103717456}
+  _canvasGroup: {fileID: 5255503037858995452}
   _width: 12
   _height: 7
   _cellSize: {x: 60, y: 60}
   _cellSpriteEmpty: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   _cellSpriteSelected: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   _cellSpriteBlocked: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+--- !u!225 &5255503037858995452
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5857058449203971187}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6238120663519193440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1345,6 +1361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5284761444299057634}
   - component: {fileID: 3673302449860407023}
+  - component: {fileID: 5397050634197705404}
   m_Layer: 5
   m_Name: Inventory_Inside
   m_TagString: Untagged
@@ -1385,12 +1402,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rtf: {fileID: 5284761444299057634}
+  _canvasGroup: {fileID: 5397050634197705404}
   _width: 5
   _height: 5
   _cellSize: {x: 60, y: 60}
   _cellSpriteEmpty: {fileID: 21300000, guid: f2d2ffbc1330e4fc29fd4d1225c6b9d6, type: 3}
   _cellSpriteSelected: {fileID: 21300000, guid: 61d42f6bf2d0e504f92d5e64875034ab, type: 3}
   _cellSpriteBlocked: {fileID: 21300000, guid: b31cb26d60baa4eabab2be0bf756b7cb, type: 3}
+--- !u!225 &5397050634197705404
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7109308669157202118}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &7984054667428103827
 GameObject:
   m_ObjectHideFlags: 0

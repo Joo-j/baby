@@ -13,6 +13,7 @@ namespace BabyNightmare.InventorySystem
     public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         [SerializeField] private RectTransform _rtf;
+        [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private int _width = 4;
         [SerializeField] private int _height = 4;
         [SerializeField] private Vector2Int _cellSize = new Vector2Int(32, 32);
@@ -467,6 +468,8 @@ namespace BabyNightmare.InventorySystem
                 var image = pair.Value;
                 image.StartCoolDownLoop(data.CoolTime, () => onCoolDown?.Invoke(data));
             }
+
+            _canvasGroup.interactable = false;
         }
 
         public void StopCoolDown()
@@ -476,6 +479,8 @@ namespace BabyNightmare.InventorySystem
                 var image = pair.Value;
                 image.ResetCool();
             }
+
+            _canvasGroup.interactable = true;
         }
     }
 }
