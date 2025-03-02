@@ -86,8 +86,9 @@ MonoBehaviour:
     Health: 50
     Attack_Interval: 3
     Move_Step_Duration: 1.2
-    Move_Step_Speed: 2
-    Stop_Step_Duration: 1.2
+    Move_Step_Speed: 1
+    Stop_Step_Duration: 1.5
+    Attack_Radius: 2
   - ID: 102
     Name: Mike
     Damage: 3
@@ -96,6 +97,7 @@ MonoBehaviour:
     Move_Step_Duration: 0.8
     Move_Step_Speed: 3
     Stop_Step_Duration: 0.8
+    Attack_Radius: 2
   - ID: 103
     Name: Roz
     Damage: 10
@@ -104,6 +106,7 @@ MonoBehaviour:
     Move_Step_Duration: 1.2
     Move_Step_Speed: 3
     Stop_Step_Duration: 1.2
+    Attack_Radius: 5
   EnemySpawnDataList:
   - ID: 1
     Group: 101
