@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9042028811863406623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8770265973091081742}
+  m_Layer: 7
+  m_Name: TF_HPBar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8770265973091081742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9042028811863406623}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6643867927404232000}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9222521953975024170
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +66,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4451446091227810431}
+  - {fileID: 8770265973091081742}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &9198569637107048656
@@ -143,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 5748560137970352542}
   _renderer: {fileID: 0}
+  _hpTF: {fileID: 8770265973091081742}
 --- !u!95 &5748560137970352542
 Animator:
   serializedVersion: 5
@@ -175,6 +208,14 @@ PrefabInstance:
     - target: {fileID: 3765992340146399274, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3765992340146399274, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3981983336407287447, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4542072329902289552, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
       propertyPath: m_LocalPosition.x
@@ -215,6 +256,10 @@ PrefabInstance:
     - target: {fileID: 4542072329902289552, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6220023359353248652, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
