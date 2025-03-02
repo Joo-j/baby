@@ -23,6 +23,6 @@ MonoBehaviour:
   _shape:
     _width: 2
     _height: 2
-    _shape: 0101
+    _shape: 01010001
   _sprite: {fileID: 21300000, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
-  Position: {x: 2, y: 3}
+  Position: {x: 2, y: 2}
