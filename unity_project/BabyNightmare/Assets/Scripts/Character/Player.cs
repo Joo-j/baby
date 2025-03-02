@@ -39,7 +39,7 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
         }
 
-        public void Attack(EquipmentData equipmentData, CharacterBase character)
+        public void Attack(EquipmentData equipmentData, CharacterBase enemy)
         {
             _animator.Play(HASH_ANI_ATTACK);
 
@@ -47,11 +47,11 @@ namespace BabyNightmare.Character
             obj.Init();
             obj.transform.position = transform.position;
 
-            StartCoroutine(Co_ThrowObj(obj.transform, character.TF, equipmentData.ThrowDuration,
+            StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration,
             () =>
             {
                 var damage = equipmentData.Damage;
-                character?.ReceiveAttack(damage);
+                enemy?.ReceiveAttack(damage);
             }));
         }
 
@@ -74,8 +74,9 @@ namespace BabyNightmare.Character
 
                 var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
-                midPos.y *= 2;
-                objTF.position = VectorUtil.CalcBezier(startPos, midPos, targetPos, factor);
+                midPos.y *= 5;
+                objTF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
+                objTF.Rotate(Vector3.forward, 10f * Time.deltaTime, Space.Self);
             }
 
             objTF.position = targetTF.position;
