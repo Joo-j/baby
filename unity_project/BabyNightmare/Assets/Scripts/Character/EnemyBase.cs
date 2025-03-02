@@ -56,7 +56,7 @@ namespace BabyNightmare.Character
             while (true)
             {
                 var dir = (targetTF.position - transform.position).normalized;
-                transform.Translate(dir * Time.deltaTime * speed);
+                transform.Translate(dir * Time.deltaTime * speed, Space.World);
                 yield return null;
             }
         }
