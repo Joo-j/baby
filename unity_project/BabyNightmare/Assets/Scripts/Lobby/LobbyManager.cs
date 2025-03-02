@@ -1,23 +1,12 @@
 using System;
 using System.Collections.Generic;
+using BabyNightmare.HUD;
 using UnityEngine;
 
 namespace BabyNightmare.Lobby
 {
-    public class LobbyManager
+    public class LobbyManager : SingletoneBase<LobbyManager>
     {
-        private static LobbyManager _instance = null;
-        public static LobbyManager Instance
-        {
-            get
-            {
-                if (null == _instance)
-                    _instance = new LobbyManager();
-
-                return _instance;
-            }
-        }
-
         private const string PATH_LOBBY_VIEW = "Lobby/LobbyView";
         private LobbyView _lobbyView = null;
         private Action _startMatch = null;
@@ -25,6 +14,7 @@ namespace BabyNightmare.Lobby
         public void Init(Action startMatch)
         {
             _startMatch = startMatch;
+            HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "Lobby");
         }
 
         private void CreateView()
