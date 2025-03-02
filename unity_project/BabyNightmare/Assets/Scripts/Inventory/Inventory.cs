@@ -20,16 +20,16 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Sprite _cellSpriteSelected = null;
         [SerializeField] private Sprite _cellSpriteBlocked = null;
 
-        private const string PATH_EQUIPMENT_IMAGE = "Inventory/EquipmentImage";
+        private const string PATH_DYNAMIC_CELL = "Inventory/DynamicCell";
         private Canvas _grandCanvas = null;
         private Rect _fullRect;
-        private EquipmentImage[] _grid = null;
-        private Dictionary<EquipmentData, EquipmentImage> _imageDict = new Dictionary<EquipmentData, EquipmentImage>();
-        private Pool<EquipmentImage> _imagePool;
-        private PointerEventData _currentEventData;
-        private List<EquipmentData> _dataList = new List<EquipmentData>();
-        private EquipmentData _draggedData;
-        private EquipmentData _lastHoveredData;
+        private DynamicCell[] _grid = null;
+        private Dictionary<EquipmentData, DynamicCell> _cellDict = null;
+        private Pool<DynamicCell> _cellPool = null;
+        private PointerEventData _currentEventData = null;
+        private List<EquipmentData> _dataList = null;
+        private EquipmentData _draggedData = null;
+        private EquipmentData _lastHoveredData = null;
         private static DraggedEquipment _draggedEquipment;
 
         public Vector2 CellSize => _cellSize;
@@ -45,47 +45,31 @@ namespace BabyNightmare.InventorySystem
             poolTF.transform.localPosition = Vector3.zero;
             poolTF.transform.localScale = Vector3.one;
 
-            _imagePool = new Pool<EquipmentImage>(() => ObjectUtil.LoadAndInstantiate<EquipmentImage>(PATH_EQUIPMENT_IMAGE, poolTF));
-
+            _dataList = new List<EquipmentData>();
+            _cellDict = new Dictionary<EquipmentData, DynamicCell>();
+            _cellPool = new Pool<DynamicCell>(() => ObjectUtil.LoadAndInstantiate<DynamicCell>(PATH_DYNAMIC_CELL, poolTF));
             _fullRect = new Rect(0, 0, _width, _height);
 
-            for (int i = 0; i < _dataList.Count;)
-            {
-                var data = _dataList[i];
-                var padding = Vector2.one * 0.01f;
-
-                if (false == _fullRect.Contains(data.GetMinPoint() + padding) ||
-                    false == _fullRect.Contains(data.GetMaxPoint() - padding))
-                {
-                    TryDrop(data);
-                }
-                else
-                {
-                    i++;
-                }
-            }
-
             RerenderGrid();
-            RerenderImage();
+            RerenderCells();
         }
 
-        private EquipmentImage GetEuipmentImage(Sprite sprite, bool raycastTarget)
+        private DynamicCell GetCell(Sprite sprite, bool enable)
         {
-            var img = _imagePool.Get();
-            img.gameObject.SetActive(true);
-            img.RTF.sizeDelta = new Vector2(sprite.rect.width, sprite.rect.height);
-            img.Image.sprite = sprite;
-            img.Image.type = Image.Type.Simple;
-            img.Image.raycastTarget = raycastTarget;
-            img.RTF.SetAsLastSibling();
+            var cell = _cellPool.Get();
+            cell.Show();
+            cell.RefreshImage(sprite);
+            cell.EnableRaycast(enable);
+            cell.SetType(Image.Type.Simple);
+            cell.RTF.SetAsLastSibling();
 
-            return img;
+            return cell;
         }
 
-        private void ReturnEuipmentImage(EquipmentImage image)
+        private void ReturnCell(DynamicCell cell)
         {
-            image.gameObject.SetActive(false);
-            _imagePool.Return(image);
+            cell.Hide();
+            _cellPool.Return(cell);
         }
 
         private void RerenderGrid()
@@ -94,7 +78,7 @@ namespace BabyNightmare.InventorySystem
             {
                 for (var i = 0; i < _grid.Length; i++)
                 {
-                    ReturnEuipmentImage(_grid[i]);
+                    ReturnCell(_grid[i]);
                     _grid[i].transform.SetSiblingIndex(i);
                 }
             }
@@ -106,62 +90,59 @@ namespace BabyNightmare.InventorySystem
             var topLeft = new Vector3(-gridSize.x / 2, -gridSize.y / 2, 0); // Calculate topleft corner
             var halfCellSize = new Vector3(CellSize.x / 2, CellSize.y / 2, 0); // Calulcate cells half-size
 
-            _grid = new EquipmentImage[Width * Height];
+            _grid = new DynamicCell[Width * Height];
 
             var count = 0;
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    var image = GetEuipmentImage(_cellSpriteEmpty, true);
-                    image.gameObject.name = "Grid " + count;
-                    image.RTF.SetAsFirstSibling();
-                    image.Image.type = Image.Type.Sliced;
-                    image.RTF.localPosition = topLeft + new Vector3(CellSize.x * ((Width - 1) - x), CellSize.y * y, 0) + halfCellSize;
-                    image.RTF.sizeDelta = CellSize;
-                    _grid[count] = image;
+                    var cell = GetCell(_cellSpriteEmpty, true);
+                    cell.RTF.SetAsFirstSibling();
+                    cell.SetType(Image.Type.Sliced);
+                    cell.RTF.localPosition = topLeft + new Vector3(CellSize.x * ((Width - 1) - x), CellSize.y * y, 0) + halfCellSize;
+                    cell.RTF.sizeDelta = CellSize;
+                    cell.gameObject.name = $"Grid {count}";
+                    _grid[count] = cell;
                     count++;
                 }
             }
 
-            // Set the size of the main RectTransform
-            // This is useful as it allowes custom graphical elements
-            // suchs as a border to mimic the size of the inventory.
             _rtf.sizeDelta = gridSize;
         }
 
-        private void RerenderImage()
+        private void RerenderCells()
         {
-            _imageDict ??= new Dictionary<EquipmentData, EquipmentImage>();
+            _cellDict ??= new Dictionary<EquipmentData, DynamicCell>();
 
-            foreach (var image in _imageDict.Values)
+            foreach (var cell in _cellDict.Values)
             {
-                ReturnEuipmentImage(image);
+                ReturnCell(cell);
             }
 
-            _imageDict.Clear();
+            _cellDict.Clear();
 
             foreach (var data in _dataList)
             {
-                AddImage(data);
+                AddCell(data);
             }
         }
 
-        private void AddImage(EquipmentData data)
+        private void AddCell(EquipmentData data)
         {
-            var img = GetEuipmentImage(data.Image, false);
-            img.RTF.localPosition = GetEquipmentOffset(data);
+            var cell = GetCell(data.Image, false);
+            cell.RTF.localPosition = GetPivot(data);
 
-            _imageDict.Add(data, img);
+            _cellDict.Add(data, cell);
         }
 
-        private void RemoveImage(EquipmentData data)
+        private void RemoveCell(EquipmentData data)
         {
-            if (false == _imageDict.TryGetValue(data, out var image))
+            if (false == _cellDict.TryGetValue(data, out var cell))
                 return;
 
-            ReturnEuipmentImage(image);
-            _imageDict.Remove(data);
+            ReturnCell(cell);
+            _cellDict.Remove(data);
         }
 
         public void SelectGrid(EquipmentData data, bool blocked, Color color)
@@ -189,8 +170,10 @@ namespace BabyNightmare.InventorySystem
                         continue;
 
                     var index = p.y * Width + (Width - 1 - p.x);
-                    _grid[index].Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
-                    _grid[index].Image.color = color;
+                    var cell = _grid[index];
+
+                    cell.Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
+                    cell.Image.color = color;
                 }
             }
         }
@@ -199,20 +182,15 @@ namespace BabyNightmare.InventorySystem
         {
             for (var i = 0; i < _grid.Length; i++)
             {
-                _grid[i].Image.sprite = _cellSpriteEmpty;
-                _grid[i].Image.color = Color.white;
+                var cell = _grid[i];
+                cell.Image.sprite = _cellSpriteEmpty;
+                cell.Image.color = Color.white;
             }
         }
 
         public bool TryAdd(EquipmentData data)
         {
-            if (true == _dataList.Contains(data))
-                return false;
-
             if (false == TryGetFitPoint(data, out var point))
-                return false;
-
-            if (false == CanAddAtPoint(data, point))
                 return false;
 
             return TryAdd(data, point);
@@ -220,20 +198,17 @@ namespace BabyNightmare.InventorySystem
 
         public bool TryAdd(EquipmentData data, Vector2Int point)
         {
-            if (false == CanAddAtPoint(data, point))
+            if (true == _dataList.Contains(data))
                 return false;
 
-            if (true == _dataList.Contains(data))
-            {
-                Debug.Log("Already Contains");
+            if (false == CanAddAtPoint(data, point))
                 return false;
-            }
 
             _dataList.Add(data);
 
             data.Position = point;
 
-            AddImage(data);
+            AddCell(data);
             return true;
         }
 
@@ -246,7 +221,7 @@ namespace BabyNightmare.InventorySystem
             if (false == _dataList.Remove(data))
                 return false;
 
-            RemoveImage(data);
+            RemoveCell(data);
             return true;
         }
 
@@ -256,7 +231,7 @@ namespace BabyNightmare.InventorySystem
 
             foreach (var data in _dataList)
             {
-                RemoveImage(data);
+                RemoveCell(data);
             }
         }
 
@@ -274,7 +249,7 @@ namespace BabyNightmare.InventorySystem
                 return false;
             }
 
-            RemoveImage(data);
+            RemoveCell(data);
             Debug.Log(data.Name + " was dropped on the ground");
 
             return true;
@@ -387,7 +362,7 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             var localPosition = ScreenToLocalPositionInRenderer(eventData.position);
-            var equipmentOffest = GetEquipmentOffset(_draggedData);
+            var equipmentOffest = GetPivot(_draggedData);
             var offset = equipmentOffest - localPosition;
 
             _draggedEquipment = new DraggedEquipment(
@@ -396,7 +371,7 @@ namespace BabyNightmare.InventorySystem
                 _draggedData.Position,
                 _draggedData,
                 offset,
-                GetEuipmentImage(_draggedData.Image, false)
+                GetCell(_draggedData.Image, false)
             );
 
             TryRemove(_draggedData);
@@ -457,7 +432,7 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        internal Vector2 GetEquipmentOffset(EquipmentData data)
+        internal Vector2 GetPivot(EquipmentData data)
         {
             var x = (-(Width * 0.5f) + data.Position.x + data.Width * 0.5f) * CellSize.x;
             var y = (-(Height * 0.5f) + data.Position.y + data.Height * 0.5f) * CellSize.y;
@@ -486,7 +461,7 @@ namespace BabyNightmare.InventorySystem
 
         public void StartCoolDown(Action<EquipmentData> onCoolDown)
         {
-            foreach (var pair in _imageDict)
+            foreach (var pair in _cellDict)
             {
                 var data = pair.Key;
                 var image = pair.Value;
@@ -496,7 +471,7 @@ namespace BabyNightmare.InventorySystem
 
         public void StopCoolDown()
         {
-            foreach (var pair in _imageDict)
+            foreach (var pair in _cellDict)
             {
                 var image = pair.Value;
                 image.ResetCool();

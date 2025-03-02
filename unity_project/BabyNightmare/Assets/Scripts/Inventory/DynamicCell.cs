@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace BabyNightmare
 {
-    public class EquipmentImage : MonoBehaviour
+    public class DynamicCell : MonoBehaviour
     {
         [SerializeField] private RectTransform _rtf;
         [SerializeField] private Image _image;
@@ -14,6 +14,25 @@ namespace BabyNightmare
 
         public Image Image => _image;
         public RectTransform RTF => _rtf;
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void RefreshImage(Sprite sprite)
+        {
+            _image.sprite = sprite;
+            _rtf.sizeDelta = new Vector2(sprite.rect.width, sprite.rect.height);
+        }
+
+        public void SetType(Image.Type type) => _image.type = type;
+        public void EnableRaycast(bool enable) => _image.raycastTarget = enable;
 
         public void StartCoolDownLoop(float coolTime, Action onCoolDown)
         {

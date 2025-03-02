@@ -18,7 +18,7 @@ namespace BabyNightmare.InventorySystem
         }
 
         private readonly RectTransform _canvasRect;
-        private readonly EquipmentImage _image;
+        private readonly DynamicCell _image;
         private Vector2 _offset;
 
         public Vector2Int OriginPoint { get; private set; }
@@ -34,7 +34,7 @@ namespace BabyNightmare.InventorySystem
             Vector2Int originPoint,
             EquipmentData equipment,
             Vector2 offset,
-            EquipmentImage image)
+            DynamicCell image)
         {
             this.OriginalInventory = originalInventory;
             this.CurrentInventory = originalInventory;
