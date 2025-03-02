@@ -67,7 +67,7 @@ namespace BabyNightmare.InventorySystem
                 {
                     Equipment.Position = CurrentInventory.ScreenToGrid(value + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
                     var canAdd = CurrentInventory.CanAddAtPoint(Equipment, Equipment.Position);
-                    CurrentInventory.SelectEquipment(Equipment, !canAdd, Color.white);
+                    CurrentInventory.SelectGrid(Equipment, !canAdd, Color.white);
                 }
 
                 // Slowly animate the equipment towards the center of the mouse pointer
@@ -85,25 +85,25 @@ namespace BabyNightmare.InventorySystem
                 // Try to add new equipment
                 if (CurrentInventory.CanAddAtPoint(Equipment, grid))
                 {
-                    CurrentInventory.TryAddEquipmentAtPoint(Equipment, grid); // Place the equipment in a new location
+                    CurrentInventory.TryAdd(Equipment, grid); // Place the equipment in a new location
                     mode = DropMode.Added;
                 }
                 // Could not add or swap, return the equipment
                 else
                 {
-                    OriginalInventory.TryAddEquipmentAtPoint(Equipment, OriginPoint); // Return the equipment to its previous location
+                    OriginalInventory.TryAdd(Equipment, OriginPoint); // Return the equipment to its previous location
                     mode = DropMode.Returned;
 
                 }
 
-                CurrentInventory.ClearSelection();
+                CurrentInventory.ClearGrid();
             }
             else
             {
                 mode = DropMode.Dropped;
                 if (false == OriginalInventory.TryDrop(Equipment)) // Drop the equipment on the ground
                 {
-                    OriginalInventory.TryAddEquipmentAtPoint(Equipment, OriginPoint);
+                    OriginalInventory.TryAdd(Equipment, OriginPoint);
                 }
             }
 

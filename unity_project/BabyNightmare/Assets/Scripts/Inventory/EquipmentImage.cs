@@ -15,7 +15,6 @@ namespace BabyNightmare
         public Image Image => _image;
         public RectTransform RTF => _rtf;
 
-
         public void StartCoolDownLoop(float coolTime, Action onCoolDown)
         {
             StartCoroutine(Co_CoolDown(true, coolTime, onCoolDown));
