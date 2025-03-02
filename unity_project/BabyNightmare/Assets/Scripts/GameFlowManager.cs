@@ -5,6 +5,7 @@ using BabyNightmare.StaticData;
 using BabyNightmare.Character;
 using BabyNightmare.Lobby;
 using BabyNightmare.Match;
+using BabyNightmare.HUD;
 
 namespace BabyNightmare
 {
@@ -14,6 +15,7 @@ namespace BabyNightmare
         {
             LayerHelper.Init();
             PlayerData.Instance.Init();
+            HUDManager.Instance.Init();
             StaticDataManager.Instance.Init();
             LobbyManager.Instance.Init(StartMatch);
             MatchManager.Instance.Init(EnterLobby);
