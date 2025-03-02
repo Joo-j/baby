@@ -11,10 +11,10 @@ namespace BabyNightmare.Character
         public float Health { get; }
     }
 
-    public abstract class CharacterBase : BehaviourBase
+    public abstract class CharacterBase : BehaviourBase, ICharacter
     {
         [SerializeField] protected Animator _animator;
-        [SerializeField] protected MeshRenderer _renderer;
+        [SerializeField] protected Renderer _renderer;
         [SerializeField] private Transform _hpTF;
 
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
@@ -38,16 +38,47 @@ namespace BabyNightmare.Character
 
         public abstract void Die();
 
+
         public void ReceiveAttack(float damage)
         {
             _currentHealth = Mathf.Max(0, _currentHealth - damage);
 
             _hpBar.Refresh(_currentHealth, _maxHealth, false);
+            StartCoroutine(Co_FlashRed());
 
             if (_currentHealth == 0)
             {
                 Die();
             }
+        }
+
+        private IEnumerator Co_FlashRed()
+        {
+            var mat = _renderer.material;
+            var startColor = mat.color;
+            var targetColor = Color.red;
+            var duration = 0.1f;
+
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                yield return null;
+                elapsed += Time.deltaTime;
+
+                var factor = elapsed / duration;
+                mat.color = Color.Lerp(startColor, targetColor, factor);
+            }
+
+            while (elapsed > 0)
+            {
+                yield return null;
+                elapsed -= Time.deltaTime;
+
+                var factor = elapsed / duration;
+                mat.color = Color.Lerp(startColor, targetColor, factor);
+            }
+
+            mat.color = startColor;
         }
     }
 }

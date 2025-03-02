@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
-using BabyNightmare.Util;
 using Supercent.Util;
 
 namespace BabyNightmare.Character
