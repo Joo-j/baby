@@ -28,7 +28,6 @@ namespace BabyNightmare.InventorySystem
         private HashSet<Equipment> _equipmentSet = null;
         private Equipment _clickedEquipment = null;
         private static DraggedItem _draggedEquipment = null;
-        private PointerEventData _currentEventData = null;
 
         public Vector2 CellSize => _cellSize;
         public int Width => _width;
@@ -234,8 +233,6 @@ namespace BabyNightmare.InventorySystem
             {
                 _draggedEquipment.SetOwner(this);
             }
-
-            _currentEventData = eventData;
         }
 
         public void OnPointerExit(PointerEventData eventData)
@@ -249,8 +246,6 @@ namespace BabyNightmare.InventorySystem
             {
                 _clickedEquipment = null;
             }
-
-            _currentEventData = null;
         }
 
         public void OnPointerDown(PointerEventData eventData)
@@ -264,9 +259,9 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerUp(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
+            if (null != _clickedEquipment)
             {
-                //InventoryUtil.ShowInfoPopup(_draggedData);
+                //InventoryUtil.ShowInfoPopup(_clickedEquipment);
             }
         }
 
@@ -296,11 +291,18 @@ namespace BabyNightmare.InventorySystem
 
         public void OnDrag(PointerEventData eventData)
         {
-            _currentEventData = eventData;
-            if (_draggedEquipment != null)
+            if (null == _draggedEquipment)
             {
-                // Update the equipments position
-                //_draggedEquipment.Position = eventData.position;
+                var pos = GetCellPos(eventData.position);
+                var equipment = GetEquipmentAtPos(pos);
+                if (equipment == _clickedEquipment)
+                    return;
+
+                _clickedEquipment = equipment;
+            }
+            else
+            {
+                _draggedEquipment.SetPosition(eventData.position);
             }
         }
 
@@ -323,29 +325,6 @@ namespace BabyNightmare.InventorySystem
             }
 
             _draggedEquipment = null;
-            _currentEventData = null;
-        }
-
-        private void Update()
-        {
-            if (null == _currentEventData)
-                return;
-
-            if (null == _draggedEquipment)
-            {
-                // Detect hover
-                var pos = GetCellPos(_currentEventData.position);
-                var data = GetEquipmentAtPos(pos);
-                if (data == _clickedEquipment)
-                    return;
-
-                _clickedEquipment = data;
-            }
-            else
-            {
-                // Update position while dragging
-                _draggedEquipment.SetPosition(_currentEventData.position);
-            }
         }
 
         private Equipment GetEquipmentAtPos(Vector2Int pos)
@@ -376,18 +355,18 @@ namespace BabyNightmare.InventorySystem
             return new Vector2(x, y);
         }
 
+        private Vector2 GetLocalPos(Vector2 screenPos)
+        {
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var localPos);
+            return localPos;
+        }
+
         public Vector2Int GetCellPos(Vector2 screenPos)
         {
             var pos = GetLocalPos(screenPos);
             pos.x += _rtf.sizeDelta.x / 2;
             pos.y += _rtf.sizeDelta.y / 2;
             return new Vector2Int(Mathf.FloorToInt(pos.x / CellSize.x), Mathf.FloorToInt(pos.y / CellSize.y));
-        }
-
-        private Vector2 GetLocalPos(Vector2 screenPos)
-        {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var localPos);
-            return localPos;
         }
 
         public void StartCoolDown(Action<EquipmentData> onCoolDown)
