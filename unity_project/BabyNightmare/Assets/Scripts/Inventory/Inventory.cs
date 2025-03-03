@@ -10,7 +10,7 @@ using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
-    public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
     {
         [SerializeField] private RectTransform _rtf;
         [SerializeField] private CanvasGroup _canvasGroup;
@@ -257,12 +257,17 @@ namespace BabyNightmare.InventorySystem
             _clickedEquipment = GetEquipmentAtPos(pos);
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public void OnPointerClick(PointerEventData eventData)
         {
-            if (null != _clickedEquipment)
-            {
-                //InventoryUtil.ShowInfoPopup(_clickedEquipment);
-            }
+            var pos = GetCellPos(eventData.position);
+            var equipment = GetEquipmentAtPos(pos);
+            if (null == equipment)
+                return;
+
+            if (null != _draggedEquipment)
+                return;
+
+            InventoryUtil.ShowInfoPopup(equipment.Data);
         }
 
         public void OnBeginDrag(PointerEventData eventData)
