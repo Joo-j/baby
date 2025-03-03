@@ -53,10 +53,11 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _inventory.Init(_canvas);
-            _outside.Init(_canvas);
+            var canvasRect = _canvas.transform as RectTransform;
+            _inventory.Init(canvasRect);
+            _outside.Init(canvasRect);
 
-            _inventory.TryAddCell(_context.InitEquipment);
+            _inventory.TryAdd(_context.InitEquipment);
         }
 
         public void RefreshWave(int curWave, int maxWave, bool immediate)
@@ -83,7 +84,7 @@ namespace BabyNightmare.Match
             var equipmentList = _context.GetRerollData?.Invoke();
 
             for (var i = 0; i < equipmentList.Count; i++)
-                _outside.TryAddCell(equipmentList[i]);
+                _outside.TryAdd(equipmentList[i]);
         }
 
         public void OnClickFight()

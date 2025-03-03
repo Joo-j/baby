@@ -34,7 +34,7 @@ namespace BabyNightmare.InventorySystem
             this._originOwner = originalOwner;
             this._currentOwner = originalOwner;
             this._equipment = equipment;
-            this._originPos = equipment.Position;
+            this._originPos = equipment.Pos;
             this._offset = offset;
 
             _data = equipment.Data;
@@ -53,8 +53,8 @@ namespace BabyNightmare.InventorySystem
 
             if (null != _currentOwner)
             {
-                _equipment.Position = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
-                var isAddable = _currentOwner.IsAddable(_data, _equipment.Position);
+                _equipment.Pos = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
+                var isAddable = _currentOwner.IsAddable(_data, _equipment.Pos);
                 _currentOwner.SelectGrid(_equipment, false == isAddable, Color.white);
             }
 

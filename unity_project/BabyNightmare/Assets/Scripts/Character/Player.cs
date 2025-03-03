@@ -36,26 +36,29 @@ namespace BabyNightmare.Character
     public class Player : CharacterBase
     {
         [SerializeField] private Transform _throwStartTF;
+        [SerializeField] private float _hitRadius = 2f;
         [SerializeField] private AnimationTrigger _aniTrigger;
 
         private PlayerContext _context = null;
-        private Queue<AttackInfo> _attackInfoQueue = null;
+        private Queue<AttackInfo> _throwInfoQueue = null;
+
+        public override float HitRadius => _hitRadius;
 
         public override void Init(ICharacterContext context)
         {
             base.Init(context);
 
             _context = context as PlayerContext;
-            _attackInfoQueue = new Queue<AttackInfo>();
+            _throwInfoQueue = new Queue<AttackInfo>();
 
-            _aniTrigger.AddAction(1, OnAnimationAction);
+            _aniTrigger.AddAction(1, TryThrowObj);
         }
 
-        public void Move(Action doneCallback)
+        public void Move(float duration, Action doneCallback)
         {
-            _animator.Play(HASH_ANI_IDLE);
+            _animator.Play(HASH_ANI_MOVE);
 
-            this.Invoke(CoroutineUtil.WaitForSeconds(3f), () =>
+            this.Invoke(CoroutineUtil.WaitForSeconds(duration), () =>
             {
                 _animator.Play(HASH_ANI_IDLE);
                 doneCallback?.Invoke();
@@ -69,42 +72,39 @@ namespace BabyNightmare.Character
 
         public void Attack(EquipmentData equipmentData, ICharacter enemy)
         {
-            _attackInfoQueue.Enqueue(new AttackInfo(equipmentData, enemy));
+            _throwInfoQueue.Enqueue(new AttackInfo(equipmentData, enemy));
 
-            _animator.speed = _attackInfoQueue.Count;
+            if (_throwInfoQueue.Count > 1)
+            {
+                TryThrowObj();
+                return;
+            }
 
             _animator.Rebind();
             _animator.Play(HASH_ANI_ATTACK);
         }
 
-        private void OnAnimationAction()
+        private void TryThrowObj()
         {
-            if (_attackInfoQueue.Count == 0)
+            if (_throwInfoQueue.Count == 0)
                 return;
 
-            var info = _attackInfoQueue.Dequeue();
+            var info = _throwInfoQueue.Dequeue();
 
             var enemy = info.Character;
             if (null == enemy)
                 return;
 
-            ThrowObj(info);
-        }
+            if (enemy.Health <= 0)
+                return;
 
-        private void ThrowObj(AttackInfo info)
-        {
             var equipmentData = info.EquipmentData;
-            var enemy = info.Character;
+            var damage = equipmentData.Damage;
 
             var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
             obj.transform.position = _throwStartTF.position;
 
-            StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration,
-            () =>
-            {
-                var damage = equipmentData.Damage;
-                enemy?.ReceiveAttack(damage);
-            }));
+            StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
         }
 
         private IEnumerator Co_ThrowObj(Transform objTF, Transform targetTF, float duration, Action doneCallback)
@@ -120,7 +120,6 @@ namespace BabyNightmare.Character
                     yield break;
                 }
 
-                yield return null;
                 elapsed += Time.deltaTime;
                 var factor = elapsed / duration;
                 var targetPos = targetTF.position;
@@ -128,6 +127,7 @@ namespace BabyNightmare.Character
                 midPos.y *= 5;
                 objTF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
                 objTF.Rotate(Vector3.forward, 10f * Time.deltaTime, Space.Self);
+                yield return null;
             }
 
             objTF.position = targetTF.position;

@@ -10,6 +10,5 @@ namespace BabyNightmare.StaticData
         public int ID;
         public int Group;
         public int EnemyID;
-        public int Prob;
     }
 }

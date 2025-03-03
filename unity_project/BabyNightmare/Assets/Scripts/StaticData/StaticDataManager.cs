@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using BabyNightmare.Util;
 using UnityEngine;
 
 namespace BabyNightmare.StaticData
@@ -13,7 +12,6 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
         private Dictionary<int, List<EquipmentProbData>> _equipmentProbDataDict = null;
-        private Dictionary<int, BoolMatrixData> _slotDataDict = null;
         private Dictionary<int, EnemyData> _enemyDataDict = null;
         private Dictionary<int, List<EnemySpawnData>> _enemySpawnDataDict = null;
 
@@ -29,7 +27,6 @@ namespace BabyNightmare.StaticData
             InitWaveData();
             InitEquipmentData();
             InitEquipmentProbData();
-            InitSlotData();
             InitEnemyData();
             InitEnemySpawnData();
         }
@@ -80,19 +77,6 @@ namespace BabyNightmare.StaticData
                     _equipmentProbDataDict.Add(group, new List<EquipmentProbData>());
 
                 _equipmentProbDataDict[group].Add(data);
-            }
-        }
-
-        private void InitSlotData()
-        {
-            _slotDataDict = new Dictionary<int, BoolMatrixData>();
-
-            var slotDataList = _sheet.SlotDataList;
-
-            for (var i = 0; i < slotDataList.Count; i++)
-            {
-                var data = slotDataList[i];
-                _slotDataDict.Add(data.ID, data);
             }
         }
 
@@ -159,17 +143,6 @@ namespace BabyNightmare.StaticData
             }
 
             return dataList;
-        }
-
-        public BoolMatrixData GetSlotData(int id)
-        {
-            if (false == _slotDataDict.TryGetValue(id, out var data))
-            {
-                Debug.LogError($"{id} slot data is null");
-                return null;
-            }
-
-            return data;
         }
 
         public EnemyData GetEnemyData(int id)

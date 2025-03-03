@@ -22,7 +22,7 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Sprite _cellSpriteBlocked = null;
 
         private const string PATH_DYNAMIC_CELL = "Inventory/DynamicCell";
-        private Canvas _grandCanvas = null;
+        private RectTransform _grandCanvasRect = null;
         private DynamicCell[] _grid = null;
         private Pool<DynamicCell> _cellPool = null;
         private HashSet<Equipment> _equipmentSet = null;
@@ -33,9 +33,9 @@ namespace BabyNightmare.InventorySystem
         public int Width => _width;
         public int Height => _height;
 
-        public void Init(Canvas grandCanvas)
+        public void Init(RectTransform grandCanvasRect)
         {
-            _grandCanvas = grandCanvas;
+            _grandCanvasRect = grandCanvasRect;
 
             var poolTF = new GameObject("PoolTF").GetComponent<Transform>();
             poolTF.SetParent(transform);
@@ -102,7 +102,7 @@ namespace BabyNightmare.InventorySystem
                     if (false == shape.IsPartOfShape(new Vector2Int(x, y)))
                         continue;
 
-                    var pos = equipment.Position + new Vector2Int(x, y);
+                    var pos = equipment.Pos + new Vector2Int(x, y);
                     if (pos.x < 0)
                         continue;
                     if (pos.x >= Width)
@@ -131,7 +131,7 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public bool TryAddCell(EquipmentData data) //가능한 가장 가까운 자리
+        public bool TryAdd(EquipmentData data) //가능한 가장 가까운 자리
         {
             if (data.Width > Width)
                 return false;
@@ -161,7 +161,7 @@ namespace BabyNightmare.InventorySystem
             var cell = GetCell(data.Sprite, false);
 
             var equipment = new Equipment(cell, data);
-            equipment.Position = pos;
+            equipment.Pos = pos;
 
             cell.RTF.localPosition = GetPivot(equipment);
 
@@ -204,7 +204,7 @@ namespace BabyNightmare.InventorySystem
                         if (false == shape.IsPartOfShape(new Vector2Int(i, j)))
                             continue;
 
-                        var iPos = equipment.Position + new Vector2Int(i, j);
+                        var iPos = equipment.Pos + new Vector2Int(i, j);
                         for (var x = 0; x < targetData.Width; x++)
                         {
                             for (var y = 0; y < targetData.Height; y++)
@@ -279,7 +279,7 @@ namespace BabyNightmare.InventorySystem
             var offset = GetPivot(_clickedEquipment) - localPos;
 
             _draggedEquipment = new DraggedItem(
-                _grandCanvas.transform as RectTransform,
+                _grandCanvasRect.transform as RectTransform,
                 this,
                 _clickedEquipment,
                 offset
@@ -337,7 +337,7 @@ namespace BabyNightmare.InventorySystem
                 {
                     for (var j = 0; j < data.Height; j++)
                     {
-                        if (pos == equipment.Position + new Vector2Int(i, j))
+                        if (pos == equipment.Pos + new Vector2Int(i, j))
                             return equipment;
                     }
                 }
@@ -350,8 +350,8 @@ namespace BabyNightmare.InventorySystem
         {
             var data = equipment.Data;
 
-            var x = (-(Width * 0.5f) + equipment.Position.x + data.Width * 0.5f) * CellSize.x;
-            var y = (-(Height * 0.5f) + equipment.Position.y + data.Height * 0.5f) * CellSize.y;
+            var x = (-(Width * 0.5f) + equipment.Pos.x + data.Width * 0.5f) * CellSize.x;
+            var y = (-(Height * 0.5f) + equipment.Pos.y + data.Height * 0.5f) * CellSize.y;
             return new Vector2(x, y);
         }
 

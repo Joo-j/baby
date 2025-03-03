@@ -15,14 +15,11 @@ MonoBehaviour:
   ID: 1003
   Name: GreenVial
   Level: 1
-  Damage: 1
-  CoolTime: 1
+  Damage: 3
+  CoolTime: 2
   ThrowDuration: 0.5
-  Grade: 0
-  _type: 2
   _shape:
     _width: 1
     _height: 1
     _shape: 01
   _sprite: {fileID: 21300018, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
-  Position: {x: 0, y: 0}

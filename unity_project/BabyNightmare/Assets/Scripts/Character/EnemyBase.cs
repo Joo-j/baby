@@ -35,6 +35,8 @@ namespace BabyNightmare.Character
 
         private EnemyContext _context = null;
 
+        public override float HitRadius => 2f;
+
         public override void Init(ICharacterContext context)
         {
             base.Init(context);
@@ -77,44 +79,45 @@ namespace BabyNightmare.Character
 
                 while (elapsed < moveStepDuration)
                 {
-                    yield return null;
                     elapsed += Time.deltaTime;
                     var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
                     transform.position = Vector3.Lerp(startPos, targetPos, factor);
 
-                    if (Vector3.Distance(transform.position, player.TF.position) <= 0.1f)
+                    if (Vector3.Distance(transform.position, player.TF.position) <= player.HitRadius)
                     {
-                        transform.position = player.TF.position;
-                        StartAttack();
-                        yield break;
+                        Attack();
+                        break;
                     }
+
+                    yield return null;
                 }
 
                 yield return CoroutineUtil.WaitForSeconds(stopStepDuration);
             }
         }
-        private void StartAttack()
+        private void Attack()
         {
             if (null != _coAct)
                 StopCoroutine(_coAct);
 
-
-            _coAct = StartCoroutine(Co_Attack());
-        }
-
-        private IEnumerator Co_Attack()
-        {
             var interval = _context.EnemyData.Attack_Interval;
             var player = _context.Player;
+            if (player.Health <= 0)
+                return;
 
-            while (true)
+            _coAct = StartCoroutine(Co_Attack());
+
+            IEnumerator Co_Attack()
             {
-                yield return new WaitForSeconds(interval);
+                while (true)
+                {
+                    _animator.Play(HASH_ANI_ATTACK);
 
-                _animator.Play(HASH_ANI_ATTACK);
+                    var damage = _context.EnemyData.Damage;
+                    player.ReceiveAttack(damage);
 
-                var damage = _context.EnemyData.Damage;
-                player.ReceiveAttack(damage);
+                    yield return new WaitForSeconds(interval);
+                }
             }
         }
 

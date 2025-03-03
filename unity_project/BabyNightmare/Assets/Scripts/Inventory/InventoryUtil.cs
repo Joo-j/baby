@@ -16,7 +16,7 @@ namespace BabyNightmare.InventorySystem
                 _infoPopup = ObjectUtil.LoadAndInstantiate<EquipmentInfoPopup>(PATH_EQUIPMENT_INFO_POPUP, null);                
             }
 
-            _infoPopup.Show(data);
+            _infoPopup?.Show(data);
         }
     }
 }

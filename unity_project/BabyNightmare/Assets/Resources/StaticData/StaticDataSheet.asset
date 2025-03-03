@@ -57,27 +57,23 @@ MonoBehaviour:
     Prob: 1
   - ID: 2
     Group: 101
-    EquipmentID: 1004
+    EquipmentID: 1002
     Prob: 1
   - ID: 3
     Group: 101
-    EquipmentID: 1006
+    EquipmentID: 1003
     Prob: 1
   - ID: 4
-    Group: 102
-    EquipmentID: 1001
-    Prob: 1
-  - ID: 5
-    Group: 102
-    EquipmentID: 1002
-    Prob: 1
-  - ID: 6
-    Group: 102
+    Group: 101
     EquipmentID: 1004
     Prob: 1
-  - ID: 7
-    Group: 102
-    EquipmentID: 1007
+  - ID: 5
+    Group: 101
+    EquipmentID: 1005
+    Prob: 1
+  - ID: 6
+    Group: 101
+    EquipmentID: 1006
     Prob: 1
   EnemyDataList:
   - ID: 101
@@ -111,15 +107,36 @@ MonoBehaviour:
   - ID: 1
     Group: 101
     EnemyID: 101
-    Prob: 5
   - ID: 1
     Group: 101
     EnemyID: 102
-    Prob: 4
   - ID: 1
     Group: 101
     EnemyID: 103
-    Prob: 1
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
+  - ID: 1
+    Group: 101
+    EnemyID: 102
   SlotDataList:
   - ID: 1
     Rows: 2

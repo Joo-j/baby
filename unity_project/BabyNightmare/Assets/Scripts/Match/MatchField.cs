@@ -55,7 +55,7 @@ namespace BabyNightmare.Match
 
         public void StartWave(List<EnemyData> enemyDataList)
         {
-            _aliveEnemies.Clear();
+            _aliveEnemies.Clear();            
 
             StartCoroutine(Co_SpawnEnemy(enemyDataList));
         }
@@ -69,6 +69,7 @@ namespace BabyNightmare.Match
                 var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy));
 
                 enemy.Init(enemyContext);
+                enemy.TF.localPosition += Vector3.right * UnityEngine.Random.Range(-4f, 4f);
                 _aliveEnemies.Add(enemy);
 
                 var randomDelay = UnityEngine.Random.Range(1.5f, 3f);
@@ -104,7 +105,7 @@ namespace BabyNightmare.Match
 
         public void MovePlayer(Action doneCallback)
         {
-            _player.Move(doneCallback);
+            _player.Move(3f, doneCallback);
         }
     }
 }

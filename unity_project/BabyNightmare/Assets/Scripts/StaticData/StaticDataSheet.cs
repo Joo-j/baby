@@ -13,6 +13,5 @@ namespace BabyNightmare.StaticData
         public List<EquipmentProbData> EquipmentProbDataList;
         public List<EnemyData> EnemyDataList;
         public List<EnemySpawnData> EnemySpawnDataList;
-        public List<BoolMatrixData> SlotDataList;
     }
 }
