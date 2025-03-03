@@ -55,10 +55,9 @@ namespace BabyNightmare.Character
         {
             _animator.Play(HASH_ANI_IDLE);
 
-            this.Invoke(CoroutineUtil.WaitForSeconds(4f), () =>
+            this.Invoke(CoroutineUtil.WaitForSeconds(3f), () =>
             {
-                _animator.Play(HASH_ANI_MOVE);
-
+                _animator.Play(HASH_ANI_IDLE);
                 doneCallback?.Invoke();
             });
         }
@@ -85,6 +84,10 @@ namespace BabyNightmare.Character
 
             var info = _attackInfoQueue.Dequeue();
 
+            var enemy = info.Character;
+            if (null == enemy)
+                return;
+
             ThrowObj(info);
         }
 
@@ -92,8 +95,6 @@ namespace BabyNightmare.Character
         {
             var equipmentData = info.EquipmentData;
             var enemy = info.Character;
-            if (null == enemy || null == enemy.GO)
-                return;
 
             var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
             obj.transform.position = _throwStartTF.position;

@@ -12,7 +12,7 @@ namespace BabyNightmare.InventorySystem
 
         public int Width => _width;
         public int Height => _height;
-        
+
         public EquipmentShape(int width, int height)
         {
             _width = width;
@@ -34,19 +34,14 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-
         public bool IsPartOfShape(Vector2Int localPoint)
         {
             if (localPoint.x < 0 || localPoint.x >= _width || localPoint.y < 0 || localPoint.y >= _height)
                 return false;
 
             var index = GetIndex(localPoint.x, localPoint.y);
-
             if (index < 0 || index >= _shape.Length)
-            {
-                //Debug.Log($"0 < {index} < {_shape.Length}");
                 return false;
-            }
 
             return _shape[index];
         }

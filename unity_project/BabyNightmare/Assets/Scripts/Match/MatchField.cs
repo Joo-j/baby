@@ -5,6 +5,7 @@ using UnityEngine;
 using Supercent.Util;
 using BabyNightmare.Character;
 using BabyNightmare.StaticData;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.Match
 {
@@ -21,12 +22,14 @@ namespace BabyNightmare.Match
         private Action _onClearWave = null;
         private Action _onFailWave = null;
         private Player _player = null;
-        private List<EnemyBase> _aliveEnemies = new List<EnemyBase>();
+        private List<EnemyBase> _aliveEnemies = null;
 
         public RenderTexture RT => _rt;
 
         public void Init(Action onClearWave, Action onFailWave)
         {
+            _aliveEnemies = new List<EnemyBase>();
+
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
 
@@ -81,7 +84,7 @@ namespace BabyNightmare.Match
         private void OnDieEnemy(EnemyBase enemy)
         {
             _aliveEnemies.Remove(enemy);
-            Destroy(enemy.gameObject);
+            Destroy(enemy.GO);
 
             if (_aliveEnemies.Count == 0)
             {

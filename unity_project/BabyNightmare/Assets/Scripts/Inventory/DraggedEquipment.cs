@@ -1,13 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Diagnostics.CodeAnalysis;
 using BabyNightmare.StaticData;
 
 namespace BabyNightmare.InventorySystem
 {
-    /// <summary>
-    /// Class for keeping track of dragged equipments
-    /// </summary>
     public class DraggedEquipment
     {
         public enum DropMode
@@ -22,30 +18,28 @@ namespace BabyNightmare.InventorySystem
         private Vector2 _offset;
 
         public Vector2Int OriginPoint { get; private set; }
-        public EquipmentData Equipment { get; private set; }
+        public EquipmentData Data { get; private set; }
         public Inventory OriginalInventory { get; private set; }
         public Inventory CurrentInventory { get; set; }
 
 
-        [SuppressMessage("ReSharper", "Unity.InefficientPropertyAccess")]
         public DraggedEquipment(
             Canvas canvas,
             Inventory originalInventory,
             Vector2Int originPoint,
-            EquipmentData equipment,
+            EquipmentData data,
             Vector2 offset,
             DynamicCell image)
         {
             this.OriginalInventory = originalInventory;
             this.CurrentInventory = originalInventory;
             this.OriginPoint = originPoint;
-            this.Equipment = equipment;
+            this.Data = data;
 
             _canvasRect = canvas.transform as RectTransform;
 
             _offset = offset;
 
-            // Create an image representing the dragged equipment
             _image = image;
             _image.transform.SetParent(_canvasRect);
             _image.transform.SetAsLastSibling();
@@ -65,9 +59,9 @@ namespace BabyNightmare.InventorySystem
                 // Make selections
                 if (CurrentInventory != null)
                 {
-                    Equipment.Position = CurrentInventory.ScreenToGrid(value + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
-                    var canAdd = CurrentInventory.CanAddAtPoint(Equipment, Equipment.Position);
-                    CurrentInventory.SelectGrid(Equipment, !canAdd, Color.white);
+                    Data.Position = CurrentInventory.GetCellPos(value + _offset + GetOffset(CurrentInventory, Data));
+                    var canAdd = CurrentInventory.TryOverlap(Data, Data.Position);
+                    CurrentInventory.SelectGrid(Data, !canAdd, Color.white);
                 }
 
                 // Slowly animate the equipment towards the center of the mouse pointer
@@ -80,18 +74,18 @@ namespace BabyNightmare.InventorySystem
             DropMode mode;
             if (null != CurrentInventory)
             {
-                var grid = CurrentInventory.ScreenToGrid(pos + _offset + GetDraggedEquipmentOffset(CurrentInventory, Equipment));
+                var grid = CurrentInventory.GetCellPos(pos + _offset + GetOffset(CurrentInventory, Data));
 
                 // Try to add new equipment
-                if (CurrentInventory.CanAddAtPoint(Equipment, grid))
+                if (CurrentInventory.TryOverlap(Data, grid))
                 {
-                    CurrentInventory.TryAdd(Equipment, grid); // Place the equipment in a new location
+                    CurrentInventory.TryAddCell(Data, grid); // Place the equipment in a new location
                     mode = DropMode.Added;
                 }
                 // Could not add or swap, return the equipment
                 else
                 {
-                    OriginalInventory.TryAdd(Equipment, OriginPoint); // Return the equipment to its previous location
+                    OriginalInventory.TryAddCell(Data, OriginPoint); // Return the equipment to its previous location
                     mode = DropMode.Returned;
 
                 }
@@ -101,9 +95,9 @@ namespace BabyNightmare.InventorySystem
             else
             {
                 mode = DropMode.Dropped;
-                if (false == OriginalInventory.TryDrop(Equipment)) // Drop the equipment on the ground
+                if (false == OriginalInventory.TryRemoveCell(Data)) // Drop the equipment on the ground
                 {
-                    OriginalInventory.TryAdd(Equipment, OriginPoint);
+                    OriginalInventory.TryAddCell(Data, OriginPoint);
                 }
             }
 
@@ -116,14 +110,14 @@ namespace BabyNightmare.InventorySystem
         /*
          * Returns the offset between dragged equipment and the grid 
          */
-        private Vector2 GetDraggedEquipmentOffset(Inventory manager, EquipmentData equipment)
+        private Vector2 GetOffset(Inventory manager, EquipmentData data)
         {
             var scale = new Vector2(
                 Screen.width / _canvasRect.sizeDelta.x,
                 Screen.height / _canvasRect.sizeDelta.y
             );
-            var gx = -(equipment.Width * manager.CellSize.x / 2f) + (manager.CellSize.x / 2);
-            var gy = -(equipment.Height * manager.CellSize.y / 2f) + (manager.CellSize.y / 2);
+            var gx = -(data.Width * manager.CellSize.x / 2f) + (manager.CellSize.x / 2);
+            var gy = -(data.Height * manager.CellSize.y / 2f) + (manager.CellSize.y / 2);
             return new Vector2(gx, gy) * scale;
         }
     }

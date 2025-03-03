@@ -18,12 +18,6 @@ namespace BabyNightmare.Util
         private Func<T> _creator;
         private bool _allowTakingWhenEmpty;
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="creator">A function to be used for creating new objects</param>
-        /// <param name="initialCount">Initial count of objects in the pool</param>
-        /// <param name="allowTakingWhenEmpty">If true, objects can be taken from the pool even when the pool is empty</param>
         public Pool(Func<T> creator, int initialCount = 0, bool allowTakingWhenEmpty = true)
         {
             if (creator == null) throw new ArgumentNullException("pCreator");
@@ -40,30 +34,9 @@ namespace BabyNightmare.Util
             }
         }
 
-        /// <summary>
-        /// Returns the current number of objects in the pool
-        /// </summary>
         public int Count => _inactive.Count;
-
-        /// <summary>
-        /// Returns true if the pool is empty.
-		/// Note that objects can still be taken from an empty pool, if allowTakingWhenEmpty 
-        /// is set to true, but that additional allocations will be imposed.
         public bool IsEmpty => Count == 0;
 
-        /// <summary>
-        /// Returns true of an item can be taken from the pool right now.
-        /// This is not the same as whether or not the pool is empty.
-        /// </summary>
-        public bool CanTake => _allowTakingWhenEmpty || !IsEmpty;
-
-        /// <summary>
-        /// Takes an object from the pool.
-        /// If the pool is empty and allowTakingWhenEmpty is enabled, it will allocate
-        /// a new object. Otherwise, a pooled object is returned. Either way, the object 
-        /// should eventually be returned to the pool by calling Recycle().
-        /// </summary>
-        /// <returns>An object of type T, or null if nothing could be taken</returns>
         public T Get()
         {
             if (IsEmpty)
@@ -72,7 +45,7 @@ namespace BabyNightmare.Util
                 {
                     var obj = _creator();
                     _inactive.Add(obj);
-                    return TakeInternal();
+                    return GetInternal();
                 }
                 else
                 {
@@ -81,11 +54,11 @@ namespace BabyNightmare.Util
             }
             else
             {
-                return TakeInternal();
+                return GetInternal();
             }
         }
 
-        private T TakeInternal()
+        private T GetInternal()
         {
             T obj = _inactive[_inactive.Count - 1];
             _inactive.RemoveAt(_inactive.Count - 1);
@@ -93,29 +66,22 @@ namespace BabyNightmare.Util
             return obj;
         }
 
-        /// <summary>
-		/// Recycles an object into the pool. After this point, the object is
-		/// considered dead and should not be used until taken from the pool
-		/// again.
-        /// </summary>
         public void Return(T item)
         {
-            if (!_active.Contains(item)) { throw new InvalidOperationException("An item was recycled even though it was not part of the pool"); }
+            if (false == _active.Contains(item))
+            {
+                throw new InvalidOperationException("An item was recycled even though it was not part of the pool");
+            }
+
             _inactive.Add(item);
             _active.Remove(item);
         }
-
-        /// <summary>
-        /// Returns a copied list of all inactive items
-        /// </summary>
+        
         public List<T> GetInactive()
         {
             return _inactive.ToList();
         }
 
-        /// <summary>
-        /// Returns a copied list of all active items
-        /// </summary>
         public List<T> GetActive()
         {
             return _active.ToList();
