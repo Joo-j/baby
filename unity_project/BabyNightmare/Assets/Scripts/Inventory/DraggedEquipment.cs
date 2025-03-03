@@ -4,7 +4,7 @@ using BabyNightmare.StaticData;
 
 namespace BabyNightmare.InventorySystem
 {
-    public class DraggedEquipment
+    public class DraggedItem
     {
         public enum DropMode
         {
@@ -13,112 +13,106 @@ namespace BabyNightmare.InventorySystem
             Dropped,
         }
 
-        private readonly RectTransform _canvasRect;
-        private readonly DynamicCell _image;
+        private RectTransform _canvasRect;
+        private Equipment _equipment;
         private Vector2 _offset;
+        private Vector2Int _originPos;
+        private DynamicCell _cell = null;
 
-        public Vector2Int OriginPoint { get; private set; }
-        public EquipmentData Data { get; private set; }
-        public Inventory OriginalInventory { get; private set; }
-        public Inventory CurrentInventory { get; set; }
+        private Inventory _originOwner = null;
+        private Inventory _currentOwner = null;
+        private EquipmentData _data { get; }
 
-
-        public DraggedEquipment(
-            Canvas canvas,
-            Inventory originalInventory,
-            Vector2Int originPoint,
-            EquipmentData data,
-            Vector2 offset,
-            DynamicCell image)
+        public DraggedItem
+        (
+            RectTransform canvasRect,
+            Inventory originalOwner,
+            Equipment equipment,
+            Vector2 offset)
         {
-            this.OriginalInventory = originalInventory;
-            this.CurrentInventory = originalInventory;
-            this.OriginPoint = originPoint;
-            this.Data = data;
+            this._canvasRect = canvasRect;
+            this._originOwner = originalOwner;
+            this._currentOwner = originalOwner;
+            this._equipment = equipment;
+            this._originPos = equipment.Position;
+            this._offset = offset;
 
-            _canvasRect = canvas.transform as RectTransform;
+            _data = equipment.Data;
 
-            _offset = offset;
-
-            _image = image;
-            _image.transform.SetParent(_canvasRect);
-            _image.transform.SetAsLastSibling();
-            _image.transform.localScale = Vector3.one;
-            _image.Image.SetNativeSize();
+            _cell = GameObject.Instantiate(_equipment.Cell);
+            _cell.RTF.SetParent(_canvasRect);
+            _cell.RTF.SetAsLastSibling();
+            _cell.RTF.localScale = Vector3.one;
+            _cell.Image.SetNativeSize();
         }
 
-        public Vector2 Position
+        public void SetPosition(Vector2 value)
         {
-            set
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, value + _offset, null, out var localPos);
+            _cell.RTF.localPosition = localPos;
+
+            if (null != _currentOwner)
             {
-                // Move the image                
-                RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, value + _offset, null, out var newValue);
-                _image.RTF.localPosition = newValue;
-
-
-                // Make selections
-                if (CurrentInventory != null)
-                {
-                    Data.Position = CurrentInventory.GetCellPos(value + _offset + GetOffset(CurrentInventory, Data));
-                    var canAdd = CurrentInventory.TryOverlap(Data, Data.Position);
-                    CurrentInventory.SelectGrid(Data, !canAdd, Color.white);
-                }
-
-                // Slowly animate the equipment towards the center of the mouse pointer
-                _offset = Vector2.Lerp(_offset, Vector2.zero, Time.deltaTime * 10f);
+                _equipment.Position = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
+                var isAddable = _currentOwner.IsAddable(_data, _equipment.Position);
+                _currentOwner.SelectGrid(_equipment, false == isAddable, Color.white);
             }
+
+            // Slowly animate the equipment towards the center of the mouse pointer
+            _offset = Vector2.Lerp(_offset, Vector2.zero, Time.deltaTime * 10f);
         }
 
         public DropMode Drop(Vector2 pos)
         {
             DropMode mode;
-            if (null != CurrentInventory)
+            if (null != _currentOwner)
             {
-                var grid = CurrentInventory.GetCellPos(pos + _offset + GetOffset(CurrentInventory, Data));
+                var cellPos = _currentOwner.GetCellPos(pos + _offset + GetOffset(_data));
 
-                // Try to add new equipment
-                if (CurrentInventory.TryOverlap(Data, grid))
+                if (true == _currentOwner.IsAddable(_data, cellPos))
                 {
-                    CurrentInventory.TryAddCell(Data, grid); // Place the equipment in a new location
+                    _currentOwner.TryAdd(_data, cellPos);
                     mode = DropMode.Added;
                 }
-                // Could not add or swap, return the equipment
                 else
                 {
-                    OriginalInventory.TryAddCell(Data, OriginPoint); // Return the equipment to its previous location
+                    _originOwner.TryAdd(_data, _originPos);
                     mode = DropMode.Returned;
-
                 }
 
-                CurrentInventory.ClearGrid();
+                _currentOwner.ClearGrid();
             }
             else
             {
                 mode = DropMode.Dropped;
-                if (false == OriginalInventory.TryRemoveCell(Data)) // Drop the equipment on the ground
+                if (false == _originOwner.TryRemove(_equipment))
                 {
-                    OriginalInventory.TryAddCell(Data, OriginPoint);
+                    _originOwner.TryAdd(_data, _originPos);
                 }
             }
 
-            // Destroy the image representing the equipment
-            Object.Destroy(_image.gameObject);
+            Object.Destroy(_cell.GO);
+            _cell = null;
 
             return mode;
         }
 
-        /*
-         * Returns the offset between dragged equipment and the grid 
-         */
-        private Vector2 GetOffset(Inventory manager, EquipmentData data)
+        private Vector2 GetOffset(EquipmentData data)
         {
-            var scale = new Vector2(
-                Screen.width / _canvasRect.sizeDelta.x,
-                Screen.height / _canvasRect.sizeDelta.y
-            );
-            var gx = -(data.Width * manager.CellSize.x / 2f) + (manager.CellSize.x / 2);
-            var gy = -(data.Height * manager.CellSize.y / 2f) + (manager.CellSize.y / 2);
+            if (null == _currentOwner)
+                return default;
+
+            var cellSize = _currentOwner.CellSize;
+
+            var scale = new Vector2(Screen.width / _canvasRect.sizeDelta.x, Screen.height / _canvasRect.sizeDelta.y);
+            var gx = -(data.Width * cellSize.x / 2f) + (cellSize.x / 2);
+            var gy = -(data.Height * cellSize.y / 2f) + (cellSize.y / 2);
             return new Vector2(gx, gy) * scale;
+        }
+
+        public void SetOwner(Inventory owner)
+        {
+            _currentOwner = owner;
         }
     }
 }

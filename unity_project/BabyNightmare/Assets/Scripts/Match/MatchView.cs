@@ -78,7 +78,7 @@ namespace BabyNightmare.Match
 
         public void OnClickReroll()
         {
-            _outside.RemoveAllCell();
+            _outside.RemoveAll();
 
             var equipmentList = _context.GetRerollData?.Invoke();
 
@@ -88,7 +88,7 @@ namespace BabyNightmare.Match
 
         public void OnClickFight()
         {
-            _outside.RemoveAllCell();
+            _outside.RemoveAll();
             _inventory.StartCoolDown(_context.OnCoolDown);
 
             var startSize = new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);

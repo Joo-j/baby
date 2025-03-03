@@ -19,7 +19,5 @@ namespace BabyNightmare.StaticData
         public int Width => _shape.Width;
         public int Height => _shape.Height;
         public EquipmentShape Shape => _shape;
-
-        public Vector2Int Position { get; set; }
     }
 }

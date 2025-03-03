@@ -114,16 +114,15 @@ namespace BabyNightmare.Character
             var elapsed = 0f;
             while (elapsed < duration)
             {
-                yield return null;
-                elapsed += Time.deltaTime;
-                var factor = elapsed / duration;
-
                 if (null == targetTF)
                 {
                     Destroy(objTF.gameObject);
                     yield break;
                 }
 
+                yield return null;
+                elapsed += Time.deltaTime;
+                var factor = elapsed / duration;
                 var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
                 midPos.y *= 5;
