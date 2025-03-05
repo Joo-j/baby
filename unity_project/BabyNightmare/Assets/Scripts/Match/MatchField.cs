@@ -100,7 +100,7 @@ namespace BabyNightmare.Match
 
             var rand = UnityEngine.Random.Range(0, _aliveEnemies.Count);
             var randomEnemy = _aliveEnemies[rand];
-            _player.Attack(equipmentData, randomEnemy);
+            _player.UseEquipment(equipmentData, randomEnemy);
         }
 
         public void MovePlayer(Action doneCallback)

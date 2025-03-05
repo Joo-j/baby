@@ -59,6 +59,9 @@ namespace BabyNightmare.Character
 
         public void ReceiveAttack(float damage)
         {
+            if (damage <= 0)
+                return;
+
             _heath = Mathf.Max(0, _heath - damage);
 
             _hpBar.Refresh(_heath, _maxHealth, false);
@@ -72,6 +75,15 @@ namespace BabyNightmare.Character
             {
                 Die();
             }
+        }
+
+        public void Heal(float amount)
+        {
+            if (amount <= 0)
+                return;
+
+            _heath += amount;
+            _hpBar.Refresh(_heath, _maxHealth, false);
         }
 
         private IEnumerator Co_FlashRed()

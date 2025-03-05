@@ -21,12 +21,12 @@ namespace BabyNightmare.Character
         }
     }
 
-    public class AttackInfo
+    public class EquipmentUseInfo
     {
         public EquipmentData EquipmentData { get; }
         public ICharacter Character { get; }
 
-        public AttackInfo(EquipmentData equipmentData, ICharacter character)
+        public EquipmentUseInfo(EquipmentData equipmentData, ICharacter character)
         {
             EquipmentData = equipmentData;
             Character = character;
@@ -40,7 +40,8 @@ namespace BabyNightmare.Character
         [SerializeField] private AnimationTrigger _aniTrigger;
 
         private PlayerContext _context = null;
-        private Queue<AttackInfo> _throwInfoQueue = null;
+        private Queue<EquipmentUseInfo> _useInfoQueue = null;
+        private float _defence = 0f;
 
         public override float HitRadius => _hitRadius;
 
@@ -49,9 +50,9 @@ namespace BabyNightmare.Character
             base.Init(context);
 
             _context = context as PlayerContext;
-            _throwInfoQueue = new Queue<AttackInfo>();
+            _useInfoQueue = new Queue<EquipmentUseInfo>();
 
-            _aniTrigger.AddAction(1, TryThrowObj);
+            _aniTrigger.AddAction(1, TryUseEquipment);
         }
 
         public void Move(float duration, Action doneCallback)
@@ -70,13 +71,18 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
         }
 
-        public void Attack(EquipmentData equipmentData, ICharacter enemy)
+        public void AddDefence(float amount)
         {
-            _throwInfoQueue.Enqueue(new AttackInfo(equipmentData, enemy));
+            _defence += amount;
+        }
 
-            if (_throwInfoQueue.Count > 1)
+        public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
+        {
+            _useInfoQueue.Enqueue(new EquipmentUseInfo(equipmentData, enemy));
+
+            if (_useInfoQueue.Count > 1)
             {
-                TryThrowObj();
+                TryUseEquipment();
                 return;
             }
 
@@ -84,12 +90,17 @@ namespace BabyNightmare.Character
             _animator.Play(HASH_ANI_ATTACK);
         }
 
-        private void TryThrowObj()
+        private void TryUseEquipment()
         {
-            if (_throwInfoQueue.Count == 0)
+            if (_useInfoQueue.Count == 0)
                 return;
 
-            var info = _throwInfoQueue.Dequeue();
+            var info = _useInfoQueue.Dequeue();
+
+            var equipmentData = info.EquipmentData;
+
+            Heal(equipmentData.Heal);
+            AddDefence(equipmentData.Defence);
 
             var enemy = info.Character;
             if (null == enemy)
@@ -98,13 +109,15 @@ namespace BabyNightmare.Character
             if (enemy.Health <= 0)
                 return;
 
-            var equipmentData = info.EquipmentData;
             var damage = equipmentData.Damage;
 
-            var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
-            obj.transform.position = _throwStartTF.position;
+            if (damage > 0 && equipmentData.ThrowDuration > 0)
+            {
+                var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
+                obj.transform.position = _throwStartTF.position;
 
-            StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
+                StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
+            }
         }
 
         private IEnumerator Co_ThrowObj(Transform objTF, Transform targetTF, float duration, Action doneCallback)
