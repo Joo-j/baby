@@ -8,7 +8,7 @@ using Unity.VisualScripting;
 
 namespace BabyNightmare.Match
 {
-    public class MatchManager : SingletoneBase<MatchManager>
+    public class MatchManager : SingletonBase<MatchManager>
     {
         private const string PATH_MATCH_FIELD = "Match/MatchField";
         private const string PATH_MATCH_VIEW = "Match/MatchView";

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    public class StaticDataManager : SingletoneBase<StaticDataManager>
+    public class StaticDataManager : SingletonBase<StaticDataManager>
     {
         private const string PATH_STATIC_DATA_SHEET = "StaticData/StaticDataSheet";
         private StaticDataSheet _sheet = null;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BabyNightmare.Lobby
 {
-    public class LobbyManager : SingletoneBase<LobbyManager>
+    public class LobbyManager : SingletonBase<LobbyManager>
     {
         private const string PATH_LOBBY_VIEW = "Lobby/LobbyView";
         private LobbyView _lobbyView = null;

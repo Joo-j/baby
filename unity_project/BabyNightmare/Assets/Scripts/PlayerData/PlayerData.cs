@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BabyNightmare
 {
-    public class PlayerData : SingletoneBase<PlayerData>
+    public class PlayerData : SingletonBase<PlayerData>
     {
         private const string FILE_PLAYER_DATA = "player_data";
         private const string KEY_STAGE = "player_data_stage";

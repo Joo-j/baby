@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SingletoneBase<T> where T : new()
+public class SingletonBase<T> where T : new()
 {
     private static T _instance = default;
     public static T Instance

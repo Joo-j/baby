@@ -9,7 +9,7 @@ using BabyNightmare.HUD;
 
 namespace BabyNightmare
 {
-    public class GameFlowManager : SingletoneBase<GameFlowManager>
+    public class GameFlowManager : SingletonBase<GameFlowManager>
     {
         public void AppOpen()
         {
