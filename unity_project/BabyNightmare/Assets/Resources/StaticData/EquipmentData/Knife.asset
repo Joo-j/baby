@@ -20,8 +20,9 @@ MonoBehaviour:
   Defence: 0
   CoolTime: 1.5
   ThrowDuration: 0.4
+  UpgradeDataID: -1
   Sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
-    _row: 2
-    _column: 1
+    _column: 2
+    _row: 1
     _shape: 0101

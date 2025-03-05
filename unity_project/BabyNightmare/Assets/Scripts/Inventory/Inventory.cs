@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
-using Unity.VisualScripting;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -14,9 +13,8 @@ namespace BabyNightmare.InventorySystem
     {
         [SerializeField] private RectTransform _rtf;
         [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private int _width = 4;
-        [SerializeField] private int _height = 4;
         [SerializeField] private Vector2Int _cellSize = new Vector2Int(32, 32);
+        [SerializeField] private RectShape _shape;
         [SerializeField] private Sprite _cellSpriteEmpty = null;
         [SerializeField] private Sprite _cellSpriteSelected = null;
         [SerializeField] private Sprite _cellSpriteBlocked = null;
@@ -24,43 +22,42 @@ namespace BabyNightmare.InventorySystem
         private const string PATH_DYNAMIC_CELL = "Inventory/DynamicCell";
         private RectTransform _grandCanvasRect = null;
         private DynamicCell[] _bgCellArr = null;
+        private Transform _poolTF = null;
         private Pool<DynamicCell> _cellPool = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Equipment _clickedEquipment = null;
         private static DraggedItem _draggedEquipment = null;
 
-        public int Row => _width;
-        public int Column => _height;
         public Vector2 CellSize => _cellSize;
 
         public void Init(RectTransform grandCanvasRect)
         {
             _grandCanvasRect = grandCanvasRect;
 
-            var poolTF = new GameObject("PoolTF").GetComponent<Transform>();
-            poolTF.SetParent(transform);
-            poolTF.localPosition = Vector3.zero;
-            poolTF.localScale = Vector3.one;
+            _poolTF = new GameObject("PoolTF").GetComponent<Transform>();
+            _poolTF.SetParent(transform);
+            _poolTF.localPosition = Vector3.zero;
+            _poolTF.localScale = Vector3.one;
 
-            _cellPool = new Pool<DynamicCell>(() => ObjectUtil.LoadAndInstantiate<DynamicCell>(PATH_DYNAMIC_CELL, poolTF));
+            _cellPool = new Pool<DynamicCell>(() => ObjectUtil.LoadAndInstantiate<DynamicCell>(PATH_DYNAMIC_CELL, _poolTF));
 
-            _bgCellArr = new DynamicCell[Row * Column];
+            _bgCellArr = new DynamicCell[_shape.Row * _shape.Column];
 
-            var gridSize = new Vector2(_cellSize.x * Row, _cellSize.y * Column);
+            var gridSize = new Vector2(_cellSize.x * _shape.Column, _cellSize.y * _shape.Row);
             _rtf.sizeDelta = gridSize;
 
             var topLeft = new Vector3(-gridSize.x / 2, -gridSize.y / 2, 0); // Calculate topleft corner
             var half_cellSize = new Vector3(_cellSize.x / 2, _cellSize.y / 2, 0); // Calulcate cells half-size
 
             var count = 0;
-            for (int y = 0; y < Column; y++)
+            for (int y = 0; y < _shape.Row; y++)
             {
-                for (int x = 0; x < Row; x++)
+                for (int x = 0; x < _shape.Column; x++)
                 {
                     var cell = GetCell(_cellSpriteEmpty, true);
                     cell.RTF.SetAsFirstSibling();
                     cell.Image.type = Image.Type.Sliced;
-                    cell.RTF.localPosition = topLeft + new Vector3(_cellSize.x * (Row - 1 - x), _cellSize.y * y, 0) + half_cellSize;
+                    cell.RTF.localPosition = topLeft + new Vector3(_cellSize.x * (_shape.Column - 1 - x), _cellSize.y * y, 0) + half_cellSize;
                     cell.RTF.sizeDelta = _cellSize;
                     cell.GO.name = $"grid {count}";
                     _bgCellArr[count] = cell;
@@ -87,6 +84,7 @@ namespace BabyNightmare.InventorySystem
 
         private void ReturnCell(DynamicCell cell)
         {
+            cell.RTF.SetParent(_poolTF);
             cell.GO.SetActive(false);
             _cellPool.Return(cell);
         }
@@ -98,25 +96,25 @@ namespace BabyNightmare.InventorySystem
             bool isAddable = IsAddable(equipment);
             var data = equipment.Data;
             var point = equipment.Point;
-            for (var x = 0; x < data.Row; x++)
+            for (var x = 0; x < data.Column; x++)
             {
-                for (var y = 0; y < data.Column; y++)
+                for (var y = 0; y < data.Row; y++)
                 {
                     var offset = new Vector2Int(x, y);
-                    if (false == data.IsInside(offset))
+                    if (false == data.IsValid(offset))
                         continue;
 
                     var newPoint = point + offset;
                     if (newPoint.x < 0)
                         continue;
-                    if (newPoint.x >= Row)
+                    if (newPoint.x >= _shape.Column)
                         continue;
                     if (newPoint.y < 0)
                         continue;
-                    if (newPoint.y >= Column)
+                    if (newPoint.y >= _shape.Row)
                         continue;
 
-                    var index = newPoint.y * Row + (Row - 1 - newPoint.x);
+                    var index = newPoint.y * _shape.Column + (_shape.Column - 1 - newPoint.x);
                     var cell = _bgCellArr[index];
 
                     cell.Image.sprite = isAddable ? _cellSpriteSelected : _cellSpriteBlocked;
@@ -125,7 +123,7 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public void ClearBG()
+        private void ClearBG()
         {
             for (var i = 0; i < _bgCellArr.Length; i++)
             {
@@ -135,26 +133,28 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public bool TryAdd(EquipmentData data) //가능한 가장 가까운 자리
+        public bool TryAdd(EquipmentData data) //랜덤 배치
         {
-            if (data.Row > Row)
+            if (data.Row > _shape.Row)
                 return false;
 
-            if (data.Column > Column)
+            if (data.Column > _shape.Column)
                 return false;
 
-            for (var x = 0; x < Row - (data.Row - 1); x++)
+            List<Vector2Int> enablePoints = new List<Vector2Int>();
+
+            for (var x = 0; x < _shape.Column - (data.Column - 1); x++)
             {
-                for (var y = 0; y < Column - (data.Column - 1); y++)
+                for (var y = 0; y < _shape.Row - (data.Row - 1); y++)
                 {
-                    if (false == TryAdd(data, new Vector2Int(x, y)))
-                        continue;
-
-                    return true;
+                    var newPoint = new Vector2Int(x, y);
+                    if (true == IsAddable(data, newPoint))
+                        enablePoints.Add(newPoint);
                 }
             }
 
-            return false;
+            var finalPoint = enablePoints[UnityEngine.Random.Range(0, enablePoints.Count)];
+            return TryAdd(data, finalPoint);
         }
 
         public bool TryAdd(EquipmentData data, Vector2Int point)
@@ -170,6 +170,7 @@ namespace BabyNightmare.InventorySystem
             cell.RTF.localPosition = GetPivot(equipment);
 
             _equipmentSet.Add(equipment);
+            ClearBG();
             return true;
         }
 
@@ -221,13 +222,13 @@ namespace BabyNightmare.InventorySystem
             if (true == _draggedEquipment.IsDragging)
                 return;
 
-            var pos = GetCellPos(eventData.position);
+            var pos = GetPoint(eventData.position);
             _clickedEquipment = TryGetEquipmentAtPos(pos);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            var pos = GetCellPos(eventData.position);
+            var pos = GetPoint(eventData.position);
             var equipment = TryGetEquipmentAtPos(pos);
             if (null == equipment)
                 return;
@@ -264,7 +265,7 @@ namespace BabyNightmare.InventorySystem
             }
             else
             {
-                var pos = GetCellPos(eventData.position);
+                var pos = GetPoint(eventData.position);
                 var equipment = TryGetEquipmentAtPos(pos);
                 if (equipment == _clickedEquipment)
                     return;
@@ -275,44 +276,48 @@ namespace BabyNightmare.InventorySystem
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (false == _draggedEquipment.IsDragging)
-                return;
+            if (true == _draggedEquipment.IsDragging)
+            {
+                _draggedEquipment.Release(eventData.position);
+                _clickedEquipment = null;
+            }
 
-            _draggedEquipment.Release(eventData.position);
-            _clickedEquipment = null;
+            ClearBG();
         }
 
         public bool IsAddable(Equipment equipment) => IsAddable(equipment.Data, equipment.Point);
-
         public bool IsAddable(EquipmentData data, Vector2Int point)
         {
-            if (false == IsInside(data, point))
+            if (false == IsValid(data, point))
                 return false;
 
-            if (true == IsOverlap(data, point))
+            if (null != GetOverlapEquipments(data, point))
                 return false;
 
             return true;
         }
 
-        private bool IsInside(EquipmentData data, Vector2Int point)
+        public bool IsValid(EquipmentData data, Vector2Int point)
         {
-            for (var x = 0; x < data.Row; x++)
+            for (var x = 0; x < data.Column; x++)
             {
-                for (var y = 0; y < data.Column; y++)
+                for (var y = 0; y < data.Row; y++)
                 {
                     var offset = new Vector2Int(x, y);
-                    if (false == data.IsInside(offset))
+                    if (false == data.IsValid(offset))
                         continue;
 
                     var newPoint = point + offset;
+                    if (false == _shape.IsValid(newPoint))
+                        return false;
+
                     if (newPoint.x < 0)
                         return false;
-                    if (newPoint.x >= Row)
+                    if (newPoint.x >= _shape.Column)
                         return false;
                     if (newPoint.y < 0)
                         return false;
-                    if (newPoint.y >= Column)
+                    if (newPoint.y >= _shape.Row)
                         return false;
                 }
             }
@@ -320,38 +325,42 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
-        private bool IsOverlap(EquipmentData targetData, Vector2Int point)
+        public List<Equipment> GetOverlapEquipments(EquipmentData targetData, Vector2Int point)
         {
+            List<Equipment> overlapEquipments = null;
+
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
-                for (var i = 0; i < data.Row; i++)
+                for (var i = 0; i < data.Column; i++)
                 {
-                    for (var j = 0; j < data.Column; j++)
+                    for (var j = 0; j < data.Row; j++)
                     {
                         var offset = new Vector2Int(i, j);
-                        if (false == data.IsInside(offset))
+                        if (false == data.IsValid(offset))
                             continue;
 
                         var ePoint = equipment.Point + offset;
-                        for (var x = 0; x < targetData.Row; x++)
+                        for (var x = 0; x < targetData.Column; x++)
                         {
-                            for (var y = 0; y < targetData.Column; y++)
+                            for (var y = 0; y < targetData.Row; y++)
                             {
                                 var targetOffset = new Vector2Int(x, y);
-                                if (false == targetData.IsInside(targetOffset))
+                                if (false == targetData.IsValid(targetOffset))
                                     continue;
 
                                 var tPoint = point + targetOffset;
                                 if (ePoint == tPoint)
-                                    return true;
+                                {
+                                    overlapEquipments ??= new List<Equipment>();
+                                    overlapEquipments.Add(equipment);
+                                }
                             }
                         }
                     }
                 }
             }
-
-            return false;
+            return overlapEquipments;
         }
 
         private Equipment TryGetEquipmentAtPos(Vector2Int point)
@@ -360,9 +369,9 @@ namespace BabyNightmare.InventorySystem
             {
                 var data = equipment.Data;
 
-                for (var i = 0; i < data.Row; i++)
+                for (var i = 0; i < data.Column; i++)
                 {
-                    for (var j = 0; j < data.Column; j++)
+                    for (var j = 0; j < data.Row; j++)
                     {
                         if (point == equipment.Point + new Vector2Int(i, j))
                             return equipment;
@@ -377,8 +386,8 @@ namespace BabyNightmare.InventorySystem
         {
             var data = equipment.Data;
 
-            var x = (-(Row * 0.5f) + equipment.Point.x + data.Row * 0.5f) * _cellSize.x;
-            var y = (-(Column * 0.5f) + equipment.Point.y + data.Column * 0.5f) * _cellSize.y;
+            var x = (-(_shape.Column * 0.5f) + equipment.Point.x + data.Column * 0.5f) * _cellSize.x;
+            var y = (-(_shape.Row * 0.5f) + equipment.Point.y + data.Row * 0.5f) * _cellSize.y;
             return new Vector2(x, y);
         }
 
@@ -388,12 +397,12 @@ namespace BabyNightmare.InventorySystem
             return localPos;
         }
 
-        public Vector2Int GetCellPos(Vector2 screenPos)
+        public Vector2Int GetPoint(Vector2 screenPos)
         {
-            var pos = GetLocalPos(screenPos);
-            pos.x += _rtf.sizeDelta.x / 2;
-            pos.y += _rtf.sizeDelta.y / 2;
-            return new Vector2Int(Mathf.FloorToInt(pos.x / _cellSize.x), Mathf.FloorToInt(pos.y / _cellSize.y));
+            var point = GetLocalPos(screenPos);
+            point.x += _rtf.sizeDelta.x / 2;
+            point.y += _rtf.sizeDelta.y / 2;
+            return new Vector2Int(Mathf.FloorToInt(point.x / _cellSize.x), Mathf.FloorToInt(point.y / _cellSize.y));
         }
 
         public void StartUseEquipment(Action<EquipmentData> onCoolDown)

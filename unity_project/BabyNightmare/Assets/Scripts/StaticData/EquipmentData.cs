@@ -14,11 +14,12 @@ namespace BabyNightmare.StaticData
         public float Defence;
         public float CoolTime;
         public float ThrowDuration;
+        public int UpgradeDataID = -1;
         public Sprite Sprite;
-        public EquipmentShape Shape;
+        public RectShape Shape;
 
         public int Row => Shape.Row;
         public int Column => Shape.Column;
-        public bool IsInside(Vector2Int point) => Shape.IsInside(point);
+        public bool IsValid(Vector2Int point) => Shape.IsValid(point);
     }
 }

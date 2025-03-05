@@ -6,25 +6,25 @@ namespace BabyNightmare.InventorySystem
     [Serializable]
     public class RectShape
     {
-        [SerializeField] private int _row;
         [SerializeField] private int _column;
+        [SerializeField] private int _row;
         [SerializeField] private bool[] _shape;
 
-        public int Row => _row;
         public int Column => _column;
+        public int Row => _row;
 
-        public RectShape(int row, int column)
+        public RectShape(int column, int row)
         {
-            _row = row;
             _column = column;
-            _shape = new bool[_row * _column];
+            _row = row;
+            _shape = new bool[_column * _row];
         }
 
         public RectShape(bool[,] shape)
         {
             _column = shape.GetLength(0);
             _row = shape.GetLength(1);
-            _shape = new bool[_row * _column];
+            _shape = new bool[_column * _row];
             for (int x = 0; x < _column; x++)
             {
                 for (int y = 0; y < _row; y++)

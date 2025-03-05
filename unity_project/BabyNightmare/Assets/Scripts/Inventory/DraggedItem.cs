@@ -1,3 +1,4 @@
+using BabyNightmare.StaticData;
 using UnityEngine;
 
 namespace BabyNightmare.InventorySystem
@@ -36,31 +37,60 @@ namespace BabyNightmare.InventorySystem
             IsDragging = true;
         }
 
-        public void Release(Vector2 dropPos)
+        public void Release(Vector2 point)
         {
-            if (null == Cell)
+            if (false == IsDragging)
                 return;
 
-            Object.Destroy(Cell.GO);
+            GameObject.Destroy(Cell.GO);
             Cell = null;
 
-            if (null != CurrentOwner)
-            {
-                var cellPos = CurrentOwner.GetCellPos(dropPos + Offset + GetOffset());
-                var data = Equipment.Data;
-                if (true == CurrentOwner.IsAddable(data, cellPos))
-                {
-                    CurrentOwner.TryAdd(data, cellPos);
-                }
-                else
-                {
-                    OriginOwner.TryAdd(data, OriginPoint);
-                }
+            IsDragging = false;
 
-                CurrentOwner.ClearBG();
+            if (null == CurrentOwner)
+                return;
+
+            var newPoint = CurrentOwner.GetPoint(point + Offset + GetOffset());
+            var data = Equipment.Data;
+
+            if (false == CurrentOwner.IsValid(data, newPoint))
+            {
+                OriginOwner.TryAdd(data, OriginPoint);
+                return;
             }
 
-            IsDragging = false;
+            var overlappedEquipments = CurrentOwner.GetOverlapEquipments(data, newPoint);
+            if (null == overlappedEquipments)
+            {
+                CurrentOwner.TryAdd(data, newPoint);
+                return;
+            }
+
+            var overlapCount = overlappedEquipments.Count;
+            if (overlapCount > 1)
+            {
+                for (var i = 0; i < overlappedEquipments.Count; i++)
+                {
+                    CurrentOwner.TryRemove(overlappedEquipments[i]);
+                    OriginOwner.TryAdd(overlappedEquipments[i].Data);
+                }
+
+                return;
+            }
+
+            CurrentOwner.TryAdd(data, newPoint);
+            var oe = overlappedEquipments[0];
+            var upgradeData = StaticDataManager.Instance.GetEquipmentData(data.UpgradeDataID);
+            if (oe.Data.ID == data.ID && null != upgradeData)
+            {
+                CurrentOwner.TryAdd(upgradeData, newPoint);
+            }
+            else
+            {
+                CurrentOwner.TryRemove(oe);
+                OriginOwner.TryAdd(oe.Data);
+                CurrentOwner.TryAdd(data, newPoint);
+            }
         }
 
         public void SetPosition(Vector2 pos)
@@ -70,7 +100,7 @@ namespace BabyNightmare.InventorySystem
 
             if (null != CurrentOwner)
             {
-                Equipment.Point = CurrentOwner.GetCellPos(pos + Offset + GetOffset());
+                Equipment.Point = CurrentOwner.GetPoint(pos + Offset + GetOffset());
                 CurrentOwner.PaintBG(Equipment, Color.white);
             }
 
@@ -86,8 +116,8 @@ namespace BabyNightmare.InventorySystem
             var cellSize = CurrentOwner.CellSize;
 
             var scale = new Vector2(Screen.width / _canvasRect.sizeDelta.x, Screen.height / _canvasRect.sizeDelta.y);
-            var gx = -(data.Row * cellSize.x / 2f) + (cellSize.x / 2);
-            var gy = -(data.Column * cellSize.y / 2f) + (cellSize.y / 2);
+            var gx = -(data.Column * cellSize.x / 2f) + (cellSize.x / 2);
+            var gy = -(data.Row * cellSize.y / 2f) + (cellSize.y / 2);
             return new Vector2(gx, gy) * scale;
         }
     }

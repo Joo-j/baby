@@ -126,10 +126,7 @@ namespace BabyNightmare.StaticData
         public EquipmentData GetEquipmentData(int id)
         {
             if (false == _equipmentDataDict.TryGetValue(id, out var data))
-            {
-                Debug.LogError($"{id} equipment data is null");
                 return null;
-            }
 
             return data;
         }
