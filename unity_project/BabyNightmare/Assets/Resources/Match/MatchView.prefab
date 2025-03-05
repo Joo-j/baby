@@ -1418,9 +1418,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rtf: {fileID: 5284761444299057634}
   _canvasGroup: {fileID: 5397050634197705404}
-  _width: 4
-  _height: 4
-  _cellSize: {x: 80, y: 80}
+  _width: 3
+  _height: 3
+  _cellSize: {x: 100, y: 100}
   _cellSpriteEmpty: {fileID: 21300000, guid: f2d2ffbc1330e4fc29fd4d1225c6b9d6, type: 3}
   _cellSpriteSelected: {fileID: 21300000, guid: 61d42f6bf2d0e504f92d5e64875034ab, type: 3}
   _cellSpriteBlocked: {fileID: 21300000, guid: b31cb26d60baa4eabab2be0bf756b7cb, type: 3}
