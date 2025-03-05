@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: StunBaton
   m_EditorClassIdentifier: 
   ID: 1006
-  Name: StunBaton
+  Name: Spear
   Level: 1
-  Damage: 5
-  CoolTime: 3
-  ThrowDuration: 0.5
-  _shape:
-    _width: 1
-    _height: 4
-    _shape: 01010101
-  _sprite: {fileID: 21300004, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  Damage: 20
+  Heal: 0
+  Defence: 0
+  CoolTime: 4.5
+  ThrowDuration: 0.7
+  Sprite: {fileID: 0}
+  Shape:
+    _row: 1
+    _column: 3
+    _shape: 010101

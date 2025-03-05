@@ -15,11 +15,13 @@ MonoBehaviour:
   ID: 1002
   Name: Gadget
   Level: 1
-  Damage: 2
-  CoolTime: 2
-  ThrowDuration: 0.5
-  _shape:
-    _width: 1
-    _height: 2
+  Damage: 0
+  Heal: 0
+  Defence: 5
+  CoolTime: 3
+  ThrowDuration: 0
+  Sprite: {fileID: 0}
+  Shape:
+    _row: 1
+    _column: 2
     _shape: 0101
-  _sprite: {fileID: 21300008, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}

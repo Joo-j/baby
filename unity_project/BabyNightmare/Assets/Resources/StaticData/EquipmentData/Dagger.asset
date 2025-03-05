@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Dagger
   m_EditorClassIdentifier: 
   ID: 1001
-  Name: Dagger
+  Name: Knife
   Level: 1
   Damage: 3
-  CoolTime: 1.4
-  ThrowDuration: 0.5
-  _shape:
-    _width: 2
-    _height: 1
+  Heal: 0
+  Defence: 0
+  CoolTime: 1.5
+  ThrowDuration: 0.4
+  Sprite: {fileID: 0}
+  Shape:
+    _row: 2
+    _column: 1
     _shape: 0101
-  _sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}

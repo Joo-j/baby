@@ -15,11 +15,13 @@ MonoBehaviour:
   ID: 1005
   Name: RedVial
   Level: 1
-  Damage: 1
-  CoolTime: 1.9
+  Damage: 0
+  Heal: 5
+  Defence: 0
+  CoolTime: 2.5
   ThrowDuration: 0.5
-  _shape:
-    _width: 1
-    _height: 1
+  Sprite: {fileID: 0}
+  Shape:
+    _row: 1
+    _column: 1
     _shape: 01
-  _sprite: {fileID: 21300006, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
