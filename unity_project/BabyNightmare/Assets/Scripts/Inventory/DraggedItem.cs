@@ -1,98 +1,94 @@
 using UnityEngine;
-using UnityEngine.UI;
-using BabyNightmare.StaticData;
 
 namespace BabyNightmare.InventorySystem
 {
     public class DraggedItem
     {
-        private RectTransform _canvasRect;
-        private Equipment _equipment;
-        private Vector2 _offset;
-        private Vector2Int _originPos;
-        private DynamicCell _cell = null;
+        private RectTransform _canvasRect = null;
 
-        private Inventory _originOwner = null;
-        private Inventory _currentOwner = null;
-        private EquipmentData _data { get; }
+        public Inventory OriginOwner { get; private set; }
+        public Inventory CurrentOwner { get; set; }
+        public Equipment Equipment { get; private set; }
+        public Vector2Int OriginPoint { get; private set; }
+        public Vector2 Offset { get; private set; }
+        public DynamicCell Cell { get; private set; }
+        public bool IsDragging { get; private set; }
 
-        public DraggedItem
-        (
-            RectTransform canvasRect,
-            Inventory originalOwner,
-            Equipment equipment,
-            Vector2 offset)
+        public DraggedItem(RectTransform canvasRect)
         {
-            this._canvasRect = canvasRect;
-            this._originOwner = originalOwner;
-            this._currentOwner = originalOwner;
-            this._equipment = equipment;
-            this._originPos = equipment.Point;
-            this._offset = offset;
-
-            _data = equipment.Data;
-
-            _cell = GameObject.Instantiate(_equipment.Cell);
-            _cell.RTF.SetParent(_canvasRect);
-            _cell.RTF.SetAsLastSibling();
-            _cell.RTF.localScale = Vector3.one;
-            _cell.Image.SetNativeSize();
+            _canvasRect = canvasRect;
         }
 
-        public void SetPosition(Vector2 value)
+        public void Init(DynamicCell cell, Inventory owner, Equipment equipment, Vector2 offset)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, value + _offset, null, out var localPos);
-            _cell.RTF.localPosition = localPos;
+            OriginOwner = owner;
+            CurrentOwner = owner;
+            Equipment = equipment;
+            OriginPoint = equipment.Point;
+            Offset = offset;
 
-            if (null != _currentOwner)
-            {
-                _equipment.Point = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
-                var isAddable = _currentOwner.IsAddable(_data, _equipment.Point);
-                _currentOwner.PaintBG(_equipment, false == isAddable, Color.white);
-            }
+            Cell = GameObject.Instantiate(cell);
+            Cell.RTF.SetParent(_canvasRect);
+            Cell.RTF.SetAsLastSibling();
+            Cell.RTF.localScale = Vector3.one;
+            Cell.Image.SetNativeSize();
 
-            // Slowly animate the equipment towards the center of the mouse pointer
-            _offset = Vector2.Lerp(_offset, Vector2.zero, Time.deltaTime * 10f);
+            IsDragging = true;
         }
 
-        public void Drop(Vector2 pos)
+        public void Release(Vector2 dropPos)
         {
-            Object.Destroy(_cell.GO);
-            _cell = null;
+            if (null == Cell)
+                return;
 
-            if (null != _currentOwner)
+            Object.Destroy(Cell.GO);
+            Cell = null;
+
+            if (null != CurrentOwner)
             {
-                var cellPos = _currentOwner.GetCellPos(pos + _offset + GetOffset(_data));
-
-                if (true == _currentOwner.IsAddable(_data, cellPos))
+                var cellPos = CurrentOwner.GetCellPos(dropPos + Offset + GetOffset());
+                var data = Equipment.Data;
+                if (true == CurrentOwner.IsAddable(data, cellPos))
                 {
-                    _currentOwner.TryAdd(_data, cellPos);
+                    CurrentOwner.TryAdd(data, cellPos);
                 }
                 else
                 {
-                    _originOwner.TryAdd(_data, _originPos);
+                    OriginOwner.TryAdd(data, OriginPoint);
                 }
 
-                _currentOwner.ClearBG();
+                CurrentOwner.ClearBG();
             }
+
+            IsDragging = false;
         }
 
-        private Vector2 GetOffset(EquipmentData data)
+        public void SetPosition(Vector2 pos)
         {
-            if (null == _currentOwner)
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, pos + Offset, null, out var localPos);
+            Cell.RTF.localPosition = localPos;
+
+            if (null != CurrentOwner)
+            {
+                Equipment.Point = CurrentOwner.GetCellPos(pos + Offset + GetOffset());
+                CurrentOwner.PaintBG(Equipment, Color.white);
+            }
+
+            Offset = Vector2.Lerp(Offset, Vector2.zero, Time.deltaTime * 10f);
+        }
+
+        private Vector2 GetOffset()
+        {
+            if (null == CurrentOwner)
                 return default;
 
-            var cellSize = _currentOwner.CellSize;
+            var data = Equipment.Data;
+            var cellSize = CurrentOwner.CellSize;
 
             var scale = new Vector2(Screen.width / _canvasRect.sizeDelta.x, Screen.height / _canvasRect.sizeDelta.y);
             var gx = -(data.Row * cellSize.x / 2f) + (cellSize.x / 2);
             var gy = -(data.Column * cellSize.y / 2f) + (cellSize.y / 2);
             return new Vector2(gx, gy) * scale;
-        }
-
-        public void SetOwner(Inventory owner)
-        {
-            _currentOwner = owner;
         }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
+using Unity.VisualScripting;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -68,6 +69,7 @@ namespace BabyNightmare.InventorySystem
             }
 
             _equipmentSet = new HashSet<Equipment>();
+            _draggedEquipment ??= new DraggedItem(_grandCanvasRect);
         }
 
         private DynamicCell GetCell(Sprite sprite, bool enable)
@@ -89,10 +91,11 @@ namespace BabyNightmare.InventorySystem
             _cellPool.Return(cell);
         }
 
-        public void PaintBG(Equipment equipment, bool blocked, Color color)
+        public void PaintBG(Equipment equipment, Color color)
         {
             ClearBG();
 
+            bool isAddable = IsAddable(equipment);
             var data = equipment.Data;
             var point = equipment.Point;
             for (var x = 0; x < data.Row; x++)
@@ -116,7 +119,7 @@ namespace BabyNightmare.InventorySystem
                     var index = newPoint.y * Row + (Row - 1 - newPoint.x);
                     var cell = _bgCellArr[index];
 
-                    cell.Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
+                    cell.Image.sprite = isAddable ? _cellSpriteSelected : _cellSpriteBlocked;
                     cell.Image.color = color;
                 }
             }
@@ -194,17 +197,17 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
             {
-                _draggedEquipment.SetOwner(this);
+                _draggedEquipment.CurrentOwner = this;
             }
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
             {
-                _draggedEquipment.SetOwner(null);
+                _draggedEquipment.CurrentOwner = null;
                 ClearBG();
             }
             else
@@ -215,7 +218,7 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
                 return;
 
             var pos = GetCellPos(eventData.position);
@@ -229,7 +232,7 @@ namespace BabyNightmare.InventorySystem
             if (null == equipment)
                 return;
 
-            if (null != _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
                 return;
 
             InventoryUtil.ShowInfoPopup(equipment.Data);
@@ -242,25 +245,24 @@ namespace BabyNightmare.InventorySystem
             if (null == _clickedEquipment)
                 return;
 
-            if (null != _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
                 return;
 
             var localPos = GetLocalPos(eventData.position);
             var offset = GetPivot(_clickedEquipment) - localPos;
 
-            _draggedEquipment = new DraggedItem(
-                _grandCanvasRect.transform as RectTransform,
-                this,
-                _clickedEquipment,
-                offset
-            );
+            _draggedEquipment.Init(_clickedEquipment.Cell, this, _clickedEquipment, offset);
 
             TryRemove(_clickedEquipment);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (null == _draggedEquipment)
+            if (true == _draggedEquipment.IsDragging)
+            {
+                _draggedEquipment.SetPosition(eventData.position);
+            }
+            else
             {
                 var pos = GetCellPos(eventData.position);
                 var equipment = TryGetEquipmentAtPos(pos);
@@ -269,22 +271,18 @@ namespace BabyNightmare.InventorySystem
 
                 _clickedEquipment = equipment;
             }
-            else
-            {
-                _draggedEquipment.SetPosition(eventData.position);
-            }
         }
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (null == _draggedEquipment)
+            if (false == _draggedEquipment.IsDragging)
                 return;
 
-            _draggedEquipment.Drop(eventData.position);
-
+            _draggedEquipment.Release(eventData.position);
             _clickedEquipment = null;
-            _draggedEquipment = null;
         }
+
+        public bool IsAddable(Equipment equipment) => IsAddable(equipment.Data, equipment.Point);
 
         public bool IsAddable(EquipmentData data, Vector2Int point)
         {
