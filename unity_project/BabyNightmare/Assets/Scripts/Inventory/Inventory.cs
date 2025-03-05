@@ -29,9 +29,9 @@ namespace BabyNightmare.InventorySystem
         private Equipment _clickedEquipment = null;
         private static DraggedItem _draggedEquipment = null;
 
-        public Vector2 CellSize => _cellSize;
         public int Width => _width;
         public int Height => _height;
+        public Vector2 CellSize => _cellSize;
 
         public void Init(RectTransform grandCanvasRect)
         {
@@ -42,15 +42,15 @@ namespace BabyNightmare.InventorySystem
             poolTF.localPosition = Vector3.zero;
             poolTF.localScale = Vector3.one;
 
-            _equipmentSet = new HashSet<Equipment>();
             _cellPool = new Pool<DynamicCell>(() => ObjectUtil.LoadAndInstantiate<DynamicCell>(PATH_DYNAMIC_CELL, poolTF));
+
             _grid = new DynamicCell[Width * Height];
 
-            var gridSize = new Vector2(CellSize.x * Width, CellSize.y * Height);
+            var gridSize = new Vector2(_cellSize.x * Width, _cellSize.y * Height);
             _rtf.sizeDelta = gridSize;
 
             var topLeft = new Vector3(-gridSize.x / 2, -gridSize.y / 2, 0); // Calculate topleft corner
-            var halfCellSize = new Vector3(CellSize.x / 2, CellSize.y / 2, 0); // Calulcate cells half-size
+            var half_cellSize = new Vector3(_cellSize.x / 2, _cellSize.y / 2, 0); // Calulcate cells half-size
 
             var count = 0;
             for (int y = 0; y < Height; y++)
@@ -60,13 +60,15 @@ namespace BabyNightmare.InventorySystem
                     var cell = GetCell(_cellSpriteEmpty, true);
                     cell.RTF.SetAsFirstSibling();
                     cell.Image.type = Image.Type.Sliced;
-                    cell.RTF.localPosition = topLeft + new Vector3(CellSize.x * (Width - 1 - x), CellSize.y * y, 0) + halfCellSize;
-                    cell.RTF.sizeDelta = CellSize;
+                    cell.RTF.localPosition = topLeft + new Vector3(_cellSize.x * (Width - 1 - x), _cellSize.y * y, 0) + half_cellSize;
+                    cell.RTF.sizeDelta = _cellSize;
                     cell.GO.name = $"grid {count}";
                     _grid[count] = cell;
                     count++;
                 }
             }
+
+            _equipmentSet = new HashSet<Equipment>();
         }
 
         private DynamicCell GetCell(Sprite sprite, bool enable)
@@ -355,8 +357,8 @@ namespace BabyNightmare.InventorySystem
         {
             var data = equipment.Data;
 
-            var x = (-(Width * 0.5f) + equipment.Pos.x + data.Width * 0.5f) * CellSize.x;
-            var y = (-(Height * 0.5f) + equipment.Pos.y + data.Height * 0.5f) * CellSize.y;
+            var x = (-(Width * 0.5f) + equipment.Pos.x + data.Width * 0.5f) * _cellSize.x;
+            var y = (-(Height * 0.5f) + equipment.Pos.y + data.Height * 0.5f) * _cellSize.y;
             return new Vector2(x, y);
         }
 
@@ -371,7 +373,7 @@ namespace BabyNightmare.InventorySystem
             var pos = GetLocalPos(screenPos);
             pos.x += _rtf.sizeDelta.x / 2;
             pos.y += _rtf.sizeDelta.y / 2;
-            return new Vector2Int(Mathf.FloorToInt(pos.x / CellSize.x), Mathf.FloorToInt(pos.y / CellSize.y));
+            return new Vector2Int(Mathf.FloorToInt(pos.x / _cellSize.x), Mathf.FloorToInt(pos.y / _cellSize.y));
         }
 
         public void StartCoolDown(Action<EquipmentData> onCoolDown)
