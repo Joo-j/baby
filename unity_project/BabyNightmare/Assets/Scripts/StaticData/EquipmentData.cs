@@ -16,8 +16,8 @@ namespace BabyNightmare.StaticData
         [SerializeField] private Sprite _sprite = null;
 
         public Sprite Sprite => _sprite;
-        public int Width => _shape.Width;
-        public int Height => _shape.Height;
-        public EquipmentShape Shape => _shape;
+        public int Row => _shape.Row;
+        public int Column => _shape.Column;
+        public bool IsInside(Vector2Int point) => _shape.IsInside(point);
     }
 }

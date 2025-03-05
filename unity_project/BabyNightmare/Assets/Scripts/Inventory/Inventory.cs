@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
-using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -23,14 +22,14 @@ namespace BabyNightmare.InventorySystem
 
         private const string PATH_DYNAMIC_CELL = "Inventory/DynamicCell";
         private RectTransform _grandCanvasRect = null;
-        private DynamicCell[] _grid = null;
+        private DynamicCell[] _bgCellArr = null;
         private Pool<DynamicCell> _cellPool = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Equipment _clickedEquipment = null;
         private static DraggedItem _draggedEquipment = null;
 
-        public int Width => _width;
-        public int Height => _height;
+        public int Row => _width;
+        public int Column => _height;
         public Vector2 CellSize => _cellSize;
 
         public void Init(RectTransform grandCanvasRect)
@@ -44,26 +43,26 @@ namespace BabyNightmare.InventorySystem
 
             _cellPool = new Pool<DynamicCell>(() => ObjectUtil.LoadAndInstantiate<DynamicCell>(PATH_DYNAMIC_CELL, poolTF));
 
-            _grid = new DynamicCell[Width * Height];
+            _bgCellArr = new DynamicCell[Row * Column];
 
-            var gridSize = new Vector2(_cellSize.x * Width, _cellSize.y * Height);
+            var gridSize = new Vector2(_cellSize.x * Row, _cellSize.y * Column);
             _rtf.sizeDelta = gridSize;
 
             var topLeft = new Vector3(-gridSize.x / 2, -gridSize.y / 2, 0); // Calculate topleft corner
             var half_cellSize = new Vector3(_cellSize.x / 2, _cellSize.y / 2, 0); // Calulcate cells half-size
 
             var count = 0;
-            for (int y = 0; y < Height; y++)
+            for (int y = 0; y < Column; y++)
             {
-                for (int x = 0; x < Width; x++)
+                for (int x = 0; x < Row; x++)
                 {
                     var cell = GetCell(_cellSpriteEmpty, true);
                     cell.RTF.SetAsFirstSibling();
                     cell.Image.type = Image.Type.Sliced;
-                    cell.RTF.localPosition = topLeft + new Vector3(_cellSize.x * (Width - 1 - x), _cellSize.y * y, 0) + half_cellSize;
+                    cell.RTF.localPosition = topLeft + new Vector3(_cellSize.x * (Row - 1 - x), _cellSize.y * y, 0) + half_cellSize;
                     cell.RTF.sizeDelta = _cellSize;
                     cell.GO.name = $"grid {count}";
-                    _grid[count] = cell;
+                    _bgCellArr[count] = cell;
                     count++;
                 }
             }
@@ -90,32 +89,32 @@ namespace BabyNightmare.InventorySystem
             _cellPool.Return(cell);
         }
 
-        public void SelectGrid(Equipment equipment, bool blocked, Color color)
+        public void PaintBG(Equipment equipment, bool blocked, Color color)
         {
-            ClearGrid();
+            ClearBG();
 
             var data = equipment.Data;
-
-            for (var x = 0; x < data.Width; x++)
+            var point = equipment.Point;
+            for (var x = 0; x < data.Row; x++)
             {
-                for (var y = 0; y < data.Height; y++)
+                for (var y = 0; y < data.Column; y++)
                 {
-                    var shape = data.Shape;
-                    if (false == shape.IsPartOfShape(new Vector2Int(x, y)))
+                    var offset = new Vector2Int(x, y);
+                    if (false == data.IsInside(offset))
                         continue;
 
-                    var pos = equipment.Pos + new Vector2Int(x, y);
-                    if (pos.x < 0)
+                    var newPoint = point + offset;
+                    if (newPoint.x < 0)
                         continue;
-                    if (pos.x >= Width)
+                    if (newPoint.x >= Row)
                         continue;
-                    if (pos.y < 0)
+                    if (newPoint.y < 0)
                         continue;
-                    if (pos.y >= Height)
+                    if (newPoint.y >= Column)
                         continue;
 
-                    var index = pos.y * Width + (Width - 1 - pos.x);
-                    var cell = _grid[index];
+                    var index = newPoint.y * Row + (Row - 1 - newPoint.x);
+                    var cell = _bgCellArr[index];
 
                     cell.Image.sprite = blocked ? _cellSpriteBlocked : _cellSpriteSelected;
                     cell.Image.color = color;
@@ -123,11 +122,11 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public void ClearGrid()
+        public void ClearBG()
         {
-            for (var i = 0; i < _grid.Length; i++)
+            for (var i = 0; i < _bgCellArr.Length; i++)
             {
-                var cell = _grid[i];
+                var cell = _bgCellArr[i];
                 cell.Image.sprite = _cellSpriteEmpty;
                 cell.Image.color = Color.white;
             }
@@ -135,15 +134,15 @@ namespace BabyNightmare.InventorySystem
 
         public bool TryAdd(EquipmentData data) //가능한 가장 가까운 자리
         {
-            if (data.Width > Width)
+            if (data.Row > Row)
                 return false;
 
-            if (data.Height > Height)
+            if (data.Column > Column)
                 return false;
 
-            for (var x = 0; x < Width - (data.Width - 1); x++)
+            for (var x = 0; x < Row - (data.Row - 1); x++)
             {
-                for (var y = 0; y < Height - (data.Height - 1); y++)
+                for (var y = 0; y < Column - (data.Column - 1); y++)
                 {
                     if (false == TryAdd(data, new Vector2Int(x, y)))
                         continue;
@@ -155,15 +154,15 @@ namespace BabyNightmare.InventorySystem
             return false;
         }
 
-        public bool TryAdd(EquipmentData data, Vector2Int pos)
+        public bool TryAdd(EquipmentData data, Vector2Int point)
         {
-            if (false == IsAddable(data, pos))
+            if (false == IsAddable(data, point))
                 return false;
 
             var cell = GetCell(data.Sprite, false);
 
             var equipment = new Equipment(cell, data);
-            equipment.Pos = pos;
+            equipment.Point = point;
 
             cell.RTF.localPosition = GetPivot(equipment);
 
@@ -193,42 +192,6 @@ namespace BabyNightmare.InventorySystem
             _equipmentSet.Clear();
         }
 
-        public bool IsAddable(EquipmentData targetData, Vector2Int pos)
-        {
-            foreach (var equipment in _equipmentSet)
-            {
-                var data = equipment.Data;
-                for (var i = 0; i < data.Width; i++)
-                {
-                    for (var j = 0; j < data.Height; j++)
-                    {
-                        var shape = data.Shape;
-                        if (false == shape.IsPartOfShape(new Vector2Int(i, j)))
-                            continue;
-
-                        var iPos = equipment.Pos + new Vector2Int(i, j);
-                        for (var x = 0; x < targetData.Width; x++)
-                        {
-                            for (var y = 0; y < targetData.Height; y++)
-                            {
-                                var targetShape = targetData.Shape;
-                                if (false == targetShape.IsPartOfShape(new Vector2Int(x, y)))
-                                    continue;
-
-                                var oPos = pos + new Vector2Int(x, y);
-                                if (oPos != iPos)
-                                    continue;
-
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return true;
-        }
-
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (null != _draggedEquipment)
@@ -242,7 +205,7 @@ namespace BabyNightmare.InventorySystem
             if (null != _draggedEquipment)
             {
                 _draggedEquipment.SetOwner(null);
-                ClearGrid();
+                ClearBG();
             }
             else
             {
@@ -256,13 +219,13 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             var pos = GetCellPos(eventData.position);
-            _clickedEquipment = GetEquipmentAtPos(pos);
+            _clickedEquipment = TryGetEquipmentAtPos(pos);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
             var pos = GetCellPos(eventData.position);
-            var equipment = GetEquipmentAtPos(pos);
+            var equipment = TryGetEquipmentAtPos(pos);
             if (null == equipment)
                 return;
 
@@ -274,7 +237,7 @@ namespace BabyNightmare.InventorySystem
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            ClearGrid();
+            ClearBG();
 
             if (null == _clickedEquipment)
                 return;
@@ -295,13 +258,12 @@ namespace BabyNightmare.InventorySystem
             TryRemove(_clickedEquipment);
         }
 
-
         public void OnDrag(PointerEventData eventData)
         {
             if (null == _draggedEquipment)
             {
                 var pos = GetCellPos(eventData.position);
-                var equipment = GetEquipmentAtPos(pos);
+                var equipment = TryGetEquipmentAtPos(pos);
                 if (equipment == _clickedEquipment)
                     return;
 
@@ -334,17 +296,87 @@ namespace BabyNightmare.InventorySystem
             _draggedEquipment = null;
         }
 
-        private Equipment GetEquipmentAtPos(Vector2Int pos)
+        public bool IsAddable(EquipmentData data, Vector2Int point)
+        {
+            if (false == IsInside(data, point))
+                return false;
+
+            if (true == IsOverlap(data, point))
+                return false;
+
+            return true;
+        }
+
+        private bool IsInside(EquipmentData data, Vector2Int point)
+        {
+            for (var x = 0; x < data.Row; x++)
+            {
+                for (var y = 0; y < data.Column; y++)
+                {
+                    var offset = new Vector2Int(x, y);
+                    if (false == data.IsInside(offset))
+                        continue;
+
+                    var newPoint = point + offset;
+                    if (newPoint.x < 0)
+                        return false;
+                    if (newPoint.x >= Row)
+                        return false;
+                    if (newPoint.y < 0)
+                        return false;
+                    if (newPoint.y >= Column)
+                        return false;
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsOverlap(EquipmentData targetData, Vector2Int point)
+        {
+            foreach (var equipment in _equipmentSet)
+            {
+                var data = equipment.Data;
+                for (var i = 0; i < data.Row; i++)
+                {
+                    for (var j = 0; j < data.Column; j++)
+                    {
+                        var offset = new Vector2Int(i, j);
+                        if (false == data.IsInside(offset))
+                            continue;
+
+                        var ePoint = equipment.Point + offset;
+                        for (var x = 0; x < targetData.Row; x++)
+                        {
+                            for (var y = 0; y < targetData.Column; y++)
+                            {
+                                var targetOffset = new Vector2Int(x, y);
+                                if (false == targetData.IsInside(targetOffset))
+                                    continue;
+
+                                var tPoint = point + targetOffset;
+                                if (ePoint == tPoint)
+                                    return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private Equipment TryGetEquipmentAtPos(Vector2Int point)
         {
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
 
-                for (var i = 0; i < data.Width; i++)
+                for (var i = 0; i < data.Row; i++)
                 {
-                    for (var j = 0; j < data.Height; j++)
+                    for (var j = 0; j < data.Column; j++)
                     {
-                        if (pos == equipment.Pos + new Vector2Int(i, j))
+                        if (point == equipment.Point + new Vector2Int(i, j))
                             return equipment;
                     }
                 }
@@ -357,8 +389,8 @@ namespace BabyNightmare.InventorySystem
         {
             var data = equipment.Data;
 
-            var x = (-(Width * 0.5f) + equipment.Pos.x + data.Width * 0.5f) * _cellSize.x;
-            var y = (-(Height * 0.5f) + equipment.Pos.y + data.Height * 0.5f) * _cellSize.y;
+            var x = (-(Row * 0.5f) + equipment.Point.x + data.Row * 0.5f) * _cellSize.x;
+            var y = (-(Column * 0.5f) + equipment.Point.y + data.Column * 0.5f) * _cellSize.y;
             return new Vector2(x, y);
         }
 
@@ -376,7 +408,7 @@ namespace BabyNightmare.InventorySystem
             return new Vector2Int(Mathf.FloorToInt(pos.x / _cellSize.x), Mathf.FloorToInt(pos.y / _cellSize.y));
         }
 
-        public void StartCoolDown(Action<EquipmentData> onCoolDown)
+        public void StartUseEquipment(Action<EquipmentData> onCoolDown)
         {
             foreach (var equipment in _equipmentSet)
             {
@@ -388,7 +420,7 @@ namespace BabyNightmare.InventorySystem
             _canvasGroup.interactable = false;
         }
 
-        public void StopCoolDown()
+        public void StopUseEquipment()
         {
             foreach (var equipment in _equipmentSet)
             {

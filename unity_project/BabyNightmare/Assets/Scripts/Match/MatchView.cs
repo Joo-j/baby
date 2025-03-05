@@ -63,7 +63,7 @@ namespace BabyNightmare.Match
         public void RefreshWave(int curWave, int maxWave, bool immediate)
         {
             _waveProgress.Refresh(curWave, maxWave, immediate);
-            _inventory.StopCoolDown();
+            _inventory.StopUseEquipment();
 
             var startSize = new Vector2(_topRTF.sizeDelta.x, _matchTopHeight);
             var targetSize = new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
@@ -90,7 +90,7 @@ namespace BabyNightmare.Match
         public void OnClickFight()
         {
             _outside.RemoveAll();
-            _inventory.StartCoolDown(_context.OnCoolDown);
+            _inventory.StartUseEquipment(_context.OnCoolDown);
 
             var startSize = new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
             var targetSize = new Vector2(_topRTF.sizeDelta.x, _matchTopHeight);

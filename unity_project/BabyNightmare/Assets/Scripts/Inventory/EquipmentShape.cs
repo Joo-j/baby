@@ -10,13 +10,13 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] int _height;
         [SerializeField] bool[] _shape;
 
-        public int Width => _width;
-        public int Height => _height;
+        public int Row => _width;
+        public int Column => _height;
 
-        public EquipmentShape(int width, int height)
+        public EquipmentShape(int row, int column)
         {
-            _width = width;
-            _height = height;
+            _width = row;
+            _height = column;
             _shape = new bool[_width * _height];
         }
 
@@ -34,12 +34,12 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public bool IsPartOfShape(Vector2Int localPoint)
+        public bool IsInside(Vector2Int point)
         {
-            if (localPoint.x < 0 || localPoint.x >= _width || localPoint.y < 0 || localPoint.y >= _height)
+            if (point.x < 0 || point.x >= _width || point.y < 0 || point.y >= _height)
                 return false;
 
-            var index = GetIndex(localPoint.x, localPoint.y);
+            var index = GetIndex(point.x, point.y);
             if (index < 0 || index >= _shape.Length)
                 return false;
 

@@ -34,7 +34,7 @@ namespace BabyNightmare.InventorySystem
             this._originOwner = originalOwner;
             this._currentOwner = originalOwner;
             this._equipment = equipment;
-            this._originPos = equipment.Pos;
+            this._originPos = equipment.Point;
             this._offset = offset;
 
             _data = equipment.Data;
@@ -53,9 +53,9 @@ namespace BabyNightmare.InventorySystem
 
             if (null != _currentOwner)
             {
-                _equipment.Pos = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
-                var isAddable = _currentOwner.IsAddable(_data, _equipment.Pos);
-                _currentOwner.SelectGrid(_equipment, false == isAddable, Color.white);
+                _equipment.Point = _currentOwner.GetCellPos(value + _offset + GetOffset(_data));
+                var isAddable = _currentOwner.IsAddable(_data, _equipment.Point);
+                _currentOwner.PaintBG(_equipment, false == isAddable, Color.white);
             }
 
             // Slowly animate the equipment towards the center of the mouse pointer
@@ -80,7 +80,7 @@ namespace BabyNightmare.InventorySystem
                     mode = DropMode.Returned;
                 }
 
-                _currentOwner.ClearGrid();
+                _currentOwner.ClearBG();
             }
             else
             {
@@ -105,8 +105,8 @@ namespace BabyNightmare.InventorySystem
             var cellSize = _currentOwner.CellSize;
 
             var scale = new Vector2(Screen.width / _canvasRect.sizeDelta.x, Screen.height / _canvasRect.sizeDelta.y);
-            var gx = -(data.Width * cellSize.x / 2f) + (cellSize.x / 2);
-            var gy = -(data.Height * cellSize.y / 2f) + (cellSize.y / 2);
+            var gx = -(data.Row * cellSize.x / 2f) + (cellSize.x / 2);
+            var gy = -(data.Column * cellSize.y / 2f) + (cellSize.y / 2);
             return new Vector2(gx, gy) * scale;
         }
 

@@ -10,7 +10,7 @@ namespace BabyNightmare.InventorySystem
         public DynamicCell Cell;
         public EquipmentData Data;
 
-        public Vector2Int Pos { get; set; }
+        public Vector2Int Point { get; set; }
 
         public Equipment(DynamicCell cell, EquipmentData data)
         {
