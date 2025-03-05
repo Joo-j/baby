@@ -82,7 +82,7 @@ namespace BabyNightmare.Character
             if (amount <= 0)
                 return;
 
-            _heath += amount;
+            _heath = Mathf.Min(_maxHealth, _heath + amount);
             _hpBar.Refresh(_heath, _maxHealth, false);
         }
 
