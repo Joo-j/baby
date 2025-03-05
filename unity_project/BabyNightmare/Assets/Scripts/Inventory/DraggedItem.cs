@@ -6,13 +6,6 @@ namespace BabyNightmare.InventorySystem
 {
     public class DraggedItem
     {
-        public enum DropMode
-        {
-            Added,
-            Returned,
-            Dropped,
-        }
-
         private RectTransform _canvasRect;
         private Equipment _equipment;
         private Vector2 _offset;
@@ -62,9 +55,11 @@ namespace BabyNightmare.InventorySystem
             _offset = Vector2.Lerp(_offset, Vector2.zero, Time.deltaTime * 10f);
         }
 
-        public DropMode Drop(Vector2 pos)
+        public void Drop(Vector2 pos)
         {
-            DropMode mode;
+            Object.Destroy(_cell.GO);
+            _cell = null;
+
             if (null != _currentOwner)
             {
                 var cellPos = _currentOwner.GetCellPos(pos + _offset + GetOffset(_data));
@@ -72,29 +67,14 @@ namespace BabyNightmare.InventorySystem
                 if (true == _currentOwner.IsAddable(_data, cellPos))
                 {
                     _currentOwner.TryAdd(_data, cellPos);
-                    mode = DropMode.Added;
                 }
                 else
                 {
                     _originOwner.TryAdd(_data, _originPos);
-                    mode = DropMode.Returned;
                 }
 
                 _currentOwner.ClearBG();
             }
-            else
-            {
-                mode = DropMode.Dropped;
-                if (false == _originOwner.TryRemove(_equipment))
-                {
-                    _originOwner.TryAdd(_data, _originPos);
-                }
-            }
-
-            Object.Destroy(_cell.GO);
-            _cell = null;
-
-            return mode;
         }
 
         private Vector2 GetOffset(EquipmentData data)

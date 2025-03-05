@@ -280,19 +280,9 @@ namespace BabyNightmare.InventorySystem
             if (null == _draggedEquipment)
                 return;
 
-            var mode = _draggedEquipment.Drop(eventData.position);
+            _draggedEquipment.Drop(eventData.position);
 
-            switch (mode)
-            {
-                case DraggedItem.DropMode.Added:
-                    break;
-                case DraggedItem.DropMode.Returned:
-                    break;
-                case DraggedItem.DropMode.Dropped:
-                    _clickedEquipment = null;
-                    break;
-            }
-
+            _clickedEquipment = null;
             _draggedEquipment = null;
         }
 
