@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BabyNightmare.InventorySystem
 {
     [Serializable]
-    public class EquipmentShape
+    public class RectShape
     {
         [SerializeField] private int _row;
         [SerializeField] private int _column;
@@ -13,30 +13,30 @@ namespace BabyNightmare.InventorySystem
         public int Row => _row;
         public int Column => _column;
 
-        public EquipmentShape(int row, int column)
+        public RectShape(int row, int column)
         {
             _row = row;
             _column = column;
             _shape = new bool[_row * _column];
         }
 
-        public EquipmentShape(bool[,] shape)
+        public RectShape(bool[,] shape)
         {
-            _row = shape.GetLength(0);
-            _column = shape.GetLength(1);
+            _column = shape.GetLength(0);
+            _row = shape.GetLength(1);
             _shape = new bool[_row * _column];
-            for (int x = 0; x < _row; x++)
+            for (int x = 0; x < _column; x++)
             {
-                for (int y = 0; y < _column; y++)
+                for (int y = 0; y < _row; y++)
                 {
                     _shape[GetIndex(x, y)] = shape[x, y];
                 }
             }
         }
 
-        public bool IsInside(Vector2Int point)
+        public bool IsValid(Vector2Int point)
         {
-            if (point.x < 0 || point.x >= _row || point.y < 0 || point.y >= _column)
+            if (point.x < 0 || point.x >= _column || point.y < 0 || point.y >= _row)
                 return false;
 
             var index = GetIndex(point.x, point.y);
@@ -48,8 +48,8 @@ namespace BabyNightmare.InventorySystem
 
         private int GetIndex(int x, int y)
         {
-            y = (_column - 1) - y;
-            return x + _row * y;
+            y = (_row - 1) - y;
+            return x + _column * y;
         }
     }
 }

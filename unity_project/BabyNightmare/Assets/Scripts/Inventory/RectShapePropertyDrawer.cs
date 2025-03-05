@@ -6,7 +6,7 @@ namespace BabyNightmare.InventorySystem
     /// <summary>
     /// Custom Property Drawer for InventoryShape
     /// </summary>
-    [CustomPropertyDrawer(typeof(EquipmentShape))]
+    [CustomPropertyDrawer(typeof(RectShape))]
     public class EquipmentShapePropertyDrawer : PropertyDrawer
     {
         const int GridSize = 16; // The size between the boold-fields that make up the shape matrix
@@ -46,11 +46,11 @@ namespace BabyNightmare.InventorySystem
             var row = pRow.intValue;
             var column = pColumn.intValue;
             pShape.arraySize = row * column;
-            for (var x = 0; x < row; x++)
+            for (var x = 0; x < column; x++)
             {
-                for (var y = 0; y < column; y++)
+                for (var y = 0; y < row; y++)
                 {
-                    var index = x + row * y;
+                    var index = x + column * y;
                     var rect = new Rect(position.x + (x * GridSize), position.y + GridSize + (y * GridSize), GridSize, GridSize);
                     EditorGUI.PropertyField(rect, pShape.GetArrayElementAtIndex(index), GUIContent.none);
                 }
@@ -65,9 +65,9 @@ namespace BabyNightmare.InventorySystem
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            float column = EditorGUI.GetPropertyHeight(property, label);
-            column += property.FindPropertyRelative("_column").intValue * GridSize;
-            return column;
+            float row = EditorGUI.GetPropertyHeight(property, label);
+            row += property.FindPropertyRelative("_row").intValue * GridSize;
+            return row;
         }
     }
 }
