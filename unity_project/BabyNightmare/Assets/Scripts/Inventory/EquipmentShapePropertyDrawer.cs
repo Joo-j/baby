@@ -14,13 +14,13 @@ namespace BabyNightmare.InventorySystem
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             // Find properties
-            var pWidth = property.FindPropertyRelative("_width");
-            var pHeight = property.FindPropertyRelative("_height");
+            var pRow = property.FindPropertyRelative("_row");
+            var pColumn = property.FindPropertyRelative("_column");
             var pShape = property.FindPropertyRelative("_shape");
 
-            // Clamp height & width
-            if (pWidth.intValue <= 0) { pWidth.intValue = 1; }
-            if (pHeight.intValue <= 0) { pHeight.intValue = 1; }
+            // Clamp column & row
+            if (pRow.intValue <= 0) { pRow.intValue = 1; }
+            if (pColumn.intValue <= 0) { pColumn.intValue = 1; }
 
             // Begin property
             EditorGUI.BeginProperty(position, label, property);
@@ -33,24 +33,24 @@ namespace BabyNightmare.InventorySystem
             EditorGUI.indentLevel = 0;
 
             // Calculate rects
-            var halfWidth = position.width / 2;
-            var widthRect = new Rect(position.x, position.y, halfWidth, GridSize);
-            var heightRect = new Rect(position.x + halfWidth, position.y, halfWidth, GridSize);
+            var halfRow = position.width / 2;
+            var rowRect = new Rect(position.x, position.y, halfRow, GridSize);
+            var columnRect = new Rect(position.x + halfRow, position.y, halfRow, GridSize);
 
-            // Width & Height
+            // Row & Column
             EditorGUIUtility.labelWidth = 40;
-            EditorGUI.PropertyField(widthRect, pWidth, new GUIContent("width"));
-            EditorGUI.PropertyField(heightRect, pHeight, new GUIContent("height"));
+            EditorGUI.PropertyField(rowRect, pRow, new GUIContent("row"));
+            EditorGUI.PropertyField(columnRect, pColumn, new GUIContent("column"));
 
             // Draw grid
-            var width = pWidth.intValue;
-            var height = pHeight.intValue;
-            pShape.arraySize = width * height;
-            for (var x = 0; x < width; x++)
+            var row = pRow.intValue;
+            var column = pColumn.intValue;
+            pShape.arraySize = row * column;
+            for (var x = 0; x < row; x++)
             {
-                for (var y = 0; y < height; y++)
+                for (var y = 0; y < column; y++)
                 {
-                    var index = x + width * y;
+                    var index = x + row * y;
                     var rect = new Rect(position.x + (x * GridSize), position.y + GridSize + (y * GridSize), GridSize, GridSize);
                     EditorGUI.PropertyField(rect, pShape.GetArrayElementAtIndex(index), GUIContent.none);
                 }
@@ -65,9 +65,9 @@ namespace BabyNightmare.InventorySystem
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            float height = EditorGUI.GetPropertyHeight(property, label);
-            height += property.FindPropertyRelative("_height").intValue * GridSize;
-            return height;
+            float column = EditorGUI.GetPropertyHeight(property, label);
+            column += property.FindPropertyRelative("_column").intValue * GridSize;
+            return column;
         }
     }
 }

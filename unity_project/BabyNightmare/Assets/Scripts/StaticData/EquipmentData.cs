@@ -10,14 +10,15 @@ namespace BabyNightmare.StaticData
         public string Name;
         public int Level;
         public float Damage;
+        public float Heal;
+        public float Defence;
         public float CoolTime;
         public float ThrowDuration;
-        [SerializeField] private EquipmentShape _shape = null;
-        [SerializeField] private Sprite _sprite = null;
+        public Sprite Sprite;
+        public EquipmentShape Shape;
 
-        public Sprite Sprite => _sprite;
-        public int Row => _shape.Row;
-        public int Column => _shape.Column;
-        public bool IsInside(Vector2Int point) => _shape.IsInside(point);
+        public int Row => Shape.Row;
+        public int Column => Shape.Column;
+        public bool IsInside(Vector2Int point) => Shape.IsInside(point);
     }
 }

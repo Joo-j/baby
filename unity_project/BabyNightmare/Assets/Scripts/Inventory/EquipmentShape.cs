@@ -6,28 +6,28 @@ namespace BabyNightmare.InventorySystem
     [Serializable]
     public class EquipmentShape
     {
-        [SerializeField] int _width;
-        [SerializeField] int _height;
-        [SerializeField] bool[] _shape;
+        [SerializeField] private int _row;
+        [SerializeField] private int _column;
+        [SerializeField] private bool[] _shape;
 
-        public int Row => _width;
-        public int Column => _height;
+        public int Row => _row;
+        public int Column => _column;
 
         public EquipmentShape(int row, int column)
         {
-            _width = row;
-            _height = column;
-            _shape = new bool[_width * _height];
+            _row = row;
+            _column = column;
+            _shape = new bool[_row * _column];
         }
 
         public EquipmentShape(bool[,] shape)
         {
-            _width = shape.GetLength(0);
-            _height = shape.GetLength(1);
-            _shape = new bool[_width * _height];
-            for (int x = 0; x < _width; x++)
+            _row = shape.GetLength(0);
+            _column = shape.GetLength(1);
+            _shape = new bool[_row * _column];
+            for (int x = 0; x < _row; x++)
             {
-                for (int y = 0; y < _height; y++)
+                for (int y = 0; y < _column; y++)
                 {
                     _shape[GetIndex(x, y)] = shape[x, y];
                 }
@@ -36,7 +36,7 @@ namespace BabyNightmare.InventorySystem
 
         public bool IsInside(Vector2Int point)
         {
-            if (point.x < 0 || point.x >= _width || point.y < 0 || point.y >= _height)
+            if (point.x < 0 || point.x >= _row || point.y < 0 || point.y >= _column)
                 return false;
 
             var index = GetIndex(point.x, point.y);
@@ -48,8 +48,8 @@ namespace BabyNightmare.InventorySystem
 
         private int GetIndex(int x, int y)
         {
-            y = (_height - 1) - y;
-            return x + _width * y;
+            y = (_column - 1) - y;
+            return x + _row * y;
         }
     }
 }
