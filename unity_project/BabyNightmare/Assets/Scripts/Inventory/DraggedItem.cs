@@ -60,35 +60,41 @@ namespace BabyNightmare.InventorySystem
             }
 
             var overlappedEquipments = CurrentOwner.GetOverlapEquipments(data, newPoint);
-            if (null == overlappedEquipments)
+            var overlapCount = overlappedEquipments.Count;
+            Debug.Log($"overlapCount {overlapCount}");
+
+            if (overlapCount == 0)
             {
                 CurrentOwner.TryAdd(data, newPoint);
                 return;
             }
 
-            var overlapCount = overlappedEquipments.Count;
             if (overlapCount > 1)
             {
-                for (var i = 0; i < overlappedEquipments.Count; i++)
+                foreach (var equipment in overlappedEquipments)
                 {
-                    CurrentOwner.TryRemove(overlappedEquipments[i]);
-                    OriginOwner.TryAdd(overlappedEquipments[i].Data);
+                    CurrentOwner.TryRemove(equipment);
+                    OriginOwner.TryAdd(equipment.Data);
                 }
 
                 return;
             }
 
             CurrentOwner.TryAdd(data, newPoint);
-            var oe = overlappedEquipments[0];
-            var upgradeData = StaticDataManager.Instance.GetEquipmentData(data.UpgradeDataID);
-            if (oe.Data.ID == data.ID && null != upgradeData)
+
+            foreach (var equipment in overlappedEquipments)
             {
-                CurrentOwner.TryAdd(upgradeData, newPoint);
-            }
-            else
-            {
-                CurrentOwner.TryRemove(oe);
-                OriginOwner.TryAdd(oe.Data);
+                var upgradeData = StaticDataManager.Instance.GetEquipmentData(data.UpgradeDataID);
+                if (equipment.Data.ID == data.ID && null != upgradeData)
+                {
+                    CurrentOwner.TryRemove(equipment);
+                    CurrentOwner.TryAdd(upgradeData, newPoint);
+                    Debug.Log("Upgrade");
+                    return;
+                }
+
+                CurrentOwner.TryRemove(equipment);
+                OriginOwner.TryAdd(equipment.Data);
                 CurrentOwner.TryAdd(data, newPoint);
             }
         }

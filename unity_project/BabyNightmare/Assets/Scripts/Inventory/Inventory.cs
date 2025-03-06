@@ -27,12 +27,16 @@ namespace BabyNightmare.InventorySystem
         private HashSet<Equipment> _equipmentSet = null;
         private Equipment _clickedEquipment = null;
         private static DraggedItem _draggedEquipment = null;
+        private Action<EquipmentData> _onEquip = null;
+        private Action<EquipmentData> _onUnequip = null;
 
         public Vector2 CellSize => _cellSize;
 
-        public void Init(RectTransform grandCanvasRect)
+        public void Init(RectTransform grandCanvasRect, Action<EquipmentData> onEquip, Action<EquipmentData> onUnequip)
         {
             _grandCanvasRect = grandCanvasRect;
+            _onEquip = onEquip;
+            _onUnequip = onUnequip;
 
             _poolTF = new GameObject("PoolTF").GetComponent<Transform>();
             _poolTF.SetParent(transform);
@@ -123,7 +127,7 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        private void ClearBG()
+        public void ClearBG()
         {
             for (var i = 0; i < _bgCellArr.Length; i++)
             {
@@ -153,6 +157,9 @@ namespace BabyNightmare.InventorySystem
                 }
             }
 
+            if (enablePoints.Count == 0)
+                return false;
+
             var finalPoint = enablePoints[UnityEngine.Random.Range(0, enablePoints.Count)];
             return TryAdd(data, finalPoint);
         }
@@ -168,9 +175,11 @@ namespace BabyNightmare.InventorySystem
             equipment.Point = point;
 
             cell.RTF.localPosition = GetPivot(equipment);
+            cell.GO.name = $"{data.Name}";
 
             _equipmentSet.Add(equipment);
             ClearBG();
+            _onEquip?.Invoke(equipment.Data);
             return true;
         }
 
@@ -181,6 +190,8 @@ namespace BabyNightmare.InventorySystem
 
             ReturnCell(equipment.Cell);
             _equipmentSet.Remove(equipment);
+            _onUnequip?.Invoke(equipment.Data);
+            ClearBG();
 
             return true;
         }
@@ -190,6 +201,7 @@ namespace BabyNightmare.InventorySystem
             foreach (var equipment in _equipmentSet)
             {
                 var cell = equipment.Cell;
+                _onUnequip?.Invoke(equipment.Data);
                 ReturnCell(cell);
             }
 
@@ -291,7 +303,7 @@ namespace BabyNightmare.InventorySystem
             if (false == IsValid(data, point))
                 return false;
 
-            if (null != GetOverlapEquipments(data, point))
+            if (GetOverlapEquipments(data, point).Count > 0)
                 return false;
 
             return true;
@@ -325,9 +337,9 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
-        public List<Equipment> GetOverlapEquipments(EquipmentData targetData, Vector2Int point)
+        public HashSet<Equipment> GetOverlapEquipments(EquipmentData targetData, Vector2Int point)
         {
-            List<Equipment> overlapEquipments = null;
+            HashSet<Equipment> overlapEquipments = new HashSet<Equipment>();
 
             foreach (var equipment in _equipmentSet)
             {
@@ -352,7 +364,6 @@ namespace BabyNightmare.InventorySystem
                                 var tPoint = point + targetOffset;
                                 if (ePoint == tPoint)
                                 {
-                                    overlapEquipments ??= new List<Equipment>();
                                     overlapEquipments.Add(equipment);
                                 }
                             }
@@ -360,6 +371,7 @@ namespace BabyNightmare.InventorySystem
                     }
                 }
             }
+
             return overlapEquipments;
         }
 
@@ -411,7 +423,7 @@ namespace BabyNightmare.InventorySystem
             {
                 var cell = equipment.Cell;
                 var data = equipment.Data;
-                cell.StartCoolDownLoop(data.CoolTime, () => onCoolDown?.Invoke(data));
+                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => cell.StartCoolDownLoop(data.CoolTime, () => onCoolDown?.Invoke(data)));
             }
 
             _canvasGroup.interactable = false;
