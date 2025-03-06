@@ -44,8 +44,8 @@ namespace BabyNightmare.Match
         [SerializeField] private SimpleProgress _waveProgress;
         [SerializeField] private Inventory _inventory;
         [SerializeField] private Inventory _outside;
-        [SerializeField] private float _noMatchTopHeight = 640;
-        [SerializeField] private float _matchTopHeight = 820;
+        [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
+        [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private GameObject _startGO;
         [SerializeField] private GameObject _rerollGO;
         [SerializeField] private GameObject _rerollGO_Free;
@@ -87,6 +87,8 @@ namespace BabyNightmare.Match
             _boxGO.SetActive(false);
             _canvasGroup.blocksRaycasts = false;
             _startGO.SetActive(true);
+
+            ChangeRectPos(false, true);
         }
 
         public void RefreshProgress(int curWave, int maxWave, bool immediate)
@@ -145,7 +147,7 @@ namespace BabyNightmare.Match
 
         public void ShowBox(EquipmentBoxData boxData)
         {
-            AdaptTopSize(false, false);
+            ChangeRectPos(false);
 
             _boxData = boxData;
             var iconPath = $"{PATH_BOX_ICON}{boxData.Type}";
@@ -203,28 +205,48 @@ namespace BabyNightmare.Match
             _inventory.StartUseEquipment(_context.OnCoolDown);
             _canvasGroup.blocksRaycasts = false;
 
-            AdaptTopSize(true, false);
+            ChangeRectPos(true);
 
             _context.StartWave?.Invoke();
         }
 
-        public void AdaptTopSize(bool onMatch, bool immediate)
+        public void ChangeRectPos(bool top, bool immediate = false)
         {
-            var startSize = onMatch ? new Vector2(_topRTF.sizeDelta.x, _matchTopHeight) : new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
-            var targetSize = onMatch ? new Vector2(_topRTF.sizeDelta.x, _matchTopHeight) : new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
+            var topStartPos = _topRTF.anchoredPosition;
+            var topTargetPos = top ? new Vector2(topStartPos.x, _topYPosRange.x) : new Vector2(topStartPos.x, _topYPosRange.y);
+            if (_topRTF.anchoredPosition == topTargetPos)
+                return;
 
-            if (_topRTF.sizeDelta == targetSize)
+            var botStartPos = _botRTF.anchoredPosition;
+            var botTargetPos = top ? new Vector2(botStartPos.x, _botYPosRange.x) : new Vector2(botStartPos.x, _botYPosRange.y);
+            if (_botRTF.anchoredPosition == botTargetPos)
                 return;
 
             if (true == immediate)
             {
-                _topRTF.sizeDelta = targetSize;
+                _topRTF.anchoredPosition = topTargetPos;
+                _botRTF.anchoredPosition = botTargetPos;
                 return;
             }
 
-            StartCoroutine(Co_LerpSizeTop(startSize, targetSize, 0.4f));
-        }
+            StartCoroutine(Co_ChangeRectPos());
+            IEnumerator Co_ChangeRectPos()
+            {
+                var elapsed = 0f;
+                var duration = 0.4f;
+                while (elapsed < duration)
+                {
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                    var factor = elapsed / duration;
+                    _topRTF.anchoredPosition = Vector2.Lerp(topStartPos, topTargetPos, factor);
+                    _botRTF.anchoredPosition = Vector2.Lerp(botStartPos, botTargetPos, factor);
+                }
 
+                _topRTF.anchoredPosition = topTargetPos;
+                _botRTF.anchoredPosition = botTargetPos;
+            }
+        }
 
         private void OnEquip(EquipmentData data)
         {
@@ -249,24 +271,6 @@ namespace BabyNightmare.Match
             _hpTMP.text = $"{_statDict[EStatType.HP]}/s";
             _attackTMP.text = $"{_statDict[EStatType.ATK]}/s";
             _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
-        }
-
-        private IEnumerator Co_LerpSizeTop(Vector2 startSize, Vector2 targetSize, float duration)
-        {
-            var elapsed = 0f;
-            while (elapsed < duration)
-            {
-                yield return null;
-                elapsed += Time.deltaTime;
-                _topRTF.sizeDelta = Vector2.Lerp(startSize, targetSize, elapsed / duration);
-            }
-
-            _topRTF.sizeDelta = targetSize;
-        }
-
-        private void LateUpdate()
-        {
-            _botRTF.anchoredPosition = new Vector2(0, -_topRTF.sizeDelta.y);
         }
     }
 }

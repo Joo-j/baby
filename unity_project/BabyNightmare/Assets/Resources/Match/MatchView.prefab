@@ -171,8 +171,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 720, y: 500}
+  m_AnchoredPosition: {x: 0, y: 160}
+  m_SizeDelta: {x: 720, y: 720}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &360291313998440123
 GameObject:
@@ -1816,8 +1816,8 @@ MonoBehaviour:
   _waveProgress: {fileID: 1856950325314228636}
   _inventory: {fileID: 3673302449860407023}
   _outside: {fileID: 9054877851490812916}
-  _noMatchTopHeight: 500
-  _matchTopHeight: 820
+  _topYPosRange: {x: 0, y: 160}
+  _botYPosRange: {x: -720, y: -560}
   _startGO: {fileID: 8190703497089991654}
   _rerollGO: {fileID: 494988333618344200}
   _rerollGO_Free: {fileID: 2275684249330526913}
@@ -2303,8 +2303,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 165}
-  m_SizeDelta: {x: 350, y: 350}
+  m_AnchoredPosition: {x: 0, y: 190}
+  m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &9054877851490812916
 MonoBehaviour:
@@ -2324,7 +2324,7 @@ MonoBehaviour:
   _shape:
     _column: 7
     _row: 5
-    _shape: 0101010101010101010000000101010100000001010101000000010101010101010101
+    _shape: 0000000000000001010000000101010100000001010101010101010101010101010101
   _cellSpriteEmpty: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   _cellSpriteSelected: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
   _cellSpriteBlocked: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
@@ -2589,8 +2589,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -500}
-  m_SizeDelta: {x: 720, y: 780}
+  m_AnchoredPosition: {x: 0, y: -560}
+  m_SizeDelta: {x: 720, y: 720}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4243016148210452577
 CanvasRenderer:

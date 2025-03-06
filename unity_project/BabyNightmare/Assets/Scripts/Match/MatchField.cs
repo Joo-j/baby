@@ -21,6 +21,7 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox_";
 
         private RenderTexture _rt = null;
+        private Transform[] _enemySpawnTFArr = null;
         private Action _onClearWave = null;
         private Action _onFailWave = null;
         private Player _player = null;
@@ -31,6 +32,7 @@ namespace BabyNightmare.Match
         public void Init(Action onClearWave, Action onFailWave)
         {
             _aliveEnemies = new List<EnemyBase>();
+            _enemySpawnTFArr = _enemySpawnTF.GetComponentsInChildren<Transform>();
 
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
@@ -66,11 +68,10 @@ namespace BabyNightmare.Match
             for (var i = 0; i < enemyDataList.Count; i++)
             {
                 var data = enemyDataList[i];
-                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTF);
+                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTFArr[UnityEngine.Random.Range(0, _enemySpawnTFArr.Length)]);
                 var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy));
 
                 enemy.Init(enemyContext);
-                enemy.TF.localPosition += Vector3.right * UnityEngine.Random.Range(-10f, 10f);
                 _aliveEnemies.Add(enemy);
 
                 var randomDelay = UnityEngine.Random.Range(1.5f, 3f);
