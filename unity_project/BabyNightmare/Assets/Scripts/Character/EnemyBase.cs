@@ -48,6 +48,8 @@ namespace BabyNightmare.Character
 
         private void StartMove()
         {
+            _animator.Play(HASH_ANI_MOVE);
+
             if (null != _coAct)
                 StopCoroutine(_coAct);
 
@@ -111,6 +113,7 @@ namespace BabyNightmare.Character
             {
                 while (true)
                 {
+                    _animator.Rebind();
                     _animator.Play(HASH_ANI_ATTACK);
 
                     var damage = _context.EnemyData.Damage;
