@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: Spear
+  m_Name: Gadget
   m_EditorClassIdentifier: 
-  ID: 1006
-  Name: Spear
+  ID: 1002
+  Name: Gadet
   Level: 1
-  Damage: 20
+  Damage: 10
   Heal: 0
   Defence: 0
-  CoolTime: 4.5
-  ThrowDuration: 0.7
-  UpgradeDataID: 1106
-  Sprite: {fileID: 21300004, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  CoolTime: 2
+  ThrowDuration: 0
+  UpgradeDataID: -1
+  Sprite: {fileID: 21300008, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
     _column: 1
-    _row: 3
-    _shape: 010101
+    _row: 2
+    _shape: 0101

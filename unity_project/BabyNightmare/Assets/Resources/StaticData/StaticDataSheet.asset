@@ -50,6 +50,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2103fea2b7f614248bd4e2271871cbf9, type: 2}
   - {fileID: 11400000, guid: 640085f25f2394070afe43c1edd4b92e, type: 2}
   - {fileID: 11400000, guid: 57a0e4d113f3d48eeb460a17da5183e4, type: 2}
+  - {fileID: 11400000, guid: 60aa0f6efa47e403eb2a1b502203f73d, type: 2}
+  - {fileID: 11400000, guid: e444c8d378c6444d8b40e013d6e16012, type: 2}
   EquipmentProbDataList:
   - ID: 1
     Group: 101
