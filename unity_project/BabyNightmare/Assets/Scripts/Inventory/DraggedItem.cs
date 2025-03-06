@@ -77,10 +77,10 @@ namespace BabyNightmare.InventorySystem
                     OriginOwner.TryAdd(equipment.Data);
                 }
 
+                CurrentOwner.TryAdd(data, newPoint);
                 return;
             }
 
-            CurrentOwner.TryAdd(data, newPoint);
 
             foreach (var equipment in overlappedEquipments)
             {
