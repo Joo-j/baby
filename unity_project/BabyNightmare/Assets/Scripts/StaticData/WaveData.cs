@@ -11,6 +11,8 @@ namespace BabyNightmare.StaticData
         public int Stage;
         public int Wave;
         public int EquipmentProbDataGroup;
+        public EBoxType BoxType;
+        public int EquipmentBoxDataID;
         public int EnemySpawnDataGroup;
     }
 }

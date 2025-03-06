@@ -17,5 +17,7 @@ namespace BabyNightmare.StaticData
         public float Move_Step_Speed;
         public float Stop_Step_Duration;
         public float Attack_Radius;
+        public int Coin_Min = 1;
+        public int Coin_Max = 10;
     }
 }

@@ -12,6 +12,7 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
         private Dictionary<int, List<EquipmentProbData>> _equipmentProbDataDict = null;
+        private Dictionary<int, EquipmentBoxData> _equipmentBoxDataDict = null;
         private Dictionary<int, EnemyData> _enemyDataDict = null;
         private Dictionary<int, List<EnemySpawnData>> _enemySpawnDataDict = null;
 
@@ -27,6 +28,7 @@ namespace BabyNightmare.StaticData
             InitWaveData();
             InitEquipmentData();
             InitEquipmentProbData();
+            InitEquipmentBoxData();
             InitEnemyData();
             InitEnemySpawnData();
         }
@@ -77,6 +79,19 @@ namespace BabyNightmare.StaticData
                     _equipmentProbDataDict.Add(group, new List<EquipmentProbData>());
 
                 _equipmentProbDataDict[group].Add(data);
+            }
+        }
+
+        private void InitEquipmentBoxData()
+        {
+            _equipmentBoxDataDict = new Dictionary<int, EquipmentBoxData>();
+
+            var equipmentBoxDataList = _sheet.EquipmentBoxDataList;
+
+            for (var i = 0; i < equipmentBoxDataList.Count; i++)
+            {
+                var data = equipmentBoxDataList[i];
+                _equipmentBoxDataDict.Add(data.ID, data);
             }
         }
 
@@ -140,6 +155,18 @@ namespace BabyNightmare.StaticData
             }
 
             return dataList;
+        }
+
+
+        public EquipmentBoxData GetEquipmentBoxDataList(int id)
+        {
+            if (false == _equipmentBoxDataDict.TryGetValue(id, out var boxData))
+            {
+                Debug.LogError($"{id} box data is not exist");
+                return null;
+            }
+
+            return boxData;
         }
 
         public EnemyData GetEnemyData(int id)

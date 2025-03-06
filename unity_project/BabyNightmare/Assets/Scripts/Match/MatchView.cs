@@ -14,20 +14,20 @@ namespace BabyNightmare.Match
     {
         public RenderTexture RT { get; }
         public EquipmentData InitEquipment { get; }
-        public Func<List<EquipmentData>> GetRerollData { get; }
+        public Action OnClickReroll { get; }
         public Action StartWave { get; }
         public Action<EquipmentData> OnCoolDown { get; }
 
         public MatchViewContext(
         RenderTexture rt,
         EquipmentData initEquipment,
-        Func<List<EquipmentData>> getRerollData,
+        Action onClickReroll,
         Action startWave,
         Action<EquipmentData> onCooldown)
         {
             this.RT = rt;
             this.InitEquipment = initEquipment;
-            this.GetRerollData = getRerollData;
+            this.OnClickReroll = onClickReroll;
             this.StartWave = startWave;
             this.OnCoolDown = onCooldown;
         }
@@ -44,45 +44,81 @@ namespace BabyNightmare.Match
         [SerializeField] private Inventory _outside;
         [SerializeField] private float _noMatchTopHeight = 640;
         [SerializeField] private float _matchTopHeight = 820;
-
+        [SerializeField] private GameObject _startButtonGO;
+        [SerializeField] private GameObject _bottomButtonsGO;
+        [SerializeField] private Image _rerollBG;
+        [SerializeField] private TextMeshProUGUI _rerollCostTMP;
+        [SerializeField] private GameObject _boxButtonGO;
+        [SerializeField] private Image _boxIMG;
         [SerializeField] private TextMeshProUGUI _hpTMP;
         [SerializeField] private TextMeshProUGUI _attackTMP;
         [SerializeField] private TextMeshProUGUI _defTMP;
+
+        private const string PATH_BOX_ICON = "Match/UI/ICN_Box_";
         private MatchViewContext _context = null;
         private Dictionary<EStatType, float> _statDict = null;
+        private EquipmentBoxData _boxData = null;
 
         public void Init(MatchViewContext context)
         {
             _context = context;
+            _statDict = new Dictionary<EStatType, float>();
+
+            foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
+                _statDict.Add(type, 0f);
+
+            RefreshStat();
 
             _fieldIMG.texture = _context.RT;
 
             var canvasRect = _canvas.transform as RectTransform;
-            _inventory.Init(canvasRect);
-            _outside.Init(canvasRect);
+            _inventory.Init(canvasRect, OnEquip, OnUnequip);
+            _outside.Init(canvasRect, null, null);
 
             _inventory.TryAdd(_context.InitEquipment);
+
+            _bottomButtonsGO.SetActive(false);
+            _boxButtonGO.SetActive(false);
+            _startButtonGO.SetActive(true);
+
         }
 
-        public void RefreshWave(int curWave, int maxWave, bool immediate)
+        public void RefreshProgress(int curWave, int maxWave, bool immediate)
         {
             _waveProgress.Refresh(curWave, maxWave, immediate);
-            _inventory.StopUseEquipment();
-
-            var startSize = new Vector2(_topRTF.sizeDelta.x, _matchTopHeight);
-            var targetSize = new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
-
-            if (true == immediate)
-            {
-                _topRTF.sizeDelta = targetSize;
-                return;
-            }
-
-            StartCoroutine(Co_LerpSizeTop(startSize, targetSize, 1f));
         }
 
-        public void OnClickReroll()
+        public void OnClearWave()
         {
+            _inventory.StopUseEquipment();
+        }
+
+        public void Reroll(List<EquipmentData> dataList)
+        {
+            _outside.RemoveAll();
+
+            for (var i = 0; i < dataList.Count; i++)
+            {
+                _outside.TryAdd(dataList[i]);
+            }
+        }
+
+        public void RefreshRerollCost(int cost, bool purchasable)
+        {
+            if (cost <= 0)
+                _rerollCostTMP.text = $"FREE";
+            else
+                _rerollCostTMP.text = $"{cost}";
+
+            _rerollBG.color = purchasable ? Color.white : Color.red;
+        }
+
+        public void OnClickStart()
+        {
+            _startButtonGO.SetActive(false);
+            _bottomButtonsGO.SetActive(true);
+        }
+
         public void ShowBox(EquipmentBoxData boxData)
         {
             AdaptTopSize(false, false);
@@ -105,7 +141,6 @@ namespace BabyNightmare.Match
 
             _outside.RemoveAll();
 
-            var equipmentList = _context.GetRerollData?.Invoke();
             var equipmentIDList = _boxData.EquipmentIDList;
             var dataList = new List<EquipmentData>();
             for (var i = 0; i < equipmentIDList.Count; i++)
@@ -119,11 +154,13 @@ namespace BabyNightmare.Match
                 _outside.TryAdd(dataList[i]);
             }
 
-            for (var i = 0; i < equipmentList.Count; i++)
-                _outside.TryAdd(equipmentList[i]);
             _boxData = null;
             _bottomButtonsGO.SetActive(true);
         }
+
+        public void OnClickReroll()
+        {
+            _context.OnClickReroll?.Invoke();
         }
 
         public void OnClickFight()
@@ -131,9 +168,7 @@ namespace BabyNightmare.Match
             _outside.RemoveAll();
             _inventory.StartUseEquipment(_context.OnCoolDown);
 
-            var startSize = new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
-            var targetSize = new Vector2(_topRTF.sizeDelta.x, _matchTopHeight);
-            StartCoroutine(Co_LerpSizeTop(startSize, targetSize, 0.4f));
+            AdaptTopSize(true, false);
 
             _context.StartWave?.Invoke();
         }
@@ -146,6 +181,24 @@ namespace BabyNightmare.Match
 
             _boxButtonGO.SetActive(true);
         }
+
+        public void AdaptTopSize(bool onMatch, bool immediate)
+        {
+            var startSize = onMatch ? new Vector2(_topRTF.sizeDelta.x, _matchTopHeight) : new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
+            var targetSize = onMatch ? new Vector2(_topRTF.sizeDelta.x, _matchTopHeight) : new Vector2(_topRTF.sizeDelta.x, _noMatchTopHeight);
+
+            if (_topRTF.sizeDelta == targetSize)
+                return;
+
+            if (true == immediate)
+            {
+                _topRTF.sizeDelta = targetSize;
+                return;
+            }
+
+            StartCoroutine(Co_LerpSizeTop(startSize, targetSize, 0.4f));
+        }
+
 
         private void OnEquip(EquipmentData data)
         {

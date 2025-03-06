@@ -4,4 +4,17 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
+    public enum EBoxType
+    {
+        Normal,
+        Rare,
+        Epic
+    }
+
+    public enum EStatType
+    {
+        HP,
+        ATK,
+        DEF,
+    }
 }

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using BabyNightmare.Util;
 using UnityEngine;
-using BabyNightmare.StaticData;
 using Supercent.Util;
-using Unity.VisualScripting;
+using BabyNightmare.StaticData;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.Match
 {
@@ -16,6 +15,7 @@ namespace BabyNightmare.Match
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/MatchCompleteView";
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
+        private const int REROLL_INITIAL_COST = 10;
 
         private MatchField _matchField = null;
         private MatchView _matchView = null;
@@ -23,6 +23,7 @@ namespace BabyNightmare.Match
         private List<WaveData> _waveDataList = null;
         private int _currentWave = 0;
         private int _maxWave = 0;
+        private int _rerollCount = 0;
 
         public void Init(Action enterLobby)
         {
@@ -43,17 +44,19 @@ namespace BabyNightmare.Match
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
 
+
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             _matchField.Init(OnClearWave, OnFailMatch);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
-            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, Reroll, OnStartWave, _matchField.AttackEnemy);
+            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy);
             _matchView.Init(matchViewContext);
-            _matchView.RefreshWave(_currentWave + 1, _maxWave, true);
+            _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
+            _matchView.RefreshRerollCost(0, true);
 
-            Reroll();
+            OnClickReroll();
         }
 
         private void OnFailMatch()
@@ -134,9 +137,20 @@ namespace BabyNightmare.Match
             return boxData;
         }
 
+        private void OnClickReroll()
+        {
+            var dataList = GetRerollData();
+            _matchView.Reroll(dataList);
+
+            var rerollCost = REROLL_INITIAL_COST * _rerollCount;
+            var purhchasable = PlayerData.Instance.Coin >= rerollCost;
+
+            _matchView.RefreshRerollCost(rerollCost, purhchasable);
+
+            ++_rerollCount;
         }
 
-        private List<EquipmentData> Reroll()
+        private List<EquipmentData> GetRerollData()
         {
             var waveData = _waveDataList[_currentWave];
 
@@ -150,17 +164,17 @@ namespace BabyNightmare.Match
                 randomPicker.Add(probDataGroup, probDataGroup.Prob);
             }
 
-            var datalist = new List<EquipmentData>();
+            var dataList = new List<EquipmentData>();
             for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
             {
                 var probData = randomPicker.RandomPick();
                 randomPicker.Remove(probData);
 
                 var equipment = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
-                datalist.Add(equipment);
+                dataList.Add(equipment);
             }
 
-            return datalist;
+            return dataList;
         }
 
 

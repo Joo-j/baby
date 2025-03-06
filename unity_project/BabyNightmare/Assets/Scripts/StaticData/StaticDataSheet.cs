@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using BabyNightmare.Util;
 using UnityEngine;
 
 namespace BabyNightmare.StaticData
@@ -11,6 +10,7 @@ namespace BabyNightmare.StaticData
         public List<WaveData> WaveDataList;
         public List<EquipmentData> EquipmentDataList;
         public List<EquipmentProbData> EquipmentProbDataList;
+        public List<EquipmentBoxData> EquipmentBoxDataList;
         public List<EnemyData> EnemyDataList;
         public List<EnemySpawnData> EnemySpawnDataList;
     }
