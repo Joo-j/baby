@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
@@ -45,11 +46,13 @@ namespace BabyNightmare.Match
         [SerializeField] private Inventory _outside;
         [SerializeField] private float _noMatchTopHeight = 640;
         [SerializeField] private float _matchTopHeight = 820;
-        [SerializeField] private GameObject _startButtonGO;
-        [SerializeField] private GameObject _bottomButtonsGO;
-        [SerializeField] private Image _rerollBG;
+        [SerializeField] private GameObject _startGO;
+        [SerializeField] private GameObject _rerollGO;
+        [SerializeField] private GameObject _rerollGO_Free;
+        [SerializeField] private GameObject _rerollGO_AD;
         [SerializeField] private TextMeshProUGUI _rerollCostTMP;
-        [SerializeField] private GameObject _boxButtonGO;
+        [SerializeField] private GameObject _fightGO;
+        [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
         [SerializeField] private TextMeshProUGUI _hpTMP;
         [SerializeField] private TextMeshProUGUI _attackTMP;
@@ -59,6 +62,7 @@ namespace BabyNightmare.Match
         private MatchViewContext _context = null;
         private Dictionary<EStatType, float> _statDict = null;
         private EquipmentBoxData _boxData = null;
+        private int _rerollCost = 0;
 
         public void Init(MatchViewContext context)
         {
@@ -77,11 +81,12 @@ namespace BabyNightmare.Match
 
             _inventory.TryAdd(_context.InitEquipment);
 
-            _bottomButtonsGO.SetActive(false);
-            _boxButtonGO.SetActive(false);
-            _canvasGroup.blocksRaycasts = false;
+            HideRerollButton();
+            _fightGO.SetActive(false);
 
-            _startButtonGO.SetActive(true);
+            _boxGO.SetActive(false);
+            _canvasGroup.blocksRaycasts = false;
+            _startGO.SetActive(true);
         }
 
         public void RefreshProgress(int curWave, int maxWave, bool immediate)
@@ -99,20 +104,42 @@ namespace BabyNightmare.Match
             }
         }
 
-        public void RefreshRerollCost(int cost, bool purchasable)
+        public void RefreshRerollCost(int cost)
         {
-            if (cost <= 0)
-                _rerollCostTMP.text = $"FREE";
-            else
-                _rerollCostTMP.text = $"{cost}";
+            _rerollCost = cost;
+            _rerollCostTMP.text = $"{_rerollCost}";
+        }
 
-            _rerollBG.color = purchasable ? Color.white : Color.red;
+        private void ShowRerollButton()
+        {
+            HideRerollButton();
+            if (_rerollCost <= 0)
+            {
+                _rerollGO_Free.SetActive(true);
+                return;
+            }
+
+            if (_rerollCost > PlayerData.Instance.Coin)
+            {
+                _rerollGO_AD.SetActive(true);
+                return;
+            }
+
+            _rerollGO.SetActive(true);
+        }
+
+        private void HideRerollButton()
+        {
+            _rerollGO_Free.SetActive(false);
+            _rerollGO_AD.SetActive(false);
+            _rerollGO.SetActive(false);
         }
 
         public void OnClickStart()
         {
-            _startButtonGO.SetActive(false);
-            _bottomButtonsGO.SetActive(true);
+            _startGO.SetActive(false);
+            ShowRerollButton();
+            _fightGO.SetActive(true);
             _canvasGroup.blocksRaycasts = true;
         }
 
@@ -123,7 +150,7 @@ namespace BabyNightmare.Match
             _boxData = boxData;
             var iconPath = $"{PATH_BOX_ICON}{boxData.Type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
-            _boxButtonGO.SetActive(true);
+            _boxGO.SetActive(true);
         }
 
         public void OnClearWave()
@@ -140,7 +167,7 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            _boxButtonGO.SetActive(false);
+            _boxGO.SetActive(false);
 
             _outside.RemoveAll();
 
@@ -158,7 +185,9 @@ namespace BabyNightmare.Match
             }
 
             _boxData = null;
-            _bottomButtonsGO.SetActive(true);
+
+            ShowRerollButton();
+            _fightGO.SetActive(true);
         }
 
         public void OnClickReroll()
@@ -168,7 +197,8 @@ namespace BabyNightmare.Match
 
         public void OnClickFight()
         {
-            _bottomButtonsGO.SetActive(false);
+            HideRerollButton();
+            _fightGO.SetActive(false);
             _outside.RemoveAll();
             _inventory.StartUseEquipment(_context.OnCoolDown);
             _canvasGroup.blocksRaycasts = false;

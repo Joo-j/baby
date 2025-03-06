@@ -54,7 +54,6 @@ namespace BabyNightmare.Match
             var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy);
             _matchView.Init(matchViewContext);
             _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
-            _matchView.RefreshRerollCost(0, true);
         }
 
         private void OnFailMatch()
@@ -141,9 +140,7 @@ namespace BabyNightmare.Match
             _matchView.Reroll(dataList);
 
             var rerollCost = REROLL_INITIAL_COST * _rerollCount;
-            var purhchasable = PlayerData.Instance.Coin >= rerollCost;
-
-            _matchView.RefreshRerollCost(rerollCost, purhchasable);
+            _matchView.RefreshRerollCost(rerollCost);
 
             ++_rerollCount;
         }
