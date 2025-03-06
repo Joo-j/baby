@@ -79,12 +79,47 @@ namespace BabyNightmare.Match
 
         public void OnClickReroll()
         {
+        public void ShowBox(EquipmentBoxData boxData)
+        {
+            AdaptTopSize(false, false);
+
+            _boxData = boxData;
+            var iconPath = $"{PATH_BOX_ICON}{boxData.Type}";
+            _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
+            _boxButtonGO.SetActive(true);
+        }
+
+        public void OnClickBox()
+        {
+            if (null == _boxData)
+            {
+                Debug.LogError("no box data");
+                return;
+            }
+
+            _boxButtonGO.SetActive(false);
+
             _outside.RemoveAll();
 
             var equipmentList = _context.GetRerollData?.Invoke();
+            var equipmentIDList = _boxData.EquipmentIDList;
+            var dataList = new List<EquipmentData>();
+            for (var i = 0; i < equipmentIDList.Count; i++)
+            {
+                var equipment = StaticDataManager.Instance.GetEquipmentData(equipmentIDList[i]);
+                dataList.Add(equipment);
+            }
+
+            for (var i = 0; i < dataList.Count; i++)
+            {
+                _outside.TryAdd(dataList[i]);
+            }
 
             for (var i = 0; i < equipmentList.Count; i++)
                 _outside.TryAdd(equipmentList[i]);
+            _boxData = null;
+            _bottomButtonsGO.SetActive(true);
+        }
         }
 
         public void OnClickFight()
@@ -99,6 +134,14 @@ namespace BabyNightmare.Match
             _context.StartWave?.Invoke();
         }
 
+        public void ShowBox(EBoxType type)
+        {
+            var path = $"{PATH_BOX_ICON}{type}";
+            _boxIMG.sprite = Resources.Load<Sprite>(path);
+            Debug.Assert(null != _boxIMG.sprite, $"{path} no sprite");
+
+            _boxButtonGO.SetActive(true);
+        }
         private IEnumerator Co_LerpSizeTop(Vector2 startSize, Vector2 targetSize, float duration)
         {
             var elapsed = 0f;

@@ -5,7 +5,7 @@ using UnityEngine;
 using Supercent.Util;
 using BabyNightmare.Character;
 using BabyNightmare.StaticData;
-using BabyNightmare.Util;
+using BabyNightmare.HUD;
 
 namespace BabyNightmare.Match
 {
@@ -14,9 +14,11 @@ namespace BabyNightmare.Match
         [SerializeField] private Camera _renderCamera;
         [SerializeField] private Transform _playerTF;
         [SerializeField] private Transform _enemySpawnTF;
+        [SerializeField] private Transform _boxTF;
 
         private const string PATH_PLAYER = "Match/Player";
         private const string PATH_ENEMY = "Match/Enemy_";
+        private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox_";
 
         private RenderTexture _rt = null;
         private Action _onClearWave = null;
@@ -38,7 +40,7 @@ namespace BabyNightmare.Match
 
             _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
-            var playerContext = new PlayerContext(PlayerData.Instance.Health, OnDiePlayer);
+            var playerContext = new PlayerContext(PlayerData.Instance.HP, OnDiePlayer);
             _player.Init(playerContext);
         }
 
@@ -55,8 +57,7 @@ namespace BabyNightmare.Match
 
         public void StartWave(List<EnemyData> enemyDataList)
         {
-            _aliveEnemies.Clear();            
-
+            _aliveEnemies.Clear();
             StartCoroutine(Co_SpawnEnemy(enemyDataList));
         }
 
@@ -103,9 +104,20 @@ namespace BabyNightmare.Match
             _player.UseEquipment(equipmentData, randomEnemy);
         }
 
-        public void MovePlayer(Action doneCallback)
+        public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)
         {
-            _player.Move(3f, doneCallback);
+            StartCoroutine(Co_EncounterBox());
+            IEnumerator Co_EncounterBox()
+            {
+                var waiter = new CoroutineWaiter();
+
+                _player.Move(3f, waiter.Signal);
+                yield return waiter.Wait();
+
+                var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
+                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxTF);
+                box.Open(doneCallback);
+            }
         }
     }
 }

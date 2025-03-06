@@ -17,31 +17,43 @@ MonoBehaviour:
     Stage: 1
     Wave: 1
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 0
     EnemySpawnDataGroup: 101
   - ID: 2
     Stage: 1
     Wave: 2
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 1
     EnemySpawnDataGroup: 101
   - ID: 3
     Stage: 1
     Wave: 3
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 2
     EnemySpawnDataGroup: 101
   - ID: 3
     Stage: 2
     Wave: 1
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 3
     EnemySpawnDataGroup: 101
   - ID: 3
     Stage: 2
     Wave: 2
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 1
     EnemySpawnDataGroup: 101
   - ID: 3
     Stage: 2
     Wave: 3
     EquipmentProbDataGroup: 101
+    BoxType: 0
+    EquipmentBoxDataID: 2
     EnemySpawnDataGroup: 101
   EquipmentDataList:
   - {fileID: 11400000, guid: 53fac397599b9450cb6ffc84b6990844, type: 2}
@@ -77,6 +89,16 @@ MonoBehaviour:
     Group: 101
     EquipmentID: 1006
     Prob: 1
+  EquipmentBoxDataList:
+  - ID: 1
+    Type: 0
+    EquipmentIDList: e9030000ea030000eb030000
+  - ID: 2
+    Type: 0
+    EquipmentIDList: e9030000ea030000ec030000
+  - ID: 3
+    Type: 0
+    EquipmentIDList: ea030000eb030000ed030000
   EnemyDataList:
   - ID: 101
     Name: Sullivan
