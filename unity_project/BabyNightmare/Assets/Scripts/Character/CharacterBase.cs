@@ -17,7 +17,7 @@ namespace BabyNightmare.Character
 
     public interface ICharacterContext
     {
-        public float Health { get; }
+        public float HP { get; }
     }
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
@@ -32,8 +32,8 @@ namespace BabyNightmare.Character
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");
 
-        private SimpleProgress _hpBar = null;
-        protected float _heath = 0;
+        protected SimpleProgress _hpBar = null;
+        protected float _hp = 0;
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
         private Coroutine _coFlash = null;
@@ -41,49 +41,40 @@ namespace BabyNightmare.Character
 
         public GameObject GO => gameObject;
         public Transform TF => transform;
-        public float Health => _heath;
+        public float Health => _hp;
         public abstract float HitRadius { get; }
 
         public virtual void Init(ICharacterContext context)
         {
             _originColor = _renderer.material.color;
 
-            _heath = _maxHealth = context.Health;
+            _hp = _maxHealth = context.HP;
 
             _hpBar = ObjectUtil.LoadAndInstantiate<SimpleProgress>(PATH_SIMPLE_PROGRESS, _hpTF);
             _hpBar.transform.rotation = Quaternion.Euler(0, 0, 0);
-            _hpBar.Refresh(_heath, _maxHealth, true);
+            _hpBar.Refresh(_hp, _maxHealth, true);
         }
 
         public abstract void Die();
 
-        public void ReceiveAttack(float damage)
+        public virtual void ReceiveAttack(float damage)
         {
             if (damage <= 0)
                 return;
 
-            _heath = Mathf.Max(0, _heath - damage);
+            _hp = Mathf.Max(0, _hp - damage);
 
-            _hpBar.Refresh(_heath, _maxHealth, false);
+            _hpBar.Refresh(_hp, _maxHealth, false);
 
             if (null != _coFlash)
                 StopCoroutine(_coFlash);
 
             _coFlash = StartCoroutine(Co_FlashRed());
 
-            if (_heath <= 0)
+            if (_hp <= 0)
             {
                 Die();
             }
-        }
-
-        public void Heal(float amount)
-        {
-            if (amount <= 0)
-                return;
-
-            _heath = Mathf.Min(_maxHealth, _heath + amount);
-            _hpBar.Refresh(_heath, _maxHealth, false);
         }
 
         private IEnumerator Co_FlashRed()

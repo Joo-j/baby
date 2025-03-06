@@ -1,8 +1,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using BabyNightmare.StaticData;
 using Supercent.Util;
+using BabyNightmare.StaticData;
+using BabyNightmare.HUD;
 
 namespace BabyNightmare.Character
 {
@@ -12,7 +13,7 @@ namespace BabyNightmare.Character
         public ICharacter Player { get; }
         public Action OnDie { get; }
 
-        public float Health { get; }
+        public float HP { get; }
 
         public EnemyContext
         (
@@ -25,7 +26,7 @@ namespace BabyNightmare.Character
             Player = player;
             OnDie = onDie;
 
-            Health = enemyData.Health;
+            HP = enemyData.Health;
         }
     }
 

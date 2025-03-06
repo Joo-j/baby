@@ -11,12 +11,14 @@ namespace BabyNightmare.Character
 {
     public class PlayerContext : ICharacterContext
     {
-        public float Health { get; }
+        public float HP { get; }
         public Action OnDiePlayer { get; }
 
-        public PlayerContext(float health, Action onDiePlayer)
+        public PlayerContext(
+        float hp,
+        Action onDiePlayer)
         {
-            this.Health = health;
+            this.HP = hp;
             this.OnDiePlayer = onDiePlayer;
         }
     }
@@ -41,7 +43,7 @@ namespace BabyNightmare.Character
 
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
-        private float _defence = 0f;
+        private float _def = 0f;
 
         public override float HitRadius => _hitRadius;
 
@@ -71,9 +73,25 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
         }
 
-        public void AddDefence(float amount)
+        public override void ReceiveAttack(float damage)
         {
-            _defence += amount;
+            damage -= _def;
+
+            base.ReceiveAttack(damage);
+        }
+
+        public void AddHP(float amount)
+        {
+            if (amount <= 0)
+                return;
+
+            _hp = Mathf.Min(_maxHealth, _hp + amount);
+            _hpBar.Refresh(_hp, _maxHealth, false);
+        }
+
+        public void AddDEF(float amount)
+        {
+            _def += amount;
         }
 
         public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
@@ -99,8 +117,8 @@ namespace BabyNightmare.Character
 
             var equipmentData = info.EquipmentData;
 
-            Heal(equipmentData.Heal);
-            AddDefence(equipmentData.Defence);
+            AddHP(equipmentData.Heal);
+            AddDEF(equipmentData.Defence);
 
             var enemy = info.Character;
             if (null == enemy)

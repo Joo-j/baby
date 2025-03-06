@@ -176,6 +176,7 @@ MonoBehaviour:
   _renderer: {fileID: 7856365895407285863}
   _hpTF: {fileID: 8770265973091081742}
   _throwStartTF: {fileID: 5497047235258197999}
+  _hitRadius: 3
   _aniTrigger: {fileID: 488257661798664165}
 --- !u!1001 &202125535568705775
 PrefabInstance:

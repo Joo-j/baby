@@ -45,7 +45,11 @@ namespace BabyNightmare.Match
         [SerializeField] private float _noMatchTopHeight = 640;
         [SerializeField] private float _matchTopHeight = 820;
 
+        [SerializeField] private TextMeshProUGUI _hpTMP;
+        [SerializeField] private TextMeshProUGUI _attackTMP;
+        [SerializeField] private TextMeshProUGUI _defTMP;
         private MatchViewContext _context = null;
+        private Dictionary<EStatType, float> _statDict = null;
 
         public void Init(MatchViewContext context)
         {
@@ -142,6 +146,32 @@ namespace BabyNightmare.Match
 
             _boxButtonGO.SetActive(true);
         }
+
+        private void OnEquip(EquipmentData data)
+        {
+            _statDict[EStatType.HP] += data.Heal;
+            _statDict[EStatType.ATK] += data.Damage;
+            _statDict[EStatType.DEF] += data.Defence;
+
+            RefreshStat();
+        }
+
+        private void OnUnequip(EquipmentData data)
+        {
+            _statDict[EStatType.HP] -= data.Heal;
+            _statDict[EStatType.ATK] -= data.Damage;
+            _statDict[EStatType.DEF] -= data.Defence;
+
+            RefreshStat();
+        }
+
+        private void RefreshStat()
+        {
+            _hpTMP.text = $"{_statDict[EStatType.HP]}/s";
+            _attackTMP.text = $"{_statDict[EStatType.ATK]}/s";
+            _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
+        }
+
         private IEnumerator Co_LerpSizeTop(Vector2 startSize, Vector2 targetSize, float duration)
         {
             var elapsed = 0f;
