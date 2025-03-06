@@ -87,6 +87,8 @@ MonoBehaviour:
     Move_Step_Speed: 1
     Stop_Step_Duration: 1.5
     Attack_Radius: 2
+    Coin_Min: 1
+    Coin_Max: 10
   - ID: 102
     Name: Mike
     Damage: 3
@@ -96,6 +98,8 @@ MonoBehaviour:
     Move_Step_Speed: 3
     Stop_Step_Duration: 0.8
     Attack_Radius: 2
+    Coin_Min: 1
+    Coin_Max: 10
   - ID: 103
     Name: Roz
     Damage: 10
@@ -105,6 +109,8 @@ MonoBehaviour:
     Move_Step_Speed: 3
     Stop_Step_Duration: 1.2
     Attack_Radius: 5
+    Coin_Min: 1
+    Coin_Max: 10
   EnemySpawnDataList:
   - ID: 1
     Group: 101
@@ -136,16 +142,3 @@ MonoBehaviour:
   - ID: 1
     Group: 101
     EnemyID: 102
-  - ID: 1
-    Group: 101
-    EnemyID: 102
-  SlotDataList:
-  - ID: 1
-    Rows: 2
-    Columns: 1
-  - ID: 2
-    Rows: 1
-    Columns: 2
-  - ID: 3
-    Rows: 2
-    Columns: 2

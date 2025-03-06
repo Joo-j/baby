@@ -126,6 +126,9 @@ namespace BabyNightmare.Character
 
         public override void Die()
         {
+            CoinHUD.SetSpreadPoint(transform.position);
+            PlayerData.Instance.Coin += UnityEngine.Random.Range(_context.EnemyData.Coin_Min, _context.EnemyData.Coin_Max);
+
             _context.OnDie?.Invoke();
         }
     }
