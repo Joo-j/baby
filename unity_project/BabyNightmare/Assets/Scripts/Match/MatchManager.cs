@@ -55,8 +55,6 @@ namespace BabyNightmare.Match
             _matchView.Init(matchViewContext);
             _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
             _matchView.RefreshRerollCost(0, true);
-
-            OnClickReroll();
         }
 
         private void OnFailMatch()

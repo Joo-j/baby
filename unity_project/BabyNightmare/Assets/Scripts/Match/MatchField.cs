@@ -70,7 +70,7 @@ namespace BabyNightmare.Match
                 var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy));
 
                 enemy.Init(enemyContext);
-                enemy.TF.localPosition += Vector3.right * UnityEngine.Random.Range(-4f, 4f);
+                enemy.TF.localPosition += Vector3.right * UnityEngine.Random.Range(-10f, 10f);
                 _aliveEnemies.Add(enemy);
 
                 var randomDelay = UnityEngine.Random.Range(1.5f, 3f);
@@ -85,6 +85,11 @@ namespace BabyNightmare.Match
 
         private void OnDieEnemy(EnemyBase enemy)
         {
+            var worldPos = enemy.TF.position;
+            var screenPos = _renderCamera.WorldToScreenPoint(worldPos);
+            CoinHUD.SetSpreadPoint(worldPos);
+            PlayerData.Instance.Coin += enemy.GetRandomCoin();
+
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
 

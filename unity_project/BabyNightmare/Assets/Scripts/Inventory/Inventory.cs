@@ -20,7 +20,7 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Sprite _cellSpriteBlocked = null;
 
         private const string PATH_DYNAMIC_CELL = "Inventory/DynamicCell";
-        private RectTransform _grandCanvasRect = null;
+        private RectTransform _parentRTF = null;
         private DynamicCell[] _bgCellArr = null;
         private Transform _poolTF = null;
         private Pool<DynamicCell> _cellPool = null;
@@ -32,9 +32,9 @@ namespace BabyNightmare.InventorySystem
 
         public Vector2 CellSize => _cellSize;
 
-        public void Init(RectTransform grandCanvasRect, Action<EquipmentData> onEquip, Action<EquipmentData> onUnequip)
+        public void Init(RectTransform parentRTF, Action<EquipmentData> onEquip, Action<EquipmentData> onUnequip)
         {
-            _grandCanvasRect = grandCanvasRect;
+            _parentRTF = parentRTF;
             _onEquip = onEquip;
             _onUnequip = onUnequip;
 
@@ -70,7 +70,7 @@ namespace BabyNightmare.InventorySystem
             }
 
             _equipmentSet = new HashSet<Equipment>();
-            _draggedEquipment ??= new DraggedItem(_grandCanvasRect);
+            _draggedEquipment ??= new DraggedItem(_parentRTF);
         }
 
         private DynamicCell GetCell(Sprite sprite, bool enable)

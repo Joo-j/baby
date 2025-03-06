@@ -35,7 +35,8 @@ namespace BabyNightmare.Match
 
     public class MatchView : MonoBehaviour
     {
-        [SerializeField] private Canvas _canvas;
+        [SerializeField] private CanvasGroup _canvasGroup;
+        [SerializeField] private RectTransform _rtf;
         [SerializeField] private RectTransform _topRTF;
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
@@ -71,26 +72,21 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            var canvasRect = _canvas.transform as RectTransform;
-            _inventory.Init(canvasRect, OnEquip, OnUnequip);
-            _outside.Init(canvasRect, null, null);
+            _inventory.Init(_rtf, OnEquip, OnUnequip);
+            _outside.Init(_rtf, null, null);
 
             _inventory.TryAdd(_context.InitEquipment);
 
             _bottomButtonsGO.SetActive(false);
             _boxButtonGO.SetActive(false);
-            _startButtonGO.SetActive(true);
+            _canvasGroup.blocksRaycasts = false;
 
+            _startButtonGO.SetActive(true);
         }
 
         public void RefreshProgress(int curWave, int maxWave, bool immediate)
         {
             _waveProgress.Refresh(curWave, maxWave, immediate);
-        }
-
-        public void OnClearWave()
-        {
-            _inventory.StopUseEquipment();
         }
 
         public void Reroll(List<EquipmentData> dataList)
@@ -117,6 +113,7 @@ namespace BabyNightmare.Match
         {
             _startButtonGO.SetActive(false);
             _bottomButtonsGO.SetActive(true);
+            _canvasGroup.blocksRaycasts = true;
         }
 
         public void ShowBox(EquipmentBoxData boxData)
@@ -127,6 +124,12 @@ namespace BabyNightmare.Match
             var iconPath = $"{PATH_BOX_ICON}{boxData.Type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxButtonGO.SetActive(true);
+        }
+
+        public void OnClearWave()
+        {
+            _inventory.StopUseEquipment();
+            _canvasGroup.blocksRaycasts = true;
         }
 
         public void OnClickBox()
@@ -165,21 +168,14 @@ namespace BabyNightmare.Match
 
         public void OnClickFight()
         {
+            _bottomButtonsGO.SetActive(false);
             _outside.RemoveAll();
             _inventory.StartUseEquipment(_context.OnCoolDown);
+            _canvasGroup.blocksRaycasts = false;
 
             AdaptTopSize(true, false);
 
             _context.StartWave?.Invoke();
-        }
-
-        public void ShowBox(EBoxType type)
-        {
-            var path = $"{PATH_BOX_ICON}{type}";
-            _boxIMG.sprite = Resources.Load<Sprite>(path);
-            Debug.Assert(null != _boxIMG.sprite, $"{path} no sprite");
-
-            _boxButtonGO.SetActive(true);
         }
 
         public void AdaptTopSize(bool onMatch, bool immediate)
