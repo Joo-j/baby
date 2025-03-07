@@ -97,7 +97,6 @@ namespace BabyNightmare.InventorySystem
         {
             ClearBG();
 
-            bool isAddable = IsAddable(equipment);
             var data = equipment.Data;
             var point = equipment.Point;
             for (var x = 0; x < data.Column; x++)
@@ -118,10 +117,11 @@ namespace BabyNightmare.InventorySystem
                     if (newPoint.y >= _shape.Row)
                         continue;
 
+                    var isOverlapped = IsOverlap(newPoint, out var overlappedEquipment);
                     var index = newPoint.y * _shape.Column + (_shape.Column - 1 - newPoint.x);
                     var cell = _bgCellArr[index];
 
-                    cell.Image.sprite = isAddable ? _cellSpriteSelected : _cellSpriteBlocked;
+                    cell.Image.sprite = isOverlapped ? _cellSpriteBlocked : _cellSpriteSelected;
                     cell.Image.color = color;
                 }
             }
@@ -340,6 +340,28 @@ namespace BabyNightmare.InventorySystem
         public HashSet<Equipment> GetOverlapEquipments(EquipmentData targetData, Vector2Int point)
         {
             HashSet<Equipment> overlapEquipments = new HashSet<Equipment>();
+            for (var x = 0; x < targetData.Column; x++)
+            {
+                for (var y = 0; y < targetData.Row; y++)
+                {
+                    var targetOffset = new Vector2Int(x, y);
+                    if (false == targetData.IsValid(targetOffset))
+                        continue;
+
+                    var tPoint = point + targetOffset;
+                    if (true == IsOverlap(tPoint, out var equipment))
+                    {
+                        overlapEquipments.Add(equipment);
+                    }
+                }
+            }
+
+            return overlapEquipments;
+        }
+
+        private bool IsOverlap(Vector2Int point, out Equipment overlappedEquipment)
+        {
+            overlappedEquipment = null;
 
             foreach (var equipment in _equipmentSet)
             {
@@ -352,27 +374,17 @@ namespace BabyNightmare.InventorySystem
                         if (false == data.IsValid(offset))
                             continue;
 
-                        var ePoint = equipment.Point + offset;
-                        for (var x = 0; x < targetData.Column; x++)
+                        var oPoint = equipment.Point + offset;
+                        if (point == oPoint)
                         {
-                            for (var y = 0; y < targetData.Row; y++)
-                            {
-                                var targetOffset = new Vector2Int(x, y);
-                                if (false == targetData.IsValid(targetOffset))
-                                    continue;
-
-                                var tPoint = point + targetOffset;
-                                if (ePoint == tPoint)
-                                {
-                                    overlapEquipments.Add(equipment);
-                                }
-                            }
+                            overlappedEquipment = equipment;
+                            return true;
                         }
                     }
                 }
             }
 
-            return overlapEquipments;
+            return false;
         }
 
         private Equipment TryGetEquipmentAtPos(Vector2Int point)
