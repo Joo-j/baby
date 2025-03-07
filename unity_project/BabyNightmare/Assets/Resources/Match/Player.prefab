@@ -178,6 +178,7 @@ MonoBehaviour:
   _throwStartTF: {fileID: 5497047235258197999}
   _hitRadius: 3
   _aniTrigger: {fileID: 488257661798664165}
+  _projectileRes: {fileID: -3954499830993565947, guid: 5d85ed3557e8944d5b6a3e057124cbfd, type: 3}
 --- !u!1001 &202125535568705775
 PrefabInstance:
   m_ObjectHideFlags: 0

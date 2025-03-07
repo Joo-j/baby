@@ -3,7 +3,7 @@ using BabyNightmare.InventorySystem;
 
 namespace BabyNightmare.StaticData
 {
-    [CreateAssetMenu(fileName = "EquipmentData", menuName = "Inventory/EquipmentData")]
+    [CreateAssetMenu(fileName = "EquipmentData", menuName = "BabyNightmare/EquipmentData")]
     public class EquipmentData : ScriptableObject
     {
         public int ID;

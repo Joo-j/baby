@@ -27,7 +27,6 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _hpTF;
 
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
-        protected const string PATH_PROJECTILE = "Inventory/Projectile";
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");

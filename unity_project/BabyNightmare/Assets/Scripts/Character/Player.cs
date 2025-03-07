@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using BabyNightmare.InventorySystem;
-using BabyNightmare.StaticData;
 using Supercent.Util;
+using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using BabyNightmare.Match;
 
 namespace BabyNightmare.Character
 {
@@ -40,10 +40,12 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
         [SerializeField] private AnimationTrigger _aniTrigger;
+        [SerializeField] private Projectile _projectileRes;
 
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
+        private Pool<Projectile> _projectilePool = null;
 
         public override float HitRadius => _hitRadius;
 
@@ -55,6 +57,8 @@ namespace BabyNightmare.Character
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
             _aniTrigger.AddAction(1, TryUseEquipment);
+
+            _projectilePool = new Pool<Projectile>(() => Instantiate(_projectileRes));
         }
 
         public void Move(float duration, Action doneCallback)
@@ -131,23 +135,25 @@ namespace BabyNightmare.Character
 
             if (damage > 0 && equipmentData.ThrowDuration > 0)
             {
-                var obj = ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null);
-                obj.transform.position = _throwStartTF.position;
+                var projectile = _projectilePool.Get();
+                projectile.TF.position = _throwStartTF.position;
+                projectile.TF.rotation = Quaternion.identity;
+                projectile.Init(equipmentData.ID);
 
-                StartCoroutine(Co_ThrowObj(obj.transform, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
+                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
             }
         }
 
-        private IEnumerator Co_ThrowObj(Transform objTF, Transform targetTF, float duration, Action doneCallback)
+        private IEnumerator Co_ThrowProjectile(Projectile projectile, Transform targetTF, float duration, Action doneCallback)
         {
-            var startPos = objTF.position;
+            var startPos = projectile.TF.position;
 
             var elapsed = 0f;
             while (elapsed < duration)
             {
                 if (null == targetTF)
                 {
-                    Destroy(objTF.gameObject);
+                    Destroy(projectile.gameObject);
                     yield break;
                 }
 
@@ -156,13 +162,13 @@ namespace BabyNightmare.Character
                 var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
                 midPos.y *= 5;
-                objTF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
-                objTF.Rotate(Vector3.forward, 10f * Time.deltaTime, Space.Self);
+                projectile.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
+                projectile.TF.Rotate(Vector3.back, 360f * Time.deltaTime, Space.Self);
                 yield return null;
             }
 
-            objTF.position = targetTF.position;
-            Destroy(objTF.gameObject);
+            projectile.TF.position = targetTF.position;
+            Destroy(projectile.gameObject);
 
             doneCallback?.Invoke();
         }
