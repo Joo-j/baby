@@ -151,7 +151,6 @@ namespace BabyNightmare.Character
             var startAngle = Vector3.zero;
             var targetAngle = projectile.TargetAngle;
             var startPos = projectile.TF.position;
-            var targetPos = targetTF.position;
 
             var elapsed = 0f;
             while (elapsed < duration)
@@ -164,8 +163,10 @@ namespace BabyNightmare.Character
 
                 elapsed += Time.deltaTime;
                 var factor = curve.Evaluate(elapsed / duration);
+                var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
-                midPos.y *= 5;
+
+                midPos.y += projectile.BezierHeight;
                 projectile.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
                 projectile.TF.eulerAngles = Vector3.Lerp(startAngle, targetAngle, factor);
                 yield return null;

@@ -13,6 +13,7 @@ namespace BabyNightmare.Match
         private int _id = -1;
         public float Duration { get; private set; }
         public AnimationCurve Curve { get; private set; }
+        public float BezierHeight { get; private set; }
         public Vector3 TargetAngle { get; private set; }
         public Transform TF => transform;
 
@@ -31,6 +32,7 @@ namespace BabyNightmare.Match
 
             Duration = data.Duration;
             Curve = data.Curve;
+            BezierHeight = data.BezierHeight;
             TargetAngle = new Vector3(0, 0, data.TargetAngleZ);
         }
     }
