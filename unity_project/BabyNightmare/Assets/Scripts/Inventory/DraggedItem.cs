@@ -80,7 +80,6 @@ namespace BabyNightmare.InventorySystem
                 return;
             }
 
-
             foreach (var equipment in overlappedEquipments)
             {
                 var upgradeData = StaticDataManager.Instance.GetEquipmentData(data.UpgradeDataID);
@@ -88,7 +87,6 @@ namespace BabyNightmare.InventorySystem
                 {
                     CurrentOwner.TryRemove(equipment);
                     CurrentOwner.TryAdd(upgradeData, newPoint);
-                    Debug.Log("Upgrade");
                     return;
                 }
 

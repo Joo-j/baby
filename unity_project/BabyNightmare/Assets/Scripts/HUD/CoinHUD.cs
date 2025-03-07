@@ -43,6 +43,15 @@ namespace BabyNightmare.HUD
             hud.SetSpreadPoint_FromUI(canvasWorldPosition);
         }
 
+        public static void SetSpreadPoint(Vector3 worldPos, Camera worldCamera, RectTransform uiCanvasRect)
+        {
+            var hud = GetFocusedHUD(typeof(CoinHUD));
+            if (null == hud)
+                return;
+
+            hud.SetSpreadPoint_FromWorld(worldPos, worldCamera, uiCanvasRect);
+        }
+
         protected override void PlayHaptic()
         {
             // NOTE: 햅틱 코드

@@ -64,6 +64,8 @@ namespace BabyNightmare.Match
         private Dictionary<EStatType, float> _statDict = null;
         private EquipmentBoxData _boxData = null;
 
+        public RectTransform FieldImage => _fieldIMG.rectTransform;
+
         public void Init(MatchViewContext context)
         {
             _context = context;

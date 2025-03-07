@@ -22,15 +22,17 @@ namespace BabyNightmare.Match
 
         private RenderTexture _rt = null;
         private Transform[] _enemySpawnTFArr = null;
+        private Action<int, Vector3> _getCoin = null;
         private Action _onClearWave = null;
         private Action _onFailWave = null;
         private Player _player = null;
         private List<EnemyBase> _aliveEnemies = null;
 
         public RenderTexture RT => _rt;
+        public Camera RenderCamera => _renderCamera;
         public Vector3 CameraForward => _renderCamera.transform.forward;
 
-        public void Init(Action onClearWave, Action onFailWave)
+        public void Init(Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
         {
             _aliveEnemies = new List<EnemyBase>();
             _enemySpawnTFArr = _enemySpawnTF.GetComponentsInChildren<Transform>();
@@ -38,6 +40,7 @@ namespace BabyNightmare.Match
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
 
+            _getCoin = getCoin;
             _onClearWave = onClearWave;
             _onFailWave = onFailWave;
 
@@ -87,11 +90,7 @@ namespace BabyNightmare.Match
 
         private void OnDieEnemy(EnemyBase enemy)
         {
-            var worldPos = enemy.TF.position;
-            var screenPos = _renderCamera.WorldToScreenPoint(worldPos);
-            CoinHUD.SetSpreadPoint(worldPos);
-            PlayerData.Instance.Coin += enemy.GetRandomCoin();
-
+            _getCoin?.Invoke(enemy.GetRandomCoin(), enemy.transform.position);
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using BabyNightmare.HUD;
 
 namespace BabyNightmare.Match
 {
@@ -44,7 +45,7 @@ namespace BabyNightmare.Match
             _maxWave = _waveDataList.Count;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
-            _matchField.Init(OnClearWave, OnFailMatch);
+            _matchField.Init(GetCoin, OnClearWave, OnFailMatch);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
@@ -178,6 +179,12 @@ namespace BabyNightmare.Match
             }
 
             return dataList;
+        }
+
+        private void GetCoin(int coin, Vector3 worldPos)
+        {
+            CoinHUD.SetSpreadPoint(worldPos, _matchField.RenderCamera, _matchView.FieldImage);
+            PlayerData.Instance.Coin += coin;
         }
     }
 }
