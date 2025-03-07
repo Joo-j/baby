@@ -24,11 +24,10 @@ namespace BabyNightmare.Match
         private int _currentWave = 0;
         private int _maxWave = 0;
         private int _rerollCount = 0;
+        private int _rerollCost = 0;
 
         public void Init(Action enterLobby)
         {
-            Load();
-
             _enterLobby = enterLobby;
         }
 
@@ -44,7 +43,6 @@ namespace BabyNightmare.Match
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
 
-
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             _matchField.Init(OnClearWave, OnFailMatch);
 
@@ -54,6 +52,9 @@ namespace BabyNightmare.Match
             var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy);
             _matchView.Init(matchViewContext);
             _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
+
+            PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
+            PlayerData.Instance.Coin += 0;
         }
 
         private void OnFailMatch()
@@ -75,6 +76,8 @@ namespace BabyNightmare.Match
 
         private void CloseMatch()
         {
+            PlayerData.Instance.OnChangedCoinEvent.RemoveListener(RefreshRerollCost);
+
             GameObject.Destroy(_matchField.gameObject);
             _matchField = null;
 
@@ -139,10 +142,15 @@ namespace BabyNightmare.Match
             var dataList = GetRerollData();
             _matchView.Reroll(dataList);
 
-            var rerollCost = REROLL_INITIAL_COST * _rerollCount;
-            _matchView.RefreshRerollCost(rerollCost);
-
+            var preCost = _rerollCost;
             ++_rerollCount;
+            _rerollCost = REROLL_INITIAL_COST * (int)Mathf.Pow(_rerollCount, 2);
+            PlayerData.Instance.Coin -= preCost;
+        }
+
+        private void RefreshRerollCost(int coin)
+        {
+            _matchView?.RefreshRerollCost(_rerollCost, coin);
         }
 
         private List<EquipmentData> GetRerollData()
@@ -170,17 +178,6 @@ namespace BabyNightmare.Match
             }
 
             return dataList;
-        }
-
-
-        private void Save()
-        {
-
-        }
-
-        private void Load()
-        {
-
         }
     }
 }

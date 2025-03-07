@@ -367,7 +367,7 @@ GameObject:
   - component: {fileID: 638985178666130999}
   - component: {fileID: 5392884442316172841}
   m_Layer: 5
-  m_Name: GO_Reroll
+  m_Name: GO_Reroll_Normal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -917,7 +917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 390165938892135188}
   m_Layer: 0
-  m_Name: GO_Button
+  m_Name: GO_Reroll
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -938,7 +938,6 @@ RectTransform:
   - {fileID: 1550480013831675}
   - {fileID: 6192266495417617163}
   - {fileID: 133642613815833514}
-  - {fileID: 3801756073424825513}
   m_Father: {fileID: 948779688216060171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1819,7 +1818,8 @@ MonoBehaviour:
   _topYPosRange: {x: 0, y: 160}
   _botYPosRange: {x: -720, y: -560}
   _startGO: {fileID: 8190703497089991654}
-  _rerollGO: {fileID: 494988333618344200}
+  _rerollGO: {fileID: 2015280492048894987}
+  _rerollGO_Normal: {fileID: 494988333618344200}
   _rerollGO_Free: {fileID: 2275684249330526913}
   _rerollGO_AD: {fileID: 2139185923344405278}
   _rerollCostTMP: {fileID: 1504713153205525928}
@@ -2056,10 +2056,10 @@ RectTransform:
   - {fileID: 7045838759297766237}
   m_Father: {fileID: 948779688216060171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -150}
-  m_SizeDelta: {x: -470, y: -530}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8893108538152458300
 CanvasRenderer:
@@ -2585,6 +2585,7 @@ RectTransform:
   - {fileID: 6691224524544064147}
   - {fileID: 8847222151125633884}
   - {fileID: 390165938892135188}
+  - {fileID: 3801756073424825513}
   m_Father: {fileID: 1311380960210802507}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -3019,11 +3020,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4397367513477609694}
-  m_Father: {fileID: 390165938892135188}
+  m_Father: {fileID: 948779688216060171}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 130, y: 0}
+  m_AnchoredPosition: {x: 130, y: -230}
   m_SizeDelta: {x: 200, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2326018884458493570
