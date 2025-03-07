@@ -28,6 +28,7 @@ namespace BabyNightmare.Match
         private List<EnemyBase> _aliveEnemies = null;
 
         public RenderTexture RT => _rt;
+        public Vector3 CameraForward => _renderCamera.transform.forward;
 
         public void Init(Action onClearWave, Action onFailWave)
         {
@@ -42,7 +43,7 @@ namespace BabyNightmare.Match
 
             _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
-            var playerContext = new PlayerContext(PlayerData.Instance.HP, OnDiePlayer);
+            var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer);
             _player.Init(playerContext);
         }
 
@@ -69,7 +70,7 @@ namespace BabyNightmare.Match
             {
                 var data = enemyDataList[i];
                 var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTFArr[UnityEngine.Random.Range(0, _enemySpawnTFArr.Length)]);
-                var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy));
+                var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy), CameraForward);
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);

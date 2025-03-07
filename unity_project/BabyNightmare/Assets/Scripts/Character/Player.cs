@@ -12,13 +12,16 @@ namespace BabyNightmare.Character
     public class PlayerContext : ICharacterContext
     {
         public float HP { get; }
+        public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
 
         public PlayerContext(
         float hp,
+        Vector3 cameraForward,
         Action onDiePlayer)
         {
             this.HP = hp;
+            this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
         }
     }

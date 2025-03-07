@@ -14,12 +14,14 @@ namespace BabyNightmare.Character
         public Action OnDie { get; }
 
         public float HP { get; }
+        public Vector3 CameraForward { get; }
 
         public EnemyContext
         (
             EnemyData enemyData,
             ICharacter player,
-            Action onDie
+            Action onDie,
+            Vector3 cameraForward
         )
         {
             EnemyData = enemyData;
@@ -27,6 +29,7 @@ namespace BabyNightmare.Character
             OnDie = onDie;
 
             HP = enemyData.Health;
+            this.CameraForward = cameraForward;
         }
     }
 

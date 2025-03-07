@@ -18,6 +18,7 @@ namespace BabyNightmare.Character
     public interface ICharacterContext
     {
         public float HP { get; }
+        public Vector3 CameraForward { get; }
     }
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
@@ -50,7 +51,7 @@ namespace BabyNightmare.Character
             _hp = _maxHealth = context.HP;
 
             _hpBar = ObjectUtil.LoadAndInstantiate<SimpleProgress>(PATH_SIMPLE_PROGRESS, _hpTF);
-            _hpBar.transform.rotation = Quaternion.Euler(0, 0, 0);
+            _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
         }
 

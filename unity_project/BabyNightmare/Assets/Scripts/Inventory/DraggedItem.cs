@@ -61,7 +61,6 @@ namespace BabyNightmare.InventorySystem
 
             var overlappedEquipments = CurrentOwner.GetOverlapEquipments(data, newPoint);
             var overlapCount = overlappedEquipments.Count;
-            Debug.Log($"overlapCount {overlapCount}");
 
             if (overlapCount == 0)
             {
