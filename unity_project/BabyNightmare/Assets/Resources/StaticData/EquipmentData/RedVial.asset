@@ -19,9 +19,9 @@ MonoBehaviour:
   Heal: 5
   Defence: 0
   CoolTime: 2.5
-  ThrowDuration: 0.5
+  UpgradeDataID: 1105
   Sprite: {fileID: 21300006, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
-    _row: 1
     _column: 1
+    _row: 1
     _shape: 01
