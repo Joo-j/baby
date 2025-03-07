@@ -11,6 +11,9 @@ namespace BabyNightmare.Match
 
         private const string PATH_PROJECTILE_MESH = "Match/Projectile/ProjectileData_";
         private int _id = -1;
+        public float Duration { get; private set; }
+        public AnimationCurve Curve { get; private set; }
+        public Vector3 TargetAngle { get; private set; }
         public Transform TF => transform;
 
         public void Init(int id)
@@ -25,12 +28,10 @@ namespace BabyNightmare.Match
 
             _meshFilter.mesh = data.Mesh;
             _render.materials = data.Materials;
-        }
 
-        public void Release()
-        {
-            _meshFilter = null;
-            _render = null;
+            Duration = data.Duration;
+            Curve = data.Curve;
+            TargetAngle = new Vector3(0, 0, data.TargetAngleZ);
         }
     }
 }

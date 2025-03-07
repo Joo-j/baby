@@ -15,3 +15,29 @@ MonoBehaviour:
   _mesh: {fileID: 5017474074519476115, guid: 8816324961259427791e6101e0a6ee85, type: 3}
   _materials:
   - {fileID: 2100000, guid: 9a3135b40043e4feda7a9fdebefa680c, type: 2}
+  _throwDuration: 0.5
+  _throwCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  _targetAngleZ: -480

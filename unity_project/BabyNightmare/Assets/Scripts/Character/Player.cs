@@ -133,20 +133,25 @@ namespace BabyNightmare.Character
 
             var damage = equipmentData.Damage;
 
-            if (damage > 0 && equipmentData.ThrowDuration > 0)
+            if (damage > 0)
             {
                 var projectile = _projectilePool.Get();
                 projectile.TF.position = _throwStartTF.position;
                 projectile.TF.rotation = Quaternion.identity;
                 projectile.Init(equipmentData.ID);
 
-                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, equipmentData.ThrowDuration, () => enemy?.ReceiveAttack(damage)));
+                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, () => enemy?.ReceiveAttack(damage)));
             }
         }
 
-        private IEnumerator Co_ThrowProjectile(Projectile projectile, Transform targetTF, float duration, Action doneCallback)
+        private IEnumerator Co_ThrowProjectile(Projectile projectile, Transform targetTF, Action doneCallback)
         {
+            var duration = projectile.Duration;
+            var curve = projectile.Curve;
+            var startAngle = Vector3.zero;
+            var targetAngle = projectile.TargetAngle;
             var startPos = projectile.TF.position;
+            var targetPos = targetTF.position;
 
             var elapsed = 0f;
             while (elapsed < duration)
@@ -158,12 +163,11 @@ namespace BabyNightmare.Character
                 }
 
                 elapsed += Time.deltaTime;
-                var factor = elapsed / duration;
-                var targetPos = targetTF.position;
+                var factor = curve.Evaluate(elapsed / duration);
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
                 midPos.y *= 5;
                 projectile.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
-                projectile.TF.Rotate(Vector3.back, 360f * Time.deltaTime, Space.Self);
+                projectile.TF.eulerAngles = Vector3.Lerp(startAngle, targetAngle, factor);
                 yield return null;
             }
 
