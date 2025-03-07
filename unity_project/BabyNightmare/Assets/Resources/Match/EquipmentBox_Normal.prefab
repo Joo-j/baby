@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4322091499546287996}
-  - component: {fileID: 4960483438023732665}
   - component: {fileID: 8155882371622655733}
   m_Layer: 9
   m_Name: EquipmentBox_Normal
@@ -34,27 +33,6 @@ Transform:
   - {fileID: 2783158847198878391}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &4960483438023732665
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4322091499546287999}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.7525777
-  m_Center: {x: 0.004876375, y: 0.3069198, z: 0.019882023}
 --- !u!114 &8155882371622655733
 MonoBehaviour:
   m_ObjectHideFlags: 0

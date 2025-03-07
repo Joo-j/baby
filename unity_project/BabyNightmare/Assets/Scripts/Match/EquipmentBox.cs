@@ -9,7 +9,7 @@ namespace BabyNightmare.Match
     {
         [SerializeField] private Animator _animator;
 
-        private const string HASH_ANI_OPEN = "Open";
+        private const string HASH_ANI_OPEN = "Box_Open";
         private bool _isOpened = false;
 
         public void Open(Action doneCallback)
@@ -23,6 +23,7 @@ namespace BabyNightmare.Match
 
         IEnumerator Co_Open(Action doneCallback)
         {
+            _animator.Rebind();
             _animator.Play(HASH_ANI_OPEN);
             yield return null;
 
