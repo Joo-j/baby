@@ -136,10 +136,10 @@ MonoBehaviour:
   EnemySpawnDataList:
   - ID: 1
     Group: 101
-    EnemyID: 101
+    EnemyID: 103
   - ID: 1
     Group: 101
-    EnemyID: 102
+    EnemyID: 103
   - ID: 1
     Group: 101
     EnemyID: 103
@@ -148,10 +148,10 @@ MonoBehaviour:
     EnemyID: 102
   - ID: 1
     Group: 101
-    EnemyID: 102
+    EnemyID: 103
   - ID: 1
     Group: 101
-    EnemyID: 102
+    EnemyID: 103
   - ID: 1
     Group: 101
-    EnemyID: 102
+    EnemyID: 101
