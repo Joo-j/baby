@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 5825056804155421326}
-  _renderer: {fileID: 7382541680663804539}
+  _animator: {fileID: 5948638334016226332}
+  _renderer: {fileID: 5297901199775490593}
   _hpTF: {fileID: 4076110215470964464}
   _moveCurve:
     serializedVersion: 2
@@ -237,16 +237,6 @@ PrefabInstance:
 --- !u!4 &3700777198183483166 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
-  m_PrefabInstance: {fileID: 1531286858849736641}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &5825056804155421326 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5014471238292186447, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
-  m_PrefabInstance: {fileID: 1531286858849736641}
-  m_PrefabAsset: {fileID: 0}
---- !u!137 &7382541680663804539 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8301321326921870778, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
   m_PrefabInstance: {fileID: 1531286858849736641}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8516013245556413726
@@ -1222,6 +1212,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
+--- !u!137 &5297901199775490593 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4587789228553975615, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
+  m_PrefabInstance: {fileID: 8516013245556413726}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5948638334016226332 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2640019646264529154, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
+  m_PrefabInstance: {fileID: 8516013245556413726}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6133195375652788135 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
