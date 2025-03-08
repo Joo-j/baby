@@ -47,7 +47,7 @@ namespace BabyNightmare.Character
 
         public virtual void Init(ICharacterContext context)
         {
-            _originColor = _renderer.material.color;
+            _originColor = _renderer.material.GetColor(KEY_EMISSION);
 
             _hp = _maxHealth = context.HP;
 
@@ -100,7 +100,6 @@ namespace BabyNightmare.Character
                 elapsed -= Time.deltaTime;
 
                 var factor = elapsed / duration;
-
                 mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
             }
 
