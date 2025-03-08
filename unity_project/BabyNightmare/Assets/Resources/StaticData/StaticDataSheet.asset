@@ -106,7 +106,7 @@ MonoBehaviour:
     Health: 10
     Attack_Interval: 3
     Move_Step_Duration: 1.2
-    Move_Step_Speed: 1
+    Move_Step_Speed: 2
     Stop_Step_Duration: 0
     Attack_Radius: 2
     Coin_Min: 1
@@ -117,7 +117,7 @@ MonoBehaviour:
     Health: 7
     Attack_Interval: 2.5
     Move_Step_Duration: 0.8
-    Move_Step_Speed: 3
+    Move_Step_Speed: 2
     Stop_Step_Duration: 0
     Attack_Radius: 2
     Coin_Min: 1
