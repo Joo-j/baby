@@ -57,9 +57,21 @@ PrefabInstance:
       value: Enemy_Mike
       objectReference: {fileID: 0}
     - target: {fileID: 1950666521795416685, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1950666521795416685, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 42f6a051c91fd41a491f7bdd5f293f67, type: 2}
+    - target: {fileID: 1950666521795416685, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: -8848810374240701247, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
+    - target: {fileID: 1950666521795416685, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: -1580535799172915004, guid: 0fe902e5b7497467c82954c5d4156cc3, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
