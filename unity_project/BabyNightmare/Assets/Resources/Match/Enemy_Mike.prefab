@@ -170,6 +170,18 @@ PrefabInstance:
       value: Enemy_Mike2
       objectReference: {fileID: 0}
     - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
@@ -208,6 +220,10 @@ PrefabInstance:
     - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2746056721135947999, guid: 06ccf4c186fde4484b617c76c0a22783, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
