@@ -103,33 +103,33 @@ MonoBehaviour:
   - ID: 101
     Name: Sullivan
     Damage: 4
-    Health: 50
+    Health: 10
     Attack_Interval: 3
     Move_Step_Duration: 1.2
     Move_Step_Speed: 1
-    Stop_Step_Duration: 1.5
+    Stop_Step_Duration: 0
     Attack_Radius: 2
     Coin_Min: 1
     Coin_Max: 10
   - ID: 102
     Name: Mike
     Damage: 3
-    Health: 25
+    Health: 7
     Attack_Interval: 2.5
     Move_Step_Duration: 0.8
     Move_Step_Speed: 3
-    Stop_Step_Duration: 0.8
+    Stop_Step_Duration: 0
     Attack_Radius: 2
     Coin_Min: 1
     Coin_Max: 10
   - ID: 103
     Name: Roz
     Damage: 10
-    Health: 60
+    Health: 4
     Attack_Interval: 3.5
     Move_Step_Duration: 1.2
     Move_Step_Speed: 3
-    Stop_Step_Duration: 1.2
+    Stop_Step_Duration: 0
     Attack_Radius: 5
     Coin_Min: 1
     Coin_Max: 10
