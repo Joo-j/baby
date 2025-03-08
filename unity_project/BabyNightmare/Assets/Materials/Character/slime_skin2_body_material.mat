@@ -20,6 +20,7 @@ Material:
   - TCP2_TANGENT_AS_NORMALS
   - TCP2_UV_NORMALS_FULL
   - _ALPHAPREMULTIPLY_ON
+  - _EMISSION
   m_InvalidKeywords:
   - DR_CEL_EXTRA_ON
   - DR_RIM_ON
@@ -163,7 +164,7 @@ Material:
     - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
     - _OutlineTextureType: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 2
     - _OverrideLightmapDir: 0
     - _Parallax: 0.02
     - _QueueOffset: 0
@@ -213,7 +214,7 @@ Material:
     - _UnityShadowPower: 0.5
     - _UnityShadowSharpness: 1
     - _UseAlphaTest: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseFresnelReflections: 1
     - _UseMatCap: 1
     - _UseMatCapMask: 0

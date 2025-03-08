@@ -19,6 +19,7 @@ Material:
   - TCP2_SPECULAR
   - TCP2_TANGENT_AS_NORMALS
   - TCP2_UV_NORMALS_FULL
+  - _EMISSION
   m_InvalidKeywords:
   - TCP2_DISABLE_WRAPPED_LIGHT
   - _INVERTDISSOLVE_ON
@@ -134,7 +135,7 @@ Material:
     - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
     - _OutlineTextureType: 0
-    - _OutlineWidth: 3
+    - _OutlineWidth: 2
     - _Parallax: 0.02
     - _RampBands: 4
     - _RampBandsSmoothing: 0.1
@@ -170,7 +171,7 @@ Material:
     - _TCP2_STYLIZED_FRESNEL: 0
     - _UVSec: 0
     - _UseAlphaTest: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseFresnelReflections: 1
     - _UseMatCap: 0
     - _UseMatCapMask: 0

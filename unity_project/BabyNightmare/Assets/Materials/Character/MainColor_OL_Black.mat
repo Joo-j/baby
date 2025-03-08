@@ -19,6 +19,7 @@ Material:
   - TCP2_SPECULAR
   - TCP2_TANGENT_AS_NORMALS
   - TCP2_UV_NORMALS_FULL
+  - _EMISSION
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -38,11 +39,11 @@ Material:
     m_Floats:
     - _NormalsSource: 2
     - _OutlinePixelSizeType: 1
-    - _OutlineWidth: 0
+    - _OutlineWidth: 2
     - _SpecularRoughness: 0.467
     - _SpecularToonSize: 0.004
     - _SpecularType: 0
-    - _UseEmission: 0
+    - _UseEmission: 1
     - _UseOutline: 1
     - _UseSpecular: 1
     m_Colors:
