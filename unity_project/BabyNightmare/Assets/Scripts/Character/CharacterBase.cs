@@ -28,6 +28,7 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _hpTF;
 
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
+        private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");
@@ -90,7 +91,7 @@ namespace BabyNightmare.Character
                 elapsed += Time.deltaTime;
 
                 var factor = elapsed / duration;
-                mat.color = Color.Lerp(_originColor, targetColor, factor);
+                mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
             }
 
             while (elapsed > 0)
@@ -99,10 +100,12 @@ namespace BabyNightmare.Character
                 elapsed -= Time.deltaTime;
 
                 var factor = elapsed / duration;
+
+                mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
                 mat.color = Color.Lerp(_originColor, targetColor, factor);
             }
 
-            mat.color = _originColor;
+            mat.SetColor(KEY_EMISSION, _originColor);
             _coFlash = null;
         }
     }
