@@ -102,7 +102,6 @@ namespace BabyNightmare.Character
                 var factor = elapsed / duration;
 
                 mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
-                mat.color = Color.Lerp(_originColor, targetColor, factor);
             }
 
             mat.SetColor(KEY_EMISSION, _originColor);
