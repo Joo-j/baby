@@ -81,7 +81,7 @@ namespace BabyNightmare.Character
         private IEnumerator Co_FlashRed()
         {
             var mat = _renderer.material;
-            var targetColor = Color.red;
+            var targetColor = Color.white;
             var duration = 0.1f;
 
             var elapsed = 0f;
