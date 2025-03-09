@@ -139,7 +139,7 @@ namespace BabyNightmare.InventorySystem
                 else
                 {
                     Debug.Log($"같은 장비가 아니면 기존 장비 밖으로 내보내고 배치");
-                    KickOut(oe);
+                    Eject(oe);
                     Equip(equipment, targetIndex);
                     return true;
                 }
@@ -147,9 +147,7 @@ namespace BabyNightmare.InventorySystem
 
             Debug.Log("겹친 장비가 2개 이상이면 기존 장비 전부 밖으로 내보내고 배치");
             foreach (var oe in oeList)
-            {
-                KickOut(oe);
-            }
+                Eject(oe);
 
             Equip(equipment, targetIndex);
             return true;
@@ -171,13 +169,13 @@ namespace BabyNightmare.InventorySystem
             var randomIndex = GetRandomIndex(data);
 
             Debug.Log($"Equip {randomIndex}");
+            equipment.transform.SetParent(transform);
             _equipmentSet.Add(equipment);
             equipment.Index = randomIndex;
 
             var targetPos = GetAnchoredPos(randomIndex, equipment.Data);
             equipment.Move(targetPos, () =>
             {
-                equipment.transform.SetParent(transform);
                 _onEquip?.Invoke(equipment.Data);
                 ClearCell();
             });
@@ -224,7 +222,7 @@ namespace BabyNightmare.InventorySystem
             return equipment;
         }
 
-        private void KickOut(Equipment equipment)
+        private void Eject(Equipment equipment)
         {
             if (false == _equipmentSet.Contains(equipment))
                 return;
@@ -340,10 +338,8 @@ namespace BabyNightmare.InventorySystem
 
         private Vector2 GetAnchoredPos(Vector2Int index, EquipmentData data)
         {
-            var offsetX = (data.Column - _shape.Column) * 0.5f;
-            var offsetY = (data.Row - _shape.Row) * 0.5f;
-
-            return new Vector2((index.x + offsetX) * _cellSize.x, (index.y + offsetY) * _cellSize.y);
+            var offset = (new Vector2(data.Column, data.Row) - new Vector2(_shape.Column, _shape.Row)) * 0.5f;
+            return (index + offset) * _cellSize;
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -433,7 +429,7 @@ namespace BabyNightmare.InventorySystem
 
             var data = _draggedEquipment.Data;
             var halfSize = _cellSize * 0.5f;
-            var offset = new Vector2(-(data.Column * halfSize.x) + halfSize.x, -(data.Row * halfSize.y) + halfSize.y);
+            var offset = new Vector2((1 - data.Column) * halfSize.x, (1 - data.Row) * halfSize.y);
 
             var screenPos = eventData.position;
             var index = GetIndex(screenPos + offset);
@@ -458,7 +454,7 @@ namespace BabyNightmare.InventorySystem
             var indexList = data.IndexList;
 
             var halfSize = _cellSize * 0.5f;
-            var offset = new Vector2(-(data.Column * halfSize.x) + halfSize.x, -(data.Row * halfSize.y) + halfSize.y);
+            var offset = new Vector2((1 - data.Column) * halfSize.x, (1 - data.Row) * halfSize.y);
             var targetIndex = GetIndex(screenPos + offset);
 
             for (var i = 0; i < indexList.Count; i++)
@@ -479,7 +475,6 @@ namespace BabyNightmare.InventorySystem
                     if (null != upgradeData)
                     {
                         cell.sprite = _cellUpgradable;
-                        overlappedEquipment.StartShake();
                     }
                     else
                     {
