@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8103438964718466151}
   - component: {fileID: 1256432079520073379}
   - component: {fileID: 1263723907170713896}
-  - component: {fileID: 2008375864314316596}
   - component: {fileID: 3873843367746722132}
+  - component: {fileID: 7267023545244721366}
   m_Layer: 5
-  m_Name: DynamicCell
+  m_Name: Equipment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,21 +78,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2008375864314316596
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4371683600941068144}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52951ea61e5ac413282e552916f7aa14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rtf: {fileID: 8103438964718466151}
-  _image: {fileID: 1263723907170713896}
-  _coolImage: {fileID: 1225144944757958967}
 --- !u!114 &3873843367746722132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +91,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &7267023545244721366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4371683600941068144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37a87d43c89d24b30839c4257a741d86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rtf: {fileID: 8103438964718466151}
+  _image: {fileID: 1263723907170713896}
+  _coolImage: {fileID: 1225144944757958967}
 --- !u!1 &6333611132768348513
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 1224658051147327901}
   - component: {fileID: 1225144944757958967}
   m_Layer: 5
-  m_Name: Progress
+  m_Name: img_cool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

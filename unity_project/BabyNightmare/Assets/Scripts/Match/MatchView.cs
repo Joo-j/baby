@@ -18,19 +18,21 @@ namespace BabyNightmare.Match
         public Action OnClickReroll { get; }
         public Action StartWave { get; }
         public Action<EquipmentData> OnCoolDown { get; }
-
+        public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
         public MatchViewContext(
         RenderTexture rt,
         EquipmentData initEquipment,
         Action onClickReroll,
         Action startWave,
-        Action<EquipmentData> onCooldown)
+        Action<EquipmentData> onCooldown,
+        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
         {
             this.RT = rt;
             this.InitEquipment = initEquipment;
             this.OnClickReroll = onClickReroll;
             this.StartWave = startWave;
             this.OnCoolDown = onCooldown;
+            this.GetUpgradeData = getUpgradeData;
         }
     }
 
@@ -42,8 +44,8 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private SimpleProgress _waveProgress;
-        [SerializeField] private Inventory _inventory;
-        [SerializeField] private Inventory _outside;
+        [SerializeField] private Inventory _inventoryInside;
+        [SerializeField] private Inventory _inventoryOutside;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private GameObject _startGO;
@@ -78,10 +80,10 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _inventory.Init(_rtf, OnEquip, OnUnequip);
-            _outside.Init(_rtf, null, null);
+            _inventoryInside.Init(_rtf, _inventoryOutside, OnEquip, OnUnequip, context.GetUpgradeData);
+            _inventoryOutside.Init(_rtf, _inventoryOutside, null, null, context.GetUpgradeData);
 
-            _inventory.TryAdd(_context.InitEquipment);
+            _inventoryInside.TryAdd(_context.InitEquipment);
 
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
@@ -100,11 +102,11 @@ namespace BabyNightmare.Match
 
         public void Reroll(List<EquipmentData> dataList)
         {
-            _outside.RemoveAll();
+            _inventoryOutside.RemoveAll();
 
             for (var i = 0; i < dataList.Count; i++)
             {
-                _outside.TryAdd(dataList[i]);
+                _inventoryOutside.TryAdd(dataList[i]);
             }
         }
 
@@ -151,7 +153,7 @@ namespace BabyNightmare.Match
 
         public void OnClearWave()
         {
-            _inventory.StopUseEquipment();
+            _inventoryInside.StopUseEquipment();
             _canvasGroup.blocksRaycasts = true;
         }
 
@@ -165,7 +167,7 @@ namespace BabyNightmare.Match
 
             _boxGO.SetActive(false);
 
-            _outside.RemoveAll();
+            _inventoryOutside.RemoveAll();
 
             var equipmentIDList = _boxData.EquipmentIDList;
             var dataList = new List<EquipmentData>();
@@ -177,7 +179,7 @@ namespace BabyNightmare.Match
 
             for (var i = 0; i < dataList.Count; i++)
             {
-                _outside.TryAdd(dataList[i]);
+                _inventoryOutside.TryAdd(dataList[i]);
             }
 
             _boxData = null;
@@ -195,8 +197,8 @@ namespace BabyNightmare.Match
         {
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
-            _outside.RemoveAll();
-            _inventory.StartUseEquipment(_context.OnCoolDown);
+            _inventoryOutside.RemoveAll();
+            _inventoryInside.StartUseEquipment(_context.OnCoolDown);
             _canvasGroup.blocksRaycasts = false;
 
             ChangeRectPos(true);

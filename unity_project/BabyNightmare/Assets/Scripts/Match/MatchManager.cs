@@ -50,7 +50,7 @@ namespace BabyNightmare.Match
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
-            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy);
+            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy, GetUpgradeData);
             _matchView.Init(matchViewContext);
             _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
 
@@ -185,6 +185,17 @@ namespace BabyNightmare.Match
         {
             CoinHUD.SetSpreadPoint(worldPos, _matchField.RenderCamera, _matchView.FieldImage);
             PlayerData.Instance.Coin += coin;
+        }
+
+        private EquipmentData GetUpgradeData(EquipmentData data1, EquipmentData data2)
+        {
+            if (data1.ID != data2.ID)
+                return null;
+
+            if (data1.UpgradeDataID == -1)
+                return null;
+
+            return StaticDataManager.Instance.GetEquipmentData(data1.UpgradeDataID);
         }
     }
 }

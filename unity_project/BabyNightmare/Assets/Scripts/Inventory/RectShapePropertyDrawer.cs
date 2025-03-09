@@ -34,13 +34,13 @@ namespace BabyNightmare.InventorySystem
 
             // Calculate rects
             var halfRow = position.width / 2;
-            var rowRect = new Rect(position.x, position.y, halfRow, GridSize);
             var columnRect = new Rect(position.x + halfRow, position.y, halfRow, GridSize);
+            var rowRect = new Rect(position.x, position.y, halfRow, GridSize);
 
             // Row & Column
             EditorGUIUtility.labelWidth = 40;
-            EditorGUI.PropertyField(rowRect, pRow, new GUIContent("row"));
             EditorGUI.PropertyField(columnRect, pColumn, new GUIContent("column"));
+            EditorGUI.PropertyField(rowRect, pRow, new GUIContent("row"));
 
             // Draw grid
             var row = pRow.intValue;

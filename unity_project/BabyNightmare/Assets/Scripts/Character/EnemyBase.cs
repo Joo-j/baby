@@ -46,11 +46,9 @@ namespace BabyNightmare.Character
             base.Init(context);
 
             _context = context as EnemyContext;
-
-            StartMove();
         }
 
-        private void StartMove()
+        public void StartMove()
         {
             _animator.Play(HASH_ANI_MOVE);
 

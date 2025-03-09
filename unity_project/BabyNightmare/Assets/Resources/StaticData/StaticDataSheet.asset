@@ -56,14 +56,24 @@ MonoBehaviour:
     EquipmentBoxDataID: 2
     EnemySpawnDataGroup: 101
   EquipmentDataList:
-  - {fileID: 11400000, guid: 53fac397599b9450cb6ffc84b6990844, type: 2}
   - {fileID: 11400000, guid: a790d8ff8de79447eba65a1c9f328eb1, type: 2}
+  - {fileID: 11400000, guid: abe9aab69eb144402a5c2d5e273b9dd1, type: 2}
+  - {fileID: 11400000, guid: 49f2fcd5741834765992d98e2c2acba9, type: 2}
   - {fileID: 11400000, guid: 1e71a40542e224abcb0957010541b8c8, type: 2}
+  - {fileID: 11400000, guid: 9bc84a07d53a7494f904f552ab724845, type: 2}
+  - {fileID: 11400000, guid: c680a154ae5964d15b558f6c8582894f, type: 2}
   - {fileID: 11400000, guid: 2103fea2b7f614248bd4e2271871cbf9, type: 2}
-  - {fileID: 11400000, guid: 640085f25f2394070afe43c1edd4b92e, type: 2}
-  - {fileID: 11400000, guid: 57a0e4d113f3d48eeb460a17da5183e4, type: 2}
+  - {fileID: 11400000, guid: e07d078f700814b80afd690ae97911fc, type: 2}
+  - {fileID: 11400000, guid: 28f2d4512b4944eb8842f93b6f2d0dce, type: 2}
+  - {fileID: 11400000, guid: 53fac397599b9450cb6ffc84b6990844, type: 2}
   - {fileID: 11400000, guid: 60aa0f6efa47e403eb2a1b502203f73d, type: 2}
+  - {fileID: 11400000, guid: 1bd15520abcc44e0c91caa28dd681f66, type: 2}
+  - {fileID: 11400000, guid: 640085f25f2394070afe43c1edd4b92e, type: 2}
+  - {fileID: 11400000, guid: 89408a290d9ac4104bb09ac49a9ae918, type: 2}
+  - {fileID: 11400000, guid: 47d29e36ac95b4c8482c0c1f2250fe1e, type: 2}
+  - {fileID: 11400000, guid: 57a0e4d113f3d48eeb460a17da5183e4, type: 2}
   - {fileID: 11400000, guid: e444c8d378c6444d8b40e013d6e16012, type: 2}
+  - {fileID: 11400000, guid: 3ce97aea635f64a3ca91e1decadc4c17, type: 2}
   EquipmentProbDataList:
   - ID: 1
     Group: 101
