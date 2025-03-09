@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6f6e2f2d4da94081a4afd1a1e19cfb8, type: 3}
   m_Name: ProjectileData_1004
   m_EditorClassIdentifier: 
-  _mesh: {fileID: 8314571269056883277, guid: 6994819ca3b5447f08b73f2e7450afac, type: 3}
+  _mesh: {fileID: -102537409546720931, guid: 7f10dbbef02cd4e069a29e6eb04db92b, type: 3}
   _materials:
-  - {fileID: -2797637372928595446, guid: 6994819ca3b5447f08b73f2e7450afac, type: 3}
+  - {fileID: 2100000, guid: 8ec67bf67546a43608d50caab1a1d98b, type: 2}
   _throwDuration: 0.5
   _throwCurve:
     serializedVersion: 2
