@@ -110,7 +110,10 @@ namespace BabyNightmare.InventorySystem
 
                     var newIndex = targetIndex + index;
                     if (true == IsOverlap(newIndex, out var overlapEquipment))
-                        oeList.Add(overlapEquipment);
+                    {
+                        if (false == oeList.Contains(overlapEquipment))
+                            oeList.Add(overlapEquipment);
+                    }
                 }
             }
 
