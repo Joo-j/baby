@@ -65,7 +65,7 @@ namespace BabyNightmare.Match
         [SerializeField] private TextMeshProUGUI _defTMP;
         [SerializeField] private AnimationCurve _bounceCurve;
 
-        private const string PATH_BOX_ICON = "Match/UI/ICN_Box_";
+        private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
         private MatchViewContext _context = null;
         private Dictionary<EStatType, float> _statDict = null;
         private EquipmentBoxData _boxData = null;
@@ -150,7 +150,7 @@ namespace BabyNightmare.Match
             ChangeRectPos(false);
 
             _boxData = boxData;
-            var iconPath = $"{PATH_BOX_ICON}{boxData.Type}";
+            var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{boxData.Type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
         }
