@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using System.Linq;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -75,7 +76,6 @@ namespace BabyNightmare.InventorySystem
         public bool TryAdd(EquipmentData data)
         {
             var randomIndex = GetRandomIndex(data);
-            Debug.Log($"TryAdd {randomIndex}");
 
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
             equipment.Refresh(data, false);
@@ -99,7 +99,7 @@ namespace BabyNightmare.InventorySystem
                 }
             }
 
-            List<Equipment> oeList = new List<Equipment>();
+            HashSet<Equipment> oeSet = new HashSet<Equipment>();
             for (var x = 0; x < data.Column; x++)
             {
                 for (var y = 0; y < data.Row; y++)
@@ -111,13 +111,12 @@ namespace BabyNightmare.InventorySystem
                     var newIndex = targetIndex + index;
                     if (true == IsOverlap(newIndex, out var overlapEquipment))
                     {
-                        if (false == oeList.Contains(overlapEquipment))
-                            oeList.Add(overlapEquipment);
+                        oeSet.Add(overlapEquipment);
                     }
                 }
             }
 
-            var overlapCount = oeList.Count;
+            var overlapCount = oeSet.Count;
             if (overlapCount <= 0)
             {
                 Debug.Log($"겹친 장비가 없다면 바로 배치");
@@ -129,7 +128,7 @@ namespace BabyNightmare.InventorySystem
             {
                 Debug.Log($"겹친 장비가 하나일 때");
 
-                var oe = oeList[0];
+                var oe = oeSet.ToList()[0];
                 var upgradeData = _getUpgradeData(oe.Data, data);
                 if (null != upgradeData)
                 {
@@ -149,7 +148,7 @@ namespace BabyNightmare.InventorySystem
             }
 
             Debug.Log("겹친 장비가 2개 이상이면 기존 장비 전부 밖으로 내보내고 배치");
-            foreach (var oe in oeList)
+            foreach (var oe in oeSet)
                 Eject(oe);
 
             Equip(equipment, targetIndex);
@@ -171,7 +170,6 @@ namespace BabyNightmare.InventorySystem
             var data = equipment.Data;
             var randomIndex = GetRandomIndex(data);
 
-            Debug.Log($"Equip {randomIndex}");
             equipment.transform.SetParent(transform);
             _equipmentSet.Add(equipment);
             equipment.Index = randomIndex;
