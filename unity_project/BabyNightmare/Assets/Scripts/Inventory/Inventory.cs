@@ -164,7 +164,17 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
-        private void Equip(Equipment equipment)
+        private void Equip(Equipment equipment, Vector2Int index)
+        {
+            equipment.transform.SetParent(transform);
+            equipment.Index = index;
+            equipment.AnchoredPos = GetAnchoredPos(index, equipment.Data);
+            _equipmentSet.Add(equipment);
+            _onEquip?.Invoke(equipment.Data);
+            ClearCell();
+        }
+
+        private void Equip_Lerp(Equipment equipment)
         {
             var data = equipment.Data;
             if (false == TryGetRandomPoint(data, out var index))
@@ -179,23 +189,13 @@ namespace BabyNightmare.InventorySystem
 
             var startPos = equipment.AnchoredPos;
             var targetPos = GetAnchoredPos(index, equipment.Data);
-            StartCoroutine(SimpleLerp.Co_LerpAnchoredPosition(equipment.RTF, startPos, targetPos, _equipmentMoveCurve, 0.2f,
+            StartCoroutine(SimpleLerp.Co_LerpAnchoredPosition(equipment.RTF, startPos, targetPos, _equipmentMoveCurve, 0.1f,
             () =>
             {
                 equipment.transform.SetParent(transform);
                 _onEquip?.Invoke(equipment.Data);
                 ClearCell();
             }));
-        }
-
-        private void Equip(Equipment equipment, Vector2Int index)
-        {
-            equipment.transform.SetParent(transform);
-            equipment.Index = index;
-            equipment.AnchoredPos = GetAnchoredPos(index, equipment.Data);
-            _equipmentSet.Add(equipment);
-            _onEquip?.Invoke(equipment.Data);
-            ClearCell();
         }
 
         private void Remove(Equipment equipment)
@@ -247,7 +247,7 @@ namespace BabyNightmare.InventorySystem
             _equipmentSet.Remove(equipment);
             _onUnequip?.Invoke(equipment.Data);
 
-            _outsideInventory.Equip(equipment);
+            _outsideInventory.Equip_Lerp(equipment);
 
             ClearCell();
         }
