@@ -48,14 +48,11 @@ namespace BabyNightmare.InventorySystem
 
             _cellArr = new Image[_shape.Row * _shape.Column];
 
-            var gridSize = _rtf.sizeDelta;
-
-            var topLeft = new Vector2(-gridSize.x / 2, -gridSize.y / 2);
-            var width = gridSize.x / _shape.Column;
-            var height = gridSize.y / _shape.Row;
+            var topLeft = _rtf.sizeDelta * -0.5f;
+            var width = _rtf.sizeDelta.x / _shape.Column;
+            var height = _rtf.sizeDelta.y / _shape.Row;
             _cellSize = new Vector2(width, height);
-
-            var half_cellSize = new Vector2(_cellSize.x / 2, _cellSize.y / 2);
+            var halfCellSize = _cellSize * 0.5f;
 
             var count = 0;
             for (int y = 0; y < _shape.Row; y++)
@@ -66,7 +63,7 @@ namespace BabyNightmare.InventorySystem
                     cell.transform.SetParent(transform);
                     cell.sprite = _cellClear;
                     cell.type = Image.Type.Sliced;
-                    cell.rectTransform.anchoredPosition = topLeft + new Vector2(_cellSize.x * (_shape.Column - 1 - x), _cellSize.y * y) + half_cellSize;
+                    cell.rectTransform.anchoredPosition = topLeft + new Vector2(_cellSize.x * (_shape.Column - 1 - x), _cellSize.y * y) + halfCellSize;
                     cell.rectTransform.sizeDelta = _cellSize;
                     _cellArr[count] = cell;
                     ++count;
@@ -78,12 +75,6 @@ namespace BabyNightmare.InventorySystem
 
         public bool TryAdd(EquipmentData data)
         {
-            if (data.Row > _shape.Row)
-                return false;
-
-            if (data.Column > _shape.Column)
-                return false;
-
             if (false == TryGetRandomPoint(data, out var index))
                 return false;
 
@@ -103,7 +94,10 @@ namespace BabyNightmare.InventorySystem
                 var index = indexList[i];
                 var newIndex = targetIndex + index;
                 if (false == _shape.IsValid(newIndex))
+                {
+                    Debug.Log($"{newIndex}가 유효하지 않습니다.");
                     return false;
+                }
             }
 
             HashSet<Equipment> oes = new HashSet<Equipment>();
@@ -298,30 +292,32 @@ namespace BabyNightmare.InventorySystem
         private bool TryGetRandomPoint(EquipmentData data, out Vector2Int targetIndex)
         {
             targetIndex = default;
+            if (data.Row > _shape.Row)
+                return false;
+
+            if (data.Column > _shape.Column)
+                return false;
+
             List<Vector2Int> enableIndexList = new List<Vector2Int>();
 
             var indexList = data.IndexList;
-
-            var maxX = _shape.Column - (data.Column - 1);
-            var maxY = _shape.Row - (data.Row - 1);
-
-            for (var x = 0; x < maxX; x++)
+            for (var i = 0; i < indexList.Count; i++)
             {
-                for (var y = 0; y < maxY; y++)
+                var index = indexList[i];
+                var newIndex = targetIndex + index;
+                if (false == _shape.IsValid(newIndex))
                 {
-                    for (var i = 0; i < indexList.Count; i++)
-                    {
-                        var index = indexList[i];
-                        var newIndex = targetIndex + index;
-                        if (false == _shape.IsValid(newIndex))
-                            continue;
-
-                        if (true == IsOverlap(newIndex, out var overlappedEquipment))
-                            continue;
-
-                        enableIndexList.Add(newIndex);
-                    }
+                    Debug.Log($"TryGetRandomPoint {newIndex}는 그리드에서 유효하지 않습니다.");
+                    continue;
                 }
+
+                if (true == IsOverlap(newIndex, out var overlappedEquipment))
+                {
+                    Debug.Log($"TryGetRandomPoint {data.Name}이 {newIndex}에 {overlappedEquipment.Data.Name}이 겹칩니다.");
+                    continue;
+                }
+
+                enableIndexList.Add(newIndex);
             }
 
             if (enableIndexList.Count == 0)
@@ -372,7 +368,7 @@ namespace BabyNightmare.InventorySystem
             var equipment = Get(index);
             if (null == equipment)
             {
-                Debug.Log("{index}에서 장비를 찾지 못함");
+                Debug.Log($"{index}에서 장비를 찾지 못함");
                 return;
             }
 
@@ -438,8 +434,12 @@ namespace BabyNightmare.InventorySystem
             if (null == _draggedEquipment || null == _currentInventory)
                 return;
 
+            var data = _draggedEquipment.Data;
+            var halfSize = _cellSize * 0.5f;
+            var offset = new Vector2(-(data.Column * halfSize.x) + halfSize.x, -(data.Row * halfSize.y) + halfSize.y);
+
             var screenPos = eventData.position;
-            var index = GetIndex(screenPos);
+            var index = GetIndex(screenPos + offset);
 
             if (true == _currentInventory.TryEquip(_draggedEquipment, index))
             {
@@ -459,7 +459,10 @@ namespace BabyNightmare.InventorySystem
 
             var data = equipment.Data;
             var indexList = data.IndexList;
-            var targetIndex = GetIndex(screenPos);
+
+            var halfSize = _cellSize * 0.5f;
+            var offset = new Vector2(-(data.Column * halfSize.x) + halfSize.x, -(data.Row * halfSize.y) + halfSize.y);
+            var targetIndex = GetIndex(screenPos + offset);
 
             for (var i = 0; i < indexList.Count; i++)
             {
