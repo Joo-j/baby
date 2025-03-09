@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Supercent.UI;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.HUD
 {
@@ -35,6 +36,7 @@ namespace BabyNightmare.HUD
             PlayerData.Instance.OnChangedGemEvent.RemoveListener(RefreshAll_CurrentType);
         }
 
+
         public static void SetSpreadPoint(Vector3 canvasWorldPosition)
         {
             var hud = GetFocusedHUD(typeof(GemHUD));
@@ -64,7 +66,7 @@ namespace BabyNightmare.HUD
 
 
         protected override int GetCurrencyValue_FromUserData() => PlayerData.Instance.Gem;
-        protected override string ValueToString(int value) => IHUD.GetCurrencyUnit(currencyCount: value, useNumberSymbol: false);
+        protected override string ValueToString(int value) => CurrencyUtil.GetUnit(currencyCount: value, useNumberSymbol: false);
 
         public static void UseFX(bool use)
         {

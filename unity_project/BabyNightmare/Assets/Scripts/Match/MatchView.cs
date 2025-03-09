@@ -57,9 +57,13 @@ namespace BabyNightmare.Match
         [SerializeField] private GameObject _fightGO;
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
+        [SerializeField] private RectTransform _hpRTF;
+        [SerializeField] private RectTransform _atkRTF;
+        [SerializeField] private RectTransform _defRTF;
         [SerializeField] private TextMeshProUGUI _hpTMP;
-        [SerializeField] private TextMeshProUGUI _attackTMP;
+        [SerializeField] private TextMeshProUGUI _atkTMP;
         [SerializeField] private TextMeshProUGUI _defTMP;
+        [SerializeField] private AnimationCurve _bounceCurve;
 
         private const string PATH_BOX_ICON = "Match/UI/ICN_Box_";
         private MatchViewContext _context = null;
@@ -246,26 +250,51 @@ namespace BabyNightmare.Match
 
         private void OnEquip(EquipmentData data)
         {
-            _statDict[EStatType.HP] += data.Heal;
-            _statDict[EStatType.ATK] += data.Damage;
-            _statDict[EStatType.DEF] += data.Defence;
+            if (data.Heal > 0)
+            {
+                _statDict[EStatType.HP] += data.Heal;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
 
-            RefreshStat();
+            if (data.Damage > 0)
+            {
+                _statDict[EStatType.ATK] += data.Damage;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
+
+            if (data.Defence > 0)
+            {
+                _statDict[EStatType.DEF] += data.Defence;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
         }
 
         private void OnUnequip(EquipmentData data)
         {
-            _statDict[EStatType.HP] -= data.Heal;
-            _statDict[EStatType.ATK] -= data.Damage;
-            _statDict[EStatType.DEF] -= data.Defence;
 
-            RefreshStat();
+            if (data.Heal > 0)
+            {
+                _statDict[EStatType.HP] -= data.Heal;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
+
+            if (data.Damage > 0)
+            {
+                _statDict[EStatType.ATK] -= data.Damage;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
+
+            if (data.Defence > 0)
+            {
+                _statDict[EStatType.DEF] -= data.Defence;
+                StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
         }
 
         private void RefreshStat()
         {
             _hpTMP.text = $"{_statDict[EStatType.HP]}/s";
-            _attackTMP.text = $"{_statDict[EStatType.ATK]}/s";
+            _atkTMP.text = $"{_statDict[EStatType.ATK]}/s";
             _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
         }
     }

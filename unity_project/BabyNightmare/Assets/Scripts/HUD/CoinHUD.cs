@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Supercent.UI;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.HUD
 {
@@ -72,7 +73,7 @@ namespace BabyNightmare.HUD
 
 
         protected override int GetCurrencyValue_FromUserData() => PlayerData.Instance.Coin;
-        protected override string ValueToString(int value) => IHUD.GetCurrencyUnit(value, true);
+        protected override string ValueToString(int value) => CurrencyUtil.GetUnit(value, true);
 
 
         public static void UseFX(bool use)

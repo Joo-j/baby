@@ -296,10 +296,10 @@ namespace BabyNightmare.Util
 
                 var factor = curve.Evaluate(elapsed / duration);
                 var value = (int)Mathf.Lerp(startNum, targetNum, factor);
-                tmp.text = $"x{IHUD.GetCurrencyUnit(value)}";
+                tmp.text = $"x{CurrencyUtil.GetUnit(value)}";
             }
 
-            tmp.text = $"x{IHUD.GetCurrencyUnit(targetNum)}";
+            tmp.text = $"x{CurrencyUtil.GetUnit(targetNum)}";
         }
 
         public static IEnumerator Co_LerpColor(Image image, Color startColor, Color targetColor, float duration, AnimationCurve curve, Action doneCallback = null)

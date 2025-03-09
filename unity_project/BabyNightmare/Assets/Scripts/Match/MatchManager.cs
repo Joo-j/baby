@@ -60,15 +60,13 @@ namespace BabyNightmare.Match
 
         private void OnFailMatch()
         {
-            var res = Resources.Load<MatchFailView>(PATH_MATCH_FAIL_VIEW);
-            var failView = GameObject.Instantiate(res);
-            failView.Init(CloseMatch);
+            var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
+            failView.Init(100, CloseMatch);
         }
 
         private void OnCompleteMatch()
         {
-            var res = Resources.Load<MatchFailView>(PATH_MATCH_FAIL_VIEW);
-            var completeView = GameObject.Instantiate(res);
+            var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_FAIL_VIEW, null);
             completeView.Init(CloseMatch);
 
             ++PlayerData.Instance.Stage;
