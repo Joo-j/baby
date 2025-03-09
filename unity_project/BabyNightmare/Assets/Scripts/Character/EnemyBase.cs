@@ -4,6 +4,7 @@ using UnityEngine;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.HUD;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.Character
 {
@@ -15,21 +16,24 @@ namespace BabyNightmare.Character
 
         public float HP { get; }
         public Vector3 CameraForward { get; }
+        public float Delay { get; }
 
         public EnemyContext
         (
             EnemyData enemyData,
             ICharacter player,
             Action onDie,
-            Vector3 cameraForward
+            Vector3 cameraForward,
+            float delay
         )
         {
             EnemyData = enemyData;
             Player = player;
             OnDie = onDie;
 
-            HP = enemyData.Health;
+            this.HP = enemyData.Health;
             this.CameraForward = cameraForward;
+            this.Delay = delay;
         }
     }
 
@@ -46,9 +50,17 @@ namespace BabyNightmare.Character
             base.Init(context);
 
             _context = context as EnemyContext;
+
+            _renderer.enabled = false;
+
+            StartCoroutine(SimpleLerp.Co_Invoke(_context.Delay, () =>
+            {
+                _renderer.enabled = true;
+                StartMove();
+            }));
         }
 
-        public void StartMove()
+        private void StartMove()
         {
             _animator.Play(HASH_ANI_MOVE);
 
@@ -106,7 +118,7 @@ namespace BabyNightmare.Character
 
             var interval = _context.EnemyData.Attack_Interval;
             var player = _context.Player;
-            if (player.Health <= 0)
+            if (player.HP <= 0)
                 return;
 
             _coAct = StartCoroutine(Co_Attack());

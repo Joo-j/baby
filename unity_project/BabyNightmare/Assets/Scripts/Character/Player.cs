@@ -131,7 +131,7 @@ namespace BabyNightmare.Character
             if (null == enemy)
                 return;
 
-            if (enemy.Health <= 0)
+            if (enemy.HP <= 0)
                 return;
 
             var damage = equipmentData.Damage;

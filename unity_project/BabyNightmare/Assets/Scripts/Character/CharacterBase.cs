@@ -10,7 +10,7 @@ namespace BabyNightmare.Character
     {
         public GameObject GO { get; }
         public Transform TF { get; }
-        public float Health { get; }
+        public float HP { get; }
         public float HitRadius { get; }
         public void ReceiveAttack(float damage);
     }
@@ -42,7 +42,7 @@ namespace BabyNightmare.Character
 
         public GameObject GO => gameObject;
         public Transform TF => transform;
-        public float Health => _hp;
+        public float HP => _hp;
         public abstract float HitRadius { get; }
 
         public virtual void Init(ICharacterContext context)

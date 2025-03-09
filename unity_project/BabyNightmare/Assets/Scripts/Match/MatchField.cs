@@ -15,6 +15,7 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _playerTF;
         [SerializeField] private Transform _enemySpawnTF;
         [SerializeField] private Transform _boxTF;
+        [SerializeField] private float _attackRadius = 10f;
 
         private const string PATH_PLAYER = "Match/Player";
         private const string PATH_ENEMY = "Match/Enemy_";
@@ -34,8 +35,9 @@ namespace BabyNightmare.Match
 
         public void Init(Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
         {
-            _aliveEnemies = new List<EnemyBase>();
             _enemySpawnTFArr = _enemySpawnTF.GetComponentsInChildren<Transform>();
+
+            _aliveEnemies = new List<EnemyBase>();
 
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
@@ -65,25 +67,21 @@ namespace BabyNightmare.Match
         {
             _aliveEnemies.Clear();
 
+            var delay = 0f;
             for (var i = 0; i < enemyDataList.Count; i++)
             {
                 var data = enemyDataList[i];
                 var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTFArr[UnityEngine.Random.Range(0, _enemySpawnTFArr.Length)]);
-                var enemyContext = new EnemyContext(data, _player, () => OnDieEnemy(enemy), CameraForward);
+                var enemyContext = new EnemyContext(
+                data,
+                _player,
+                () => OnDieEnemy(enemy),
+                CameraForward,
+                delay);
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);
-            }
-
-            StartCoroutine(Co_MoveEnemy(enemyDataList));
-            IEnumerator Co_MoveEnemy(List<EnemyData> enemyDataList)
-            {
-                for (var i = 0; i < _aliveEnemies.Count; i++)
-                {
-                    _aliveEnemies[i].StartMove();
-                    var randomDelay = UnityEngine.Random.Range(1.5f, 3f);
-                    yield return CoroutineUtil.WaitForSeconds(randomDelay);
-                }
+                delay = UnityEngine.Random.Range(1.5f, 4f);
             }
         }
 
@@ -106,11 +104,27 @@ namespace BabyNightmare.Match
 
         public void AttackEnemy(EquipmentData equipmentData)
         {
-            if (_aliveEnemies.Count == 0)
+            var attackableEnemies = new List<EnemyBase>();
+
+            for (var i = 0; i < _aliveEnemies.Count; i++)
+            {
+                var enemy = _aliveEnemies[i];
+                if (enemy.HP <= 0)
+                    continue;
+
+                var dist = Vector3.Distance(_player.TF.position, enemy.TF.position);
+                if (dist > _attackRadius)
+                    continue;
+
+                attackableEnemies.Add(enemy);
+            }
+
+            if (attackableEnemies.Count == 0)
                 return;
 
-            var rand = UnityEngine.Random.Range(0, _aliveEnemies.Count);
-            var randomEnemy = _aliveEnemies[rand];
+            var rand = UnityEngine.Random.Range(0, attackableEnemies.Count);
+            var randomEnemy = attackableEnemies[rand];
+
             _player.UseEquipment(equipmentData, randomEnemy);
         }
 
