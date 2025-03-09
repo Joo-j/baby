@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mesh: {fileID: 5017474074519476115, guid: 8816324961259427791e6101e0a6ee85, type: 3}
   _materials:
-  - {fileID: 2100000, guid: 9a3135b40043e4feda7a9fdebefa680c, type: 2}
+  - {fileID: 2100000, guid: 8ec67bf67546a43608d50caab1a1d98b, type: 2}
   _throwDuration: 0.5
   _throwCurve:
     serializedVersion: 2
