@@ -13,10 +13,11 @@ namespace BabyNightmare.InventorySystem
         {
             if (null == _infoPopup)
             {
-                _infoPopup = ObjectUtil.LoadAndInstantiate<EquipmentInfoPopup>(PATH_EQUIPMENT_INFO_POPUP, null);                
+                _infoPopup = ObjectUtil.LoadAndInstantiate<EquipmentInfoPopup>(PATH_EQUIPMENT_INFO_POPUP, null);
+                Debug.Assert(null != _infoPopup, $"{PATH_EQUIPMENT_INFO_POPUP} is not prefab");
             }
 
-            _infoPopup?.Show(data);
+            _infoPopup.Show(data);
         }
     }
 }

@@ -353,22 +353,6 @@ namespace BabyNightmare.InventorySystem
             ClearCell();
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (null != _draggedEquipment)
-                return;
-
-            var index = _currentInventory.GetIndex(eventData.position);
-            var equipment = Get(index);
-            if (null == equipment)
-            {
-                Debug.Log($"{index}에서 장비를 찾지 못함");
-                return;
-            }
-
-            InventoryUtil.ShowInfoPopup(equipment.Data);
-        }
-
         public void OnPointerDown(PointerEventData eventData)
         {
             if (null != _draggedEquipment)
@@ -385,6 +369,19 @@ namespace BabyNightmare.InventorySystem
                 Equip(equipment, equipment.Index);
                 _draggedEquipment = null;
             };
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            var index = _currentInventory.GetIndex(eventData.position);
+            var equipment = Get(index);
+            if (null == equipment)
+            {
+                Debug.Log($"{index}에서 장비를 찾지 못함");
+                return;
+            }
+
+            InventoryUtil.ShowInfoPopup(equipment.Data);
         }
 
         public void OnBeginDrag(PointerEventData eventData)

@@ -9,6 +9,7 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public string Name;
+        public string Desc;
         public int Level;
         public float Damage;
         public float Heal;
