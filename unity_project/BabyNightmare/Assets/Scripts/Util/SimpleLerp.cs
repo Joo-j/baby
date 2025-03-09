@@ -91,6 +91,17 @@ namespace BabyNightmare.Util
             callback?.Invoke();
         }
 
+        public static IEnumerator Co_BounceRotation_Loop(Transform tf, Quaternion startRot, Quaternion targetRot, float duration, AnimationCurve curve)
+        {
+            var halfTime = duration / 2;
+
+            while (true)
+            {
+                yield return Co_LerpRotation(tf, startRot, targetRot, halfTime, curve);
+                yield return Co_LerpRotation(tf, targetRot, startRot, halfTime, curve);
+            }
+        }
+
         public static IEnumerator Co_LerpScale_Loop(Transform tf, Vector3 startScale, Vector3 targetScale, AnimationCurve curve, float lerpTime)
         {
             var elapsed = 0f;

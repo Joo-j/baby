@@ -18,7 +18,6 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Sprite _cellEnable;
         [SerializeField] private Sprite _cellOverlapped;
         [SerializeField] private Sprite _cellUpgradable;
-        [SerializeField] private AnimationCurve _equipmentMoveCurve;
 
         private const string PATH_EQUIPMENT = "Inventory/Equipment";
 
@@ -75,12 +74,12 @@ namespace BabyNightmare.InventorySystem
 
         public bool TryAdd(EquipmentData data)
         {
-            if (false == TryGetRandomPoint(data, out var index))
-                return false;
+            var randomIndex = GetRandomIndex(data);
+            Debug.Log($"TryAdd {randomIndex}");
 
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
             equipment.Refresh(data, false);
-            Equip(equipment, index);
+            Equip(equipment, randomIndex);
 
             return true;
         }
@@ -100,7 +99,7 @@ namespace BabyNightmare.InventorySystem
                 }
             }
 
-            HashSet<Equipment> oes = new HashSet<Equipment>();
+            List<Equipment> oeList = new List<Equipment>();
             for (var x = 0; x < data.Column; x++)
             {
                 for (var y = 0; y < data.Row; y++)
@@ -111,11 +110,11 @@ namespace BabyNightmare.InventorySystem
 
                     var newIndex = targetIndex + index;
                     if (true == IsOverlap(newIndex, out var overlapEquipment))
-                        oes.Add(overlapEquipment);
+                        oeList.Add(overlapEquipment);
                 }
             }
 
-            var overlapCount = oes.Count;
+            var overlapCount = oeList.Count;
             if (overlapCount <= 0)
             {
                 Debug.Log($"겹친 장비가 없다면 바로 배치");
@@ -127,29 +126,27 @@ namespace BabyNightmare.InventorySystem
             {
                 Debug.Log($"겹친 장비가 하나일 때");
 
-                foreach (var oe in oes)
+                var oe = oeList[0];
+                var upgradeData = _getUpgradeData(oe.Data, data);
+                if (null != upgradeData)
                 {
-                    var upgradeData = _getUpgradeData(oe.Data, data);
-                    if (null != upgradeData)
-                    {
-                        Debug.Log($"업그레이드 데이터가 존재하면, 기존 장비 삭제 후 배치, 업그레이드");
-                        Remove(oe);
-                        Equip(equipment, targetIndex);
-                        equipment.Refresh(upgradeData, true);
-                        return true;
-                    }
-                    else
-                    {
-                        Debug.Log($"같은 장비가 아니면 기존 장비 밖으로 내보내고 배치");
-                        KickOut(oe);
-                        Equip(equipment, targetIndex);
-                        return true;
-                    }
+                    Debug.Log($"업그레이드 데이터가 존재하면, 기존 장비 삭제 후 배치, 업그레이드");
+                    Remove(oe);
+                    Equip(equipment, targetIndex);
+                    equipment.Refresh(upgradeData, true);
+                    return true;
+                }
+                else
+                {
+                    Debug.Log($"같은 장비가 아니면 기존 장비 밖으로 내보내고 배치");
+                    KickOut(oe);
+                    Equip(equipment, targetIndex);
+                    return true;
                 }
             }
 
             Debug.Log("겹친 장비가 2개 이상이면 기존 장비 전부 밖으로 내보내고 배치");
-            foreach (var oe in oes)
+            foreach (var oe in oeList)
             {
                 KickOut(oe);
             }
@@ -171,25 +168,19 @@ namespace BabyNightmare.InventorySystem
         private void Equip_Lerp(Equipment equipment)
         {
             var data = equipment.Data;
-            if (false == TryGetRandomPoint(data, out var index))
-            {
-                Debug.Log("랜덤 포인트를 찾지 못했습니다.");
-                Destroy(equipment.gameObject);
-                return;
-            }
+            var randomIndex = GetRandomIndex(data);
 
+            Debug.Log($"Equip {randomIndex}");
             _equipmentSet.Add(equipment);
-            equipment.Index = index;
+            equipment.Index = randomIndex;
 
-            var startPos = equipment.AnchoredPos;
-            var targetPos = GetAnchoredPos(index, equipment.Data);
-            StartCoroutine(SimpleLerp.Co_LerpAnchoredPosition(equipment.RTF, startPos, targetPos, _equipmentMoveCurve, 0.1f,
-            () =>
+            var targetPos = GetAnchoredPos(randomIndex, equipment.Data);
+            equipment.Move(targetPos, () =>
             {
                 equipment.transform.SetParent(transform);
                 _onEquip?.Invoke(equipment.Data);
                 ClearCell();
-            }));
+            });
         }
 
         private void Remove(Equipment equipment)
@@ -256,7 +247,6 @@ namespace BabyNightmare.InventorySystem
                     for (var j = 0; j < data.Row; j++)
                     {
                         var newIndex = equipment.Index + new Vector2Int(i, j);
-
                         if (targetIndex == newIndex)
                             return equipment;
                     }
@@ -264,6 +254,23 @@ namespace BabyNightmare.InventorySystem
             }
 
             return null;
+        }
+
+        private bool IsOverlap(EquipmentData data, Vector2Int targetIndex)
+        {
+            var indexList = data.IndexList;
+            for (var i = 0; i < indexList.Count; i++)
+            {
+                var index = indexList[i];
+                var newIndex = targetIndex + index;
+                if (false == _shape.IsValid(newIndex))
+                    continue;
+
+                if (true == IsOverlap(newIndex, out var overlappedEquipment))
+                    return true;
+            }
+
+            return false;
         }
 
         private bool IsOverlap(Vector2 targetIndex, out Equipment overlappedEquipment)
@@ -278,6 +285,9 @@ namespace BabyNightmare.InventorySystem
                 {
                     var index = indexList[i];
                     var newIndex = equipment.Index + index;
+                    if (false == _shape.IsValid(newIndex))
+                        continue;
+
                     if (targetIndex == newIndex)
                     {
                         overlappedEquipment = equipment;
@@ -289,45 +299,32 @@ namespace BabyNightmare.InventorySystem
             return false;
         }
 
-        private bool TryGetRandomPoint(EquipmentData data, out Vector2Int targetIndex)
+        private Vector2Int GetRandomIndex(EquipmentData data)
         {
-            targetIndex = default;
-            if (data.Row > _shape.Row)
-                return false;
-
-            if (data.Column > _shape.Column)
-                return false;
-
             List<Vector2Int> enableIndexList = new List<Vector2Int>();
 
-            var indexList = data.IndexList;
-            for (var i = 0; i < indexList.Count; i++)
+            for (int x = 0; x <= _shape.Column - data.Column; x++)
             {
-                var index = indexList[i];
-                var newIndex = targetIndex + index;
-                if (false == _shape.IsValid(newIndex))
+                for (int y = 0; y <= _shape.Row - data.Row; y++)
                 {
-                    Debug.Log($"TryGetRandomPoint {newIndex}는 그리드에서 유효하지 않습니다.");
-                    continue;
-                }
+                    var targetIndex = new Vector2Int(x, y);
+                    if (false == _shape.IsValid(targetIndex))
+                        continue;
 
-                if (true == IsOverlap(newIndex, out var overlappedEquipment))
-                {
-                    Debug.Log($"TryGetRandomPoint {data.Name}이 {newIndex}에 {overlappedEquipment.Data.Name}이 겹칩니다.");
-                    continue;
-                }
+                    if (true == IsOverlap(data, targetIndex))
+                        continue;
 
-                enableIndexList.Add(newIndex);
+                    enableIndexList.Add(targetIndex);
+                }
             }
 
-            if (enableIndexList.Count == 0)
+            if (enableIndexList.Count <= 0)
             {
-                Debug.Log("드랍 가능한 포인트가 없습니다.");
-                return false;
+                Debug.Log($"빈자리가 없습니다.");
+                return new Vector2Int(-1, -1);
             }
 
-            targetIndex = enableIndexList[UnityEngine.Random.Range(0, enableIndexList.Count)];
-            return true;
+            return enableIndexList[UnityEngine.Random.Range(0, enableIndexList.Count)];
         }
 
         private Vector2Int GetIndex(Vector2 screenPos)
@@ -482,6 +479,7 @@ namespace BabyNightmare.InventorySystem
                     if (null != upgradeData)
                     {
                         cell.sprite = _cellUpgradable;
+                        overlappedEquipment.StartShake();
                     }
                     else
                     {
@@ -510,7 +508,7 @@ namespace BabyNightmare.InventorySystem
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
-                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => equipment.StartCoolDownLoop(data.CoolTime, () => onCoolDown?.Invoke(data)));
+                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => equipment.StartCoolDown(data.CoolTime, () => onCoolDown?.Invoke(data)));
             }
 
             _canvasGroup.interactable = false;
@@ -520,7 +518,7 @@ namespace BabyNightmare.InventorySystem
         {
             foreach (var equipment in _equipmentSet)
             {
-                equipment.ResetCool();
+                equipment.StopCoolDown();
             }
 
             _canvasGroup.interactable = true;

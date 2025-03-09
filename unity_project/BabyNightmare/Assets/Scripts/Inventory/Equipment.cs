@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using BabyNightmare.StaticData;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -11,6 +12,11 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private RectTransform _rtf;
         [SerializeField] private Image _image;
         [SerializeField] private Image _coolImage;
+        [SerializeField] private AnimationCurve _moveCurve;
+
+        private Coroutine _coMove = null;
+        private Coroutine _coShake = null;
+        private Coroutine _coCoolDown = null;
 
         public EquipmentData Data { get; private set; }
         public Action Reset { get; set; }
@@ -20,8 +26,6 @@ namespace BabyNightmare.InventorySystem
             get => _rtf.anchoredPosition;
             set => _rtf.anchoredPosition = value;
         }
-        public bool IsShake { private get; set; }
-        public RectTransform RTF => _rtf;
 
         public void Refresh(EquipmentData data, bool showFX)
         {
@@ -40,34 +44,57 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-        public void StartCoolDownLoop(float coolTime, Action onCoolDown)
+        public void Move(Vector2 targetPos, Action callback)
         {
-            StartCoroutine(Co_CoolDown(true, coolTime, onCoolDown));
+            var startPos = _rtf.anchoredPosition;
+            StartCoroutine(SimpleLerp.Co_LerpAnchoredPosition(_rtf, startPos, targetPos, _moveCurve, 0.1f, callback));
         }
 
-        private IEnumerator Co_CoolDown(bool isLoop, float coolTime, Action onCoolDown)
+        public void StartShake()
         {
-            while (true)
+            var startRot = Quaternion.Euler(0, 0, -30);
+            var targetRot = Quaternion.Euler(0, 0, 30);
+            _coShake = StartCoroutine(SimpleLerp.Co_BounceRotation_Loop(transform, startRot, targetRot, 0.2f, _moveCurve));
+        }
+
+        public void StopShake()
+        {
+            transform.rotation = Quaternion.identity;
+
+            if (null != _coShake)
+                StopCoroutine(_coShake);
+
+            _coShake = null;
+        }
+
+        public void StartCoolDown(float coolTime, Action onCoolDown)
+        {
+            _coCoolDown = StartCoroutine(Co_CoolDown(coolTime, onCoolDown));
+            IEnumerator Co_CoolDown(float coolTime, Action onCoolDown)
             {
-                var elapsed = 0f;
-                while (elapsed < coolTime)
+                while (true)
                 {
-                    yield return null;
-                    elapsed += Time.deltaTime;
-                    _coolImage.fillAmount = elapsed / coolTime;
+                    var elapsed = 0f;
+                    while (elapsed < coolTime)
+                    {
+                        yield return null;
+                        elapsed += Time.deltaTime;
+                        _coolImage.fillAmount = elapsed / coolTime;
+                    }
+
+                    onCoolDown?.Invoke();
                 }
-
-                onCoolDown?.Invoke();
-
-                if (false == isLoop)
-                    break;
             }
         }
 
-        public void ResetCool()
+        public void StopCoolDown()
         {
-            StopAllCoroutines();
             _coolImage.fillAmount = 0;
+
+            if (null != _coCoolDown)
+                StopCoroutine(_coCoolDown);
+
+            _coCoolDown = null;
         }
     }
 }
