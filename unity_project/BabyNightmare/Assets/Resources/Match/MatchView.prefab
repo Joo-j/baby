@@ -1810,9 +1810,9 @@ MonoBehaviour:
   _fightGO: {fileID: 6529578300866956099}
   _boxGO: {fileID: 4726676257823111906}
   _boxIMG: {fileID: 1483143481907123031}
-  _hpRTF: {fileID: 8142763959924166996}
+  _hpRTF: {fileID: 279310149090531906}
   _atkRTF: {fileID: 3738381893503617987}
-  _defRTF: {fileID: 279310149090531906}
+  _defRTF: {fileID: 8142763959924166996}
   _hpTMP: {fileID: 4317090578386515055}
   _atkTMP: {fileID: 972397630457310612}
   _defTMP: {fileID: 886944341519997286}
@@ -3771,13 +3771,13 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 288495394893471918, guid: eed1cd04e3de84460b338491177a5975, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8142763959924166996}
+      addedObject: {fileID: 279310149090531906}
     - targetCorrespondingSourceObject: {fileID: 288495394893471918, guid: eed1cd04e3de84460b338491177a5975, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3738381893503617987}
     - targetCorrespondingSourceObject: {fileID: 288495394893471918, guid: eed1cd04e3de84460b338491177a5975, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 279310149090531906}
+      addedObject: {fileID: 8142763959924166996}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eed1cd04e3de84460b338491177a5975, type: 3}
 --- !u!224 &2782624808287409779 stripped
