@@ -52,10 +52,12 @@ namespace BabyNightmare.Character
             _context = context as EnemyContext;
 
             _renderer.enabled = false;
+            _hpBar.gameObject.SetActive(false);
 
             StartCoroutine(SimpleLerp.Co_Invoke(_context.Delay, () =>
             {
                 _renderer.enabled = true;
+                _hpBar.gameObject.SetActive(true);
                 StartMove();
             }));
         }
