@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7692109955050534691}
   - component: {fileID: 3258826937496696203}
   m_Layer: 0
-  m_Name: FX_Attach_Mike
+  m_Name: FX_Attack_Mike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7422193945044039055}
   - component: {fileID: 4204976413985155782}
   m_Layer: 0
-  m_Name: FX_Attach_Sullivan
+  m_Name: FX_Attack_Sullivan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
