@@ -373,6 +373,9 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (null != _draggedEquipment)
+                return;
+
             var index = _currentInventory.GetIndex(eventData.position);
             var equipment = Get(index);
             if (null == equipment)
