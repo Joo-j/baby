@@ -86,15 +86,15 @@ namespace BabyNightmare.Character
             {
                 var elapsed = 0f;
                 var startPos_interval = transform.position;
-                var dir = (player.TF.position - startPos_interval).normalized;
+                var dir = (targetPos - startPos_interval).normalized;
 
                 var stepDist = moveStepSpeed * moveStepDuration;
                 var targetPos_interval = startPos_interval + dir * stepDist;
 
-                var totalDist = Vector3.Distance(startPos_interval, player.TF.position);
+                var totalDist = Vector3.Distance(startPos_interval, targetPos);
                 if (totalDist - attackRadius < stepDist)// 공격 범위 바깥에서 멈추도록 보정
                 {
-                    targetPos_interval = player.TF.position - dir * attackRadius;
+                    targetPos_interval = targetPos - dir * attackRadius;
                 }
 
                 while (elapsed < moveStepDuration)
@@ -103,7 +103,7 @@ namespace BabyNightmare.Character
                     var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
                     transform.position = Vector3.Lerp(startPos_interval, targetPos_interval, factor);
 
-                    if (Vector3.Distance(transform.position, player.TF.position) <= player.HitRadius)
+                    if (Vector3.Distance(transform.position, targetPos) <= player.HitRadius)
                     {
                         Attack();
                         break;
