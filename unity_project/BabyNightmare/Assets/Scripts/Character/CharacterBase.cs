@@ -12,6 +12,8 @@ namespace BabyNightmare.Character
         public Transform TF { get; }
         public float HP { get; }
         public float HitRadius { get; }
+        public bool IsAttackable { get; }
+        public void ReserveDamage(float damage);
         public void ReceiveAttack(float damage);
     }
 
@@ -39,11 +41,13 @@ namespace BabyNightmare.Character
         protected Coroutine _coAct = null;
         private Coroutine _coFlash = null;
         private Color _originColor;
+        private float _reserveDamage = 0f;
 
+        public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
         public Transform TF => transform;
         public float HP => _hp;
-        public abstract float HitRadius { get; }
+        public bool IsAttackable => _hp - _reserveDamage > 0;
 
         public virtual void Init(ICharacterContext context)
         {
@@ -58,10 +62,14 @@ namespace BabyNightmare.Character
 
         public abstract void Die();
 
+        public void ReserveDamage(float damage) => _reserveDamage += damage;
+
         public virtual void ReceiveAttack(float damage)
         {
             if (damage <= 0)
                 return;
+
+            _reserveDamage = 0;
 
             _hp = Mathf.Max(0, _hp - damage);
 

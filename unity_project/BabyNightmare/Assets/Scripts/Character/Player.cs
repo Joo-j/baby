@@ -131,10 +131,11 @@ namespace BabyNightmare.Character
             if (null == enemy)
                 return;
 
-            if (enemy.HP <= 0)
+            if (false == enemy.IsAttackable)
                 return;
 
             var damage = equipmentData.Damage;
+            enemy.ReserveDamage(damage);
 
             if (damage > 0)
             {
