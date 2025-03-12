@@ -66,8 +66,8 @@ namespace BabyNightmare.Match
 
         private void OnCompleteMatch()
         {
-            var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_FAIL_VIEW, null);
-            completeView.Init(CloseMatch);
+            var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
+            completeView.Init(100, CloseMatch);
 
             ++PlayerData.Instance.Stage;
             PlayerData.Instance.Save();

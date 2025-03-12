@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cecfb75ae783a489fb7078c2746c0be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe17f0e00a0074fbdbabac50a2cc2d40, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -975,7 +975,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 189cc51fa3566405facc930e269bf282, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ece72ca34a9e7402887b3cb5795bdbae, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5923,9 +5923,9 @@ GameObject:
   - component: {fileID: 2294112671186822734}
   - component: {fileID: 4703493150217968770}
   - component: {fileID: 1145229248193400646}
-  - component: {fileID: 8475264679555168166}
+  - component: {fileID: 3231355411268913142}
   m_Layer: 5
-  m_Name: GameOverView
+  m_Name: MatchCompleteView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6047,7 +6047,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8475264679555168166
+--- !u!114 &3231355411268913142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6056,7 +6056,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2294112671186822832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ba82a41effec414f87555b7ba8a2854, type: 3}
+  m_Script: {fileID: 11500000, guid: 4a185ffa8c8f74fa3a4e083140bb7044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CLS_Reward:
@@ -6448,7 +6448,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 745cb239dfe354c2abe95d3078857b31, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0a806293309494447947c080cdbef1c4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6523,7 +6523,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cecfb75ae783a489fb7078c2746c0be7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fff74d2deba83421c8659f5ae26d8f1d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6702,7 +6702,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8475264679555168166}
+      - m_Target: {fileID: 3231355411268913142}
         m_TargetAssemblyTypeName: Supercent.UIv2.UIBase, Assembly-CSharp
         m_MethodName: OnButtonEvent
         m_Mode: 2
@@ -6913,7 +6913,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: GAME OVER
+  m_text: COMPLETE!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3520f0354d1ca4af087ccd460f96f17d, type: 2}
   m_sharedMaterial: {fileID: -2172190575063829588, guid: 3520f0354d1ca4af087ccd460f96f17d, type: 2}
@@ -7997,7 +7997,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8475264679555168166}
+      - m_Target: {fileID: 3231355411268913142}
         m_TargetAssemblyTypeName: Supercent.UIv2.UIBase, Assembly-CSharp
         m_MethodName: OnButtonEvent
         m_Mode: 2
