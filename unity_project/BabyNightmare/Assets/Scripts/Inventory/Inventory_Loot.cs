@@ -61,7 +61,7 @@ namespace BabyNightmare.InventorySystem
             {
                 var equipment = _equipmentList[i];
                 var equipmentPos = equipment.RTF.anchoredPosition;
-                var clickSize = equipment.RTF.sizeDelta * 0.5f;
+                var clickSize = equipment.RTF.sizeDelta;
                 var dist = Vector2.Distance(equipmentPos, anchoredPos);
 
                 if (dist < clickSize.x || dist < clickSize.y)
