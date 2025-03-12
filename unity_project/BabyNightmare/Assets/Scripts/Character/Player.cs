@@ -124,9 +124,6 @@ namespace BabyNightmare.Character
 
             var equipmentData = info.EquipmentData;
 
-            AddHP(equipmentData.Heal);
-            AddDEF(equipmentData.Defence);
-
             var enemy = info.Character;
             if (null == enemy)
                 return;
@@ -137,14 +134,34 @@ namespace BabyNightmare.Character
             var damage = equipmentData.Damage;
             enemy.ReserveDamage(damage);
 
+            var projectile = _projectilePool.Get();
+            projectile.TF.position = _throwStartTF.position;
+            projectile.TF.rotation = Quaternion.identity;
+            projectile.Init(equipmentData.ID);
+
             if (damage > 0)
             {
-                var projectile = _projectilePool.Get();
-                projectile.TF.position = _throwStartTF.position;
-                projectile.TF.rotation = Quaternion.identity;
-                projectile.Init(equipmentData.ID);
+                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, OnThrow));
+                return;
+            }
 
-                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, () => enemy?.ReceiveAttack(damage)));
+            var heal = equipmentData.Heal;
+            if (heal > 0)
+            {
+                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
+            }
+
+            var defence = equipmentData.Defence;
+            if (defence > 0)
+            {
+                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
+            }
+
+            void OnThrow()
+            {
+                enemy?.ReceiveAttack(equipmentData.Damage);
+                AddHP(equipmentData.Heal);
+                AddDEF(equipmentData.Defence);
             }
         }
 
