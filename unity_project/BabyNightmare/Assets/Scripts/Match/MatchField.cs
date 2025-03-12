@@ -141,8 +141,9 @@ namespace BabyNightmare.Match
             StartCoroutine(Co_EncounterBox());
             IEnumerator Co_EncounterBox()
             {
-                var waiter = new CoroutineWaiter();
+                yield return CoroutineUtil.WaitForSeconds(1.5f);
 
+                var waiter = new CoroutineWaiter();
                 _player.Move(3f, waiter.Signal);
                 yield return waiter.Wait();
 
