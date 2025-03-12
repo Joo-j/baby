@@ -135,7 +135,7 @@ MonoBehaviour:
     Coin_Max: 10
     SpawnOrder: 2
   - ID: 103
-    Name: Roz
+    Name: Slime
     Damage: 10
     Health: 4
     Attack_Interval: 3.5
