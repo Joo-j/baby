@@ -21,6 +21,7 @@ namespace BabyNightmare.InventorySystem
         public EquipmentData Data { get; private set; }
         public Action Reset { get; set; }
         public Vector2Int Index { get; set; }
+        public RectTransform RTF => _rtf;
         public Vector2 AnchoredPos
         {
             get => _rtf.anchoredPosition;

@@ -44,8 +44,8 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private SimpleProgress _waveProgress;
-        [SerializeField] private Inventory _inventoryInside;
-        [SerializeField] private Inventory _inventoryOutside;
+        [SerializeField] private Inventory_Bag _bag;
+        [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private GameObject _startGO;
@@ -68,7 +68,7 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
         private MatchViewContext _context = null;
         private Dictionary<EStatType, float> _statDict = null;
-        private EquipmentBoxData _boxData = null;
+        private Action _onGetBox = null;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
 
@@ -84,10 +84,9 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _inventoryInside.Init(_rtf, _inventoryOutside, OnEquip, OnUnequip, context.GetUpgradeData);
-            _inventoryOutside.Init(_rtf, _inventoryOutside, null, null, context.GetUpgradeData);
+            _bag.Init(_loot, OnEquip, OnUnequip, context.GetUpgradeData);
 
-            _inventoryInside.TryAdd(_context.InitEquipment);
+            _bag.TryAdd(_context.InitEquipment);
 
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
@@ -106,11 +105,11 @@ namespace BabyNightmare.Match
 
         public void Reroll(List<EquipmentData> dataList)
         {
-            _inventoryOutside.RemoveAll();
+            _loot.RemoveAll();
 
             for (var i = 0; i < dataList.Count; i++)
             {
-                _inventoryOutside.TryAdd(dataList[i]);
+                _loot.TryAdd(dataList[i]);
             }
         }
 
@@ -145,51 +144,29 @@ namespace BabyNightmare.Match
             _canvasGroup.blocksRaycasts = true;
         }
 
-        public void ShowBox(EquipmentBoxData boxData)
+        public void OnClearWave()
+        {
+            _bag.StopUseEquipment();
+            _canvasGroup.blocksRaycasts = true;
+        }
+
+        public void ShowBox(EBoxType type, Action onGetBox)
         {
             ChangeRectPos(false);
 
-            _boxData = boxData;
-            var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{boxData.Type}";
+            _onGetBox = onGetBox;
+            var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
         }
 
-        public void OnClearWave()
-        {
-            _inventoryInside.StopUseEquipment();
-            _canvasGroup.blocksRaycasts = true;
-        }
-
         public void OnClickBox()
         {
-            if (null == _boxData)
-            {
-                Debug.LogError("no box data");
-                return;
-            }
-
             _boxGO.SetActive(false);
-
-            _inventoryOutside.RemoveAll();
-
-            var equipmentIDList = _boxData.EquipmentIDList;
-            var dataList = new List<EquipmentData>();
-            for (var i = 0; i < equipmentIDList.Count; i++)
-            {
-                var equipment = StaticDataManager.Instance.GetEquipmentData(equipmentIDList[i]);
-                dataList.Add(equipment);
-            }
-
-            for (var i = 0; i < dataList.Count; i++)
-            {
-                _inventoryOutside.TryAdd(dataList[i]);
-            }
-
-            _boxData = null;
-
             _rerollGO.SetActive(true);
             _fightGO.SetActive(true);
+
+            _onGetBox?.Invoke();
         }
 
         public void OnClickReroll()
@@ -201,8 +178,8 @@ namespace BabyNightmare.Match
         {
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
-            _inventoryOutside.RemoveAll();
-            _inventoryInside.StartUseEquipment(_context.OnCoolDown);
+            _loot.RemoveAll();
+            _bag.StartUseEquipment(_context.OnCoolDown);
             _canvasGroup.blocksRaycasts = false;
 
             ChangeRectPos(true);

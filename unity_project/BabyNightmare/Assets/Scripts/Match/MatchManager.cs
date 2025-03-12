@@ -123,7 +123,7 @@ namespace BabyNightmare.Match
             _matchView.RefreshProgress(_currentWave, _maxWave, false);
 
             var boxData = GetBoxData();
-            _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData));
+            _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, () => OnGetBox(boxData)));
         }
 
         private EquipmentBoxData GetBoxData()
@@ -145,6 +145,19 @@ namespace BabyNightmare.Match
             ++_rerollCount;
             _rerollCost = REROLL_INITIAL_COST * (int)Mathf.Pow(_rerollCount, 2);
             PlayerData.Instance.Coin -= preCost;
+        }
+
+        private void OnGetBox(EquipmentBoxData boxData)
+        {
+            var equipmentIDList = boxData.EquipmentIDList;
+            var dataList = new List<EquipmentData>();
+            for (var i = 0; i < equipmentIDList.Count; i++)
+            {
+                var equipment = StaticDataManager.Instance.GetEquipmentData(equipmentIDList[i]);
+                dataList.Add(equipment);
+            }
+
+            _matchView.Reroll(dataList);
         }
 
         private void RefreshRerollCost(int coin)
