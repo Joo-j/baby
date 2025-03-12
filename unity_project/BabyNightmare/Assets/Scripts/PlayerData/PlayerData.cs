@@ -17,7 +17,7 @@ namespace BabyNightmare
 
         public bool Haptic_Active;
         public int Stage = 1;
-        public float HP = 100;
+        public float HP = 50;
         private int _coin = 10;
         private int _gem = 0;
 
