@@ -17,4 +17,13 @@ namespace BabyNightmare.StaticData
         ATK,
         DEF,
     }
+
+    public enum ELobbyButtonType
+    {
+        Unknown,
+        Home,
+        Shop,
+        Talent,
+        
+    }
 }
