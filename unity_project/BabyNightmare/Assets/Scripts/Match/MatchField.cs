@@ -5,7 +5,7 @@ using UnityEngine;
 using Supercent.Util;
 using BabyNightmare.Character;
 using BabyNightmare.StaticData;
-using BabyNightmare.HUD;
+using Random = UnityEngine.Random;
 
 namespace BabyNightmare.Match
 {
@@ -13,7 +13,9 @@ namespace BabyNightmare.Match
     {
         [SerializeField] private Camera _renderCamera;
         [SerializeField] private Transform _playerTF;
-        [SerializeField] private Transform _enemySpawnTF;
+        [SerializeField] private Transform _nearSpawnTF;
+        [SerializeField] private Transform _midSpawnTF;
+        [SerializeField] private Transform _farSpawnTF;
         [SerializeField] private Transform _boxTF;
         [SerializeField] private float _attackRadius = 10f;
 
@@ -22,7 +24,9 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox_";
 
         private RenderTexture _rt = null;
-        private Transform[] _enemySpawnTFArr = null;
+        private Transform[] _nearSpawnTFArr = null;
+        private Transform[] _midSpawnTFArr = null;
+        private Transform[] _farSpawnTFArr = null;
         private Action<int, Vector3> _getCoin = null;
         private Action _onClearWave = null;
         private Action _onFailWave = null;
@@ -35,8 +39,9 @@ namespace BabyNightmare.Match
 
         public void Init(Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
         {
-            _enemySpawnTFArr = _enemySpawnTF.GetComponentsInChildren<Transform>();
-
+            _nearSpawnTFArr = _nearSpawnTF.GetComponentsInChildren<Transform>();
+            _midSpawnTFArr = _midSpawnTF.GetComponentsInChildren<Transform>();
+            _farSpawnTFArr = _farSpawnTF.GetComponentsInChildren<Transform>();
             _aliveEnemies = new List<EnemyBase>();
 
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
@@ -71,13 +76,16 @@ namespace BabyNightmare.Match
             for (var i = 0; i < enemyDataList.Count; i++)
             {
                 var data = enemyDataList[i];
-                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", _enemySpawnTFArr[UnityEngine.Random.Range(0, _enemySpawnTFArr.Length)]);
+                var spawnOrder = data.SpawnOrder;
+                var spawnTF = GetSpawnTF(spawnOrder);
+
+                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", spawnTF);
                 var enemyContext = new EnemyContext(
-                data,
-                _player,
-                () => OnDieEnemy(enemy),
-                CameraForward,
-                delay);
+                                data,
+                                _player,
+                                () => OnDieEnemy(enemy),
+                                CameraForward,
+                                delay);
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);
@@ -141,6 +149,18 @@ namespace BabyNightmare.Match
                 var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
                 var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxTF);
                 box.Open(doneCallback);
+            }
+        }
+        private Transform GetSpawnTF(ESpawnOrder order)
+        {
+            switch (order)
+            {
+                case ESpawnOrder.Near: return _nearSpawnTFArr[Random.Range(0, _nearSpawnTFArr.Length)];
+                case ESpawnOrder.Middle: return _midSpawnTFArr[Random.Range(0, _midSpawnTFArr.Length)];
+                case ESpawnOrder.Far: return _farSpawnTFArr[Random.Range(0, _farSpawnTFArr.Length)];
+                default:
+                    var typeCount = Enum.GetValues(typeof(ESpawnOrder)).Length;
+                    return GetSpawnTF((ESpawnOrder)(Random.Range(0, typeCount)));
             }
         }
     }

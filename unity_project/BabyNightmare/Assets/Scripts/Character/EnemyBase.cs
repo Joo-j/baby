@@ -75,6 +75,8 @@ namespace BabyNightmare.Character
         private IEnumerator Co_IntervalMove()
         {
             var player = _context.Player;
+            var targetPos = player.TF.position;
+            targetPos.z = transform.position.z;
             var moveStepDuration = _context.EnemyData.Move_Step_Duration;
             var moveStepSpeed = _context.EnemyData.Move_Step_Speed;
             var stopStepDuration = _context.EnemyData.Stop_Step_Duration;
@@ -83,23 +85,23 @@ namespace BabyNightmare.Character
             while (true)
             {
                 var elapsed = 0f;
-                var startPos = transform.position;
-                var dir = (player.TF.position - startPos).normalized;
+                var startPos_interval = transform.position;
+                var dir = (player.TF.position - startPos_interval).normalized;
 
                 var stepDist = moveStepSpeed * moveStepDuration;
-                var targetPos = startPos + dir * stepDist;
+                var targetPos_interval = startPos_interval + dir * stepDist;
 
-                var totalDist = Vector3.Distance(startPos, player.TF.position);
+                var totalDist = Vector3.Distance(startPos_interval, player.TF.position);
                 if (totalDist - attackRadius < stepDist)// 공격 범위 바깥에서 멈추도록 보정
                 {
-                    targetPos = player.TF.position - dir * attackRadius;
+                    targetPos_interval = player.TF.position - dir * attackRadius;
                 }
 
                 while (elapsed < moveStepDuration)
                 {
                     elapsed += Time.deltaTime;
                     var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
-                    transform.position = Vector3.Lerp(startPos, targetPos, factor);
+                    transform.position = Vector3.Lerp(startPos_interval, targetPos_interval, factor);
 
                     if (Vector3.Distance(transform.position, player.TF.position) <= player.HitRadius)
                     {

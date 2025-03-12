@@ -121,6 +121,7 @@ MonoBehaviour:
     Attack_Radius: 2
     Coin_Min: 1
     Coin_Max: 10
+    SpawnOrder: 3
   - ID: 102
     Name: Mike
     Damage: 3
@@ -132,6 +133,7 @@ MonoBehaviour:
     Attack_Radius: 2
     Coin_Min: 1
     Coin_Max: 10
+    SpawnOrder: 2
   - ID: 103
     Name: Roz
     Damage: 10
@@ -143,6 +145,7 @@ MonoBehaviour:
     Attack_Radius: 5
     Coin_Min: 1
     Coin_Max: 10
+    SpawnOrder: 1
   EnemySpawnDataList:
   - ID: 1
     Group: 101

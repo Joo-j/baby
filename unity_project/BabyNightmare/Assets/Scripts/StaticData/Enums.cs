@@ -23,7 +23,14 @@ namespace BabyNightmare.StaticData
         Unknown,
         Home,
         Shop,
-        Talent,
-        
+        Talent,        
+    }
+
+     public enum ESpawnOrder
+    {
+        Near = 1,
+        Middle = 2,
+        Far = 3,
+        Random = 4,
     }
 }

@@ -19,5 +19,6 @@ namespace BabyNightmare.StaticData
         public float Attack_Radius;
         public int Coin_Min = 1;
         public int Coin_Max = 10;
+        public ESpawnOrder SpawnOrder;
     }
 }

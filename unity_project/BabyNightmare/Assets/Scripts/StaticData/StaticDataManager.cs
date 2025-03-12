@@ -60,8 +60,6 @@ namespace BabyNightmare.StaticData
             for (var i = 0; i < equipmentDataList.Count; i++)
             {
                 var data = equipmentDataList[i];
-                Debug.Log($"@@ {data.Name} {data.Shape.IndexList.Count}");
-
                 _equipmentDataDict.Add(data.ID, data);
             }
         }
