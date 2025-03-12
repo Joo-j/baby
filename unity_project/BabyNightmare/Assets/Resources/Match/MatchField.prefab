@@ -66,9 +66,9 @@ Transform:
   - {fileID: 2590364646155567106}
   - {fileID: 3304458552533586177}
   - {fileID: 3482762111341115687}
-  - {fileID: 65903232235624344}
-  - {fileID: 7242586836904560533}
   - {fileID: 6406890658820892839}
+  - {fileID: 7242586836904560533}
+  - {fileID: 65903232235624344}
   - {fileID: 8339263573230450734}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -86,9 +86,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderCamera: {fileID: 7967595075365947049}
   _playerTF: {fileID: 3482762111341115687}
-  _nearSpawnTF: {fileID: 65903232235624344}
+  _nearSpawnTF: {fileID: 6406890658820892839}
   _midSpawnTF: {fileID: 7242586836904560533}
-  _farSpawnTF: {fileID: 6406890658820892839}
+  _farSpawnTF: {fileID: 65903232235624344}
   _boxTF: {fileID: 8339263573230450734}
   _attackRadius: 10
 --- !u!1 &2173026360070404481
@@ -494,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6406890658820892839}
   m_Layer: 0
-  m_Name: FarSpawnTF
+  m_Name: NearSpawnTF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -529,7 +529,7 @@ GameObject:
   m_Component:
   - component: {fileID: 65903232235624344}
   m_Layer: 0
-  m_Name: NearSpawnTF
+  m_Name: FarSpawnTF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
