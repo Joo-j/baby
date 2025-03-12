@@ -453,7 +453,7 @@ namespace BabyNightmare.InventorySystem
 
             var data = equipment.Data;
             var indexList = data.Shape.IndexList;
-            Debug.Assert(indexList.Count != 0, "index count is zero");
+            Debug.Assert(indexList.Count != 0, $"{data.Name} index count is zero");
 
             var halfSize = _cellSize * 0.5f;
             var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
@@ -461,16 +461,11 @@ namespace BabyNightmare.InventorySystem
 
             for (var i = 0; i < indexList.Count; i++)
             {
-                Debug.Log($"{name} {i} index");
-
                 var index = indexList[i];
                 var newIndex = targetIndex + index;
 
                 if (false == _shape.IsValid(newIndex))
-                {
-                    Debug.Log($"{name} {newIndex} is not valid");
                     continue;
-                }
 
                 var cellIndex = newIndex.y * _shape.Column + (_shape.Column - 1 - newIndex.x);
                 var cell = _cellArr[cellIndex];
