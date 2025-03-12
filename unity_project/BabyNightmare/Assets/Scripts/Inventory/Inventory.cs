@@ -421,6 +421,8 @@ namespace BabyNightmare.InventorySystem
 
             _draggedEquipment.AnchoredPos = anchoredPos;
             _currentInventory.RefreshCell(_draggedEquipment, eventData.position);
+
+            Debug.Log($"{_currentInventory.name}");
         }
 
         private void InvokeEndDrag(PointerEventData eventData)
@@ -486,6 +488,8 @@ namespace BabyNightmare.InventorySystem
                 {
                     cell.sprite = _cellEnable;
                 }
+
+                Debug.Log($"{newIndex} {cell.sprite.name}");
             }
         }
 
