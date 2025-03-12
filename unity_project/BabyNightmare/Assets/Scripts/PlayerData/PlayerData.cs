@@ -15,6 +15,7 @@ namespace BabyNightmare
         private const string KEY_COIN = "player_data_coin";
         private const string KEY_GEM = "player_data_gem";
 
+        public bool Haptic_Active;
         public int Stage = 1;
         public float HP = 100;
         private int _coin = 10;
