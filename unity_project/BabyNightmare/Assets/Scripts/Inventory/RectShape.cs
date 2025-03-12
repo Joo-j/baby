@@ -1,7 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace BabyNightmare.InventorySystem
+namespace BabyNightmare.Util
 {
     [Serializable]
     public class RectShape
@@ -10,8 +11,33 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private int _row;
         [SerializeField] private bool[] _shape;
 
+        private List<Vector2Int> _indexList = null;
         public int Column => _column;
         public int Row => _row;
+
+        public List<Vector2Int> IndexList
+        {
+            get
+            {
+                if (null == _indexList)
+                {
+                    _indexList = new List<Vector2Int>();
+                    for (var x = 0; x < _column; x++)
+                    {
+                        for (var y = 0; y < _row; y++)
+                        {
+                            var index = new Vector2Int(x, y);
+                            if (false == IsValid(index))
+                                continue;
+
+                            _indexList.Add(index);
+                        }
+                    }
+                }
+
+                return _indexList;
+            }
+        }
 
         public bool IsValid(Vector2Int index)
         {

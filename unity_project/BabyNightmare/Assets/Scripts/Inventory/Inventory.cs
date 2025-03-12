@@ -87,7 +87,7 @@ namespace BabyNightmare.InventorySystem
         private bool TryEquip(Equipment equipment, Vector2Int targetIndex)
         {
             var data = equipment.Data;
-            var indexList = data.IndexList;
+            var indexList = data.Shape.IndexList;
             for (var i = 0; i < indexList.Count; i++)
             {
                 var index = indexList[i];
@@ -100,12 +100,12 @@ namespace BabyNightmare.InventorySystem
             }
 
             HashSet<Equipment> oeSet = new HashSet<Equipment>();
-            for (var x = 0; x < data.Column; x++)
+            for (var x = 0; x < data.Shape.Column; x++)
             {
-                for (var y = 0; y < data.Row; y++)
+                for (var y = 0; y < data.Shape.Row; y++)
                 {
                     var index = new Vector2Int(x, y);
-                    if (false == data.IsValid(index))
+                    if (false == data.Shape.IsValid(index))
                         continue;
 
                     var newIndex = targetIndex + index;
@@ -241,9 +241,9 @@ namespace BabyNightmare.InventorySystem
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
-                for (var i = 0; i < data.Column; i++)
+                for (var i = 0; i < data.Shape.Column; i++)
                 {
-                    for (var j = 0; j < data.Row; j++)
+                    for (var j = 0; j < data.Shape.Row; j++)
                     {
                         var newIndex = equipment.Index + new Vector2Int(i, j);
                         if (targetIndex == newIndex)
@@ -257,7 +257,7 @@ namespace BabyNightmare.InventorySystem
 
         private bool IsOverlap(EquipmentData data, Vector2Int targetIndex)
         {
-            var indexList = data.IndexList;
+            var indexList = data.Shape.IndexList;
             for (var i = 0; i < indexList.Count; i++)
             {
                 var index = indexList[i];
@@ -279,7 +279,7 @@ namespace BabyNightmare.InventorySystem
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
-                var indexList = data.IndexList;
+                var indexList = data.Shape.IndexList;
                 for (var i = 0; i < indexList.Count; i++)
                 {
                     var index = indexList[i];
@@ -302,9 +302,9 @@ namespace BabyNightmare.InventorySystem
         {
             List<Vector2Int> enableIndexList = new List<Vector2Int>();
 
-            for (int x = 0; x <= _shape.Column - data.Column; x++)
+            for (int x = 0; x <= _shape.Column - data.Shape.Column; x++)
             {
-                for (int y = 0; y <= _shape.Row - data.Row; y++)
+                for (int y = 0; y <= _shape.Row - data.Shape.Row; y++)
                 {
                     var targetIndex = new Vector2Int(x, y);
                     if (false == _shape.IsValid(targetIndex))
@@ -339,7 +339,7 @@ namespace BabyNightmare.InventorySystem
 
         private Vector2 GetAnchoredPos(Vector2Int index, EquipmentData data)
         {
-            var offset = (new Vector2(data.Column, data.Row) - new Vector2(_shape.Column, _shape.Row)) * 0.5f;
+            var offset = (new Vector2(data.Shape.Column, data.Shape.Row) - new Vector2(_shape.Column, _shape.Row)) * 0.5f;
             return (index + offset) * _cellSize;
         }
 
@@ -421,8 +421,6 @@ namespace BabyNightmare.InventorySystem
 
             _draggedEquipment.AnchoredPos = anchoredPos;
             _currentInventory.RefreshCell(_draggedEquipment, eventData.position);
-
-            Debug.Log($"{_currentInventory.name}");
         }
 
         private void InvokeEndDrag(PointerEventData eventData)
@@ -432,7 +430,7 @@ namespace BabyNightmare.InventorySystem
 
             var data = _draggedEquipment.Data;
             var halfSize = _cellSize * 0.5f;
-            var offset = new Vector2((1 - data.Column) * halfSize.x, (1 - data.Row) * halfSize.y);
+            var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
 
             var screenPos = eventData.position;
             var index = GetIndex(screenPos + offset);
@@ -454,19 +452,25 @@ namespace BabyNightmare.InventorySystem
             ClearCell();
 
             var data = equipment.Data;
-            var indexList = data.IndexList;
+            var indexList = data.Shape.IndexList;
+            Debug.Assert(indexList.Count != 0, "index count is zero");
 
             var halfSize = _cellSize * 0.5f;
-            var offset = new Vector2((1 - data.Column) * halfSize.x, (1 - data.Row) * halfSize.y);
+            var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
             var targetIndex = GetIndex(screenPos + offset);
 
             for (var i = 0; i < indexList.Count; i++)
             {
+                Debug.Log($"{name} {i} index");
+
                 var index = indexList[i];
                 var newIndex = targetIndex + index;
 
                 if (false == _shape.IsValid(newIndex))
+                {
+                    Debug.Log($"{name} {newIndex} is not valid");
                     continue;
+                }
 
                 var cellIndex = newIndex.y * _shape.Column + (_shape.Column - 1 - newIndex.x);
                 var cell = _cellArr[cellIndex];
@@ -488,8 +492,6 @@ namespace BabyNightmare.InventorySystem
                 {
                     cell.sprite = _cellEnable;
                 }
-
-                Debug.Log($"{newIndex} {cell.sprite.name}");
             }
         }
 

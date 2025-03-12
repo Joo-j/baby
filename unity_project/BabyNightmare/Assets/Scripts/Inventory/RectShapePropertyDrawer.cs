@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace BabyNightmare.InventorySystem
+namespace BabyNightmare.Util
 {
     /// <summary>
     /// Custom Property Drawer for InventoryShape
