@@ -229,19 +229,19 @@ namespace BabyNightmare.Match
         {
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] += Mathf.FloorToInt(data.Heal / data.CoolTime);
+                _statDict[EStatType.HP] += Mathf.CeilToInt(data.Heal / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] += Mathf.FloorToInt(data.Damage / data.CoolTime);
+                _statDict[EStatType.ATK] += Mathf.CeilToInt(data.Damage / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] += Mathf.FloorToInt(data.Defence / data.CoolTime);
+                _statDict[EStatType.DEF] += Mathf.CeilToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
         }
@@ -251,19 +251,19 @@ namespace BabyNightmare.Match
 
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] -= Mathf.FloorToInt(data.Heal / data.CoolTime);
+                _statDict[EStatType.HP] -= Mathf.CeilToInt(data.Heal / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] -= Mathf.FloorToInt(data.Damage / data.CoolTime);
+                _statDict[EStatType.ATK] -= Mathf.CeilToInt(data.Damage / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] -= Mathf.FloorToInt(data.Defence / data.CoolTime);
+                _statDict[EStatType.DEF] -= Mathf.CeilToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
         }
