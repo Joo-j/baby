@@ -16,7 +16,9 @@ namespace BabyNightmare
         private const string KEY_GEM = "player_data_gem";
 
         public bool Haptic_Active;
-        public int Stage = 1;
+        public int Chapter = 1;
+        public int TotalAttemptCount;
+        public int ChapterAttemptCount;
         public float HP = 50;
         private int _coin = 10;
         private int _gem = 0;
@@ -68,7 +70,7 @@ namespace BabyNightmare
             if (null == jsonClass)
                 return;
 
-            Stage = jsonClass[KEY_STAGE]?.AsInt ?? 0;
+            Chapter = jsonClass[KEY_STAGE]?.AsInt ?? 0;
             HP = jsonClass[KEY_HP]?.AsInt ?? 0;
             _coin = jsonClass[KEY_COIN]?.AsInt ?? 0;
             _gem = jsonClass[KEY_GEM]?.AsInt ?? 0;
@@ -78,7 +80,7 @@ namespace BabyNightmare
         {
             var jsonClass = new JSONClass();
 
-            jsonClass[KEY_STAGE] = new JSONData(Stage);
+            jsonClass[KEY_STAGE] = new JSONData(Chapter);
             jsonClass[KEY_HP] = new JSONData(HP);
             jsonClass[KEY_COIN] = new JSONData(_coin);
             jsonClass[KEY_GEM] = new JSONData(_gem);

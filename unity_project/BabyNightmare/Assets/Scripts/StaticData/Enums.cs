@@ -23,16 +23,33 @@ namespace BabyNightmare.StaticData
         Unknown,
         Home,
         Shop,
-        Talent,        
+        Talent,
         Mission,
         CustomShop,
     }
 
-     public enum ESpawnOrder
+    public enum ESpawnOrder
     {
         Near = 1,
         Middle = 2,
         Far = 3,
         Random = 4,
+    }
+
+    public enum EConditionType
+    {
+        Unknown = 0,
+        TotalAttemptCount = 1,
+        Chapter = 2,
+        ChapterAttemptCount,
+    }
+
+    public enum EComparisonType
+    {
+        Greater = 1,
+        Less = 2,
+        Greater_Equal,
+        Less_Eqaul,
+        Equal
     }
 }

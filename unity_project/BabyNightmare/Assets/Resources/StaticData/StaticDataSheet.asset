@@ -12,6 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1074520cc557b4e5a840683acafa1145, type: 3}
   m_Name: StaticDataSheet
   m_EditorClassIdentifier: 
+  LobbyButtonDataList:
+  - ButtonType: 1
+    ComparisonType: 1
+    ConditionType: 1
+    ConditionValue: 0
+    Order: 1
+    ShowOpenAni: 0
+  - ButtonType: 2
+    ComparisonType: 1
+    ConditionType: 1
+    ConditionValue: 0
+    Order: 1
+    ShowOpenAni: 0
+  - ButtonType: 5
+    ComparisonType: 1
+    ConditionType: 2
+    ConditionValue: 4
+    Order: 1
+    ShowOpenAni: 0
+  - ButtonType: 4
+    ComparisonType: 1
+    ConditionType: 2
+    ConditionValue: 2
+    Order: 1
+    ShowOpenAni: 0
+  - ButtonType: 3
+    ComparisonType: 1
+    ConditionType: 2
+    ConditionValue: 3
+    Order: 1
+    ShowOpenAni: 0
   WaveDataList:
   - ID: 1
     Stage: 1

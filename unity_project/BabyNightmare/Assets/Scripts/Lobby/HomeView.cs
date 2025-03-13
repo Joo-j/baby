@@ -5,15 +5,18 @@ using UnityEngine.UI;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using TMPro;
 
 namespace BabyNightmare.Lobby
 {
-    public class HomeView : HomeView_Base
+    public class HomeView : MonoBehaviour
     {
         [SerializeField] private RectTransform _center;
+        [SerializeField] private TextMeshProUGUI _chapterTMP;
+        [SerializeField] private Image _chapterICN;
+        [SerializeField] private TextMeshProUGUI _fieldTMP;
 
         private Action _startGame = null;
-        private bool _activeStartButton = false;
         private bool _isStarted = false;
 
         public void Init(Action startGame)
@@ -23,32 +26,9 @@ namespace BabyNightmare.Lobby
 
         public void Refresh()
         {
-            _activeStartButton = false;
             _isStarted = false;
-            SetActiveStartButton(true);
-        }
-
-        private void OnEnable()
-        {
-            if (true == _activeStartButton)
-            {
-                SetActiveStartButton(true);
-            }
-        }
-
-        public void SetActiveStartButton(bool active)
-        {
-            if (true == active)
-            {
-                BTN_TapToStart.gameObject.SetActive(true);
-                _activeStartButton = true;
-            }
-            else
-            {
-                BTN_TapToStart.gameObject.SetActive(false);
-
-                _activeStartButton = false;
-            }
+            _chapterTMP.text = $"Chapter {PlayerData.Instance.Chapter}";
+            _fieldTMP.text = "Night of Dessert";
         }
 
         private GridLayoutGroup GetLayoutGroup(ELobbyButtonType type)
@@ -169,18 +149,15 @@ namespace BabyNightmare.Lobby
             button.ShowGuide(force);
         }
 
-        public override void OnButtonEvent(Button button)
+        public void OnClickPlay()
         {
-            if (button == BTN_TapToStart)
+            if (true == _isStarted)
             {
-                if (true == _isStarted)
-                {
-                    Debug.Log("HomeView Already Started!!");
-                    return;
-                }
-
-                _startGame?.Invoke();
+                Debug.Log("HomeView Already Started!!");
+                return;
             }
+
+            _startGame?.Invoke();
         }
     }
 }

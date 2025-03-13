@@ -34,7 +34,7 @@ namespace BabyNightmare.Match
 
         public void StartMatch()
         {
-            var stage = PlayerData.Instance.Stage;
+            var stage = PlayerData.Instance.Chapter;
             _waveDataList = StaticDataManager.Instance.GetWaveDataList(stage);
             if (null == _waveDataList)
             {
@@ -69,7 +69,7 @@ namespace BabyNightmare.Match
             var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
             completeView.Init(100, CloseMatch);
 
-            ++PlayerData.Instance.Stage;
+            ++PlayerData.Instance.Chapter;
             PlayerData.Instance.Save();
         }
 

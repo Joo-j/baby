@@ -9,6 +9,7 @@ namespace BabyNightmare.StaticData
         private const string PATH_STATIC_DATA_SHEET = "StaticData/StaticDataSheet";
         private StaticDataSheet _sheet = null;
 
+        private Dictionary<ELobbyButtonType, LobbyButtonData> _lobbyButtonDict = null;
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
         private Dictionary<int, List<EquipmentProbData>> _equipmentProbDataDict = null;
@@ -25,12 +26,28 @@ namespace BabyNightmare.StaticData
                 return;
             }
 
+            InitLobbyButtonData();
             InitWaveData();
             InitEquipmentData();
             InitEquipmentProbData();
             InitEquipmentBoxData();
             InitEnemyData();
             InitEnemySpawnData();
+        }
+
+        private void InitLobbyButtonData()
+        {
+            _lobbyButtonDict = new Dictionary<ELobbyButtonType, LobbyButtonData>();
+
+            var lobbyButtonDataList = _sheet.LobbyButtonDataList;
+
+            for (var i = 0; i < lobbyButtonDataList.Count; i++)
+            {
+                var buttonData = lobbyButtonDataList[i];
+
+                if (false == _lobbyButtonDict.ContainsKey(buttonData.ButtonType))
+                    _lobbyButtonDict.Add(buttonData.ButtonType, buttonData);
+            }
         }
 
         private void InitWaveData()
@@ -124,6 +141,13 @@ namespace BabyNightmare.StaticData
 
                 _enemySpawnDataDict[group].Add(data);
             }
+        }
+        public LobbyButtonData GetLobbyButtonData(ELobbyButtonType type)
+        {
+            if (false == _lobbyButtonDict.TryGetValue(type, out var data))
+                return null;
+
+            return data;
         }
 
         public List<WaveData> GetWaveDataList(int stage)

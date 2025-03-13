@@ -193,5 +193,7 @@ namespace BabyNightmare.Lobby
                 _buttonList[i].HideGuide();
             }
         }
+
+        public void ActiveInteract(bool on) => _canvasGroup.interactable = on;
     }
 }

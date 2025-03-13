@@ -177,12 +177,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8649741748338331954}
-        m_TargetAssemblyTypeName: LinkedCubic.Lobby.HomeView, Assembly-CSharp
-        m_MethodName: OnButtonEvent
-        m_Mode: 2
+        m_TargetAssemblyTypeName: BabyNightmare.Lobby.HomeView, Assembly-CSharp
+        m_MethodName: OnClickPlay
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1390838613800963963}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -206,18 +206,18 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -344,8 +344,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ee195d65f7248bbb09a8d2296b60a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BTN_TapToStart: {fileID: 1390838613800963963}
   _center: {fileID: 113446752189842133}
+  _chapterTMP: {fileID: 567660574951690811}
+  _chapterICN: {fileID: 8387071680068178893}
+  _fieldTMP: {fileID: 1909166424996996259}
 --- !u!225 &1734752574374774330
 CanvasGroup:
   m_ObjectHideFlags: 0
