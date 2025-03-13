@@ -56,6 +56,8 @@ namespace BabyNightmare.Match
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
                 doneCallback?.Invoke();
+
+                Destroy(gameObject);
             }
 
             void OnNothanks()
@@ -71,9 +73,9 @@ namespace BabyNightmare.Match
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
-
-
                 doneCallback?.Invoke();
+
+                Destroy(gameObject);
             }
 
             _coSequence = StartCoroutine(Co_ShowRewardInfo());
