@@ -94,7 +94,7 @@ namespace BabyNightmare.Match
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);
-                delay = UnityEngine.Random.Range(1.5f, 4f);
+                delay += UnityEngine.Random.Range(1.5f, 4f);
             }
         }
 
@@ -171,6 +171,7 @@ namespace BabyNightmare.Match
                 box.TF.SetParent(_boxOpenTF);
 
                 yield return SimpleLerp.Co_LerpPosition_Local(box.TF, box.TF.localPosition, Vector3.zero, _boxMoveCurve, 0.5f);
+                yield return CoroutineUtil.WaitForSeconds(0.5f);
 
                 box.Open(doneCallback);
             }
