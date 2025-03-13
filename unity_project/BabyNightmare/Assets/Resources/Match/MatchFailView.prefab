@@ -6192,11 +6192,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   _rouletteRotationArr:
-  - 30
-  - 15
+  - 33
+  - 16
   - 0
-  - -15
-  - -30
+  - -16
+  - -33
   _rouletteValueArr: 0200000003000000040000000300000002000000
   _rouletteSweepTime: 2
   _canvasGroup: {fileID: 4703493150217968770}

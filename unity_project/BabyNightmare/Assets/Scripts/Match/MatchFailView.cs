@@ -55,9 +55,12 @@ namespace BabyNightmare.Match
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
-                doneCallback?.Invoke();
-
-                Destroy(gameObject);
+                
+                StartCoroutine(SimpleLerp.Co_Invoke(2f, () =>
+                {
+                    doneCallback?.Invoke();
+                    Destroy(gameObject);
+                }));
             }
 
             void OnNothanks()
