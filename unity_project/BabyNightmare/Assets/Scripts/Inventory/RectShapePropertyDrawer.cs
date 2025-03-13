@@ -7,7 +7,7 @@ namespace BabyNightmare.Util
     /// Custom Property Drawer for InventoryShape
     /// </summary>
     [CustomPropertyDrawer(typeof(RectShape))]
-    public class EquipmentShapePropertyDrawer : PropertyDrawer
+    public class RectShapePropertyDrawer : PropertyDrawer
     {
         const int GridSize = 16; // The size between the boold-fields that make up the shape matrix
 
