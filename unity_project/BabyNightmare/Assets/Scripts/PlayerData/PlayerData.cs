@@ -10,7 +10,10 @@ namespace BabyNightmare
     public class PlayerData : SingletonBase<PlayerData>
     {
         private const string FILE_PLAYER_DATA = "player_data";
-        private const string KEY_STAGE = "player_data_stage";
+        private const string KEY_CHAPTER = "player_data_chapter";
+        private const string KEY_TOTAL_ATTEMPT_COUNT = "player_data_total_attempt_count";
+        private const string KEY_CHAPTER_ATTEMPT_COUNT = "player_data_chapter_attempt_count";
+
         private const string KEY_HP = "player_data_hp";
         private const string KEY_COIN = "player_data_coin";
         private const string KEY_GEM = "player_data_gem";
@@ -70,7 +73,10 @@ namespace BabyNightmare
             if (null == jsonClass)
                 return;
 
-            Chapter = jsonClass[KEY_STAGE]?.AsInt ?? 0;
+            Chapter = jsonClass[KEY_CHAPTER]?.AsInt ?? 0;
+            TotalAttemptCount = jsonClass[KEY_TOTAL_ATTEMPT_COUNT]?.AsInt ?? 0;
+            ChapterAttemptCount = jsonClass[KEY_CHAPTER_ATTEMPT_COUNT]?.AsInt ?? 0;
+
             HP = jsonClass[KEY_HP]?.AsInt ?? 0;
             _coin = jsonClass[KEY_COIN]?.AsInt ?? 0;
             _gem = jsonClass[KEY_GEM]?.AsInt ?? 0;
@@ -80,7 +86,9 @@ namespace BabyNightmare
         {
             var jsonClass = new JSONClass();
 
-            jsonClass[KEY_STAGE] = new JSONData(Chapter);
+            jsonClass[KEY_CHAPTER] = new JSONData(Chapter);
+            jsonClass[KEY_TOTAL_ATTEMPT_COUNT] = new JSONData(TotalAttemptCount);
+            jsonClass[KEY_CHAPTER_ATTEMPT_COUNT] = new JSONData(ChapterAttemptCount);
             jsonClass[KEY_HP] = new JSONData(HP);
             jsonClass[KEY_COIN] = new JSONData(_coin);
             jsonClass[KEY_GEM] = new JSONData(_gem);
