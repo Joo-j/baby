@@ -67,7 +67,7 @@ namespace BabyNightmare.Match
 
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
         private MatchViewContext _context = null;
-        private Dictionary<EStatType, float> _statDict = null;
+        private Dictionary<EStatType, int> _statDict = null;
         private Action _onGetBox = null;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
@@ -75,10 +75,10 @@ namespace BabyNightmare.Match
         public void Init(MatchViewContext context)
         {
             _context = context;
-            _statDict = new Dictionary<EStatType, float>();
+            _statDict = new Dictionary<EStatType, int>();
 
             foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
-                _statDict.Add(type, 0f);
+                _statDict.Add(type, 0);
 
             RefreshStat();
 
@@ -229,19 +229,19 @@ namespace BabyNightmare.Match
         {
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] += data.Heal;
+                _statDict[EStatType.HP] += Mathf.FloorToInt(data.Heal / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] += data.Damage;
+                _statDict[EStatType.ATK] += Mathf.FloorToInt(data.Damage / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] += data.Defence;
+                _statDict[EStatType.DEF] += Mathf.FloorToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
         }
@@ -251,19 +251,19 @@ namespace BabyNightmare.Match
 
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] -= data.Heal;
+                _statDict[EStatType.HP] -= Mathf.FloorToInt(data.Heal / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] -= data.Damage;
+                _statDict[EStatType.ATK] -= Mathf.FloorToInt(data.Damage / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] -= data.Defence;
+                _statDict[EStatType.DEF] -= Mathf.FloorToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
         }
