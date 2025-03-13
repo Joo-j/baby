@@ -144,7 +144,11 @@ namespace BabyNightmare.Character
 
         public override void Die()
         {
+            if (true == _isDead)
+                return;
+
             _context.OnDie?.Invoke();
+            _isDead = true;
         }
 
         public int GetRandomCoin()

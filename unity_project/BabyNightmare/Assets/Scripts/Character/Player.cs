@@ -76,7 +76,11 @@ namespace BabyNightmare.Character
 
         public override void Die()
         {
+            if (true == _isDead)
+                return;
+
             _context.OnDiePlayer?.Invoke();
+            _isDead = true;
         }
 
         public override void ReceiveAttack(float damage)

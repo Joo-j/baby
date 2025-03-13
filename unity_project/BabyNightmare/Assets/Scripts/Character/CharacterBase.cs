@@ -42,6 +42,7 @@ namespace BabyNightmare.Character
         private Coroutine _coFlash = null;
         private Color _originColor;
         private float _reserveDamage = 0f;
+        protected bool _isDead = false;
 
         public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
