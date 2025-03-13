@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
+using System.Collections;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 
@@ -26,6 +27,11 @@ namespace BabyNightmare.InventorySystem
         {
             _rtf = GetComponent<RectTransform>();
             _canvasRTF = GetComponentInParent<Canvas>().transform as RectTransform;
+        }
+
+        protected virtual void OnEnable()
+        {
+            StartCoroutine(Co_DetectEquipment());
         }
 
         public void TryAdd(EquipmentData data)
@@ -100,6 +106,30 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             InventoryUtil.ShowInfoPopup(equipment.Data);
+        }
+
+        private IEnumerator Co_DetectEquipment()
+        {
+            while (true)
+            {
+                yield return null;
+
+                if (null == _dragEventData)
+                    continue;
+
+                if (null == _draggedEquipment)
+                    continue;
+
+                var equipment = Get(_dragEventData.position);
+                if (null == equipment)
+                    continue;
+
+                var upgradeData = _getUpgradeData?.Invoke(_draggedEquipment.Data, equipment.Data);
+                if (null != upgradeData)
+                {
+                    equipment.Swing();
+                }
+            }
         }
     }
 }

@@ -27,6 +27,9 @@ namespace BabyNightmare.Util
                         for (var y = 0; y < _row; y++)
                         {
                             var index = new Vector2Int(x, y);
+
+                            Debug.Log(index);
+
                             if (false == IsValid(index))
                                 continue;
 

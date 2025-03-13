@@ -65,8 +65,9 @@ namespace BabyNightmare.InventorySystem
             _equipmentSet = new HashSet<Equipment>();
         }
 
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             StartCoroutine(Co_RefreshCell());
         }
 
@@ -83,10 +84,7 @@ namespace BabyNightmare.InventorySystem
                 var index = indexList[i];
                 var newIndex = targetIndex + index;
                 if (false == _shape.IsValid(newIndex))
-                {
-                    Debug.Log($"{newIndex}가 유효하지 않습니다.");
                     return false;
-                }
             }
 
             HashSet<Equipment> oeSet = new HashSet<Equipment>();
@@ -180,10 +178,7 @@ namespace BabyNightmare.InventorySystem
         {
             var equipment = Get(targetIndex);
             if (null == equipment)
-            {
-                Debug.Log($"{targetIndex}에서 장비를 찾지 못함");
                 return null;
-            }
 
             if (false == _equipmentSet.Contains(equipment))
                 return null;
@@ -219,10 +214,7 @@ namespace BabyNightmare.InventorySystem
             var index = GetIndex(screenPos);
             var equipment = Get(index);
             if (null == equipment)
-            {
-                Debug.Log($"{index}에서 장비를 찾지 못함");
                 return null;
-            }
 
             return equipment;
         }

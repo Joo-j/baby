@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using UnityEngine.EventSystems;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -13,13 +14,16 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Image _image;
         [SerializeField] private Image _coolImage;
         [SerializeField] private AnimationCurve _moveCurve;
+        [SerializeField] private AnimationCurve _swingCurve;
 
         private Coroutine _coCoolDown = null;
+        private Coroutine _coSwing = null;
 
         public EquipmentData Data { get; private set; }
         public Action Reset { get; set; }
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
+
 
         public void Refresh(EquipmentData data, bool showFX)
         {
@@ -43,9 +47,20 @@ namespace BabyNightmare.InventorySystem
             StartCoroutine(SimpleLerp.Co_LerpAnchoredPosition(_rtf, startPos, targetPos, _moveCurve, 0.1f, callback));
         }
 
-        public void SignalShake()
+        public void Swing()
         {
+            if (null != _coSwing)
+                return;
 
+            _coSwing = StartCoroutine(Co_Swing());
+        }
+
+        private IEnumerator Co_Swing()
+        {
+            yield return SimpleLerp.Co_BounceRotation(transform, Quaternion.Euler(0, 0, -25), 0.1f, _swingCurve);
+            yield return SimpleLerp.Co_BounceRotation(transform, Quaternion.Euler(0, 0, 25), 0.1f, _swingCurve);
+
+            _coSwing = null;
         }
 
         public void StartCoolDown(float coolTime, Action onCoolDown)

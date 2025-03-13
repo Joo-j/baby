@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BabyNightmare.Util;
@@ -23,7 +24,7 @@ namespace BabyNightmare.InventorySystem
             var getEquipment = Get(screenPos);
             if (null != getEquipment)
             {
-                var upgradeData = _getUpgradeData.Invoke(getEquipment.Data, equipment.Data);
+                var upgradeData = _getUpgradeData?.Invoke(getEquipment.Data, equipment.Data);
                 if (null != upgradeData)
                 {
                     Remove(getEquipment);
@@ -94,7 +95,7 @@ namespace BabyNightmare.InventorySystem
             {
                 var equipment = _equipmentList[i];
                 var equipmentPos = equipment.RTF.anchoredPosition;
-                var clickSize = equipment.RTF.sizeDelta;
+                var clickSize = equipment.RTF.sizeDelta * 0.5f;
                 var dist = Vector2.Distance(equipmentPos, anchoredPos);
 
                 if (dist < clickSize.x || dist < clickSize.y)
@@ -135,6 +136,5 @@ namespace BabyNightmare.InventorySystem
                     x += _spacing;
             }
         }
-
     }
 }

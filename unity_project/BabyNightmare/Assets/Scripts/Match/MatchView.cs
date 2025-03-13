@@ -84,8 +84,8 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
+            _loot.Init(context.GetUpgradeData);
             _bag.Init(_loot, OnEquip, OnUnequip, context.GetUpgradeData);
-
             _bag.TryAdd(_context.InitEquipment);
 
             _rerollGO.SetActive(false);
