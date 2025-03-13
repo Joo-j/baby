@@ -202,6 +202,23 @@ namespace BabyNightmare.Util
             doneCallback?.Invoke();
         }
 
+        public static IEnumerator Co_LerpPosition_Local(Transform tf, Vector3 startPos, Vector3 targetPos, AnimationCurve curve, float duration, Action doneCallback = null)
+        {
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                yield return null;
+                elapsed += Time.deltaTime;
+
+                var factor = curve.Evaluate(elapsed / duration);
+                tf.localPosition = Vector3.Lerp(startPos, targetPos, factor);
+            }
+
+            tf.localPosition = targetPos;
+            doneCallback?.Invoke();
+        }
+
+
         public static IEnumerator Co_LerpAnchoredPosition_Loop(RectTransform rtf, Vector2 startPos, Vector2 targetPos, AnimationCurve curve, float duration)
         {
             while (true)

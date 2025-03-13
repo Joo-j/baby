@@ -6,17 +6,22 @@ using Supercent.Util;
 using BabyNightmare.Character;
 using BabyNightmare.StaticData;
 using Random = UnityEngine.Random;
+using BabyNightmare.Util;
 
 namespace BabyNightmare.Match
 {
     public class MatchField : MonoBehaviour
     {
         [SerializeField] private Camera _renderCamera;
+        [SerializeField] private Transform _groundTF;
         [SerializeField] private Transform _playerTF;
         [SerializeField] private Transform _nearSpawnTF;
         [SerializeField] private Transform _midSpawnTF;
         [SerializeField] private Transform _farSpawnTF;
-        [SerializeField] private Transform _boxTF;
+        [SerializeField] private Transform _boxSpawnTF;
+        [SerializeField] private Transform _boxOpenTF;
+        [SerializeField] private AnimationCurve _boxMoveCurve;
+        [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _attackRadius = 10f;
 
         private const string PATH_PLAYER = "Match/Player";
@@ -143,15 +148,34 @@ namespace BabyNightmare.Match
             {
                 yield return CoroutineUtil.WaitForSeconds(1.5f);
 
-                var waiter = new CoroutineWaiter();
-                _player.Move(3f, waiter.Signal);
-                yield return waiter.Wait();
+                _player.ShowMoveAni();
+
+                var startPos = _groundTF.localPosition;
+                var targetPos = startPos + Vector3.left * _groundMoveAmount;
+                var moveDuration = 3f;
+                var elapsed = 0f;
+                while (elapsed < moveDuration)
+                {
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                    var factor = elapsed / moveDuration;
+                    _groundTF.localPosition = Vector3.Lerp(startPos, targetPos, factor);
+                }
+
+                _groundTF.localPosition = targetPos;
+                _player.ShowIdleAni();
 
                 var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
-                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxTF);
+                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxSpawnTF);
+
+                box.TF.SetParent(_boxOpenTF);
+
+                yield return SimpleLerp.Co_LerpPosition_Local(box.TF, box.TF.localPosition, Vector3.zero, _boxMoveCurve, 0.5f);
+
                 box.Open(doneCallback);
             }
         }
+
         private Transform GetSpawnTF(ESpawnOrder order)
         {
             switch (order)

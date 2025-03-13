@@ -24,6 +24,8 @@ namespace BabyNightmare.StaticData
         Home,
         Shop,
         Talent,        
+        Mission,
+        CustomShop,
     }
 
      public enum ESpawnOrder

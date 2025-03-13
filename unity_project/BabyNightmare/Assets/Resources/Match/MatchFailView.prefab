@@ -6189,7 +6189,7 @@ MonoBehaviour:
   - -14.5
   - -29
   _rouletteValueArr: 0200000003000000040000000300000002000000
-  _rouletteSweepTime: 3
+  _rouletteSweepTime: 1
   _canvasGroup: {fileID: 4703493150217968770}
   _animator: {fileID: 1145229248193400646}
 --- !u!1 &2348419568350914052

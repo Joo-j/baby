@@ -97,7 +97,7 @@ namespace BabyNightmare.InventorySystem
                         continue;
 
                     var newIndex = targetIndex + index;
-                    if (true == IsOverlap(newIndex, out var overlapEquipment))
+                    if (true == TryGetOverlap(newIndex, out var overlapEquipment))
                     {
                         oeSet.Add(overlapEquipment);
                     }
@@ -247,16 +247,16 @@ namespace BabyNightmare.InventorySystem
                 if (false == _shape.IsValid(newIndex))
                     continue;
 
-                if (true == IsOverlap(newIndex, out var overlappedEquipment))
+                if (true == TryGetOverlap(newIndex, out var overlappedEquipment))
                     return true;
             }
 
             return false;
         }
 
-        private bool IsOverlap(Vector2 targetIndex, out Equipment overlappedEquipment)
+        private bool TryGetOverlap(Vector2 targetIndex, out Equipment overlapped)
         {
-            overlappedEquipment = null;
+            overlapped = null;
 
             foreach (var equipment in _equipmentSet)
             {
@@ -271,7 +271,7 @@ namespace BabyNightmare.InventorySystem
 
                     if (targetIndex == newIndex)
                     {
-                        overlappedEquipment = equipment;
+                        overlapped = equipment;
                         return true;
                     }
                 }
@@ -345,6 +345,7 @@ namespace BabyNightmare.InventorySystem
 
                 var data = _draggedEquipment.Data;
                 var indexList = data.Shape.IndexList;
+                Debug.Assert(indexList.Count != 0, "index count is 0");
 
                 var halfSize = _cellSize * 0.5f;
                 var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
@@ -361,7 +362,7 @@ namespace BabyNightmare.InventorySystem
                     var cellIndex = newIndex.y * _shape.Column + (_shape.Column - 1 - newIndex.x);
                     var cell = _cellArr[cellIndex];
 
-                    var isOverlapped = IsOverlap(newIndex, out var overlappedEquipment);
+                    var isOverlapped = TryGetOverlap(newIndex, out var overlappedEquipment);
                     if (true == isOverlapped)
                     {
                         var upgradeData = _getUpgradeData.Invoke(_draggedEquipment.Data, overlappedEquipment.Data);

@@ -64,15 +64,14 @@ namespace BabyNightmare.Character
             _projectilePool = new Pool<Projectile>(() => Instantiate(_projectileRes));
         }
 
-        public void Move(float duration, Action doneCallback)
+        public void ShowMoveAni()
         {
             _animator.Play(HASH_ANI_MOVE);
+        }
 
-            this.Invoke(CoroutineUtil.WaitForSeconds(duration), () =>
-            {
-                _animator.Play(HASH_ANI_IDLE);
-                doneCallback?.Invoke();
-            });
+        public void ShowIdleAni()
+        {
+            _animator.Play(HASH_ANI_IDLE);
         }
 
         public override void Die()

@@ -12,6 +12,8 @@ namespace BabyNightmare.Match
         private const string HASH_ANI_OPEN = "Box_Open";
         private bool _isOpened = false;
 
+        public Transform TF => transform;
+
         public void Open(Action doneCallback)
         {
             if (true == _isOpened)
