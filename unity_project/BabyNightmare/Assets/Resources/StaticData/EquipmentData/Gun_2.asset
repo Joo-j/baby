@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1104
   Name: Gun
+  Desc: attack random enemy
   Level: 1
   Damage: 9
   Heal: 0

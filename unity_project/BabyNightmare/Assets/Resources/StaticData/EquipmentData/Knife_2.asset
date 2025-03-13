@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1101
   Name: LV2 Knife
+  Desc: attack random enemy
   Level: 2
   Damage: 7
   Heal: 0

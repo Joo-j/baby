@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 1206
   Name: Spear
+  Desc: attack random enemy
   Level: 2
   Damage: 30
   Heal: 0
@@ -24,4 +25,4 @@ MonoBehaviour:
   Shape:
     _column: 1
     _row: 3
-    _shape: 010101
+    _shape: 0101
