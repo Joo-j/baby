@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: GreenVial_2
   m_EditorClassIdentifier: 
   ID: 1103
-  Name: GreenVial
+  Name: GreenVial Lv2
   Desc: heal self
-  Level: 1
+  Level: 2
   Damage: 0
-  Heal: 3
+  Heal: 2
   Defence: 0
-  CoolTime: 2.5
+  CoolTime: 2.4
   UpgradeDataID: 0
   Sprite: {fileID: 21300018, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:

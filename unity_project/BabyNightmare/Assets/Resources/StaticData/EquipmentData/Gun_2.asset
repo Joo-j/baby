@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Gun_2
   m_EditorClassIdentifier: 
   ID: 1104
-  Name: Gun
+  Name: Gun Lv2
   Desc: attack random enemy
-  Level: 1
-  Damage: 9
+  Level: 2
+  Damage: 6
   Heal: 0
   Defence: 0
   CoolTime: 1.5

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Gadget_2
   m_EditorClassIdentifier: 
   ID: 1102
-  Name: Gadet
+  Name: Gadet Lv2
   Desc: attack random enemy
-  Level: 1
-  Damage: 10
+  Level: 2
+  Damage: 6
   Heal: 0
   Defence: 0
-  CoolTime: 2
+  CoolTime: 3
   UpgradeDataID: 1201
   Sprite: {fileID: 21300008, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:

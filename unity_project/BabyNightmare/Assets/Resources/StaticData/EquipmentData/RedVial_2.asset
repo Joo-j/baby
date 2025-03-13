@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: RedVial_2
   m_EditorClassIdentifier: 
   ID: 1105
-  Name: RedVial
+  Name: RedVial Lv2
   Desc: heal self
-  Level: 1
+  Level: 2
   Damage: 0
-  Heal: 5
+  Heal: 3.5
   Defence: 0
   CoolTime: 2.5
   UpgradeDataID: 1205

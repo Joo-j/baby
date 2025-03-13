@@ -13,16 +13,16 @@ MonoBehaviour:
   m_Name: Spear_3
   m_EditorClassIdentifier: 
   ID: 1206
-  Name: Spear
+  Name: Spear Lv3
   Desc: attack random enemy
-  Level: 2
-  Damage: 30
+  Level: 3
+  Damage: 25
   Heal: 0
   Defence: 0
-  CoolTime: 4
+  CoolTime: 3.8
   UpgradeDataID: -1
   Sprite: {fileID: 21300004, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
     _column: 1
     _row: 3
-    _shape: 0101
+    _shape: 010101

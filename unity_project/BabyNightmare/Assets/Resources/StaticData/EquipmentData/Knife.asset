@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Knife
   m_EditorClassIdentifier: 
   ID: 1001
-  Name: Knife
+  Name: Knife Lv1
   Desc: attack random enemy
   Level: 1
   Damage: 3

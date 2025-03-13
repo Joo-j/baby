@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Gun_3
   m_EditorClassIdentifier: 
   ID: 1204
-  Name: Gun
+  Name: Gun Lv3
   Desc: attack random enemy
-  Level: 1
-  Damage: 9
+  Level: 3
+  Damage: 7
   Heal: 0
   Defence: 0
-  CoolTime: 1.5
+  CoolTime: 1.4
   UpgradeDataID: -1
   Sprite: {fileID: 21300000, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
