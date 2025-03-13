@@ -6164,32 +6164,41 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1
-      outSlope: 1
+      inSlope: 2
+      outSlope: 2
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
+      value: 0
+      inSlope: -2
+      outSlope: -2
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _rouletteRotationArr:
-  - 29
-  - 14.5
+  - 30
+  - 15
   - 0
-  - -14.5
-  - -29
+  - -15
+  - -30
   _rouletteValueArr: 0200000003000000040000000300000002000000
-  _rouletteSweepTime: 1
+  _rouletteSweepTime: 2
   _canvasGroup: {fileID: 4703493150217968770}
   _animator: {fileID: 1145229248193400646}
 --- !u!1 &2348419568350914052
