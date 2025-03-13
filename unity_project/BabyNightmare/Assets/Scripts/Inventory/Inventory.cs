@@ -67,7 +67,7 @@ namespace BabyNightmare.InventorySystem
 
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRTF, eventData.position, null, out var anchoredPos);
 
-            _draggedEquipment.AnchoredPos = anchoredPos;
+            _draggedEquipment.RTF.anchoredPosition = anchoredPos;
         }
 
         public void OnEndDrag(PointerEventData eventData)

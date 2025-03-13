@@ -10,6 +10,7 @@ namespace BabyNightmare.InventorySystem
     {
         [SerializeField] private float _spacing;
         [SerializeField] private AnimationCurve _moveCurve;
+
         private List<Equipment> _equipmentList = new List<Equipment>();
 
         public void Init(Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
@@ -19,6 +20,24 @@ namespace BabyNightmare.InventorySystem
 
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
+            var getEquipment = Get(screenPos);
+            if (null != getEquipment)
+            {
+                var upgradeData = _getUpgradeData.Invoke(getEquipment.Data, equipment.Data);
+                if (null != upgradeData)
+                {
+                    Remove(getEquipment);
+                    Equip(equipment);
+                    equipment.Refresh(upgradeData, true);
+                }
+                else
+                {
+                    Equip(equipment);
+                }
+
+                return true;
+            }
+
             Equip(equipment);
             return true;
         }
@@ -41,6 +60,20 @@ namespace BabyNightmare.InventorySystem
             Refresh();
 
             return equipment;
+        }
+
+        private void Remove(Equipment equipment)
+        {
+            if (null == equipment)
+                return;
+
+            if (false == _equipmentList.Contains(equipment))
+                return;
+
+            _equipmentList.Remove(equipment);
+            Destroy(equipment.gameObject);
+
+            Refresh();
         }
 
         public void RemoveAll()
@@ -73,7 +106,10 @@ namespace BabyNightmare.InventorySystem
 
         private void Refresh()
         {
-            if (_equipmentList.Count == 0) return;
+            if (_equipmentList.Count == 0)
+                return;
+
+            StopAllCoroutines();
 
             // 전체 너비 계산 (각 장비의 너비 + 간격 포함)
             float totalWidth = _spacing * (_equipmentList.Count - 1);

@@ -148,7 +148,7 @@ namespace BabyNightmare.InventorySystem
         {
             equipment.transform.SetParent(transform);
             equipment.Index = index;
-            equipment.AnchoredPos = GetAnchoredPos(index, equipment.Data);
+            equipment.RTF.anchoredPosition = GetAnchoredPos(index, equipment.Data);
             _equipmentSet.Add(equipment);
             _onEquip?.Invoke(equipment.Data);
         }
@@ -353,7 +353,6 @@ namespace BabyNightmare.InventorySystem
 
                 var data = _draggedEquipment.Data;
                 var indexList = data.Shape.IndexList;
-                Debug.Assert(indexList.Count != 0, $"{data.Name} index count is zero");
 
                 var halfSize = _cellSize * 0.5f;
                 var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
