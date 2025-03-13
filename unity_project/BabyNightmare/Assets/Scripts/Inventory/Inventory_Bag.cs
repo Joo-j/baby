@@ -345,7 +345,6 @@ namespace BabyNightmare.InventorySystem
 
                 var data = _draggedEquipment.Data;
                 var indexList = data.Shape.IndexList;
-                Debug.Assert(indexList.Count != 0, "index count is 0");
 
                 var halfSize = _cellSize * 0.5f;
                 var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);

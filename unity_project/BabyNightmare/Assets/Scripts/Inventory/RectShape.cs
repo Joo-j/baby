@@ -37,6 +37,8 @@ namespace BabyNightmare.Util
                         }
                     }
                 }
+                
+                Debug.Assert(_indexList.Count != 0, "index count is 0");
 
                 return _indexList;
             }
@@ -48,9 +50,6 @@ namespace BabyNightmare.Util
                 return false;
 
             var arrIndex = GetArrIndex(index.x, index.y);
-            if (arrIndex < 0 || arrIndex >= _shape.Length)
-                return false;
-
             return _shape[arrIndex];
         }
 
