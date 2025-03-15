@@ -6,9 +6,11 @@ namespace BabyNightmare
 {
     public class GameLifeCycle : MonoBehaviour
     {
+        private static GameLifeCycle _singleton = null;
+
         private void Awake()
         {
-
+            _singleton = this;
         }
 
         private void OnEnable()
@@ -46,6 +48,16 @@ namespace BabyNightmare
         private void OnDestroy()
         {
 
+        }
+
+        public static Coroutine Start_Coroutine(IEnumerator coroutine)
+        {
+            return _singleton.StartCoroutine(coroutine);
+        }
+
+        public static void Stop_Coroutine(IEnumerator coroutine)
+        {
+            _singleton.StopCoroutine(coroutine);
         }
     }
 }

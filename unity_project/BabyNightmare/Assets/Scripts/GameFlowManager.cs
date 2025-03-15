@@ -19,6 +19,7 @@ namespace BabyNightmare
             StaticDataManager.Instance.Init();
             LobbyManager.Instance.Init(StartMatch);
             MatchManager.Instance.Init(EnterLobby);
+            HUDManager.Instance.SetState(EHUDState.Show_Shortcut_Off, "AppOpen");
 
             EnterLobby();
         }

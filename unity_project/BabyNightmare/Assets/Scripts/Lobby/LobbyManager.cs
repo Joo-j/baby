@@ -81,6 +81,8 @@ namespace BabyNightmare.Lobby
             SetMenu(ELobbyButtonType.Home);
 
             RefreshButtonState();
+
+            GameLifeCycle.Start_Coroutine(Co_EnterSequence());
         }
 
         public void Exit()
@@ -122,7 +124,7 @@ namespace BabyNightmare.Lobby
             }
         }
 
-        private IEnumerator Co_EnterSequence(Action<int, int, Action> promoteField)
+        private IEnumerator Co_EnterSequence()
         {
             _printer.Log("Co_EnterSequence", $"Co_EnterSequence - Begin");
             var waiter = new CoroutineWaiter();
@@ -168,7 +170,7 @@ namespace BabyNightmare.Lobby
                 GuideMenuButton(data.ButtonType);
             }
 
-            HUDManager.Instance.RevertState("LobbyManager");
+            //HUDManager.Instance.RevertState("LobbyManager");
             _lobbyView.ActiveInteract(true);
 
             _isEnterSequenceDone = true;
@@ -204,14 +206,14 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
+                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         //CustomShopManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
 
                 case ELobbyButtonType.Shop:
                     {
-                        HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
+                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
 
                         // if (null != identifier && Enum.TryParse(identifier.ToString(), out EShopScrollType scrollType))
                         // {
@@ -224,20 +226,20 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Home:
                     {
-                        HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
+                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         _homeView.gameObject.SetActive(true);
                         _homeView.Refresh();
                         return;
                     }
                 case ELobbyButtonType.Talent:
                     {
-                        HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
+                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         //TalentManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
+                        // HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         //MissionManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
@@ -252,31 +254,31 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        HUDManager.Instance.RevertState("LobbyManager");
+                        // HUDManager.Instance.RevertState("LobbyManager");
                         //CustomShopManager.Instance.Hide(); 
                         return;
                     }
                 case ELobbyButtonType.Shop:
                     {
-                        HUDManager.Instance.RevertState("LobbyManager");
+                        // HUDManager.Instance.RevertState("LobbyManager");
                         //ShopManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Home:
                     {
-                        HUDManager.Instance.RevertState("LobbyManager");
+                        // HUDManager.Instance.RevertState("LobbyManager");
                         // _homeView.gameObject.SetActive(false);
                         return;
                     }
                 case ELobbyButtonType.Talent:
                     {
-                        HUDManager.Instance.RevertState("LobbyManager");
+                        // HUDManager.Instance.RevertState("LobbyManager");
                         //TalentManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        HUDManager.Instance.RevertState("LobbyManager");
+                        // HUDManager.Instance.RevertState("LobbyManager");
                         //MissionManager.Instance.Hide();
                         return;
                     }
