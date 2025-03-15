@@ -11,41 +11,35 @@ namespace BabyNightmare.Util
         [SerializeField] private int _row;
         [SerializeField] private bool[] _shape;
 
-        private List<Vector2Int> _indexList = null;
         public int Column => _column;
         public int Row => _row;
 
-        public List<Vector2Int> IndexList
+        public List<Vector2Int> ValidIndexList
         {
             get
             {
-                if (null == _indexList)
+                var validIndexList = new List<Vector2Int>();
+                for (var x = 0; x < _column; x++)
                 {
-                    _indexList = new List<Vector2Int>();
-                    for (var x = 0; x < _column; x++)
+                    for (var y = 0; y < _row; y++)
                     {
-                        for (var y = 0; y < _row; y++)
-                        {
-                            var index = new Vector2Int(x, y);
+                        var index = new Vector2Int(x, y);
 
-                            if (false == IsValid(index))
-                            {
-                                Debug.Log($"{index}가 false라 취소");
-                                continue;
-                            }
+                        if (false == IsValid(index))
+                            continue;
 
-                            _indexList.Add(index);
-                        }
+                        validIndexList.Add(index);
+                        Debug.Log($"valid {index}");
                     }
                 }
 
-                return _indexList;
+                return validIndexList;
             }
         }
 
         public bool IsValid(Vector2Int index)
         {
-            if (index.x < 0 || index.x >= _column || index.y < 0 || index.y >= _row)
+            if (index.x < 0 || index.y < 0 || index.x >= _column || index.y >= _row)
                 return false;
 
             var arrIndex = GetArrIndex(index.x, index.y);
@@ -57,5 +51,7 @@ namespace BabyNightmare.Util
             y = (_row - 1) - y;
             return x + _column * y;
         }
+
+
     }
 }

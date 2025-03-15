@@ -93,7 +93,7 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
+            if (null != _draggedEquipment || null == _currentInventory)
                 return;
 
             var equipment = _currentInventory.Get(eventData.position);
@@ -101,6 +101,7 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             InventoryUtil.ShowInfoPopup(equipment.Data);
+            _draggedEquipment = null;
         }
 
         private IEnumerator Co_DetectEquipment()
