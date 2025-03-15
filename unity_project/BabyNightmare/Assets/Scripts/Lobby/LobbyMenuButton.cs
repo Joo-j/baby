@@ -124,8 +124,10 @@ namespace BabyNightmare.Lobby
             {
                 if (false == _unlocked)
                 {
+                    SimpleToastMessage.Show("Play More", null);
                     return;
                 }
+                
                 FocusOverlayHelper.Clear();
 
                 _onClick?.Invoke();
