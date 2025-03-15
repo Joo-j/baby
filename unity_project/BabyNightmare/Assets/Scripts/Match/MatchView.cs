@@ -48,6 +48,7 @@ namespace BabyNightmare.Match
         [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
+        [SerializeField] private float _rectChangeDruation = 0.4f;
         [SerializeField] private GameObject _startGO;
         [SerializeField] private GameObject _rerollGO;
         [SerializeField] private GameObject _rerollGO_Normal;
@@ -71,6 +72,7 @@ namespace BabyNightmare.Match
         private MatchViewContext _context = null;
         private Dictionary<EStatType, int> _statDict = null;
         private Action _onGetBox = null;
+        private Coroutine _coChangeRect = null;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
 
@@ -204,12 +206,12 @@ namespace BabyNightmare.Match
         {
             var topStartPos = _topRTF.anchoredPosition;
             var topTargetPos = top ? new Vector2(topStartPos.x, _topYPosRange.x) : new Vector2(topStartPos.x, _topYPosRange.y);
-            if (_topRTF.anchoredPosition == topTargetPos)
+            if (topStartPos == topTargetPos)
                 return;
 
             var botStartPos = _botRTF.anchoredPosition;
             var botTargetPos = top ? new Vector2(botStartPos.x, _botYPosRange.x) : new Vector2(botStartPos.x, _botYPosRange.y);
-            if (_botRTF.anchoredPosition == botTargetPos)
+            if (botStartPos == botTargetPos)
                 return;
 
             if (true == immediate)
@@ -219,23 +221,31 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            StartCoroutine(Co_ChangeRectPos());
-            IEnumerator Co_ChangeRectPos()
-            {
-                var elapsed = 0f;
-                var duration = 0.4f;
-                while (elapsed < duration)
-                {
-                    yield return null;
-                    elapsed += Time.deltaTime;
-                    var factor = elapsed / duration;
-                    _topRTF.anchoredPosition = Vector2.Lerp(topStartPos, topTargetPos, factor);
-                    _botRTF.anchoredPosition = Vector2.Lerp(botStartPos, botTargetPos, factor);
-                }
+            if (null != _coChangeRect)
+                StopCoroutine(_coChangeRect);
 
-                _topRTF.anchoredPosition = topTargetPos;
-                _botRTF.anchoredPosition = botTargetPos;
+            _coChangeRect = StartCoroutine(Co_ChangeRectPos(topTargetPos, botTargetPos));
+        }
+
+        private IEnumerator Co_ChangeRectPos(Vector2 topTargetPos, Vector2 botTargetPos)
+        {
+            var elapsed = 0f;
+
+            var topStartPos = _topRTF.anchoredPosition;
+            var botStartPos = _botRTF.anchoredPosition;
+            while (elapsed < _rectChangeDruation)
+            {
+                yield return null;
+                elapsed += Time.deltaTime;
+                var factor = elapsed / _rectChangeDruation;
+                _topRTF.anchoredPosition = Vector2.Lerp(topStartPos, topTargetPos, factor);
+                _botRTF.anchoredPosition = Vector2.Lerp(botStartPos, botTargetPos, factor);
             }
+
+            _topRTF.anchoredPosition = topTargetPos;
+            _botRTF.anchoredPosition = botTargetPos;
+
+            _coChangeRect = null;
         }
 
         private void OnEquip(EquipmentData data)

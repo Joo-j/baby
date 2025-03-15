@@ -94,20 +94,6 @@ namespace BabyNightmare.Character
             base.ReceiveAttack(damage);
         }
 
-        public void AddHP(float amount)
-        {
-            if (amount <= 0)
-                return;
-
-            _hp = Mathf.Min(_maxHealth, _hp + amount);
-            _hpBar.Refresh(_hp, _maxHealth, false);
-        }
-
-        public void AddDEF(float amount)
-        {
-            _def += amount;
-        }
-
         public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
         {
             _useInfoQueue.Enqueue(new EquipmentUseInfo(equipmentData, enemy));
@@ -149,23 +135,8 @@ namespace BabyNightmare.Character
             if (damage > 0)
             {
                 StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, OnThrow));
-                return;
             }
-
-            var heal = equipmentData.Heal;
-            if (heal > 0)
-            {
-                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
-            }
-
-            var defence = equipmentData.Defence;
-            if (defence > 0)
-            {
-                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
-            }
-
-            var coin = equipmentData.Coin;
-            if (coin > 0)
+            else
             {
                 StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
             }
@@ -173,8 +144,9 @@ namespace BabyNightmare.Character
             void OnThrow()
             {
                 enemy?.ReceiveAttack(equipmentData.Damage);
-                AddHP(equipmentData.Heal);
-                AddDEF(equipmentData.Defence);
+                _hp = Mathf.Min(_maxHealth, _hp + equipmentData.Heal);
+                _hpBar.Refresh(_hp, _maxHealth, false);
+                _def += equipmentData.Defence;
                 _context.GetCoin?.Invoke(equipmentData.Coin, transform.position);
             }
         }
