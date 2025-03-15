@@ -7,7 +7,7 @@ using BabyNightmare.StaticData;
 
 namespace BabyNightmare.InventorySystem
 {
-    public abstract class Inventory : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+    public abstract class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private const string PATH_EQUIPMENT = "Inventory/Equipment";
 
@@ -48,7 +48,7 @@ namespace BabyNightmare.InventorySystem
             _currentInventory = this;
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData)
         {
             if (null != _draggedEquipment)
                 return;
@@ -61,6 +61,43 @@ namespace BabyNightmare.InventorySystem
             _draggedEquipment = equipment;
 
             _dragStartInventory = this;
+        }
+
+        private IEnumerator Co_DetectEquipment()
+        {
+            while (true)
+            {
+                yield return null;
+
+                if (null == _dragEventData)
+                    continue;
+
+                if (null == _draggedEquipment)
+                    continue;
+
+                var equipment = Get(_dragEventData.position);
+                if (null == equipment)
+                    continue;
+
+                var upgradeData = _getUpgradeData?.Invoke(_draggedEquipment.Data, equipment.Data);
+                if (null != upgradeData)
+                {
+                    equipment.Swing();
+                }
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (null != _draggedEquipment || null == _currentInventory)
+                return;
+
+            var equipment = _currentInventory.Get(eventData.position);
+            if (null == equipment)
+                return;
+
+            InventoryUtil.ShowInfoPopup(equipment.Data);
+            _draggedEquipment = null;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -89,43 +126,6 @@ namespace BabyNightmare.InventorySystem
 
             _draggedEquipment = null;
             _dragStartInventory = null;
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (null != _draggedEquipment || null == _currentInventory)
-                return;
-
-            var equipment = _currentInventory.Get(eventData.position);
-            if (null == equipment)
-                return;
-
-            InventoryUtil.ShowInfoPopup(equipment.Data);
-            _draggedEquipment = null;
-        }
-
-        private IEnumerator Co_DetectEquipment()
-        {
-            while (true)
-            {
-                yield return null;
-
-                if (null == _dragEventData)
-                    continue;
-
-                if (null == _draggedEquipment)
-                    continue;
-
-                var equipment = Get(_dragEventData.position);
-                if (null == equipment)
-                    continue;
-
-                var upgradeData = _getUpgradeData?.Invoke(_draggedEquipment.Data, equipment.Data);
-                if (null != upgradeData)
-                {
-                    equipment.Swing();
-                }
-            }
         }
     }
 }
