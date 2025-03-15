@@ -8,7 +8,7 @@ namespace BabyNightmare.StaticData
     public class WaveData
     {
         public int ID;
-        public int Stage;
+        public int Chapter;
         public int Wave;
         public int EquipmentProbDataGroup;
         public EBoxType BoxType;

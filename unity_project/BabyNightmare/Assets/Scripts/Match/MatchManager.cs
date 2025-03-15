@@ -34,11 +34,11 @@ namespace BabyNightmare.Match
 
         public void StartMatch()
         {
-            var stage = PlayerData.Instance.Chapter;
-            _waveDataList = StaticDataManager.Instance.GetWaveDataList(stage);
+            var chapter = PlayerData.Instance.Chapter;
+            _waveDataList = StaticDataManager.Instance.GetWaveDataList(chapter);
             if (null == _waveDataList)
             {
-                Debug.LogError($"{stage}stage no wave data");
+                Debug.LogError($"{chapter}chapter no wave data");
                 return;
             }
             _currentWave = 0;

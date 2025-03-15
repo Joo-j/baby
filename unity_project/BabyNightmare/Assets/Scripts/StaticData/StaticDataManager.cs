@@ -60,11 +60,11 @@ namespace BabyNightmare.StaticData
             {
                 var waveData = waveDataList[i];
 
-                var stage = waveData.Stage;
-                if (false == _waveDataDict.ContainsKey(stage))
-                    _waveDataDict.Add(stage, new List<WaveData>());
+                var chapter = waveData.Chapter;
+                if (false == _waveDataDict.ContainsKey(chapter))
+                    _waveDataDict.Add(chapter, new List<WaveData>());
 
-                _waveDataDict[stage].Add(waveData);
+                _waveDataDict[chapter].Add(waveData);
             }
         }
 
@@ -150,11 +150,11 @@ namespace BabyNightmare.StaticData
             return data;
         }
 
-        public List<WaveData> GetWaveDataList(int stage)
+        public List<WaveData> GetWaveDataList(int chapter)
         {
-            if (false == _waveDataDict.TryGetValue(stage, out var waveDataList))
+            if (false == _waveDataDict.TryGetValue(chapter, out var waveDataList))
             {
-                Debug.LogError($"{stage} wave is not exist");
+                Debug.LogError($"{chapter} wave is not exist");
                 return null;
             }
 

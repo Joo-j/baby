@@ -45,45 +45,80 @@ MonoBehaviour:
     ShowOpenAni: 0
   WaveDataList:
   - ID: 1
-    Stage: 1
+    Chapter: 1
     Wave: 1
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
     EquipmentBoxDataID: 0
     EnemySpawnDataGroup: 101
   - ID: 2
-    Stage: 1
+    Chapter: 1
     Wave: 2
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
     EquipmentBoxDataID: 1
     EnemySpawnDataGroup: 101
   - ID: 3
-    Stage: 1
+    Chapter: 1
     Wave: 3
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
     EquipmentBoxDataID: 2
     EnemySpawnDataGroup: 101
   - ID: 3
-    Stage: 2
+    Chapter: 2
     Wave: 1
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
     EquipmentBoxDataID: 3
     EnemySpawnDataGroup: 101
   - ID: 3
-    Stage: 2
+    Chapter: 2
     Wave: 2
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
     EquipmentBoxDataID: 1
     EnemySpawnDataGroup: 101
   - ID: 3
-    Stage: 2
+    Chapter: 2
     Wave: 3
     EquipmentProbDataGroup: 101
-    BoxType: 0
+    BoxType: 2
+    EquipmentBoxDataID: 2
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Chapter: 3
+    Wave: 1
+    EquipmentProbDataGroup: 101
+    BoxType: 2
+    EquipmentBoxDataID: 2
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Chapter: 3
+    Wave: 2
+    EquipmentProbDataGroup: 101
+    BoxType: 2
+    EquipmentBoxDataID: 2
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Chapter: 3
+    Wave: 3
+    EquipmentProbDataGroup: 101
+    BoxType: 2
+    EquipmentBoxDataID: 2
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Chapter: 3
+    Wave: 4
+    EquipmentProbDataGroup: 101
+    BoxType: 2
+    EquipmentBoxDataID: 2
+    EnemySpawnDataGroup: 101
+  - ID: 3
+    Chapter: 3
+    Wave: 5
+    EquipmentProbDataGroup: 101
+    BoxType: 2
     EquipmentBoxDataID: 2
     EnemySpawnDataGroup: 101
   EquipmentDataList:

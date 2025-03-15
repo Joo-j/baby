@@ -6,9 +6,9 @@ namespace BabyNightmare.StaticData
 {
     public enum EBoxType
     {
-        Normal,
-        Rare,
-        Epic
+        Bronze,
+        Silver,
+        Gold
     }
 
     public enum EStatType

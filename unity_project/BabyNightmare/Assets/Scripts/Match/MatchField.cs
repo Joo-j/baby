@@ -18,8 +18,6 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _nearSpawnTF;
         [SerializeField] private Transform _midSpawnTF;
         [SerializeField] private Transform _farSpawnTF;
-        [SerializeField] private Transform _boxSpawnTF;
-        [SerializeField] private Transform _boxOpenTF;
         [SerializeField] private AnimationCurve _boxMoveCurve;
         [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _attackRadius = 10f;
@@ -146,6 +144,10 @@ namespace BabyNightmare.Match
             StartCoroutine(Co_EncounterBox());
             IEnumerator Co_EncounterBox()
             {
+                var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
+                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _groundTF);
+                box.TF.position = _player.TF.position + new Vector3(_groundMoveAmount - 1, 0, 0);
+
                 yield return CoroutineUtil.WaitForSeconds(1.5f);
 
                 _player.ShowMoveAni();
@@ -164,13 +166,6 @@ namespace BabyNightmare.Match
 
                 _groundTF.localPosition = targetPos;
                 _player.ShowIdleAni();
-
-                var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
-                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxSpawnTF);
-
-                box.TF.SetParent(_boxOpenTF);
-
-                yield return SimpleLerp.Co_LerpPosition_Local(box.TF, box.TF.localPosition, Vector3.zero, _boxMoveCurve, 0.75f);
 
                 box.Open(doneCallback);
             }
