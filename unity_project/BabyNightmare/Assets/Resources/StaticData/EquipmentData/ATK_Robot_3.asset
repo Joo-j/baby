@@ -23,6 +23,6 @@ MonoBehaviour:
   UpgradeDataID: -1
   Sprite: {fileID: 21300000, guid: 72356e9279e074f05a0a5f9db533f4f1, type: 3}
   Shape:
-    _column: 1
-    _row: 3
-    _shape: 01
+    _column: 2
+    _row: 2
+    _shape: 01010101

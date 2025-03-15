@@ -24,5 +24,5 @@ MonoBehaviour:
   Sprite: {fileID: 21300000, guid: 8a0814e9b64a540ff92e2d90b96d8226, type: 3}
   Shape:
     _column: 1
-    _row: 3
-    _shape: 010101
+    _row: 1
+    _shape: 01
