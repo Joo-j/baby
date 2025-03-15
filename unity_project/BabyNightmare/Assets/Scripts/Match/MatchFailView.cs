@@ -24,7 +24,7 @@ namespace BabyNightmare.Match
         private Coroutine _coRoullete = null;
         private int _rvMultiplyValue;
 
-        public void Init(int coin, Action doneCallback)
+        public void Init(int gem, Action doneCallback)
         {
             CLS_Reward.GO_Self.transform.localScale = new Vector3(0, 1, 1);
             CLS_Roulette.RTF_Self.localScale = Vector3.zero;
@@ -33,7 +33,7 @@ namespace BabyNightmare.Match
             BTN_RVReward.gameObject.SetActive(false);
             BTN_NoThanks.gameObject.SetActive(false);
 
-            CLS_Reward.TMP_Coin.text = $"+{CurrencyUtil.GetUnit(coin)}";
+            CLS_Reward.TMP_Coin.text = $"+{CurrencyUtil.GetUnit(gem)}";
 
             TMP_RVCoin.text = "";
 
@@ -50,8 +50,8 @@ namespace BabyNightmare.Match
                 if (null != _coRoullete)
                     StopCoroutine(_coRoullete);
 
-                CoinHUD.SetSpreadPoint(BTN_RVReward.transform.position);
-                PlayerData.Instance.Coin += _rvMultiplyValue * coin;
+                GemHUD.SetSpreadPoint(BTN_RVReward.transform.position);
+                PlayerData.Instance.Gem += _rvMultiplyValue * gem;
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
@@ -71,8 +71,8 @@ namespace BabyNightmare.Match
                 if (null != _coRoullete)
                     StopCoroutine(_coRoullete);
 
-                CoinHUD.SetSpreadPoint(BTN_NoThanks.transform.position);
-                PlayerData.Instance.Coin += coin;
+                GemHUD.SetSpreadPoint(BTN_NoThanks.transform.position);
+                PlayerData.Instance.Gem += gem;
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
@@ -107,7 +107,7 @@ namespace BabyNightmare.Match
                 yield return SimpleLerp.Co_LerpScale(CLS_Roulette.GO_Self.transform, _sizeLerpCurve, 0.15f);
 
                 yield return CoroutineUtil.WaitForSeconds(0.1f);
-                _coRoullete = StartCoroutine(Co_Roulette(coin));
+                _coRoullete = StartCoroutine(Co_Roulette(gem));
                 BTN_RVReward.gameObject.SetActive(true);
                 yield return SimpleLerp.Co_LerpScale(BTN_RVReward.transform, _sizeLerpCurve, 0.15f);
 

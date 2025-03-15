@@ -26,11 +26,14 @@ namespace BabyNightmare
 
         private void EnterLobby()
         {
+            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
             LobbyManager.Instance.Enter();
         }
 
         private void StartMatch()
         {
+            HUDManager.Instance.ActiveHUD(EHUDType.Gem, false);
+
             LobbyManager.Instance.Exit();
             MatchManager.Instance.StartMatch();
         }

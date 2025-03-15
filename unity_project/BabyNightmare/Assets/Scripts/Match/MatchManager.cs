@@ -54,18 +54,25 @@ namespace BabyNightmare.Match
             _matchView.Init(matchViewContext);
             _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
 
+            HUDManager.Instance.ActiveHUD(EHUDType.Coin, true);
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
-            PlayerData.Instance.Coin += 0;
+            PlayerData.Instance.Coin = 0;
         }
 
         private void OnFailMatch()
         {
+            HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
+            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
+
             var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
             failView.Init(100, CloseMatch);
         }
 
         private void OnCompleteMatch()
         {
+            HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
+            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
+
             var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
             completeView.Init(100, CloseMatch);
 
