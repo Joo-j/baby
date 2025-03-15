@@ -24,7 +24,7 @@ namespace BabyNightmare.Match
         private const string PATH_FIELD = "Match/Field/Field_";
         private const string PATH_PLAYER = "Match/Player";
         private const string PATH_ENEMY = "Match/Enemy_";
-        private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox_";
+        private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
 
         private Transform _fieldTF;
         private RenderTexture _rt = null;
