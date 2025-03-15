@@ -14,6 +14,7 @@ namespace BabyNightmare.StaticData
         public float Damage;
         public float Heal;
         public float Defence;
+        public int Coin;
         public float CoolTime;
         public Sprite Sprite;
         public RectShape Shape;

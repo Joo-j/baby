@@ -6,6 +6,7 @@ using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using BabyNightmare.Match;
+using BabyNightmare.HUD;
 
 namespace BabyNightmare.Character
 {
@@ -14,15 +15,18 @@ namespace BabyNightmare.Character
         public float HP { get; }
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
+        public Action<int, Vector3> GetCoin { get; }
 
         public PlayerContext(
         float hp,
         Vector3 cameraForward,
-        Action onDiePlayer)
+        Action onDiePlayer,
+        Action<int, Vector3> getCoin)
         {
             this.HP = Mathf.Max(50, hp);
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
+            this.GetCoin = getCoin;
         }
     }
 
@@ -160,11 +164,18 @@ namespace BabyNightmare.Character
                 StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
             }
 
+            var coin = equipmentData.Coin;
+            if (coin > 0)
+            {
+                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
+            }
+
             void OnThrow()
             {
                 enemy?.ReceiveAttack(equipmentData.Damage);
                 AddHP(equipmentData.Heal);
                 AddDEF(equipmentData.Defence);
+                _context.GetCoin?.Invoke(equipmentData.Coin, transform.position);
             }
         }
 

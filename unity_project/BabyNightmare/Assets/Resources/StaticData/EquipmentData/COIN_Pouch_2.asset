@@ -19,8 +19,8 @@ MonoBehaviour:
   Damage: 0
   Heal: 0
   Defence: 0
-  CoolTime: 3.9
-  UpgradeDataID: 1206
+  Coin: 4
+  CoolTime: 2.5
   Sprite: {fileID: 21300000, guid: 4557eea069bcb4681b227a17e8459786, type: 3}
   Shape:
     _column: 1

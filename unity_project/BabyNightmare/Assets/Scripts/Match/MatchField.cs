@@ -59,7 +59,7 @@ namespace BabyNightmare.Match
 
             _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
-            var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer);
+            var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer, getCoin);
             _player.Init(playerContext);
         }
 

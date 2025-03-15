@@ -16,6 +16,7 @@ namespace BabyNightmare.StaticData
         HP,
         ATK,
         DEF,
+        Coin,
     }
 
     public enum ELobbyButtonType

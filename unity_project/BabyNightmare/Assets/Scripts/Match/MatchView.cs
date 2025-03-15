@@ -60,9 +60,11 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _hpRTF;
         [SerializeField] private RectTransform _atkRTF;
         [SerializeField] private RectTransform _defRTF;
+        [SerializeField] private RectTransform _coinRTF;
         [SerializeField] private TextMeshProUGUI _hpTMP;
         [SerializeField] private TextMeshProUGUI _atkTMP;
         [SerializeField] private TextMeshProUGUI _defTMP;
+        [SerializeField] private TextMeshProUGUI _coinTMP;
         [SerializeField] private AnimationCurve _bounceCurve;
 
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
@@ -255,11 +257,16 @@ namespace BabyNightmare.Match
                 _statDict[EStatType.DEF] += Mathf.CeilToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
+
+            if (data.Coin > 0)
+            {
+                _statDict[EStatType.Coin] += Mathf.CeilToInt(data.Coin / data.CoolTime);
+                StartCoroutine(SimpleLerp.Co_BounceScale(_coinRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
         }
 
         private void OnUnequip(EquipmentData data)
         {
-
             if (data.Heal > 0)
             {
                 _statDict[EStatType.HP] -= Mathf.CeilToInt(data.Heal / data.CoolTime);
@@ -277,6 +284,12 @@ namespace BabyNightmare.Match
                 _statDict[EStatType.DEF] -= Mathf.CeilToInt(data.Defence / data.CoolTime);
                 StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
             }
+
+            if (data.Coin > 0)
+            {
+                _statDict[EStatType.Coin] += Mathf.CeilToInt(data.Coin / data.CoolTime);
+                StartCoroutine(SimpleLerp.Co_BounceScale(_coinRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+            }
         }
 
         private void RefreshStat()
@@ -284,6 +297,7 @@ namespace BabyNightmare.Match
             _hpTMP.text = $"{_statDict[EStatType.HP]}/s";
             _atkTMP.text = $"{_statDict[EStatType.ATK]}/s";
             _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
+            _coinTMP.text = $"{_statDict[EStatType.Coin]}/s";
         }
 
 #if UNITY_EDITOR
