@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: GreenVial
+  m_Name: ATK_Knife_2
   m_EditorClassIdentifier: 
-  ID: 1003
-  Name: GreenVial Lv1
-  Desc: heal self
-  Level: 1
-  Damage: 0
-  Heal: 1
+  ID: 1101
+  Name: Knife Lv2
+  Desc: attack random enemy
+  Level: 2
+  Damage: 4
+  Heal: 0
   Defence: 0
-  CoolTime: 2.5
-  UpgradeDataID: 0
-  Sprite: {fileID: 21300018, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  CoolTime: 1.4
+  UpgradeDataID: 1201
+  Sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
-    _column: 1
+    _column: 2
     _row: 1
-    _shape: 01
+    _shape: 0101

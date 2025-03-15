@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: Knife_3
+  m_Name: ATK_Horse_2
   m_EditorClassIdentifier: 
-  ID: 1201
-  Name: Knife Lv3
+  ID: 1104
+  Name: Gun Lv2
   Desc: attack random enemy
-  Level: 1
-  Damage: 5
+  Level: 2
+  Damage: 6
   Heal: 0
   Defence: 0
   CoolTime: 1.5
-  UpgradeDataID: -1
-  Sprite: {fileID: 21300002, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  UpgradeDataID: 1204
+  Sprite: {fileID: 21300000, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
     _column: 2
-    _row: 1
-    _shape: 0101
+    _row: 2
+    _shape: 01010001

@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
-  m_Name: Gadget
+  m_Name: ATK_Rabbit_1
   m_EditorClassIdentifier: 
-  ID: 1002
-  Name: Gadet Lv1
+  ID: 1006
+  Name: Spear Lv1
   Desc: attack random enemy
   Level: 1
-  Damage: 5
+  Damage: 15
   Heal: 0
   Defence: 0
-  CoolTime: 3.1
-  UpgradeDataID: 1102
-  Sprite: {fileID: 21300008, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  CoolTime: 4.5
+  UpgradeDataID: 1106
+  Sprite: {fileID: 21300004, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
   Shape:
     _column: 1
-    _row: 2
-    _shape: 0101
+    _row: 3
+    _shape: 010101
