@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
   m_Name: ATK_WaterGun_1
   m_EditorClassIdentifier: 
-  ID: 1006
+  ID: 1009
   Name: Spear Lv1
   Desc: attack random enemy
   Level: 1

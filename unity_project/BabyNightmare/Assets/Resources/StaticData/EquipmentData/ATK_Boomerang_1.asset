@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
   m_Name: ATK_Boomerang_1
   m_EditorClassIdentifier: 
-  ID: 1003
+  ID: 1002
   Name: GreenVial Lv1
   Desc: heal self
   Level: 1

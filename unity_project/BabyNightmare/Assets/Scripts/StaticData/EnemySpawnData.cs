@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace BabyNightmare.StaticData
 {
-    [Serializable]
-    public class EnemySpawnData
+    [CreateAssetMenu(fileName = "EnemySpawnData", menuName = "BabyNightmare/EnemySpawnData")]
+    public class EnemySpawnData : ScriptableObject
     {
         public int ID;
-        public int Group;
-        public int EnemyID;
+        public List<int> EnemyIDList;
     }
 }

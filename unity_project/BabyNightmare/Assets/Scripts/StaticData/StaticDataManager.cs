@@ -7,6 +7,11 @@ namespace BabyNightmare.StaticData
     public class StaticDataManager : SingletonBase<StaticDataManager>
     {
         private const string PATH_STATIC_DATA_SHEET = "StaticData/StaticDataSheet";
+        private const string PATH_EQUIPMENT_DATA = "StaticData/EquipmentData";
+        private const string PATH_EQUIPMENT_BOX_DATA = "StaticData/EquipmentBoxData";
+        private const string PATH_ENEMY_DATA = "StaticData/EnemyData";
+        private const string PATH_ENEMY_SPAWN_DATA = "StaticData/EnemySpawnData";
+
         private StaticDataSheet _sheet = null;
 
         private Dictionary<ELobbyButtonType, LobbyButtonData> _lobbyButtonDict = null;
@@ -15,7 +20,7 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, List<EquipmentProbData>> _equipmentProbDataDict = null;
         private Dictionary<int, EquipmentBoxData> _equipmentBoxDataDict = null;
         private Dictionary<int, EnemyData> _enemyDataDict = null;
-        private Dictionary<int, List<EnemySpawnData>> _enemySpawnDataDict = null;
+        private Dictionary<int, EnemySpawnData> _enemySpawnDataDict = null;
 
         private int _lastChapter = 0;
 
@@ -74,13 +79,19 @@ namespace BabyNightmare.StaticData
 
         private void InitEquipmentData()
         {
+            var equipmentDataArr = Resources.LoadAll<EquipmentData>(PATH_EQUIPMENT_DATA);
+            if (null == equipmentDataArr || equipmentDataArr.Length == 0)
+            {
+                Debug.LogError($"{PATH_EQUIPMENT_DATA}에 데이터가 없습니다.");
+                return;
+            }
+
             _equipmentDataDict = new Dictionary<int, EquipmentData>();
 
-            var equipmentDataList = _sheet.EquipmentDataList;
 
-            for (var i = 0; i < equipmentDataList.Count; i++)
+            for (var i = 0; i < equipmentDataArr.Length; i++)
             {
-                var data = equipmentDataList[i];
+                var data = equipmentDataArr[i];
                 _equipmentDataDict.Add(data.ID, data);
             }
         }
@@ -105,45 +116,58 @@ namespace BabyNightmare.StaticData
 
         private void InitEquipmentBoxData()
         {
+            var equipmentBoxDataArr = Resources.LoadAll<EquipmentBoxData>(PATH_EQUIPMENT_BOX_DATA);
+            if (null == equipmentBoxDataArr || equipmentBoxDataArr.Length == 0)
+            {
+                Debug.LogError($"{PATH_EQUIPMENT_BOX_DATA}에 데이터가 없습니다.");
+                return;
+            }
+
             _equipmentBoxDataDict = new Dictionary<int, EquipmentBoxData>();
 
-            var equipmentBoxDataList = _sheet.EquipmentBoxDataList;
-
-            for (var i = 0; i < equipmentBoxDataList.Count; i++)
+            for (var i = 0; i < equipmentBoxDataArr.Length; i++)
             {
-                var data = equipmentBoxDataList[i];
+                var data = equipmentBoxDataArr[i];
                 _equipmentBoxDataDict.Add(data.ID, data);
             }
         }
 
         private void InitEnemyData()
         {
+            var enemyDataArr = Resources.LoadAll<EnemyData>(PATH_ENEMY_DATA);
+            if (null == enemyDataArr || enemyDataArr.Length == 0)
+            {
+                Debug.LogError($"{PATH_ENEMY_DATA}에 데이터가 없습니다.");
+                return;
+            }
+
             _enemyDataDict = new Dictionary<int, EnemyData>();
 
-            var enemyDataList = _sheet.EnemyDataList;
-
-            for (var i = 0; i < enemyDataList.Count; i++)
+            for (var i = 0; i < enemyDataArr.Length; i++)
             {
-                var data = enemyDataList[i];
+                var data = enemyDataArr[i];
                 _enemyDataDict.Add(data.ID, data);
             }
         }
 
         private void InitEnemySpawnData()
         {
-            _enemySpawnDataDict = new Dictionary<int, List<EnemySpawnData>>();
-
-            var enemySpanwDataList = _sheet.EnemySpawnDataList;
-
-            for (var i = 0; i < enemySpanwDataList.Count; i++)
+            var enemySpanwDataArr = Resources.LoadAll<EnemySpawnData>(PATH_ENEMY_SPAWN_DATA);
+            if (null == enemySpanwDataArr || enemySpanwDataArr.Length == 0)
             {
-                var data = enemySpanwDataList[i];
-                var group = data.Group;
+                Debug.LogError($"{PATH_ENEMY_SPAWN_DATA}에 데이터가 없습니다.");
+                return;
+            }
 
-                if (false == _enemySpawnDataDict.ContainsKey(group))
-                    _enemySpawnDataDict.Add(group, new List<EnemySpawnData>());
+            _enemySpawnDataDict = new Dictionary<int, EnemySpawnData>();
 
-                _enemySpawnDataDict[group].Add(data);
+            for (var i = 0; i < enemySpanwDataArr.Length; i++)
+            {
+                var data = enemySpanwDataArr[i];
+                var id = data.ID;
+
+                if (false == _enemySpawnDataDict.ContainsKey(id))
+                    _enemySpawnDataDict.Add(id, data);
             }
         }
 
@@ -209,15 +233,15 @@ namespace BabyNightmare.StaticData
             return data;
         }
 
-        public List<EnemySpawnData> GetEnemySpawnDataList(int group)
+        public EnemySpawnData GetEnemySpawnData(int id)
         {
-            if (false == _enemySpawnDataDict.TryGetValue(group, out var dataList))
+            if (false == _enemySpawnDataDict.TryGetValue(id, out var data))
             {
-                Debug.LogError($"{group} enemy spawn prob data is null");
+                Debug.LogError($"{id} enemy spawn prob data is null");
                 return null;
             }
 
-            return dataList;
+            return data;
         }
     }
 }

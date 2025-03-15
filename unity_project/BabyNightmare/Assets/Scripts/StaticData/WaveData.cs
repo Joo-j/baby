@@ -9,10 +9,8 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public int Chapter;
-        public int Wave;
         public int EquipmentProbDataGroup;
-        public EBoxType BoxType;
         public int EquipmentBoxDataID;
-        public int EnemySpawnDataGroup;
+        public int EnemySpawnDataID;
     }
 }

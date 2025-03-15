@@ -5,8 +5,8 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    [Serializable]
-    public class EnemyData
+    [CreateAssetMenu(fileName = "EnemyData", menuName = "BabyNightmare/EnemyData")]
+    public class EnemyData : ScriptableObject
     {
         public int ID;
         public string Name;

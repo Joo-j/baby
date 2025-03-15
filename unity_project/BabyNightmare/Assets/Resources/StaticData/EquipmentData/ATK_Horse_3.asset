@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92e9099dba1c24dcda700fa19b64a47b, type: 3}
   m_Name: ATK_Horse_3
   m_EditorClassIdentifier: 
-  ID: 1204
+  ID: 1203
   Name: Gun Lv3
   Desc: attack random enemy
   Level: 3

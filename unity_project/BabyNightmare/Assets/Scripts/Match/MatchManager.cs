@@ -99,19 +99,20 @@ namespace BabyNightmare.Match
         {
             var waveData = _waveDataList[_currentWave];
 
-            var group = waveData.EnemySpawnDataGroup;
-            var enemySpanwDataList = StaticDataManager.Instance.GetEnemySpawnDataList(group);
-            if (null == enemySpanwDataList)
+            var id = waveData.EnemySpawnDataID;
+            var enemySpanwData = StaticDataManager.Instance.GetEnemySpawnData(id);
+            if (null == enemySpanwData)
             {
-                Debug.LogError($"{group}Group enemy spawn data is empty ");
+                Debug.LogError($"{id}Group enemy spawn data is empty ");
                 return;
             }
 
             var enemyDataList = new List<EnemyData>();
-            for (var i = 0; i < enemySpanwDataList.Count; i++)
+
+            var idList = enemySpanwData.EnemyIDList;
+            for (var i = 0; i < idList.Count; i++)
             {
-                var spawnData = enemySpanwDataList[i];
-                var enemyData = StaticDataManager.Instance.GetEnemyData(spawnData.EnemyID);
+                var enemyData = StaticDataManager.Instance.GetEnemyData(idList[i]);
                 enemyDataList.Add(enemyData);
             }
 

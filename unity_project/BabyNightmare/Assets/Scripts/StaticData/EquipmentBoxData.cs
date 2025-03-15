@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    [Serializable]
-    public class EquipmentBoxData
+    [CreateAssetMenu(fileName = "EquipmentBoxData", menuName = "BabyNightmare/EquipmentBoxData")]
+    public class EquipmentBoxData : ScriptableObject
     {
         public int ID;
         public EBoxType Type;
