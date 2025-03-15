@@ -16,11 +16,10 @@ MonoBehaviour:
   Name: Spear Lv3
   Desc: attack random enemy
   Level: 2
-  Damage: 25
+  Damage: 1.5
   Heal: 0
   Defence: 0
-  CoolTime: 3.8
-  UpgradeDataID: -1
+  CoolTime: 1.5
   Sprite: {fileID: 21300000, guid: 95c7c7040e0f743dd98a46e4245bea3c, type: 3}
   Shape:
     _column: 1

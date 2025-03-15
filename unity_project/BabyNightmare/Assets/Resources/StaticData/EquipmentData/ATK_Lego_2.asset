@@ -16,11 +16,10 @@ MonoBehaviour:
   Name: RedVial Lv2
   Desc: heal self
   Level: 2
-  Damage: 0
+  Damage: 4
   Heal: 0
   Defence: 0
   CoolTime: 2.5
-  UpgradeDataID: 1205
   Sprite: {fileID: 21300000, guid: 529d91caab9aa41f5aeb865170984211, type: 3}
   Shape:
     _column: 1

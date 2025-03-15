@@ -16,11 +16,10 @@ MonoBehaviour:
   Name: GreenVial Lv3
   Desc: heal self
   Level: 3
-  Damage: 0
+  Damage: 20
   Heal: 3
   Defence: 0
   CoolTime: 2.3
-  UpgradeDataID: 0
   Sprite: {fileID: 21300000, guid: e584d815be51e4565818041c89d46548, type: 3}
   Shape:
     _column: 2
