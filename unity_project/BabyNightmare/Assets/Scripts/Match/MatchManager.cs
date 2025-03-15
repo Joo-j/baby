@@ -159,14 +159,27 @@ namespace BabyNightmare.Match
 
         private void OnGetBox(EquipmentBoxData boxData)
         {
-            var equipmentIDList = boxData.EquipmentIDList;
-            var dataList = new List<EquipmentData>();
-            for (var i = 0; i < equipmentIDList.Count; i++)
+            var probID = boxData.EquipmentProbDataID;
+            var probData = StaticDataManager.Instance.GetEquipmentProbData(probID);
+            var probDataList = probData.ProbDataList;
+
+            var randomPicker = new WeightedRandomPicker<ProbData>();
+            for (var i = 0; i < probDataList.Count; i++)
             {
-                var equipment = StaticDataManager.Instance.GetEquipmentData(equipmentIDList[i]);
-                dataList.Add(equipment);
+                var data = probDataList[i];
+                randomPicker.Add(data, data.Prob);
             }
 
+            var dataList = new List<EquipmentData>();
+            for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
+            {
+                var data = randomPicker.RandomPick();
+                var equipment = StaticDataManager.Instance.GetEquipmentData(data.EquipmentID);
+                dataList.Add(equipment);
+
+                randomPicker.Remove(data);
+            }
+            
             _matchView.Reroll(dataList);
         }
 

@@ -9,7 +9,7 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public EBoxType Type;
-        public List<int> EquipmentIDList;
+        public int EquipmentProbDataID;
     }
 }
 
