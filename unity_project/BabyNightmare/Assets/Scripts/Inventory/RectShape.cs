@@ -29,7 +29,6 @@ namespace BabyNightmare.Util
                             continue;
 
                         validIndexList.Add(index);
-                        Debug.Log($"valid {index}");
                     }
                 }
 
