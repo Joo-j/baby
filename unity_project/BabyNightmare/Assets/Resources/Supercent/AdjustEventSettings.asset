@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad27cb5b708b49eebf8454acdf24379, type: 3}
+  m_Name: AdjustEventSettings
+  m_EditorClassIdentifier: 
+  _firstOpenEventInfos:
+  - FirstOpenStyleEnum: 1
+    EventToken: y10wec
+  _specificValueEventInfos:
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 1
+    EventToken: rl1pac
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 2
+    EventToken: hqvcne
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 3
+    EventToken: 6zof1s
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 4
+    EventToken: mpo5tg
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 5
+    EventToken: yu9pqc
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 6
+    EventToken: ggglbt
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 7
+    EventToken: uhpg3l
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 8
+    EventToken: 9vsex0
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 9
+    EventToken: 3fg83x
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 10
+    EventToken: jag61c
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 11
+    EventToken: aq8qey
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 12
+    EventToken: plj6wd
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 13
+    EventToken: 2z38cs
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 14
+    EventToken: 67nt0q
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 15
+    EventToken: b9elli
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 16
+    EventToken: shamqs
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 17
+    EventToken: ya3sdr
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 18
+    EventToken: a4sg55
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 19
+    EventToken: gtqy09
+  - ValueStyleEnum: 10
+    ActionStyleEnum: 1
+    Value: 20
+    EventToken: 4w65k1
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 10
+    EventToken: 73k8an
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 20
+    EventToken: 4x7cix
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 30
+    EventToken: orkix3
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 40
+    EventToken: x1nmic
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 50
+    EventToken: snypan
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 60
+    EventToken: 9cw1r7
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 70
+    EventToken: ydzn8i
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 80
+    EventToken: eq5bt3
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 90
+    EventToken: 1zdy4g
+  - ValueStyleEnum: 20
+    ActionStyleEnum: 3
+    Value: 100
+    EventToken: 4emgpo
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 5
+    EventToken: m4jync
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 10
+    EventToken: 7ovfg0
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 20
+    EventToken: vjxtue
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 30
+    EventToken: owqls3
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 40
+    EventToken: 9zvnbo
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 50
+    EventToken: ms1n4z
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 60
+    EventToken: 9v0ljp
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 70
+    EventToken: f5wvpk
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 80
+    EventToken: b3x57m
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 90
+    EventToken: 77g02s
+  - ValueStyleEnum: 21
+    ActionStyleEnum: 3
+    Value: 100
+    EventToken: vi6ogs
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 1
+    EventToken: 59e3gb
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 5
+    EventToken: onnmlt
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 10
+    EventToken: dy1ph3
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 20
+    EventToken: fwmpn3
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 30
+    EventToken: cxubvx
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 40
+    EventToken: 12kgwr
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 50
+    EventToken: qpvy6x
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 60
+    EventToken: 3stif0
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 70
+    EventToken: 701r5m
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 80
+    EventToken: abizvd
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 90
+    EventToken: 6w9pck
+  - ValueStyleEnum: 22
+    ActionStyleEnum: 3
+    Value: 100
+    EventToken: k35d8h
+  _iapEventInfos: []

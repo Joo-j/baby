@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccbbf25b099b49e4a7216a8be26104a, type: 3}
+  m_Name: AnalyticsV2Settings
+  m_EditorClassIdentifier: 
+  _useLog: 1
+  _useStageAutoFunnel: 0
+  _autoFunnelLastStage: 5
+  _stageSetting:
+    _prefix_world: world
+    _prefix_stage: stage
+    _adjust_world: world
+    _adjust_stage: stage

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2784001c8f4a144dabc34f6706e2e4e3, type: 3}
+  m_Name: BuildSetting
+  m_EditorClassIdentifier: 
+  _dev: 1
+  _code: linkedsnake
+  _adjust: 1jdxvjigixfk
+  _adjust_secret: (1, 202848921, 613012290, 1746581301, 217880019)
+  _apple_store_id: 6449243946
+  _slack: 
+  _developerId: U039TEW0X0D
+  _exDeveloperIds:
+  - U04DMKA89E1
+  - U07F0S280FR
+  _rewardedVideo_aos: c6d5c296efe8f0cc
+  _interstitial_aos: 7287daffe603c78a
+  _banner_aos: 8c43668b057dd26d
+  _rewardedVideo_ios: e4e62d430e3dd97f
+  _interstitial_ios: 0ec13509a00fa1cd
+  _banner_ios: fc78df0fe7a9060c
+  _mrec_aos: 
+  _mrec_ios: 
+  _appopen_ads_aos: ca-app-pub-5111356736239858/2585780325
+  _appopen_ads_ios: ca-app-pub-5111356736239858/4410568707
+  _partnerLogo: {fileID: 0}
+  _isOnDebugLogAtReleaseMode: 1
+  _isDeployAll: 0
