@@ -18,8 +18,8 @@ namespace BabyNightmare
         private const string KEY_COIN = "player_data_coin";
         private const string KEY_GEM = "player_data_gem";
 
-        public float HP = 50;
-        private int _coin = 10;
+        public float HP = 0;
+        private int _coin = 0;
         private int _gem = 0;
         public bool Haptic_Active;
         public int Chapter = 1;
@@ -41,7 +41,6 @@ namespace BabyNightmare
                     _coin = 0;
 
                 OnChangedCoinEvent?.Invoke(_coin);
-                Save();
             }
         }
 
@@ -58,7 +57,6 @@ namespace BabyNightmare
                     _gem = 0;
 
                 OnChangedGemEvent?.Invoke(_gem);
-                Save();
             }
         }
 
@@ -84,6 +82,8 @@ namespace BabyNightmare
             HP = jsonClass[KEY_HP]?.AsInt ?? 0;
             _coin = jsonClass[KEY_COIN]?.AsInt ?? 0;
             _gem = jsonClass[KEY_GEM]?.AsInt ?? 0;
+
+            Debug.Log("PlayerData Load Success");
         }
 
         public void Save()
@@ -98,7 +98,8 @@ namespace BabyNightmare
             jsonClass[KEY_GEM] = new JSONData(_gem);
 
             var binaryData = jsonClass.ToString();
-            FileSaveUtil.Save(FILE_PLAYER_DATA, binaryData, true, true);
+            FileSaveUtil.Save(FILE_PLAYER_DATA, binaryData, false, false);
+            Debug.Log("PlayerData Save Success");
         }
     }
 }

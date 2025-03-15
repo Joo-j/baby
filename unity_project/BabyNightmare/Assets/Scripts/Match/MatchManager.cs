@@ -84,6 +84,8 @@ namespace BabyNightmare.Match
             _matchView = null;
 
             _enterLobby?.Invoke();
+
+            PlayerData.Instance.Save();
         }
 
         private void OnStartWave()
