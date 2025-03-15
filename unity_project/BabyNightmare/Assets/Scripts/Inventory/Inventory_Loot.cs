@@ -43,6 +43,11 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
+        public override void Equip(Equipment equipment, Vector2Int targetIndex)
+        {
+            Equip(equipment);
+        }
+
         public override void Equip(Equipment equipment)
         {
             equipment.RTF.SetParent(transform);

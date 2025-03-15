@@ -20,10 +20,8 @@ namespace BabyNightmare.InventorySystem
         private Coroutine _coSwing = null;
 
         public EquipmentData Data { get; private set; }
-        public Action Reset { get; set; }
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
-
 
         public void Refresh(EquipmentData data, bool showFX)
         {

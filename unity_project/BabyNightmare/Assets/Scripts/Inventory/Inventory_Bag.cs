@@ -79,29 +79,19 @@ namespace BabyNightmare.InventorySystem
             var targetIndex = GetIndex(screenPos + offset);
 
             var indexList = data.Shape.IndexList;
+            var oeSet = new HashSet<Equipment>();
             for (var i = 0; i < indexList.Count; i++)
             {
                 var index = indexList[i];
                 var newIndex = targetIndex + index;
                 if (false == _shape.IsValid(newIndex))
-                    return false;
-            }
-
-            HashSet<Equipment> oeSet = new HashSet<Equipment>();
-            for (var x = 0; x < data.Shape.Column; x++)
-            {
-                for (var y = 0; y < data.Shape.Row; y++)
                 {
-                    var index = new Vector2Int(x, y);
-                    if (false == data.Shape.IsValid(index))
-                        continue;
-
-                    var newIndex = targetIndex + index;
-                    if (true == TryGetOverlap(newIndex, out var overlapEquipment))
-                    {
-                        oeSet.Add(overlapEquipment);
-                    }
+                    //Debug.Log($"{newIndex} 그리드 밖이라 실패");
+                    return false;
                 }
+
+                if (true == TryGetOverlap(newIndex, out var overlapEquipment))
+                    oeSet.Add(overlapEquipment);
             }
 
             var overlapCount = oeSet.Count;
@@ -142,7 +132,7 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
-        private void Equip(Equipment equipment, Vector2Int index)
+        public override void Equip(Equipment equipment, Vector2Int index)
         {
             equipment.transform.SetParent(transform);
             equipment.Index = index;
@@ -211,8 +201,8 @@ namespace BabyNightmare.InventorySystem
 
         public override Equipment Get(Vector2 screenPos)
         {
-            var index = GetIndex(screenPos);
-            var equipment = Get(index);
+            var targetIndex = GetIndex(screenPos);
+            var equipment = Get(targetIndex);
             if (null == equipment)
                 return null;
 
@@ -222,15 +212,13 @@ namespace BabyNightmare.InventorySystem
         {
             foreach (var equipment in _equipmentSet)
             {
-                var data = equipment.Data;
-                for (var i = 0; i < data.Shape.Column; i++)
+                var indexList = equipment.Data.Shape.IndexList;
+                for (var i = 0; i < indexList.Count; i++)
                 {
-                    for (var j = 0; j < data.Shape.Row; j++)
-                    {
-                        var newIndex = equipment.Index + new Vector2Int(i, j);
-                        if (targetIndex == newIndex)
-                            return equipment;
-                    }
+                    var index = indexList[i];
+                    var newIndex = equipment.Index + index;
+                    if (targetIndex == newIndex)
+                        return equipment;
                 }
             }
 

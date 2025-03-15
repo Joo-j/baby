@@ -14,11 +14,13 @@ namespace BabyNightmare.InventorySystem
         protected RectTransform _rtf;
         protected RectTransform _canvasRTF;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData;
+        private static Inventory _dragStartInventory = null;
         private static Inventory _currentInventory = null;
         protected static Equipment _draggedEquipment = null;
         protected static PointerEventData _dragEventData = null;
 
         public abstract bool TryEquip(Equipment equipment, Vector2 screenPos);
+        public abstract void Equip(Equipment equipment, Vector2Int targetIndex);
         public abstract void Equip(Equipment equipment);
         public abstract Equipment Unequip(Vector2 screenPos);
         public abstract Equipment Get(Vector2 screenPos);
@@ -57,11 +59,8 @@ namespace BabyNightmare.InventorySystem
 
             equipment.transform.SetParent(_canvasRTF);
             _draggedEquipment = equipment;
-            _draggedEquipment.Reset = () =>
-            {
-                TryEquip(equipment, equipment.Index);
-                _draggedEquipment = null;
-            };
+
+            _dragStartInventory = this;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -83,21 +82,17 @@ namespace BabyNightmare.InventorySystem
 
             var screenPos = eventData.position;
 
-            if (true == _currentInventory.TryEquip(_draggedEquipment, screenPos))
+            if (false == _currentInventory.TryEquip(_draggedEquipment, screenPos))
             {
-                _draggedEquipment = null;
+                _dragStartInventory.Equip(_draggedEquipment, _draggedEquipment.Index);
             }
-            else
-            {
-                _draggedEquipment.Reset?.Invoke();
-            }
+
+            _draggedEquipment = null;
+            _dragStartInventory = null;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (null != _draggedEquipment)
-                return;
-
             if (null != _draggedEquipment)
                 return;
 
