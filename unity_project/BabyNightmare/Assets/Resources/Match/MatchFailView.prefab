@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fff74d2deba83421c8659f5ae26d8f1d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29eeeee00e3981f459644bf8cf49fb74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5813,7 +5813,7 @@ ParticleSystemRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785620296180702710}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -6533,7 +6533,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: fff74d2deba83421c8659f5ae26d8f1d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 29eeeee00e3981f459644bf8cf49fb74, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
