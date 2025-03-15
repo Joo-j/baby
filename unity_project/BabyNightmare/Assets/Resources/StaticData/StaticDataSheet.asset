@@ -15,32 +15,32 @@ MonoBehaviour:
   LobbyButtonDataList:
   - ButtonType: 1
     ComparisonType: 1
-    ConditionType: 1
+    ConditionType: 2
     ConditionValue: 0
     Order: 1
     ShowOpenAni: 0
   - ButtonType: 2
     ComparisonType: 1
-    ConditionType: 1
-    ConditionValue: 0
+    ConditionType: 2
+    ConditionValue: 5
     Order: 1
     ShowOpenAni: 0
   - ButtonType: 5
     ComparisonType: 1
     ConditionType: 2
-    ConditionValue: 4
+    ConditionValue: 5
     Order: 1
     ShowOpenAni: 0
   - ButtonType: 4
     ComparisonType: 1
     ConditionType: 2
-    ConditionValue: 2
+    ConditionValue: 5
     Order: 1
     ShowOpenAni: 0
   - ButtonType: 3
     ComparisonType: 1
     ConditionType: 2
-    ConditionValue: 3
+    ConditionValue: 5
     Order: 1
     ShowOpenAni: 0
   WaveDataList:

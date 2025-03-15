@@ -16,10 +16,10 @@ namespace BabyNightmare
             LayerHelper.Init();
             PlayerData.Instance.Init();
             HUDManager.Instance.Init();
+            HUDManager.Instance.SetState(EHUDState.Show_Shortcut_Off, "AppOpen");
             StaticDataManager.Instance.Init();
             LobbyManager.Instance.Init(StartMatch);
             MatchManager.Instance.Init(EnterLobby);
-            HUDManager.Instance.SetState(EHUDState.Show_Shortcut_Off, "AppOpen");
 
             EnterLobby();
         }

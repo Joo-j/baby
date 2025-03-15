@@ -180,11 +180,8 @@ namespace BabyNightmare.Lobby
 
         public void SetMenu(ELobbyButtonType type, object identifier = null, Action doneCallback = null)
         {
-            if (type == ELobbyButtonType.Unknown)
-            {
-                _printer.Log("SetMenu", $"Unknown 버튼 클릭 요청으로 갱신을 취소합니다.");
+            if (type == ELobbyButtonType.Unknown || _focusButtonType == type)
                 return;
-            }
 
             if (_focusButtonType != ELobbyButtonType.Unknown)
                 HideView(_focusButtonType);
