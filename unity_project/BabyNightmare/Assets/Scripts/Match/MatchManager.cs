@@ -45,7 +45,7 @@ namespace BabyNightmare.Match
             _maxWave = _waveDataList.Count;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
-            _matchField.Init(GetCoin, OnClearWave, OnFailMatch);
+            _matchField.Init(chapter, GetCoin, OnClearWave, OnFailMatch);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 

@@ -13,19 +13,20 @@ namespace BabyNightmare.Match
     public class MatchField : MonoBehaviour
     {
         [SerializeField] private Camera _renderCamera;
-        [SerializeField] private Transform _groundTF;
         [SerializeField] private Transform _playerTF;
         [SerializeField] private Transform _nearSpawnTF;
         [SerializeField] private Transform _midSpawnTF;
         [SerializeField] private Transform _farSpawnTF;
-        [SerializeField] private AnimationCurve _boxMoveCurve;
+        [SerializeField] private Transform _boxSpawnTF;
         [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _attackRadius = 10f;
 
+        private const string PATH_FIELD = "Match/Field/Field_";
         private const string PATH_PLAYER = "Match/Player";
         private const string PATH_ENEMY = "Match/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox_";
 
+        private Transform _fieldTF;
         private RenderTexture _rt = null;
         private Transform[] _nearSpawnTFArr = null;
         private Transform[] _midSpawnTFArr = null;
@@ -40,8 +41,10 @@ namespace BabyNightmare.Match
         public Camera RenderCamera => _renderCamera;
         public Vector3 CameraForward => _renderCamera.transform.forward;
 
-        public void Init(Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
+        public void Init(int chapter, Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
         {
+            _fieldTF = ObjectUtil.LoadAndInstantiate<Transform>($"{PATH_FIELD}{chapter}", transform);
+
             _nearSpawnTFArr = _nearSpawnTF.GetComponentsInChildren<Transform>();
             _midSpawnTFArr = _midSpawnTF.GetComponentsInChildren<Transform>();
             _farSpawnTFArr = _farSpawnTF.GetComponentsInChildren<Transform>();
@@ -145,14 +148,14 @@ namespace BabyNightmare.Match
             IEnumerator Co_EncounterBox()
             {
                 var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
-                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _groundTF);
-                box.TF.position = _player.TF.position + new Vector3(_groundMoveAmount - 1, 0, 0);
+                var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxSpawnTF);
+                box.TF.SetParent(_fieldTF);
 
                 yield return CoroutineUtil.WaitForSeconds(1.5f);
 
                 _player.ShowMoveAni();
 
-                var startPos = _groundTF.localPosition;
+                var startPos = _fieldTF.localPosition;
                 var targetPos = startPos + Vector3.left * _groundMoveAmount;
                 var moveDuration = 3f;
                 var elapsed = 0f;
@@ -161,10 +164,10 @@ namespace BabyNightmare.Match
                     yield return null;
                     elapsed += Time.deltaTime;
                     var factor = elapsed / moveDuration;
-                    _groundTF.localPosition = Vector3.Lerp(startPos, targetPos, factor);
+                    _fieldTF.localPosition = Vector3.Lerp(startPos, targetPos, factor);
                 }
 
-                _groundTF.localPosition = targetPos;
+                _fieldTF.localPosition = targetPos;
                 _player.ShowIdleAni();
 
                 box.Open(doneCallback);
