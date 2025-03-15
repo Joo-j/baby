@@ -17,7 +17,7 @@ MonoBehaviour:
   Desc: heal self
   Level: 2
   Damage: 0
-  Heal: 3.5
+  Heal: 0
   Defence: 0
   CoolTime: 2.5
   UpgradeDataID: 1205

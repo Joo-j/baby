@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 1107
   Name: Spear Lv3
   Desc: attack random enemy
-  Level: 3
+  Level: 2
   Damage: 25
   Heal: 0
   Defence: 0
@@ -25,4 +25,4 @@ MonoBehaviour:
   Shape:
     _column: 1
     _row: 3
-    _shape: 010101
+    _shape: 01

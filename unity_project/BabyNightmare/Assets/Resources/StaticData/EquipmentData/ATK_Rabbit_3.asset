@@ -25,4 +25,4 @@ MonoBehaviour:
   Shape:
     _column: 1
     _row: 3
-    _shape: 010101
+    _shape: 01

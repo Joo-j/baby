@@ -16,7 +16,7 @@ MonoBehaviour:
   Name: Spear Lv1
   Desc: attack random enemy
   Level: 1
-  Damage: 15
+  Damage: 0
   Heal: 0
   Defence: 0
   CoolTime: 4.5

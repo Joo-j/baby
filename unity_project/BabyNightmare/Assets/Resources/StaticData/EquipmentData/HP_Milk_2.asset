@@ -16,8 +16,8 @@ MonoBehaviour:
   Name: Spear Lv2
   Desc: attack random enemy
   Level: 2
-  Damage: 20
-  Heal: 0
+  Damage: 0
+  Heal: 7
   Defence: 0
   CoolTime: 3.9
   UpgradeDataID: 1206
