@@ -179,14 +179,16 @@ namespace BabyNightmare.Match
         {
             var waveData = _waveDataList[_currentWave];
 
-            var group = waveData.EquipmentProbDataGroup;
-            var equipmentProbDataList = StaticDataManager.Instance.GetEquipmentProbDataList(group);
+            var id = waveData.EquipmentProbDataID;
+            var equipmentProbData = StaticDataManager.Instance.GetEquipmentProbData(id);
 
-            var randomPicker = new WeightedRandomPicker<EquipmentProbData>();
-            for (var i = 0; i < equipmentProbDataList.Count; i++)
+            var randomPicker = new WeightedRandomPicker<ProbData>();
+
+            var probDataList = equipmentProbData.ProbDataList;
+            for (var i = 0; i < probDataList.Count; i++)
             {
-                var probDataGroup = equipmentProbDataList[i];
-                randomPicker.Add(probDataGroup, probDataGroup.Prob);
+                var data = probDataList[i];
+                randomPicker.Add(data, data.Prob);
             }
 
             var dataList = new List<EquipmentData>();

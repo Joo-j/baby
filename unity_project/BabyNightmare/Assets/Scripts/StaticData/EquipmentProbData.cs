@@ -5,11 +5,16 @@ using UnityEngine;
 namespace BabyNightmare.StaticData
 {
     [Serializable]
-    public class EquipmentProbData
+    public class ProbData
     {
-        public int ID;
-        public int Group;
         public int EquipmentID;
         public int Prob;
+    }
+
+    [CreateAssetMenu(fileName = "EquipmentProbData", menuName = "BabyNightmare/EquipmentProbData")]
+    public class EquipmentProbData : ScriptableObject
+    {
+        public int ID;
+        public List<ProbData> ProbDataList;
     }
 }

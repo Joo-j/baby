@@ -84,18 +84,13 @@ namespace BabyNightmare.InventorySystem
                 return;
             }
 
-            // 🔹 현재 그리드보다 큰 위치에 추가하려면 자동 확장
             if (index.x >= _gridSize.x || index.y >= _gridSize.y)
             {
-                Debug.Log("현재 그리드보다 큰 위치에 추가하려면 자동 확장");
-
                 _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
 
                 var width = _gridSize.x * _cellSize.x;
                 var height = _gridSize.y * _cellSize.y;
                 _rtf.sizeDelta = new Vector2(width, height);
-
-                Debug.Log($"그리드 크기 업데이트: {_gridSize.x} x {_gridSize.y}");
 
                 foreach (var pair in _cellDict)
                 {

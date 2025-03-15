@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    [Serializable]
-    public class WaveData
+    [CreateAssetMenu(fileName = "WaveData", menuName = "BabyNightmare/WaveData")]
+    public class WaveData : ScriptableObject
     {
         public int ID;
         public int Chapter;
-        public int EquipmentProbDataGroup;
+        public int EquipmentProbDataID;
         public int EquipmentBoxDataID;
         public int EnemySpawnDataID;
     }

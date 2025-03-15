@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac1cbe6ac93284d0daa5a5cad743c358, type: 3}
+  m_Name: EquipmentProbData
+  m_EditorClassIdentifier: 
+  ID: 1
+  ProbDataList:
+  - EquipmentID: 1001
+    Prob: 1
+  - EquipmentID: 1002
+    Prob: 1
+  - EquipmentID: 1003
+    Prob: 1
+  - EquipmentID: 1004
+    Prob: 1
+  - EquipmentID: 1005
+    Prob: 1
+  - EquipmentID: 1006
+    Prob: 1
+  - EquipmentID: 1007
+    Prob: 1
+  - EquipmentID: 1008
+    Prob: 1
+  - EquipmentID: 1009
+    Prob: 1
+  - EquipmentID: 1010
+    Prob: 1
+  - EquipmentID: 1011
+    Prob: 1
+  - EquipmentID: 1012
+    Prob: 1
+  - EquipmentID: 1013
+    Prob: 1
+  - EquipmentID: 1014
+    Prob: 1

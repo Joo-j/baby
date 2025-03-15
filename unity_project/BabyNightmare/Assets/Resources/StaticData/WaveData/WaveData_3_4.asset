@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98257b108a5ac411fbe01a896c7c4476, type: 3}
-  m_Name: EnemySpawnData_3
+  m_Script: {fileID: 11500000, guid: 2aa0f6935fcbb4e4986131bbe16aab7a, type: 3}
+  m_Name: WaveData_3_4
   m_EditorClassIdentifier: 
-  ID: 1
-  EnemyIDList: 6700000067000000670000006700000067000000670000006700000066000000660000006600000066000000650000006500000065000000
+  ID: 10
+  Chapter: 3
+  EquipmentProbDataID: 1
+  EquipmentBoxDataID: 1
+  EnemySpawnDataID: 3

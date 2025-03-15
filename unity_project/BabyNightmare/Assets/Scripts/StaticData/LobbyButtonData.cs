@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BabyNightmare.StaticData
 {
-    [Serializable]
-    public class LobbyButtonData : IComparable<LobbyButtonData>
+    [CreateAssetMenu(fileName = "LobbyButtonData", menuName = "BabyNightmare/LobbyButtonData")]
+    public class LobbyButtonData : ScriptableObject, IComparable<LobbyButtonData>
     {
         //[Auto generate code begin]
 
