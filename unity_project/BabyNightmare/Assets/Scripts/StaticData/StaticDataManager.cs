@@ -17,6 +17,8 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, EnemyData> _enemyDataDict = null;
         private Dictionary<int, List<EnemySpawnData>> _enemySpawnDataDict = null;
 
+        private int _lastChapter = 0;
+
         public void Init()
         {
             _sheet = Resources.Load<StaticDataSheet>(PATH_STATIC_DATA_SHEET);
@@ -65,6 +67,8 @@ namespace BabyNightmare.StaticData
                     _waveDataDict.Add(chapter, new List<WaveData>());
 
                 _waveDataDict[chapter].Add(waveData);
+
+                _lastChapter = Mathf.Max(_lastChapter, chapter);
             }
         }
 
@@ -142,6 +146,7 @@ namespace BabyNightmare.StaticData
                 _enemySpawnDataDict[group].Add(data);
             }
         }
+
         public LobbyButtonData GetLobbyButtonData(ELobbyButtonType type)
         {
             if (false == _lobbyButtonDict.TryGetValue(type, out var data))
@@ -154,8 +159,8 @@ namespace BabyNightmare.StaticData
         {
             if (false == _waveDataDict.TryGetValue(chapter, out var waveDataList))
             {
-                Debug.LogError($"{chapter} wave is not exist");
-                return null;
+                Debug.Log($"{chapter} Chapter가 없어 마지막 챕터 {_lastChapter} 데이터로 대체");
+                return _waveDataDict[_lastChapter];
             }
 
             return waveDataList;
