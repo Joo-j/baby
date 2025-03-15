@@ -21,7 +21,7 @@ MonoBehaviour:
   Defence: 0
   CoolTime: 2.5
   UpgradeDataID: 1205
-  Sprite: {fileID: 21300006, guid: 4f666dd4618814d2f8c5a2599cd224c7, type: 3}
+  Sprite: {fileID: 21300000, guid: 529d91caab9aa41f5aeb865170984211, type: 3}
   Shape:
     _column: 1
     _row: 1
