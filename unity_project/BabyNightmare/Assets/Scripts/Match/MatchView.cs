@@ -88,10 +88,13 @@ namespace BabyNightmare.Match
             _bag.Init(_loot, OnEquip, OnUnequip, context.GetUpgradeData);
 
             var addedIndexList = PlayerData.Instance.AddedIndexList;
-            for (var i = 0; i < addedIndexList.Count; i++)
+            if (null != addedIndexList)
             {
-                var index = addedIndexList[i];
-                _bag.AddCell(index);
+                for (var i = 0; i < addedIndexList.Count; i++)
+                {
+                    var index = addedIndexList[i];
+                    _bag.AddCell(index);
+                }
             }
 
             _bag.TryAdd(_context.InitEquipment);
