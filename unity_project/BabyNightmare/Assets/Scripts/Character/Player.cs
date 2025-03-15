@@ -20,7 +20,7 @@ namespace BabyNightmare.Character
         Vector3 cameraForward,
         Action onDiePlayer)
         {
-            this.HP = Mathf.Min(50, hp);
+            this.HP = Mathf.Max(50, hp);
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
         }
