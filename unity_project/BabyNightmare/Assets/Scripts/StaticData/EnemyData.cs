@@ -20,5 +20,7 @@ namespace BabyNightmare.StaticData
         public int Coin_Min = 1;
         public int Coin_Max = 10;
         public ESpawnOrder SpawnOrder;
+        public float Spawn_Delay_Min = 1f;
+        public float Spawn_Delay_Max = 2f;
     }
 }

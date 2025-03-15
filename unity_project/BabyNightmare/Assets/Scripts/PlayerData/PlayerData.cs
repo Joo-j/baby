@@ -18,13 +18,15 @@ namespace BabyNightmare
         private const string KEY_COIN = "player_data_coin";
         private const string KEY_GEM = "player_data_gem";
 
+        public float HP = 50;
+        private int _coin = 10;
+        private int _gem = 0;
         public bool Haptic_Active;
         public int Chapter = 1;
         public int TotalAttemptCount;
         public int ChapterAttemptCount;
-        public float HP = 50;
-        private int _coin = 10;
-        private int _gem = 0;
+        public List<Vector2Int> _bagShape;
+
 
         public class ChangedCoinEvent : UnityEngine.Events.UnityEvent<int> { }
         public ChangedCoinEvent OnChangedCoinEvent { get; private set; } = new ChangedCoinEvent();
@@ -39,6 +41,7 @@ namespace BabyNightmare
                     _coin = 0;
 
                 OnChangedCoinEvent?.Invoke(_coin);
+                Save();
             }
         }
 
@@ -55,6 +58,7 @@ namespace BabyNightmare
                     _gem = 0;
 
                 OnChangedGemEvent?.Invoke(_gem);
+                Save();
             }
         }
 

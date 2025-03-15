@@ -94,7 +94,7 @@ namespace BabyNightmare.Match
 
                 enemy.Init(enemyContext);
                 _aliveEnemies.Add(enemy);
-                delay += UnityEngine.Random.Range(1f, 3f);
+                delay += UnityEngine.Random.Range(data.Spawn_Delay_Min, data.Spawn_Delay_Max);
             }
         }
 

@@ -30,7 +30,7 @@ namespace BabyNightmare.Match
             yield return null;
 
             yield return CoroutineUtil.WaitUntil(() => _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f);
-            yield return CoroutineUtil.WaitForSeconds(1f);
+            yield return CoroutineUtil.WaitForSeconds(0.5f);
 
             doneCallback?.Invoke();
             Destroy(gameObject);
