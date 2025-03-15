@@ -71,14 +71,17 @@ namespace BabyNightmare.Match
                 if (null != _coRoullete)
                     StopCoroutine(_coRoullete);
 
-                CoinHUD.SetSpreadPoint(BTN_RVReward.transform.position);
+                CoinHUD.SetSpreadPoint(BTN_NoThanks.transform.position);
                 PlayerData.Instance.Coin += coin;
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
-                doneCallback?.Invoke();
 
-                Destroy(gameObject);
+                StartCoroutine(SimpleLerp.Co_Invoke(2f, () =>
+                {
+                    doneCallback?.Invoke();
+                    Destroy(gameObject);
+                }));
             }
 
             _coSequence = StartCoroutine(Co_ShowRewardInfo());
@@ -133,8 +136,8 @@ namespace BabyNightmare.Match
             {
                 yield return null;
                 elapsed += Time.deltaTime;
-                var timeFactor = _rouletteCurve.Evaluate(elapsed / _rouletteSweepTime);
-                var arrowRot = Mathf.Lerp(startRot, targetRot, timeFactor);
+                var factor = _rouletteCurve.Evaluate(elapsed / _rouletteSweepTime);
+                var arrowRot = Mathf.Lerp(startRot, targetRot, factor);
                 CLS_Roulette.TF_Arrow.rotation = Quaternion.Euler(0, 0, arrowRot);
 
                 for (int index = 0, length = _rouletteRotationArr.Length - 1; index < length; ++index)
@@ -176,13 +179,5 @@ namespace BabyNightmare.Match
 
             yield return Co_Roulette(coin);
         }
-
-
-#if UNITY_EDITOR
-        protected override void _EDITOR_AssignObjectsForUser()
-        {
-
-        }
-#endif
     }
 }

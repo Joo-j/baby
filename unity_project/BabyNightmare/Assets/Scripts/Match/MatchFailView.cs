@@ -71,14 +71,17 @@ namespace BabyNightmare.Match
                 if (null != _coRoullete)
                     StopCoroutine(_coRoullete);
 
-                CoinHUD.SetSpreadPoint(BTN_RVReward.transform.position);
+                CoinHUD.SetSpreadPoint(BTN_NoThanks.transform.position);
                 PlayerData.Instance.Coin += coin;
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
-                doneCallback?.Invoke();
-
-                Destroy(gameObject);
+                
+                StartCoroutine(SimpleLerp.Co_Invoke(2f, () =>
+                {
+                    doneCallback?.Invoke();
+                    Destroy(gameObject);
+                }));
             }
 
             _coSequence = StartCoroutine(Co_ShowRewardInfo());
