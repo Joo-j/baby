@@ -28,17 +28,16 @@ namespace BabyNightmare.Util
                         {
                             var index = new Vector2Int(x, y);
 
-                            Debug.Log(index);
-
                             if (false == IsValid(index))
+                            {
+                                Debug.Log($"{index}가 false라 취소");
                                 continue;
+                            }
 
                             _indexList.Add(index);
                         }
                     }
                 }
-                
-                Debug.Assert(_indexList.Count != 0, "index count is 0");
 
                 return _indexList;
             }
