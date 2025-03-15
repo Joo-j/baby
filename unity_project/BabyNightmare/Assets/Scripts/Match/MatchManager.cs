@@ -11,9 +11,9 @@ namespace BabyNightmare.Match
     public class MatchManager : SingletonBase<MatchManager>
     {
         private const string PATH_MATCH_FIELD = "Match/MatchField";
-        private const string PATH_MATCH_VIEW = "Match/MatchView";
-        private const string PATH_MATCH_FAIL_VIEW = "Match/MatchFailView";
-        private const string PATH_MATCH_COMPLETE_VIEW = "Match/MatchCompleteView";
+        private const string PATH_MATCH_VIEW = "Match/UI/MatchView";
+        private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
+        private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int REROLL_INITIAL_COST = 10;

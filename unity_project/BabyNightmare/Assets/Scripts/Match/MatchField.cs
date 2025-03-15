@@ -22,8 +22,8 @@ namespace BabyNightmare.Match
         [SerializeField] private float _attackRadius = 10f;
 
         private const string PATH_FIELD = "Match/Field/Field_";
-        private const string PATH_PLAYER = "Match/Player";
-        private const string PATH_ENEMY = "Match/Enemy_";
+        private const string PATH_PLAYER = "Match/Character/Player";
+        private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
 
         private Transform _fieldTF;
