@@ -215,10 +215,7 @@ namespace BabyNightmare.Match
             if (data1.ID != data2.ID)
                 return null;
 
-            if (data1.UpgradeDataID == -1)
-                return null;
-
-            return StaticDataManager.Instance.GetEquipmentData(data1.UpgradeDataID);
+            return StaticDataManager.Instance.GetEquipmentData(data1.ID + 100);
         }
     }
 }

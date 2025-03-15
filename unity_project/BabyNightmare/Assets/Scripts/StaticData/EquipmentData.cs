@@ -15,7 +15,6 @@ namespace BabyNightmare.StaticData
         public float Heal;
         public float Defence;
         public float CoolTime;
-        public int UpgradeDataID = -1;
         public Sprite Sprite;
         public RectShape Shape;
     }
