@@ -35,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 150}
-  m_SizeDelta: {x: 300, y: 300}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &554474317169077232
 CanvasGroup:
@@ -62,13 +62,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f62825919eb8f44a998bec458d7118a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentRTF: {fileID: 0}
-  _rtf: {fileID: 288495394893471918}
   _canvasGroup: {fileID: 554474317169077232}
-  _shape:
-    _column: 3
-    _row: 3
-    _shape: 010101010101010101
+  _cellSize: {x: 100, y: 100}
   _cellClear: {fileID: 21300000, guid: 883d7f9c447f84800bc530c0c18c509c, type: 3}
   _cellEnable: {fileID: 21300000, guid: 32ae656bae8144705a5dadc79c30c7c1, type: 3}
   _cellOverlapped: {fileID: 21300000, guid: 2803c85c24cc74eb59a1a3d4ce58ea22, type: 3}
@@ -105,10 +100,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 288495394893471918}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -25}
-  m_SizeDelta: {x: 450, y: 400}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -35}
+  m_SizeDelta: {x: 200, y: 170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5571674470637296063
 CanvasRenderer:

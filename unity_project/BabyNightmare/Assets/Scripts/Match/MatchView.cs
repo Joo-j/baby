@@ -86,6 +86,14 @@ namespace BabyNightmare.Match
 
             _loot.Init(context.GetUpgradeData);
             _bag.Init(_loot, OnEquip, OnUnequip, context.GetUpgradeData);
+
+            var addedIndexList = PlayerData.Instance.AddedIndexList;
+            for (var i = 0; i < addedIndexList.Count; i++)
+            {
+                var index = addedIndexList[i];
+                _bag.AddCell(index);
+            }
+
             _bag.TryAdd(_context.InitEquipment);
 
             _rerollGO.SetActive(false);
@@ -274,5 +282,16 @@ namespace BabyNightmare.Match
             _atkTMP.text = $"{_statDict[EStatType.ATK]}/s";
             _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                _bag.ShowAddableCell();
+            }
+        }
+
+#endif
     }
 }

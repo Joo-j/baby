@@ -1,27 +1,29 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
-using System.Linq;
 
 namespace BabyNightmare.InventorySystem
 {
     public class Inventory_Bag : Inventory
     {
         [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private RectShape _shape;
+        [SerializeField] private Vector2 _cellSize = default;
         [SerializeField] private Sprite _cellClear;
         [SerializeField] private Sprite _cellEnable;
         [SerializeField] private Sprite _cellOverlapped;
         [SerializeField] private Sprite _cellUpgradable;
 
-        private Image[] _cellArr = null;
-        private Vector2 _cellSize = default;
+        private const string PATH_CELL = "Inventory/Cell";
+        private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
+        private Vector2Int _gridSize = default;
+        private Dictionary<Vector2Int, Cell> _cellDict = null;
+        private List<Cell> _addableCells = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Inventory _outsideInventory = null;
         private Action<EquipmentData> _onEquip = null;
@@ -38,29 +40,13 @@ namespace BabyNightmare.InventorySystem
             _onUnequip = onUnequip;
             _getUpgradeData = getUpgradeData;
 
-            _cellArr = new Image[_shape.Row * _shape.Column];
+            _cellDict = new Dictionary<Vector2Int, Cell>();
 
-            var topLeft = _rtf.sizeDelta * -0.5f;
-            var width = _rtf.sizeDelta.x / _shape.Column;
-            var height = _rtf.sizeDelta.y / _shape.Row;
-            _cellSize = new Vector2(width, height);
-            var halfCellSize = _cellSize * 0.5f;
+            for (int x = 0; x < DEFAULT_GRID_SIZE.x; x++)
+                for (int y = 0; y < DEFAULT_GRID_SIZE.y; y++)
+                    AddCell(new Vector2Int(x, y));
 
-            var count = 0;
-            for (int y = 0; y < _shape.Row; y++)
-            {
-                for (int x = 0; x < _shape.Column; x++)
-                {
-                    var cell = new GameObject($"cell {y} {x}").AddComponent<Image>();
-                    cell.transform.SetParent(transform);
-                    cell.sprite = _cellClear;
-                    cell.type = Image.Type.Sliced;
-                    cell.rectTransform.anchoredPosition = topLeft + new Vector2(_cellSize.x * (_shape.Column - 1 - x), _cellSize.y * y) + halfCellSize;
-                    cell.rectTransform.sizeDelta = _cellSize;
-                    _cellArr[count] = cell;
-                    ++count;
-                }
-            }
+            _addableCells = new List<Cell>();
 
             _equipmentSet = new HashSet<Equipment>();
         }
@@ -70,6 +56,157 @@ namespace BabyNightmare.InventorySystem
             base.OnEnable();
             StartCoroutine(Co_RefreshCell());
         }
+
+        private bool IsValid(Vector2Int index)
+        {
+            if (index.x < 0 || index.y < 0 || index.x >= _gridSize.x || index.y >= _gridSize.y)
+                return false;
+
+            return _cellDict.ContainsKey(index);
+        }
+
+        private Cell CreateCell(Vector2Int index)
+        {
+            var cell = ObjectUtil.LoadAndInstantiate<Cell>(PATH_CELL, transform);
+            cell.RTF.sizeDelta = _cellSize;
+            float newPosX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + index.x * _cellSize.x;
+            float newPosY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + index.y * _cellSize.y;
+            cell.RTF.anchoredPosition = new Vector2(newPosX, newPosY);
+            cell.Image.sprite = _cellClear;
+            return cell;
+        }
+
+        public void AddCell(Vector2Int index)
+        {
+            if (_cellDict.ContainsKey(index))
+            {
+                Debug.Log($"{index}에 이미 cell이 들어있습니다.");
+                return;
+            }
+
+            // 🔹 현재 그리드보다 큰 위치에 추가하려면 자동 확장
+            if (index.x >= _gridSize.x || index.y >= _gridSize.y)
+            {
+                Debug.Log("현재 그리드보다 큰 위치에 추가하려면 자동 확장");
+
+                _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
+
+                var width = _gridSize.x * _cellSize.x;
+                var height = _gridSize.y * _cellSize.y;
+                _rtf.sizeDelta = new Vector2(width, height);
+
+                Debug.Log($"그리드 크기 업데이트: {_gridSize.x} x {_gridSize.y}");
+
+                foreach (var pair in _cellDict)
+                {
+                    float posX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + pair.Key.x * _cellSize.x;
+                    float posY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + pair.Key.y * _cellSize.y;
+                    pair.Value.RTF.anchoredPosition = new Vector2(posX, posY);
+                }
+            }
+
+            var cell = CreateCell(index);
+            _cellDict.Add(index, cell);
+        }
+
+
+        public void ShowAddableCell()
+        {
+            HideAddableCell();
+
+            var addableIndexList = new List<Vector2Int>();
+
+            for (int x = 0; x < _gridSize.x; x++)
+            {
+                addableIndexList.Add(new Vector2Int(x, _gridSize.y)); // 위쪽
+                addableIndexList.Add(new Vector2Int(x, -1)); // 아래쪽
+            }
+
+            for (int y = 0; y < _gridSize.y; y++)
+            {
+                addableIndexList.Add(new Vector2Int(-1, y)); // 왼쪽
+                addableIndexList.Add(new Vector2Int(_gridSize.x, y)); // 오른쪽
+            }
+
+            foreach (var index in addableIndexList)
+            {
+                var cell = CreateCell(index);
+                cell.Image.color = new Color(1, 1, 1, 0.5f);
+                cell.OnClickAction = () =>
+                {
+                    AddCell(index);
+                    HideAddableCell();
+                };
+
+                _addableCells.Add(cell);
+            }
+        }
+
+        private void HideAddableCell()
+        {
+            foreach (var cell in _addableCells)
+            {
+                Destroy(cell.gameObject);
+            }
+            _addableCells.Clear();
+        }
+
+        private IEnumerator Co_RefreshCell()
+        {
+            while (true)
+            {
+                yield return null;
+
+                foreach (var pair in _cellDict)
+                    pair.Value.Image.sprite = _cellClear;
+
+                if (null == _draggedEquipment)
+                    continue;
+
+                if (null == _dragEventData)
+                    continue;
+
+                var data = _draggedEquipment.Data;
+                var validList = data.Shape.ValidIndexList;
+
+                var halfSize = _cellSize * 0.5f;
+                var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
+                var targetIndex = GetIndex(_dragEventData.position + offset);
+
+                for (var i = 0; i < validList.Count; i++)
+                {
+                    var newIndex = targetIndex + validList[i];
+
+                    if (false == IsValid(newIndex))
+                        continue;
+
+                    if (false == _cellDict.TryGetValue(newIndex, out var cell))
+                    {
+                        Debug.Log($"{newIndex}에 cell이 없습니다.");
+                        continue;
+                    }
+
+                    var isOverlapped = TryGetOverlap(newIndex, out var overlappedEquipment);
+                    if (true == isOverlapped)
+                    {
+                        var upgradeData = _getUpgradeData.Invoke(_draggedEquipment.Data, overlappedEquipment.Data);
+                        if (null != upgradeData)
+                        {
+                            cell.Image.sprite = _cellUpgradable;
+                        }
+                        else
+                        {
+                            cell.Image.sprite = _cellOverlapped;
+                        }
+                    }
+                    else
+                    {
+                        cell.Image.sprite = _cellEnable;
+                    }
+                }
+            }
+        }
+
 
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
@@ -83,7 +220,7 @@ namespace BabyNightmare.InventorySystem
             for (var i = 0; i < validList.Count; i++)
             {
                 var newIndex = targetIndex + validList[i];
-                if (false == _shape.IsValid(newIndex))
+                if (false == IsValid(newIndex))
                 {
                     //Debug.Log($"{newIndex} 그리드 밖이라 실패");
                     return false;
@@ -229,7 +366,7 @@ namespace BabyNightmare.InventorySystem
             for (var i = 0; i < validList.Count; i++)
             {
                 var newIndex = targetIndex + validList[i];
-                if (false == _shape.IsValid(newIndex))
+                if (false == IsValid(newIndex))
                     continue;
 
                 if (true == TryGetOverlap(newIndex, out var overlappedEquipment))
@@ -251,7 +388,7 @@ namespace BabyNightmare.InventorySystem
                 {
                     var index = validList[i];
                     var newIndex = equipment.Index + index;
-                    if (false == _shape.IsValid(newIndex))
+                    if (false == IsValid(newIndex))
                         continue;
 
                     if (targetIndex == newIndex)
@@ -269,12 +406,12 @@ namespace BabyNightmare.InventorySystem
         {
             List<Vector2Int> enableIndexList = new List<Vector2Int>();
 
-            for (int x = 0; x <= _shape.Column - data.Shape.Column; x++)
+            for (int x = 0; x <= _gridSize.x - data.Shape.Column; x++)
             {
-                for (int y = 0; y <= _shape.Row - data.Shape.Row; y++)
+                for (int y = 0; y <= _gridSize.y - data.Shape.Row; y++)
                 {
                     var targetIndex = new Vector2Int(x, y);
-                    if (false == _shape.IsValid(targetIndex))
+                    if (false == IsValid(targetIndex))
                         continue;
 
                     if (true == IsOverlap(data, targetIndex))
@@ -306,64 +443,8 @@ namespace BabyNightmare.InventorySystem
 
         private Vector2 GetAnchoredPos(Vector2Int index, EquipmentData data)
         {
-            var offset = (new Vector2(data.Shape.Column, data.Shape.Row) - new Vector2(_shape.Column, _shape.Row)) * 0.5f;
+            var offset = (new Vector2(data.Shape.Column, data.Shape.Row) - _gridSize) * 0.5f;
             return (index + offset) * _cellSize;
-        }
-
-        private IEnumerator Co_RefreshCell()
-        {
-            while (true)
-            {
-                yield return null;
-
-                for (var i = 0; i < _cellArr.Length; i++)
-                {
-                    var cell = _cellArr[i];
-                    cell.sprite = _cellClear;
-                }
-
-                if (null == _draggedEquipment)
-                    continue;
-
-                if (null == _dragEventData)
-                    continue;
-
-                var data = _draggedEquipment.Data;
-                var validList = data.Shape.ValidIndexList;
-
-                var halfSize = _cellSize * 0.5f;
-                var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
-                var targetIndex = GetIndex(_dragEventData.position + offset);
-
-                for (var i = 0; i < validList.Count; i++)
-                {
-                    var newIndex = targetIndex + validList[i];
-
-                    if (false == _shape.IsValid(newIndex))
-                        continue;
-
-                    var cellIndex = newIndex.y * _shape.Column + (_shape.Column - 1 - newIndex.x);
-                    var cell = _cellArr[cellIndex];
-
-                    var isOverlapped = TryGetOverlap(newIndex, out var overlappedEquipment);
-                    if (true == isOverlapped)
-                    {
-                        var upgradeData = _getUpgradeData.Invoke(_draggedEquipment.Data, overlappedEquipment.Data);
-                        if (null != upgradeData)
-                        {
-                            cell.sprite = _cellUpgradable;
-                        }
-                        else
-                        {
-                            cell.sprite = _cellOverlapped;
-                        }
-                    }
-                    else
-                    {
-                        cell.sprite = _cellEnable;
-                    }
-                }
-            }
         }
 
         public void StartUseEquipment(Action<EquipmentData> onCoolDown)

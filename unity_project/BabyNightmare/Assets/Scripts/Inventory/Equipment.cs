@@ -30,7 +30,6 @@ namespace BabyNightmare.InventorySystem
             _image.sprite = data.Sprite;
             _image.SetNativeSize();
             _image.raycastTarget = false;
-            _image.type = Image.Type.Simple;
             transform.localScale = Vector3.one;
 
             if (true == showFX)

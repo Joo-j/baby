@@ -10,22 +10,23 @@ namespace BabyNightmare
     public class PlayerData : SingletonBase<PlayerData>
     {
         private const string FILE_PLAYER_DATA = "player_data";
-        private const string KEY_CHAPTER = "player_data_chapter";
-        private const string KEY_TOTAL_ATTEMPT_COUNT = "player_data_total_attempt_count";
-        private const string KEY_CHAPTER_ATTEMPT_COUNT = "player_data_chapter_attempt_count";
 
         private const string KEY_HP = "player_data_hp";
         private const string KEY_COIN = "player_data_coin";
         private const string KEY_GEM = "player_data_gem";
+        private const string KEY_CHAPTER = "player_data_chapter";
+        private const string KEY_TOTAL_ATTEMPT_COUNT = "player_data_total_attempt_count";
+        private const string KEY_CHAPTER_ATTEMPT_COUNT = "player_data_chapter_attempt_count";
+        private const string KEY_ADDED_INDEX = "player_data_added_index";
 
-        public float HP = 0;
         private int _coin = 0;
         private int _gem = 0;
-        public bool Haptic_Active;
+        public float HP = 0;
         public int Chapter = 1;
         public int TotalAttemptCount;
         public int ChapterAttemptCount;
-        public List<Vector2Int> _bagShape;
+        public List<Vector2Int> AddedIndexList;
+        public bool Haptic_Active;
 
 
         public class ChangedCoinEvent : UnityEngine.Events.UnityEvent<int> { }
@@ -75,13 +76,26 @@ namespace BabyNightmare
             if (null == jsonClass)
                 return;
 
+            _coin = jsonClass[KEY_COIN]?.AsInt ?? 0;
+            _gem = jsonClass[KEY_GEM]?.AsInt ?? 0;
+            HP = jsonClass[KEY_HP]?.AsInt ?? 0;
             Chapter = jsonClass[KEY_CHAPTER]?.AsInt ?? 0;
             TotalAttemptCount = jsonClass[KEY_TOTAL_ATTEMPT_COUNT]?.AsInt ?? 0;
             ChapterAttemptCount = jsonClass[KEY_CHAPTER_ATTEMPT_COUNT]?.AsInt ?? 0;
 
-            HP = jsonClass[KEY_HP]?.AsInt ?? 0;
-            _coin = jsonClass[KEY_COIN]?.AsInt ?? 0;
-            _gem = jsonClass[KEY_GEM]?.AsInt ?? 0;
+            AddedIndexList = new List<Vector2Int>();
+            var arr = jsonClass[KEY_ADDED_INDEX]?.AsArray ?? null;
+            if (null != arr)
+            {
+                for (var i = 0; i < arr.Count; i++)
+                {
+                    var node = arr[i];
+                    var x = node["x"]?.AsInt ?? 0;
+                    var y = node["y"]?.AsInt ?? 0;
+
+                    AddedIndexList.Add(new Vector2Int(x, y));
+                }
+            }
 
             Debug.Log("PlayerData Load Success");
         }
@@ -90,12 +104,23 @@ namespace BabyNightmare
         {
             var jsonClass = new JSONClass();
 
+            jsonClass[KEY_COIN] = new JSONData(_coin);
+            jsonClass[KEY_GEM] = new JSONData(_gem);
+            jsonClass[KEY_HP] = new JSONData(HP);
             jsonClass[KEY_CHAPTER] = new JSONData(Chapter);
             jsonClass[KEY_TOTAL_ATTEMPT_COUNT] = new JSONData(TotalAttemptCount);
             jsonClass[KEY_CHAPTER_ATTEMPT_COUNT] = new JSONData(ChapterAttemptCount);
-            jsonClass[KEY_HP] = new JSONData(HP);
-            jsonClass[KEY_COIN] = new JSONData(_coin);
-            jsonClass[KEY_GEM] = new JSONData(_gem);
+
+            var jsonArr = new JSONArray();
+            for (var i = 0; i < AddedIndexList.Count; i++)
+            {
+                var node = new JSONNode();
+                node["x"] = AddedIndexList[i].x.ToString();
+                node["y"] = AddedIndexList[i].y.ToString();
+                jsonArr.Add(node);
+            }
+
+            jsonClass[KEY_ADDED_INDEX] = jsonArr;
 
             var binaryData = jsonClass.ToString();
             FileSaveUtil.Save(FILE_PLAYER_DATA, binaryData, false, false);

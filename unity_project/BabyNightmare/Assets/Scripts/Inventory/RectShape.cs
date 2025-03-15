@@ -36,7 +36,7 @@ namespace BabyNightmare.Util
             }
         }
 
-        public bool IsValid(Vector2Int index)
+        private bool IsValid(Vector2Int index)
         {
             if (index.x < 0 || index.y < 0 || index.x >= _column || index.y >= _row)
                 return false;
@@ -50,7 +50,5 @@ namespace BabyNightmare.Util
             y = (_row - 1) - y;
             return x + _column * y;
         }
-
-
     }
 }
