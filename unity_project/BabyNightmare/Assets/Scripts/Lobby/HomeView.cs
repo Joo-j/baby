@@ -15,6 +15,8 @@ namespace BabyNightmare.Lobby
         [SerializeField] private TextMeshProUGUI _chapterTMP;
         [SerializeField] private Image _chapterICN;
         [SerializeField] private TextMeshProUGUI _fieldTMP;
+        [SerializeField] private Transform _buttonTF;
+        [SerializeField] private AnimationCurve _bounceCurve;
 
         private Action _startGame = null;
         private bool _isStarted = false;
@@ -29,6 +31,8 @@ namespace BabyNightmare.Lobby
             _isStarted = false;
             _chapterTMP.text = $"Chapter {PlayerData.Instance.Chapter}";
             _fieldTMP.text = "Night of Dessert";
+
+            StartCoroutine(SimpleLerp.Co_BounceScale(_buttonTF, Vector3.one * 1.1f, _bounceCurve, 2f, true));
         }
 
         private GridLayoutGroup GetLayoutGroup(ELobbyButtonType type)

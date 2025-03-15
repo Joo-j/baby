@@ -184,24 +184,6 @@ namespace BabyNightmare.Lobby
                 return;
             }
 
-            if (type == _focusButtonType)
-            {
-                switch (type)
-                {
-                    case ELobbyButtonType.Shop:
-
-                        // if (null != identifier && Enum.TryParse(identifier.ToString(), out EShopScrollType scrollType))
-                        // {
-                        //     ShopManager.Instance.Show(_lobbyView.ScreenRTF, scrollType);
-                        // }
-
-                        return;
-                    default:
-                        _printer.Log("SetMenu", $"{type} 같은 타입의 버튼 클릭 요청으로 갱신을 취소합니다.");
-                        return;
-                }
-            }
-
             if (_focusButtonType != ELobbyButtonType.Unknown)
                 HideView(_focusButtonType);
 
@@ -244,6 +226,7 @@ namespace BabyNightmare.Lobby
                     {
                         HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         _homeView.gameObject.SetActive(true);
+                        _homeView.Refresh();
                         return;
                     }
                 case ELobbyButtonType.Talent:
