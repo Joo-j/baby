@@ -35,19 +35,17 @@ namespace BabyNightmare.InventorySystem
             this.Data = data;
 
             var iconOutlinePath = $"{PATH_EQUIPMENT_ICON_OUTLINE}{data.Name}_Outline";
-            var icon = Resources.Load<Sprite>(iconOutlinePath);
+            var icon_outline = Resources.Load<Sprite>(iconOutlinePath);
+            Debug.Assert(null != icon_outline, $"{iconOutlinePath} | no outline icon");
+
+            var iconPath = $"{PATH_EQUIPMENT_ICON}{data.Name}";
+            var icon = Resources.Load<Sprite>(iconPath);
+            Debug.Assert(null != icon, $"{iconPath} | no icon");
 
             _rtf.sizeDelta = icon.rect.size;
 
-            _iconOutline.sprite = icon;
-            Debug.Assert(null != _iconOutline.sprite, $"{iconOutlinePath} | no outline icon");
-
-            var iconPath = $"{PATH_EQUIPMENT_ICON}{data.Name}";
+            _iconOutline.sprite = icon_outline;
             _icon.sprite = Resources.Load<Sprite>(iconPath);
-            Debug.Assert(null != _iconOutline.sprite, $"{iconPath} | no icon");
-
-
-            transform.localScale = Vector3.one;
 
             if (null != _fx)
             {
