@@ -10,6 +10,32 @@ using BabyNightmare.Util;
 
 namespace BabyNightmare.Match
 {
+    public class MatchFieldContext
+    {
+        public int Chapter { get; }
+        public Action<int, Vector3> GetCoin { get; }
+        public Action<float> RefreshProgress { get; }
+        public Action OnClearWave { get; }
+        public Action OnFailWave { get; }
+
+
+        public MatchFieldContext
+        (
+            int chapter,
+            Action<int, Vector3> getCoin,
+            Action<float> refreshProgress,
+            Action onClearWave,
+            Action onFailWave
+        )
+        {
+            this.Chapter = chapter;
+            this.GetCoin = getCoin;
+            this.RefreshProgress = refreshProgress;
+            this.OnClearWave = onClearWave;
+            this.OnFailWave = onFailWave;
+        }
+    }
+
     public class MatchField : MonoBehaviour
     {
         [SerializeField] private Camera _renderCamera;
@@ -31,19 +57,20 @@ namespace BabyNightmare.Match
         private Transform[] _nearSpawnTFArr = null;
         private Transform[] _midSpawnTFArr = null;
         private Transform[] _farSpawnTFArr = null;
-        private Action<int, Vector3> _getCoin = null;
-        private Action _onClearWave = null;
-        private Action _onFailWave = null;
         private Player _player = null;
         private List<EnemyBase> _aliveEnemies = null;
+        private MatchFieldContext _context = null;
+        private int _enemySpawnCount = 0;
 
         public RenderTexture RT => _rt;
         public Camera RenderCamera => _renderCamera;
         public Vector3 CameraForward => _renderCamera.transform.forward;
 
-        public void Init(int chapter, Action<int, Vector3> getCoin, Action onClearWave, Action onFailWave)
+        public void Init(MatchFieldContext context)
         {
-            _fieldTF = ObjectUtil.LoadAndInstantiate<Transform>($"{PATH_FIELD}{chapter}", transform);
+            _context = context;
+
+            _fieldTF = ObjectUtil.LoadAndInstantiate<Transform>($"{PATH_FIELD}{_context.Chapter}", transform);
 
             _nearSpawnTFArr = _nearSpawnTF.GetComponentsInChildren<Transform>();
             _midSpawnTFArr = _midSpawnTF.GetComponentsInChildren<Transform>();
@@ -53,13 +80,9 @@ namespace BabyNightmare.Match
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
 
-            _getCoin = getCoin;
-            _onClearWave = onClearWave;
-            _onFailWave = onFailWave;
-
             _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
-            var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer, getCoin);
+            var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer, _context.GetCoin);
             _player.Init(playerContext);
         }
 
@@ -78,6 +101,7 @@ namespace BabyNightmare.Match
         {
             _aliveEnemies.Clear();
 
+            _enemySpawnCount = enemyDataList.Count;
             var delay = 0f;
             for (var i = 0; i < enemyDataList.Count; i++)
             {
@@ -101,18 +125,21 @@ namespace BabyNightmare.Match
 
         private void OnDiePlayer()
         {
-            _onFailWave?.Invoke();
+            _context.OnFailWave?.Invoke();
         }
 
         private void OnDieEnemy(EnemyBase enemy)
         {
-            _getCoin?.Invoke(enemy.GetRandomCoin(), enemy.transform.position);
+            _context.GetCoin?.Invoke(enemy.GetRandomCoin(), enemy.transform.position);
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
 
+            var progressFactor = 1 - ((float)_aliveEnemies.Count / _enemySpawnCount);
+            _context.RefreshProgress?.Invoke(progressFactor);
+
             if (_aliveEnemies.Count == 0)
             {
-                _onClearWave?.Invoke();
+                _context.OnClearWave?.Invoke();
             }
         }
 

@@ -27,7 +27,7 @@ namespace BabyNightmare.Character
     {
         [SerializeField] protected Animator _animator;
         [SerializeField] protected Renderer _renderer;
-        [SerializeField] private Transform _hpTF;
+        [SerializeField] protected Transform _hpTF;
 
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
         private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");

@@ -5,6 +5,7 @@ using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using Supercent.Util;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +44,8 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _topRTF;
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
-        [SerializeField] private SimpleProgress _waveProgress;
+        [SerializeField] private TextMeshProUGUI _waveTMP;
+        [SerializeField] private Image _waveProgressIMG;
         [SerializeField] private Inventory_Bag _bag;
         [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
@@ -58,33 +60,29 @@ namespace BabyNightmare.Match
         [SerializeField] private GameObject _fightGO;
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
-        [SerializeField] private RectTransform _hpRTF;
-        [SerializeField] private RectTransform _atkRTF;
-        [SerializeField] private RectTransform _defRTF;
-        [SerializeField] private RectTransform _coinRTF;
-        [SerializeField] private TextMeshProUGUI _hpTMP;
-        [SerializeField] private TextMeshProUGUI _atkTMP;
-        [SerializeField] private TextMeshProUGUI _defTMP;
-        [SerializeField] private TextMeshProUGUI _coinTMP;
-        [SerializeField] private AnimationCurve _bounceCurve;
-
+        [SerializeField] private Transform _statItemViewGridTF;
+        private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
         private MatchViewContext _context = null;
-        private Dictionary<EStatType, int> _statDict = null;
+        private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
         private Action _onGetBox = null;
         private Coroutine _coChangeRect = null;
+        private Coroutine _coRefreshProgress = null;
+        private Vector2 _progressSize;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
 
         public void Init(MatchViewContext context)
         {
             _context = context;
-            _statDict = new Dictionary<EStatType, int>();
+            _statItemViewDict = new Dictionary<EStatType, StatItemView>();
 
             foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
-                _statDict.Add(type, 0);
-
-            RefreshStat();
+            {
+                var itemView = ObjectUtil.LoadAndInstantiate<StatItemView>(PATH_STAT_ITEM_VIEW, _statItemViewGridTF);
+                itemView.Init(type);
+                _statItemViewDict.Add(type, itemView);
+            }
 
             _fieldIMG.texture = _context.RT;
 
@@ -111,11 +109,40 @@ namespace BabyNightmare.Match
             _startGO.SetActive(true);
 
             ChangeRectPos(false, true);
+
+            _progressSize = _waveProgressIMG.rectTransform.rect.size;
+            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(_progressSize.x, 0);
         }
 
-        public void RefreshProgress(int curWave, int maxWave, bool immediate)
+        public void RefreshWave(int curWave, int maxWave)
         {
-            _waveProgress.Refresh(curWave, maxWave, immediate);
+            _waveTMP.text = $"Wave {curWave}/{maxWave}";
+        }
+
+        public void RefreshProgress(float factor)
+        {
+            var startSize = _waveProgressIMG.rectTransform.sizeDelta;
+            var targetSize = Vector2.Lerp(startSize, _progressSize, factor);
+
+            if (null != _coRefreshProgress)
+                StopCoroutine(_coRefreshProgress);
+
+            _coRefreshProgress = StartCoroutine(Co_RefreshProgress());
+
+            IEnumerator Co_RefreshProgress()
+            {
+                var elapsed = 0f;
+                var duration = 0.4f;
+                while (elapsed < duration)
+                {
+                    yield return null;
+                    elapsed += Time.deltaTime;
+
+                    _waveProgressIMG.rectTransform.sizeDelta = Vector2.Lerp(startSize, targetSize, elapsed / duration);
+                }
+
+                _waveProgressIMG.rectTransform.sizeDelta = targetSize;
+            }
         }
 
         public void Reroll(List<EquipmentData> dataList)
@@ -252,26 +279,22 @@ namespace BabyNightmare.Match
         {
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] += Mathf.CeilToInt(data.Heal / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.HP].AddValue(Mathf.CeilToInt(data.Heal / data.CoolTime));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] += Mathf.CeilToInt(data.Damage / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.ATK].AddValue(Mathf.CeilToInt(data.Damage / data.CoolTime));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] += Mathf.CeilToInt(data.Defence / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.DEF].AddValue(Mathf.CeilToInt(data.Defence / data.CoolTime));
             }
 
             if (data.Coin > 0)
             {
-                _statDict[EStatType.Coin] += Mathf.CeilToInt(data.Coin / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_coinRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.Coin].AddValue(Mathf.CeilToInt(data.Coin / data.CoolTime));
             }
         }
 
@@ -279,35 +302,23 @@ namespace BabyNightmare.Match
         {
             if (data.Heal > 0)
             {
-                _statDict[EStatType.HP] -= Mathf.CeilToInt(data.Heal / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_hpRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.HP].AddValue(-Mathf.CeilToInt(data.Heal / data.CoolTime));
             }
 
             if (data.Damage > 0)
             {
-                _statDict[EStatType.ATK] -= Mathf.CeilToInt(data.Damage / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_atkRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.ATK].AddValue(-Mathf.CeilToInt(data.Damage / data.CoolTime));
             }
 
             if (data.Defence > 0)
             {
-                _statDict[EStatType.DEF] -= Mathf.CeilToInt(data.Defence / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_defRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.DEF].AddValue(-Mathf.CeilToInt(data.Defence / data.CoolTime));
             }
 
             if (data.Coin > 0)
             {
-                _statDict[EStatType.Coin] += Mathf.CeilToInt(data.Coin / data.CoolTime);
-                StartCoroutine(SimpleLerp.Co_BounceScale(_coinRTF, Vector3.one * 1.2f, _bounceCurve, 0.1f, RefreshStat));
+                _statItemViewDict[EStatType.Coin].AddValue(-Mathf.CeilToInt(data.Coin / data.CoolTime));
             }
-        }
-
-        private void RefreshStat()
-        {
-            _hpTMP.text = $"{_statDict[EStatType.HP]}/s";
-            _atkTMP.text = $"{_statDict[EStatType.ATK]}/s";
-            _defTMP.text = $"{_statDict[EStatType.DEF]}/s";
-            _coinTMP.text = $"{_statDict[EStatType.Coin]}/s";
         }
 
 #if UNITY_EDITOR

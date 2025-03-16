@@ -5,6 +5,7 @@ using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.HUD;
 using BabyNightmare.Util;
+using BabyNightmare.Match;
 
 namespace BabyNightmare.Character
 {
@@ -115,6 +116,7 @@ namespace BabyNightmare.Character
                 yield return CoroutineUtil.WaitForSeconds(stopStepDuration);
             }
         }
+
         private void Attack()
         {
             if (null != _coAct)
@@ -140,6 +142,13 @@ namespace BabyNightmare.Character
                     yield return new WaitForSeconds(interval);
                 }
             }
+        }
+
+        public override void ReceiveAttack(float damage)
+        {
+            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
+
+            base.ReceiveAttack(damage);
         }
 
         public override void Die()

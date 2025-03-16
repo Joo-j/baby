@@ -82,7 +82,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderCamera: {fileID: 7967595075365947049}
-  _groundTF: {fileID: 0}
   _playerTF: {fileID: 3482762111341115687}
   _nearSpawnTF: {fileID: 6406890658820892839}
   _midSpawnTF: {fileID: 7242586836904560533}

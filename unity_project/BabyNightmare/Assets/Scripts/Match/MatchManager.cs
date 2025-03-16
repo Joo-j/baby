@@ -45,18 +45,25 @@ namespace BabyNightmare.Match
             _maxWave = _waveDataList.Count;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
-            _matchField.Init(chapter, GetCoin, OnClearWave, OnFailMatch);
+            var matchFieldContext = new MatchFieldContext(chapter, GetCoin, RefreshProgress, OnClearWave, OnFailMatch);
+            _matchField.Init(matchFieldContext);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
             var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy, GetUpgradeData);
             _matchView.Init(matchViewContext);
-            _matchView.RefreshProgress(_currentWave + 1, _maxWave, true);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave);
+            _matchView.RefreshProgress(0);
 
             HUDManager.Instance.ActiveHUD(EHUDType.Coin, true);
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
             PlayerData.Instance.Coin = 0;
+        }
+
+        private void RefreshProgress(float factor)
+        {
+            _matchView?.RefreshProgress(factor);
         }
 
         private void OnFailMatch()
@@ -130,7 +137,7 @@ namespace BabyNightmare.Match
             }
 
             _matchView.OnClearWave();
-            _matchView.RefreshProgress(_currentWave, _maxWave, false);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave);
 
             var boxData = GetBoxData();
             _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, () => OnGetBox(boxData)));
@@ -179,7 +186,7 @@ namespace BabyNightmare.Match
 
                 randomPicker.Remove(data);
             }
-            
+
             _matchView.Reroll(dataList);
         }
 
