@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_BaseBall_2
   m_EditorClassIdentifier: 
   ID: 1101
-  Name: BaseBall LV2
+  Name: BaseBall
   Desc: attack random enemy
   Level: 2
   Damage: 6

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_Lego_2
   m_EditorClassIdentifier: 
   ID: 1105
-  Name: LEGO LV2
+  Name: Lego
   Desc: heal self
   Level: 2
   Damage: 4

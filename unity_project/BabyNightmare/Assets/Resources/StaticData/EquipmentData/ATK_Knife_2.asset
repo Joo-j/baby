@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_Knife_2
   m_EditorClassIdentifier: 
   ID: 1104
-  Name: Knife LV2
+  Name: Knife
   Desc: attack random enemy
   Level: 2
   Damage: 4

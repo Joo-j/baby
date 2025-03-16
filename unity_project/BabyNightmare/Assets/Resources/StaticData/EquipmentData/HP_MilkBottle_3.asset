@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HP_MilkBottle_3
   m_EditorClassIdentifier: 
   ID: 1214
-  Name: MilkBottle LV3
+  Name: MilkBottle
   Desc: attack random enemy
   Level: 3
   Damage: 0

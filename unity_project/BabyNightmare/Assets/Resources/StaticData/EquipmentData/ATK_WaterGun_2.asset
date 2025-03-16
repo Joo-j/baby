@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_WaterGun_2
   m_EditorClassIdentifier: 
   ID: 1109
-  Name: WaterGun LV2
+  Name: WaterGun
   Desc: attack random enemy
   Level: 2
   Damage: 25

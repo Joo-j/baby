@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DEF_Shield_2
   m_EditorClassIdentifier: 
   ID: 1112
-  Name: Shiled LV2
+  Name: Shiled
   Desc: attack random enemy
   Level: 2
   Damage: 0

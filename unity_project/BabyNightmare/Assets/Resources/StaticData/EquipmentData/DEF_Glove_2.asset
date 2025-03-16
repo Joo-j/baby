@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DEF_Glove_2
   m_EditorClassIdentifier: 
   ID: 1111
-  Name: Glove LV2
+  Name: Glove
   Desc: attack random enemy
   Level: 2
   Damage: 0

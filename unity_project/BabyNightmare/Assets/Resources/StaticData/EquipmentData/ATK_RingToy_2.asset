@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_RingToy_2
   m_EditorClassIdentifier: 
   ID: 1107
-  Name: RingToy LV2
+  Name: RingToy
   Desc: attack random enemy
   Level: 2
   Damage: 1.5

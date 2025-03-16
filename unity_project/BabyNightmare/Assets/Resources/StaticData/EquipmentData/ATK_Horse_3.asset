@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_Horse_3
   m_EditorClassIdentifier: 
   ID: 1203
-  Name: Horse LV3
+  Name: Horse
   Desc: attack random enemy
   Level: 3
   Damage: 7

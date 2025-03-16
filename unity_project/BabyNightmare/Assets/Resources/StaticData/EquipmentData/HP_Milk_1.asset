@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: HP_Milk_1
   m_EditorClassIdentifier: 
   ID: 1013
-  Name: Milk LV1
+  Name: Milk
   Desc: attack random enemy
   Level: 1
   Damage: 0

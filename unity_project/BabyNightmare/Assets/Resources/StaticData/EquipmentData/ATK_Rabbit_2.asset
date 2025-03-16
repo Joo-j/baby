@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_Rabbit_2
   m_EditorClassIdentifier: 
   ID: 1106
-  Name: Rabbit LV2
+  Name: Rabbit
   Desc: attack random enemy
   Level: 2
   Damage: 20

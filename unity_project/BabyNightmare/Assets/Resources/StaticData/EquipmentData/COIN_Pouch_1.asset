@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: COIN_Pouch_1
   m_EditorClassIdentifier: 
   ID: 1010
-  Name: Pouch LV1
+  Name: Pouch
   Desc: attack random enemy
   Level: 1
   Damage: 0

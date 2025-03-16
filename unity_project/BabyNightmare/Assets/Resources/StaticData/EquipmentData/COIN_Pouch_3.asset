@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: COIN_Pouch_3
   m_EditorClassIdentifier: 
   ID: 1210
-  Name: Pouch LV3
+  Name: Pouch
   Desc: attack random enemy
   Level: 3
   Damage: 0

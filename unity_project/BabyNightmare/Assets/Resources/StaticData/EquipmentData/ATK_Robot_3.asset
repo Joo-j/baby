@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ATK_Robot_3
   m_EditorClassIdentifier: 
   ID: 1208
-  Name: Robot LV3
+  Name: Robot
   Desc: attack random enemy
   Level: 3
   Damage: 25
