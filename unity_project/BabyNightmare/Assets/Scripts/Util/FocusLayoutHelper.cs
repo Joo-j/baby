@@ -41,7 +41,7 @@ namespace BabyNightmare.Util
                 _dimmedView = null;
             }
 
-            _dimmedView = ObjectUtil.LoadAndInstantiate<DimmedView>("Util/DimdView", null);
+            _dimmedView = ObjectUtil.LoadAndInstantiate<DimmedView>("Util/DimmedView", null);
             _dimmedView.SetAlpha(dimAlpha);
             _dimmedView.SetSortingOrder(DIMD_ORDER);
 
