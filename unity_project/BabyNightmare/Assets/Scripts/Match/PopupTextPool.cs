@@ -31,7 +31,7 @@ namespace BabyNightmare.Match
         public void ShowTemporary(Vector3 pos, Quaternion rot, string text, Color color)
         {
             var pt = Get();
-            pt.transform.position = pos;
+            pt.transform.position = pos + Vector3.forward * -2;
             pt.transform.rotation = rot;
             pt.Refresh(text, color, () => Return(pt));
         }
