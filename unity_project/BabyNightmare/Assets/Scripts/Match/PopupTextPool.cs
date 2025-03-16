@@ -8,7 +8,7 @@ namespace BabyNightmare.Match
 {
     public class PopupTextPool : SingletonBase<PopupTextPool>
     {
-        private const string PATH_POPUP_TEXT = "Util/PopupText";
+        private const string PATH_POPUP_TEXT = "Match/UI/PopupText";
 
         private Pool<PopupText> _pool = null;
 
@@ -16,12 +16,15 @@ namespace BabyNightmare.Match
         {
             _pool ??= new Pool<PopupText>(() => ObjectUtil.LoadAndInstantiate<PopupText>(PATH_POPUP_TEXT, null));
 
-            return _pool.Get();
+            var pt = _pool.Get();
+            pt.gameObject.SetActive(true);
+
+            return pt;
         }
 
         private void Return(PopupText pt)
         {
-            Debug.Log("return");
+            pt.gameObject.SetActive(false);
             _pool.Return(pt);
         }
 

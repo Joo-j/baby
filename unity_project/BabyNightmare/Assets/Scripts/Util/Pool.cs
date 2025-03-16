@@ -1,90 +1,44 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine;
 
 namespace BabyNightmare.Util
 {
-    /// <summary>
-    /// A generic pool of objects that can be retrieved and recycled without invoking additional allocations.
-    /// 
-	/// Please note that care must be taken when pooling objects, since the object
-	/// has to be manually reset after retrieval from the pool. Its constructor will
-	/// not be run again after the first time!
-    /// </summary>
     public sealed class Pool<T> where T : class
     {
-        private List<T> _inactive = new List<T>();
-        private List<T> _active = new List<T>();
-        private Func<T> _creator;
-        private bool _allowTakingWhenEmpty;
+        private List<T> _itemList = new List<T>();
+        private Func<T> _creator = null;
 
-        public Pool(Func<T> creator, int initialCount = 0, bool allowTakingWhenEmpty = true)
+        public Pool(Func<T> creator, int initialCount = 0)
         {
-            if (creator == null) throw new ArgumentNullException("pCreator");
-            if (initialCount < 0) throw new ArgumentOutOfRangeException("pInitialCount", "Initial count cannot be negative");
+            if (null == creator)
+                throw new ArgumentNullException("pCreator");
+            if (initialCount < 0)
+                throw new ArgumentOutOfRangeException("pInitialCount", "Initial count cannot be negative");
 
             _creator = creator;
-            _inactive.Capacity = initialCount;
-            _allowTakingWhenEmpty = allowTakingWhenEmpty;
+            _itemList.Capacity = initialCount;
 
-            // Create initial items
-            while (_inactive.Count < initialCount)
+            while (_itemList.Count < initialCount)
             {
-                _inactive.Add(_creator());
+                _itemList.Add(_creator?.Invoke());
             }
         }
-
-        public int Count => _inactive.Count;
-        public bool IsEmpty => Count == 0;
 
         public T Get()
         {
-            if (IsEmpty)
-            {
-                if (_allowTakingWhenEmpty)
-                {
-                    var obj = _creator();
-                    _inactive.Add(obj);
-                    return GetInternal();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return GetInternal();
-            }
-        }
+            if (_itemList.Count == 0)
+                return _creator?.Invoke();
 
-        private T GetInternal()
-        {
-            T obj = _inactive[_inactive.Count - 1];
-            _inactive.RemoveAt(_inactive.Count - 1);
-            _active.Add(obj);
+            var obj = _itemList[_itemList.Count - 1];
+            _itemList.RemoveAt(_itemList.Count - 1);
             return obj;
         }
 
         public void Return(T item)
         {
-            if (false == _active.Contains(item))
-            {
-                throw new InvalidOperationException("An item was recycled even though it was not part of the pool");
-            }
-
-            _inactive.Add(item);
-            _active.Remove(item);
-        }
-        
-        public List<T> GetInactive()
-        {
-            return _inactive.ToList();
-        }
-
-        public List<T> GetActive()
-        {
-            return _active.ToList();
+            _itemList.Add(item);
         }
     }
 }

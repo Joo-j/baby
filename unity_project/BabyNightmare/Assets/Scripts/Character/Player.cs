@@ -47,12 +47,10 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
         [SerializeField] private AnimationTrigger _aniTrigger;
-        [SerializeField] private Projectile _projectileRes;
 
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
-        private Pool<Projectile> _projectilePool = null;
 
         public override float HitRadius => _hitRadius;
 
@@ -64,8 +62,6 @@ namespace BabyNightmare.Character
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
             _aniTrigger.AddAction(1, TryUseEquipment);
-
-            _projectilePool = new Pool<Projectile>(() => Instantiate(_projectileRes));
         }
 
         public void ShowMoveAni()
@@ -89,6 +85,9 @@ namespace BabyNightmare.Character
 
         public override void ReceiveAttack(float damage)
         {
+            if (null == gameObject)
+                return;
+                
             damage -= _def;
 
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.red);
@@ -129,18 +128,18 @@ namespace BabyNightmare.Character
             var damage = equipmentData.Damage;
             enemy.ReserveDamage(damage);
 
-            var projectile = _projectilePool.Get();
-            projectile.TF.position = _throwStartTF.position;
-            projectile.TF.rotation = Quaternion.identity;
-            projectile.Init(equipmentData.ID);
+            var pj = ProjectilePool.Instance.Get();
+            pj.TF.position = _throwStartTF.position;
+            pj.TF.rotation = Quaternion.identity;
+            pj.Init(equipmentData.ID);
 
             if (damage > 0)
             {
-                StartCoroutine(Co_ThrowProjectile(projectile, enemy.TF, OnThrow));
+                StartCoroutine(Co_ThrowProjectile(pj, enemy.TF, OnThrow));
             }
             else
             {
-                StartCoroutine(Co_ThrowProjectile(projectile, transform, OnThrow));
+                StartCoroutine(Co_ThrowProjectile(pj, transform, OnThrow));
             }
 
             void OnThrow()
@@ -166,7 +165,7 @@ namespace BabyNightmare.Character
             {
                 if (null == targetTF)
                 {
-                    Destroy(projectile.gameObject);
+                    ProjectilePool.Instance.Return(projectile);
                     yield break;
                 }
 
@@ -182,7 +181,7 @@ namespace BabyNightmare.Character
             }
 
             projectile.TF.position = targetTF.position;
-            Destroy(projectile.gameObject);
+            ProjectilePool.Instance.Return(projectile);
 
             doneCallback?.Invoke();
         }

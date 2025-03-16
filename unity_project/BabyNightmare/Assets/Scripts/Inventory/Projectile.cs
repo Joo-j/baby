@@ -9,7 +9,7 @@ namespace BabyNightmare.Match
         [SerializeField] private MeshFilter _meshFilter;
         [SerializeField] private Renderer _render;
 
-        private const string PATH_PROJECTILE_MESH = "Match/Projectile/ProjectileData_";
+        private const string PATH_PROJECTILE_MESH = "StaticData/ProjectileData/ProjectileData_";
         private int _id = -1;
         public float Duration { get; private set; }
         public AnimationCurve Curve { get; private set; }

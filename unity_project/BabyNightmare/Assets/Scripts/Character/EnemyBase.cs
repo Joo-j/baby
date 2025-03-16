@@ -146,6 +146,9 @@ namespace BabyNightmare.Character
 
         public override void ReceiveAttack(float damage)
         {
+            if (null == gameObject)
+                return;
+
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
 
             base.ReceiveAttack(damage);
