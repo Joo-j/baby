@@ -25,7 +25,7 @@ namespace BabyNightmare
         public int Chapter = 1;
         public int TotalAttemptCount;
         public int ChapterAttemptCount;
-        public List<Vector2Int> AddedIndexList;
+        public List<Vector2Int> AddedIndexList = new List<Vector2Int>();
         public bool Haptic_Active;
 
 
@@ -83,7 +83,6 @@ namespace BabyNightmare
             TotalAttemptCount = jsonClass[KEY_TOTAL_ATTEMPT_COUNT]?.AsInt ?? 0;
             ChapterAttemptCount = jsonClass[KEY_CHAPTER_ATTEMPT_COUNT]?.AsInt ?? 0;
 
-            AddedIndexList = new List<Vector2Int>();
             var arr = jsonClass[KEY_ADDED_INDEX]?.AsArray ?? null;
             if (null != arr)
             {
