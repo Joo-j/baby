@@ -14,10 +14,11 @@ namespace BabyNightmare.InventorySystem
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Vector2 _cellSize = default;
-        [SerializeField] private Sprite _cellClear;
-        [SerializeField] private Sprite _cellEnable;
-        [SerializeField] private Sprite _cellOverlapped;
-        [SerializeField] private Sprite _cellUpgradable;
+        [SerializeField] private float _padding = 10;
+        [SerializeField] private Color _cellClearColor;
+        [SerializeField] private Color _cellEnableColor;
+        [SerializeField] private Color _cellOverlappedColor;
+        [SerializeField] private Color _cellUpgradableColor;
 
         private const string PATH_CELL = "Inventory/Cell";
         private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
@@ -72,7 +73,7 @@ namespace BabyNightmare.InventorySystem
             float newPosX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + index.x * _cellSize.x;
             float newPosY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + index.y * _cellSize.y;
             cell.RTF.anchoredPosition = new Vector2(newPosX, newPosY);
-            cell.Image.sprite = _cellClear;
+            cell.RefreshColor(_cellClearColor);
             return cell;
         }
 
@@ -88,19 +89,23 @@ namespace BabyNightmare.InventorySystem
             {
                 _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
 
-                var width = _gridSize.x * _cellSize.x;
-                var height = _gridSize.y * _cellSize.y;
+                var width = (_gridSize.x * (_cellSize.x + _padding)) - _padding;
+                var height = (_gridSize.y * (_cellSize.y + _padding)) - _padding;
                 _rtf.sizeDelta = new Vector2(width, height);
 
                 foreach (var pair in _cellDict)
                 {
-                    float posX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + pair.Key.x * _cellSize.x;
-                    float posY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + pair.Key.y * _cellSize.y;
+                    float posX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + pair.Key.x * (_cellSize.x + _padding);
+                    float posY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + pair.Key.y * (_cellSize.y + _padding);
                     pair.Value.RTF.anchoredPosition = new Vector2(posX, posY);
                 }
             }
 
             var cell = CreateCell(index);
+            float newPosX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + index.x * (_cellSize.x + _padding);
+            float newPosY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + index.y * (_cellSize.y + _padding);
+            cell.RTF.anchoredPosition = new Vector2(newPosX, newPosY);
+
             _cellDict.Add(index, cell);
         }
 
@@ -126,7 +131,7 @@ namespace BabyNightmare.InventorySystem
             foreach (var index in addableIndexList)
             {
                 var cell = CreateCell(index);
-                cell.Image.color = new Color(1, 1, 1, 0.5f);
+                cell.RefreshColor(new Color(1, 1, 1, 0.5f));
                 cell.OnClickAction = () =>
                 {
                     AddCell(index);
@@ -153,7 +158,7 @@ namespace BabyNightmare.InventorySystem
                 yield return null;
 
                 foreach (var pair in _cellDict)
-                    pair.Value.Image.sprite = _cellClear;
+                    pair.Value.RefreshColor(_cellClearColor);
 
                 if (null == _draggedEquipment)
                     continue;
@@ -187,16 +192,16 @@ namespace BabyNightmare.InventorySystem
                         var upgradeData = _getUpgradeData.Invoke(_draggedEquipment.Data, overlappedEquipment.Data);
                         if (null != upgradeData)
                         {
-                            cell.Image.sprite = _cellUpgradable;
+                            cell.RefreshColor(_cellUpgradableColor);
                         }
                         else
                         {
-                            cell.Image.sprite = _cellOverlapped;
+                            cell.RefreshColor(_cellOverlappedColor);
                         }
                     }
                     else
                     {
-                        cell.Image.sprite = _cellEnable;
+                        cell.RefreshColor(_cellEnableColor);
                     }
                 }
             }

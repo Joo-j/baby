@@ -12,8 +12,12 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Image _image;
 
         public RectTransform RTF => _rtf;
-        public Image Image => _image;
         public Action OnClickAction { get; set; }
+
+        public void RefreshColor(Color color)
+        {
+            _image.color = color;
+        }   
 
         public void OnClickButton()
         {
