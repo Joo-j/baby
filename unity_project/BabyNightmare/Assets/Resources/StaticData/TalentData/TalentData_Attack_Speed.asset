@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baa8d78e59a0091418ab19baab830f4a, type: 3}
-  m_Name: LobbyButtonData_Talent
+  m_Script: {fileID: 11500000, guid: 504b5649ef056435ea1ce1581d2b2c78, type: 3}
+  m_Name: TalentData_Attack_Speed
   m_EditorClassIdentifier: 
-  ButtonType: 3
-  ComparisonType: 1
-  ConditionType: 2
-  ConditionValue: 0
-  Order: 1
-  ShowOpenAni: 0
+  TalentType: 4
+  IncreaseValue: 3
+  ValueType: 1
+  Prob: 1
+  Order: 3

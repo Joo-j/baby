@@ -163,5 +163,10 @@ namespace BabyNightmare.Lobby
 
             _startGame?.Invoke();
         }
+
+        public void OnClickCheat()
+        {
+            DevManager.Instance.Show();
+        }
     }
 }
