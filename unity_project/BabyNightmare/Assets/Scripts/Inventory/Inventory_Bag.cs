@@ -89,23 +89,19 @@ namespace BabyNightmare.InventorySystem
             {
                 _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
 
-                var width = (_gridSize.x * (_cellSize.x + _padding)) - _padding;
-                var height = (_gridSize.y * (_cellSize.y + _padding)) - _padding;
+                var width = _gridSize.x * _cellSize.x;
+                var height = _gridSize.y * _cellSize.y;
                 _rtf.sizeDelta = new Vector2(width, height);
 
                 foreach (var pair in _cellDict)
                 {
-                    float posX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + pair.Key.x * (_cellSize.x + _padding);
-                    float posY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + pair.Key.y * (_cellSize.y + _padding);
+                    float posX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + pair.Key.x * _cellSize.x;
+                    float posY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + pair.Key.y * _cellSize.y;
                     pair.Value.RTF.anchoredPosition = new Vector2(posX, posY);
                 }
             }
 
             var cell = CreateCell(index);
-            float newPosX = (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f) + index.x * (_cellSize.x + _padding);
-            float newPosY = (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f) + index.y * (_cellSize.y + _padding);
-            cell.RTF.anchoredPosition = new Vector2(newPosX, newPosY);
-
             _cellDict.Add(index, cell);
         }
 
