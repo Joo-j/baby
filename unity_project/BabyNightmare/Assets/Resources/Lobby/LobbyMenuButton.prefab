@@ -869,7 +869,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 797ffcdccf30d41bab25c46e6c5986e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startPos: {x: 0, y: 1501}
+  _startPos: {x: 0, y: 100}
   _endPos: {x: 0, y: 150}
   _curve:
     serializedVersion: 2
@@ -895,7 +895,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _duration: 0
+  _duration: 1
 --- !u!1 &4393263196840425127
 GameObject:
   m_ObjectHideFlags: 0

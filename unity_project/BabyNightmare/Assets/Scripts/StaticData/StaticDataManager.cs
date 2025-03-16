@@ -157,8 +157,8 @@ namespace BabyNightmare.StaticData
 
         private void InitEnemySpawnData()
         {
-            var enemySpanwDataArr = Resources.LoadAll<EnemySpawnData>(PATH_ENEMY_SPAWN_DATA);
-            if (null == enemySpanwDataArr || enemySpanwDataArr.Length == 0)
+            var enemySpawnDataArr = Resources.LoadAll<EnemySpawnData>(PATH_ENEMY_SPAWN_DATA);
+            if (null == enemySpawnDataArr || enemySpawnDataArr.Length == 0)
             {
                 Debug.LogError($"{PATH_ENEMY_SPAWN_DATA}에 데이터가 없습니다.");
                 return;
@@ -166,9 +166,9 @@ namespace BabyNightmare.StaticData
 
             _enemySpawnDataDict = new Dictionary<int, EnemySpawnData>();
 
-            for (var i = 0; i < enemySpanwDataArr.Length; i++)
+            for (var i = 0; i < enemySpawnDataArr.Length; i++)
             {
-                var data = enemySpanwDataArr[i];
+                var data = enemySpawnDataArr[i];
                 var id = data.ID;
 
                 if (false == _enemySpawnDataDict.ContainsKey(id))
@@ -248,5 +248,6 @@ namespace BabyNightmare.StaticData
 
             return data;
         }
+
     }
 }

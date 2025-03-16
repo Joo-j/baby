@@ -15,6 +15,6 @@ MonoBehaviour:
   ButtonType: 3
   ComparisonType: 1
   ConditionType: 2
-  ConditionValue: 10
+  ConditionValue: 0
   Order: 1
   ShowOpenAni: 0
