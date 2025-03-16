@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: ATK_BaseBall_1
   m_EditorClassIdentifier: 
   ID: 1001
-  Name: Gadet Lv1
+  Name: BaseBall LV1
   Desc: attack random enemy
   Level: 1
   Damage: 5
   Heal: 0
   Defence: 0
+  Coin: 0
   CoolTime: 3.1
-  UpgradeDataID: 1102
   Sprite: {fileID: 21300000, guid: fbd51d88fb0b14df69e6deb75f2a165d, type: 3}
   Shape:
     _column: 1

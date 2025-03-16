@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: ATK_Boomerang_2
   m_EditorClassIdentifier: 
   ID: 1102
-  Name: GreenVial Lv2
+  Name: Boomerang LV2
   Desc: heal self
   Level: 2
   Damage: 15
   Heal: 2
   Defence: 0
+  Coin: 0
   CoolTime: 2.4
   Sprite: {fileID: 21300000, guid: e584d815be51e4565818041c89d46548, type: 3}
   Shape:

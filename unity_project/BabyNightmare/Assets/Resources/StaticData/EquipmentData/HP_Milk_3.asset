@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: HP_Milk_3
   m_EditorClassIdentifier: 
   ID: 1213
-  Name: Spear Lv2
+  Name: Milk LV3
   Desc: attack random enemy
   Level: 3
   Damage: 0
   Heal: 9
   Defence: 0
+  Coin: 0
   CoolTime: 3.9
-  UpgradeDataID: 1206
   Sprite: {fileID: 21300000, guid: 3ca57a16fdc01407d98fd110f5f8d6cc, type: 3}
   Shape:
     _column: 1

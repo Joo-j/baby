@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: ATK_Horse_3
   m_EditorClassIdentifier: 
   ID: 1203
-  Name: Gun Lv3
+  Name: Horse LV3
   Desc: attack random enemy
   Level: 3
   Damage: 7
   Heal: 0
   Defence: 0
+  Coin: 0
   CoolTime: 1.4
-  UpgradeDataID: -1
   Sprite: {fileID: 21300000, guid: 829845bc0aa5e46a281d35e1f91232a3, type: 3}
   Shape:
     _column: 1

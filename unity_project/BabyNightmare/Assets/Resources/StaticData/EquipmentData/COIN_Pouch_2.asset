@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: COIN_Pouch_2
   m_EditorClassIdentifier: 
   ID: 1110
-  Name: Spear Lv2
+  Name: Pouch LV2
   Desc: attack random enemy
   Level: 2
   Damage: 0
