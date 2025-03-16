@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using UnityEngine.EventSystems;
+using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -16,14 +17,17 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private AnimationCurve _moveCurve;
         [SerializeField] private AnimationCurve _swingCurve;
 
+        private const string PATH_EQUIPMENT_FX = "Inventory/FX/FX_Equipment_";
+        private const string PATH_EQUIPMENT_MERGE_FX = "Inventory/FX/FX_Merge";
         private Coroutine _coCoolDown = null;
         private Coroutine _coSwing = null;
+        private ParticleSystem _fx = null;
 
         public EquipmentData Data { get; private set; }
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
 
-        public void Refresh(EquipmentData data, bool showFX)
+        public void Refresh(EquipmentData data, bool isMerge)
         {
             this.Data = data;
 
@@ -32,9 +36,23 @@ namespace BabyNightmare.InventorySystem
             _image.raycastTarget = false;
             transform.localScale = Vector3.one;
 
-            if (true == showFX)
+            if (null != _fx)
             {
+                Destroy(_fx.gameObject);
+                _fx = null;
+            }
 
+            var fxRes = Resources.Load<ParticleSystem>($"{PATH_EQUIPMENT_FX}{data.ID}");
+            if (null != fxRes)
+            {
+                _fx = Instantiate(fxRes);
+            }
+
+            if (true == isMerge)
+            {
+                var mergeFX = ObjectUtil.LoadAndInstantiate<ParticleSystem>(PATH_EQUIPMENT_MERGE_FX, transform);
+                mergeFX.transform.localScale = Vector3.one * 20;
+                StartCoroutine(SimpleLerp.Co_Invoke(2, () => Destroy(mergeFX.gameObject)));
             }
         }
 
