@@ -75,7 +75,10 @@ namespace BabyNightmare.InventorySystem
                 if (null == _draggedEquipment)
                     continue;
 
-                var equipment = Get(_dragEventData.position);
+                if (null == _currentInventory)
+                    continue;
+
+                var equipment = _currentInventory.Get(_dragEventData.position);
                 if (null == equipment)
                     continue;
 
@@ -89,7 +92,10 @@ namespace BabyNightmare.InventorySystem
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (null != _draggedEquipment || null == _currentInventory)
+            if (null != _draggedEquipment)
+                return;
+
+            if (null == _currentInventory)
                 return;
 
             var equipment = _currentInventory.Get(eventData.position);
