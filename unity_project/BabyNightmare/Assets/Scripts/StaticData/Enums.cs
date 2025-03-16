@@ -53,4 +53,24 @@ namespace BabyNightmare.StaticData
         Less_Eqaul,
         Equal
     }
+
+    public enum ETalentType
+    {
+        Unknown = 0,
+        Max_HP = 1,
+        Damage,
+        Defense,
+        Attack_Speed,
+        Critical_Prob,
+        Critical_Damage,
+        Coin_Earn,
+        Gem_Earn,
+        Bag_Size,
+    }
+
+    public enum EValueType
+    {
+        Amount,
+        Percentage,
+    }
 }

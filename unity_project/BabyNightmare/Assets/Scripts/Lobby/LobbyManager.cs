@@ -7,6 +7,7 @@ using SimpleJSON;
 using BabyNightmare.StaticData;
 using BabyNightmare.HUD;
 using BabyNightmare.Util;
+using BabyNightmare.Talent;
 using Newtonsoft.Json;
 
 namespace BabyNightmare.Lobby
@@ -192,7 +193,11 @@ namespace BabyNightmare.Lobby
 
             _focusButtonType = type;
 
-            _buttonStateDict[type] = ELobbyButtonState.Unlocked;
+            if (_buttonStateDict[type] != ELobbyButtonState.Locked)
+            {
+                _buttonStateDict[type] = ELobbyButtonState.Unlocked;
+                Save();
+            }
 
             doneCallback?.Invoke();
         }
@@ -203,15 +208,12 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         //CustomShopManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
 
                 case ELobbyButtonType.Shop:
                     {
-                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
-
                         // if (null != identifier && Enum.TryParse(identifier.ToString(), out EShopScrollType scrollType))
                         // {
                         //     ShopManager.Instance.Show(_lobbyView.ScreenRTF, scrollType);
@@ -223,20 +225,17 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Home:
                     {
-                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         _homeView.gameObject.SetActive(true);
                         _homeView.Refresh();
                         return;
                     }
                 case ELobbyButtonType.Talent:
                     {
-                        //HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
-                        //TalentManager.Instance.Show(_lobbyView.ScreenRTF);
+                        TalentManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        // HUDManager.Instance.SetState(EHUDState.Show_Shortcut_On, "LobbyManager");
                         //MissionManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
@@ -251,31 +250,26 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        // HUDManager.Instance.RevertState("LobbyManager");
                         //CustomShopManager.Instance.Hide(); 
                         return;
                     }
                 case ELobbyButtonType.Shop:
                     {
-                        // HUDManager.Instance.RevertState("LobbyManager");
                         //ShopManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Home:
                     {
-                        // HUDManager.Instance.RevertState("LobbyManager");
-                        // _homeView.gameObject.SetActive(false);
+                        _homeView.gameObject.SetActive(false);
                         return;
                     }
                 case ELobbyButtonType.Talent:
                     {
-                        // HUDManager.Instance.RevertState("LobbyManager");
-                        //TalentManager.Instance.Hide();
+                        TalentManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        // HUDManager.Instance.RevertState("LobbyManager");
                         //MissionManager.Instance.Hide();
                         return;
                     }
