@@ -18,10 +18,5 @@ namespace BabyNightmare.InventorySystem
         {
             _image.color = color;
         }   
-
-        public void OnClickButton()
-        {
-            OnClickAction?.Invoke();
-        }
     }
 }
