@@ -111,7 +111,7 @@ namespace BabyNightmare.Match
             ChangeRectPos(false, true);
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
-            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(_progressSize.x, 0);
+            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
         }
 
         public void RefreshWave(int curWave, int maxWave)
