@@ -6,6 +6,7 @@ using BabyNightmare.Character;
 using BabyNightmare.Lobby;
 using BabyNightmare.Match;
 using BabyNightmare.HUD;
+using BabyNightmare.Talent;
 
 namespace BabyNightmare
 {
@@ -15,6 +16,7 @@ namespace BabyNightmare
         {
             LayerHelper.Init();
             PlayerData.Instance.Init();
+            DevManager.Instance.Init();
             HUDManager.Instance.Init();
             HUDManager.Instance.SetState(EHUDState.Show_Shortcut_Off, "AppOpen");
             StaticDataManager.Instance.Init();
@@ -25,7 +27,7 @@ namespace BabyNightmare
             EnterLobby();
         }
 
-        private void EnterLobby()
+        public void EnterLobby()
         {
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
             LobbyManager.Instance.Enter();
