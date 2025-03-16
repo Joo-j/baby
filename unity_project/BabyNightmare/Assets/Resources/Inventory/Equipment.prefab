@@ -136,7 +136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rtf: {fileID: 8103438964718466151}
-  _image: {fileID: 4478433060330918855}
+  _fxTF: {fileID: 4058610737083107786}
+  _iconOutline: {fileID: 4478433060330918855}
+  _icon: {fileID: 3103167622476674651}
   _coolImage: {fileID: 5154032658609040595}
   _moveCurve:
     serializedVersion: 2
@@ -381,7 +383,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 1
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
