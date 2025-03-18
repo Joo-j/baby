@@ -27,7 +27,7 @@ namespace BabyNightmare.Character
     {
         [SerializeField] protected Animator _animator;
         [SerializeField] protected Renderer _renderer;
-        [SerializeField] protected Transform _hpTF;
+        [SerializeField] protected SimpleProgress _hpBar = null;
 
         private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
         private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
@@ -35,7 +35,6 @@ namespace BabyNightmare.Character
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");
 
-        protected SimpleProgress _hpBar = null;
         protected float _hp = 0;
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
@@ -56,7 +55,6 @@ namespace BabyNightmare.Character
 
             _hp = _maxHealth = context.HP;
 
-            _hpBar = ObjectUtil.LoadAndInstantiate<SimpleProgress>(PATH_SIMPLE_PROGRESS, _hpTF);
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
         }
