@@ -46,7 +46,6 @@ namespace BabyNightmare.Character
     {
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
-        [SerializeField] private AnimationTrigger _aniTrigger;
 
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
@@ -61,7 +60,7 @@ namespace BabyNightmare.Character
             _context = context as PlayerContext;
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
-            _aniTrigger.AddAction(1, TryUseEquipment);
+            _animationTrigger.AddAction(1, TryUseEquipment);
         }
 
         public void ShowMoveAni()

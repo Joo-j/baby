@@ -25,11 +25,11 @@ namespace BabyNightmare.Character
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
     {
-        [SerializeField] protected Animator _animator;
         [SerializeField] protected Renderer _renderer;
+        [SerializeField] protected Animator _animator;
+        [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
 
-        private const string PATH_SIMPLE_PROGRESS = "Util/SimpleProgress";
         private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");

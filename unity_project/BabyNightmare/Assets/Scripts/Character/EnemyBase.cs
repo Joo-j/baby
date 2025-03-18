@@ -133,11 +133,11 @@ namespace BabyNightmare.Character
             {
                 while (true)
                 {
+                    _animationTrigger.Clear();
+                    _animationTrigger.AddAction(1, () => player.ReceiveAttack(_context.EnemyData.Damage));
+
                     _animator.Rebind();
                     _animator.Play(HASH_ANI_ATTACK);
-
-                    var damage = _context.EnemyData.Damage;
-                    player.ReceiveAttack(damage);
 
                     yield return new WaitForSeconds(interval);
                 }

@@ -102,6 +102,7 @@ MonoBehaviour:
   _animator: {fileID: 1823008113730173459}
   _renderer: {fileID: 2625159340128287687}
   _hpBar: {fileID: 4891646949484611165}
+  _animationTrigger: {fileID: 3219377947012573672}
   _moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -434,6 +435,17 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 259449914065426752, guid: 1bb36d53197d04c2792714201b19dfd0, type: 3}
   m_PrefabInstance: {fileID: 2879964896941122183}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3219377947012573672 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 818027851594599279, guid: 1bb36d53197d04c2792714201b19dfd0, type: 3}
+  m_PrefabInstance: {fileID: 2879964896941122183}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61fb0a06ef9524ed18803d14c9e47e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7966516376476511944
 PrefabInstance:
   m_ObjectHideFlags: 0

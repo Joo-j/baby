@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2923941540571091805}
   - component: {fileID: 6010352579816549538}
   - component: {fileID: 1096807660319560227}
-  - component: {fileID: 3713471470500097783}
   m_Layer: 7
   m_Name: Enemy_Slime
   m_TagString: Untagged
@@ -99,8 +98,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 4736103393898194246}
   _renderer: {fileID: 2103351155997094604}
+  _animator: {fileID: 4736103393898194246}
+  _animationTrigger: {fileID: 3524245300534846842}
   _hpBar: {fileID: 3118656889983358828}
   _moveCurve:
     serializedVersion: 2
@@ -126,27 +126,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &3713471470500097783
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 256515925568622462}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 59d928e98554c428eadd9cc6610e5611, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &444712318515412985
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -354,6 +333,17 @@ SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6472976828890351816, guid: 860192760fb6f431bad76ce141cb884e, type: 3}
   m_PrefabInstance: {fileID: 4964154923718883844}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3524245300534846842 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8362228996485488510, guid: 860192760fb6f431bad76ce141cb884e, type: 3}
+  m_PrefabInstance: {fileID: 4964154923718883844}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61fb0a06ef9524ed18803d14c9e47e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &4736103393898194246 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 386813050584817474, guid: 860192760fb6f431bad76ce141cb884e, type: 3}

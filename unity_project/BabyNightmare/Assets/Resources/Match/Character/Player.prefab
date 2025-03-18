@@ -141,12 +141,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42be566cd27861469021cd503dc9403, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 7265477811367614696}
   _renderer: {fileID: 7856365895407285863}
+  _animator: {fileID: 7265477811367614696}
+  _animationTrigger: {fileID: 488257661798664165}
   _hpBar: {fileID: 1093458915853520808}
   _throwStartTF: {fileID: 5497047235258197999}
   _hitRadius: 4.5
-  _aniTrigger: {fileID: 488257661798664165}
 --- !u!1001 &202125535568705775
 PrefabInstance:
   m_ObjectHideFlags: 0
