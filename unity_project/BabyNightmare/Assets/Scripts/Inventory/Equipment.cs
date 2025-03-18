@@ -108,6 +108,7 @@ namespace BabyNightmare.InventorySystem
                         _coolImage.fillAmount = elapsed / coolTime;
                     }
 
+                    StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.2f, _swingCurve, 0.15f));
                     onCoolDown?.Invoke();
                 }
             }
