@@ -7,6 +7,7 @@ using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using BabyNightmare.Match;
 using BabyNightmare.HUD;
+using Unity.VisualScripting;
 
 namespace BabyNightmare.Character
 {
@@ -117,11 +118,6 @@ namespace BabyNightmare.Character
 
             var equipmentData = info.EquipmentData;
 
-            var pj = ProjectilePool.Instance.Get();
-            pj.TF.position = _throwStartTF.position;
-            pj.TF.rotation = Quaternion.identity;
-            pj.Init(equipmentData.ID);
-
             var statDataList = equipmentData.StatDataList;
             for (var i = 0; i < statDataList.Count; i++)
             {
@@ -130,52 +126,64 @@ namespace BabyNightmare.Character
                 switch (statData.Type)
                 {
                     case EStatType.ATK:
-                        var enemy = info.Character;
-                        if (null == enemy)
-                            return;
+                        {
+                            var enemy = info.Character;
+                            if (null == enemy)
+                                return;
 
-                        if (false == enemy.IsAttackable)
-                            return;
+                            if (false == enemy.IsAttackable)
+                                return;
 
-                        enemy.ReserveDamage(value);
-                        StartCoroutine(Co_ThrowProjectile(pj, enemy.HitPoint, () => enemy?.ReceiveAttack(value)));
-                        break;
+                            enemy.ReserveDamage(value);
+
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, () => enemy?.ReceiveAttack(value)));
+                            break;
+                        }
 
                     case EStatType.HP:
-                        StartCoroutine(Co_ThrowProjectile(pj, transform, () =>
                         {
-                            _hp = Mathf.Min(_maxHealth, _hp + value);
-                            _hpBar.Refresh(_hp, _maxHealth, false);
-                        }));
-                        break;
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () =>
+                            {
+                                _hp = Mathf.Min(_maxHealth, _hp + value);
+                                _hpBar.Refresh(_hp, _maxHealth, false);
+                            }));
+                            break;
+                        }
 
                     case EStatType.DEF:
-                        StartCoroutine(Co_ThrowProjectile(pj, transform, () => _def += value));
-                        break;
-
+                        {
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () => _def += value));
+                            break;
+                        }
                     case EStatType.Coin:
-                        StartCoroutine(Co_ThrowProjectile(pj, transform, () => _context.GetCoin?.Invoke((int)value, transform.position)));
-                        break;
-
+                        {
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () => _context.GetCoin?.Invoke((int)value, transform.position)));
+                            break;
+                        }
                     default: throw new Exception($"{statData.Type}의 행동이 정해지지 않았습니다.");
                 }
             }
         }
-
-        private IEnumerator Co_ThrowProjectile(Projectile projectile, Transform targetTF, Action doneCallback)
+        
+        private IEnumerator Co_ThrowProjectile(EquipmentData data, Transform targetTF, Action doneCallback)
         {
-            var duration = projectile.Duration;
-            var curve = projectile.Curve;
+            var pt = ProjectilePool.Instance.Get();
+            pt.TF.position = _throwStartTF.position;
+            pt.TF.rotation = Quaternion.identity;
+            pt.Init(data.ID);
+
+            var duration = pt.Duration;
+            var curve = pt.Curve;
             var startAngle = Vector3.zero;
-            var targetAngle = projectile.TargetAngle;
-            var startPos = projectile.TF.position;
+            var targetAngle = pt.TargetAngle;
+            var startPos = pt.TF.position;
 
             var elapsed = 0f;
             while (elapsed < duration)
             {
                 if (null == targetTF)
                 {
-                    ProjectilePool.Instance.Return(projectile);
+                    ProjectilePool.Instance.Return(pt);
                     yield break;
                 }
 
@@ -184,14 +192,14 @@ namespace BabyNightmare.Character
                 var targetPos = targetTF.position;
                 var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
 
-                midPos.y += projectile.BezierHeight;
-                projectile.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
-                projectile.TF.eulerAngles = Vector3.Lerp(startAngle, targetAngle, factor);
+                midPos.y += pt.BezierHeight;
+                pt.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
+                pt.TF.eulerAngles = Vector3.Lerp(startAngle, targetAngle, factor);
                 yield return null;
             }
 
-            projectile.TF.position = targetTF.position;
-            ProjectilePool.Instance.Return(projectile);
+            pt.TF.position = targetTF.position;
+            ProjectilePool.Instance.Return(pt);
 
             doneCallback?.Invoke();
         }
