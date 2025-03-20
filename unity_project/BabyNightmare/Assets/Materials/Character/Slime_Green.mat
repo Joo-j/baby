@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: slime_skin2_body_material
+  m_Name: Slime_Green
   m_Shader: {fileID: -6465566751694194690, guid: df5bb027d94a6c44bb32b3c31ec1303f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -230,7 +230,7 @@ Material:
     - _VertexColorsEnabled: 0
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.21960783, g: 0.501807, b: 0.9137255, a: 1}
+    - _BaseColor: {r: 0, g: 0.509434, b: 0.046312135, a: 1}
     - _Color: {r: 0.9056604, g: 0, b: 0.26925486, a: 1}
     - _ColorDim: {r: 0.85882354, g: 0.16078432, b: 0.548629, a: 1}
     - _ColorDimCurve: {r: 1, g: 0.4575472, b: 0.9321934, a: 0}
