@@ -16,10 +16,9 @@ MonoBehaviour:
   Name: Milk
   Desc: attack random enemy
   Level: 3
-  Damage: 0
-  Heal: 9
-  Defence: 0
-  Coin: 0
+  StatDataList:
+  - Type: 0
+    Value: 5
   CoolTime: 3.9
   Sprite: {fileID: 21300000, guid: 3ca57a16fdc01407d98fd110f5f8d6cc, type: 3}
   Shape:

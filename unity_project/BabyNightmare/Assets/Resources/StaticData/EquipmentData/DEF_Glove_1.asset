@@ -16,10 +16,9 @@ MonoBehaviour:
   Name: Glove
   Desc: attack random enemy
   Level: 1
-  Damage: 0
-  Heal: 0
-  Defence: 2
-  Coin: 0
+  StatDataList:
+  - Type: 2
+    Value: 2
   CoolTime: 3.9
   Sprite: {fileID: 21300000, guid: a1070216874914094af14642bcd3276f, type: 3}
   Shape:

@@ -16,11 +16,10 @@ MonoBehaviour:
   Name: Pouch
   Desc: attack random enemy
   Level: 1
-  Damage: 0
-  Heal: 0
-  Defence: 0
-  Coin: 3
-  CoolTime: 2.5
+  StatDataList:
+  - Type: 3
+    Value: 2
+  CoolTime: 3.5
   Sprite: {fileID: 21300000, guid: 4557eea069bcb4681b227a17e8459786, type: 3}
   Shape:
     _column: 1

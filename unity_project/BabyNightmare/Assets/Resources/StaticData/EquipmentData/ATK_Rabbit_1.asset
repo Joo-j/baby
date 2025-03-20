@@ -16,11 +16,10 @@ MonoBehaviour:
   Name: Rabbit
   Desc: attack random enemy
   Level: 1
-  Damage: 15
-  Heal: 0
-  Defence: 0
-  Coin: 0
-  CoolTime: 4.5
+  StatDataList:
+  - Type: 1
+    Value: 4
+  CoolTime: 3.8
   Sprite: {fileID: 21300000, guid: 4e9260ab78a074c11a14cf112f7707be, type: 3}
   Shape:
     _column: 1

@@ -16,10 +16,9 @@ MonoBehaviour:
   Name: Lego
   Desc: heal self
   Level: 3
-  Damage: 5
-  Heal: 0
-  Defence: 0
-  Coin: 0
+  StatDataList:
+  - Type: 1
+    Value: 4.5
   CoolTime: 2.5
   Sprite: {fileID: 21300000, guid: 529d91caab9aa41f5aeb865170984211, type: 3}
   Shape:

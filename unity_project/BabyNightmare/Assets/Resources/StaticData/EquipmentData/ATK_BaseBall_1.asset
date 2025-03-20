@@ -16,10 +16,9 @@ MonoBehaviour:
   Name: BaseBall
   Desc: attack random enemy
   Level: 1
-  Damage: 5
-  Heal: 0
-  Defence: 0
-  Coin: 0
+  StatDataList:
+  - Type: 1
+    Value: 3
   CoolTime: 3.1
   Sprite: {fileID: 21300000, guid: fbd51d88fb0b14df69e6deb75f2a165d, type: 3}
   Shape:
