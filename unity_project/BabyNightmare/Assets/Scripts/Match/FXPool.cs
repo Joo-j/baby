@@ -16,6 +16,7 @@ namespace BabyNightmare.Match
         private const string PATH_FX = "Match/FX";
 
         private Dictionary<EFXType, Pool<FX>> _poolDict = null;
+        private Transform _poolTF = null;
 
         private FX Get(EFXType type)
         {
@@ -23,12 +24,14 @@ namespace BabyNightmare.Match
             {
                 _poolDict = new Dictionary<EFXType, Pool<FX>>();
 
+                _poolTF = new GameObject("FXPoolTF").transform;
+
                 var resArr = Resources.LoadAll<FX>(PATH_FX);
 
                 for (var i = 0; i < resArr.Length; i++)
                 {
                     var res = resArr[i];
-                    _poolDict.Add(res.Type, new Pool<FX>(() => ObjectUtil.Instantiate<FX>(res, null)));
+                    _poolDict.Add(res.Type, new Pool<FX>(() => ObjectUtil.Instantiate<FX>(res, _poolTF)));
                 }
             }
 

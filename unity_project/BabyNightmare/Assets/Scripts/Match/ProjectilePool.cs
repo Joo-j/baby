@@ -11,10 +11,15 @@ namespace BabyNightmare.Match
         private const string PATH_PROJECTILE = "Match/Projectile";
 
         private Pool<Projectile> _pool = null;
+        private Transform _poolTF = null;
 
         public Projectile Get()
         {
-            _pool ??= new Pool<Projectile>(() => ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null));
+            if (null == _pool)
+            {
+                _poolTF = new GameObject("ProjectilePoolTF").transform;
+                _pool = new Pool<Projectile>(() => ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, _poolTF));
+            }
 
             return _pool.Get();
         }

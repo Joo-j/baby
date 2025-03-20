@@ -11,10 +11,15 @@ namespace BabyNightmare.Match
         private const string PATH_POPUP_TEXT = "Match/UI/PopupText";
 
         private Pool<PopupText> _pool = null;
+        private Transform _poolTF = null;
 
         private PopupText Get()
         {
-            _pool ??= new Pool<PopupText>(() => ObjectUtil.LoadAndInstantiate<PopupText>(PATH_POPUP_TEXT, null));
+            if (null == _pool)
+            {
+                _poolTF = new GameObject("PopupTextPoolTF").transform;
+                _pool = new Pool<PopupText>(() => ObjectUtil.LoadAndInstantiate<PopupText>(PATH_POPUP_TEXT, _poolTF));
+            }
 
             return _pool.Get();
         }
