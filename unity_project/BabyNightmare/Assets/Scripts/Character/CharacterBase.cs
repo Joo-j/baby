@@ -13,6 +13,7 @@ namespace BabyNightmare.Character
         public Transform TF { get; }
         public float HP { get; }
         public float HitRadius { get; }
+        public Transform HitPoint { get; }
         public bool IsAttackable { get; }
         public void ReserveDamage(float damage);
         public void ReceiveAttack(float damage);
@@ -30,6 +31,7 @@ namespace BabyNightmare.Character
         [SerializeField] protected Animator _animator;
         [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
+        [SerializeField] private Transform _hitPoint;
         [SerializeField] private Color _ownColor;
 
         private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
@@ -48,6 +50,7 @@ namespace BabyNightmare.Character
         public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
         public Transform TF => transform;
+        public Transform HitPoint => _hitPoint;
         public float HP => _hp;
         public bool IsAttackable => _hp - _reserveDamage > 0;
 
@@ -73,8 +76,8 @@ namespace BabyNightmare.Character
             _reserveDamage = 0;
 
             _hp = Mathf.Max(0, _hp - damage);
-            
-            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, transform.position, _ownColor);
+
+            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, HitPoint.position, _ownColor);
 
             if (_hp <= 0)
             {
@@ -119,5 +122,19 @@ namespace BabyNightmare.Character
             mat.SetColor(KEY_EMISSION, _originColor);
             _coFlash = null;
         }
+
+#if UNITY_EDITOR
+        protected override void OnBindSerializedField()
+        {
+            base.OnBindSerializedField();
+
+            _renderer = this.GetComponentInChildren<Renderer>();
+            _animator = this.GetComponentInChildren<Animator>();
+            _animationTrigger = _animator.gameObject.GetComponent<AnimationTrigger>();
+            _hpBar = this.FindComponent<SimpleProgress>("HPBar");
+            _hitPoint = this.FindComponent<Transform>("HitPoint");
+        }
+
+#endif
     }
 }

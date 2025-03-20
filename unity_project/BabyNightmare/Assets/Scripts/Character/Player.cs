@@ -134,7 +134,7 @@ namespace BabyNightmare.Character
 
             if (damage > 0)
             {
-                StartCoroutine(Co_ThrowProjectile(pj, enemy.TF, OnThrow));
+                StartCoroutine(Co_ThrowProjectile(pj, enemy.HitPoint, OnThrow));
             }
             else
             {

@@ -35,6 +35,7 @@ Transform:
   - {fileID: 1640225200558334661}
   - {fileID: 1931293665116305044}
   - {fileID: 3072772346612718254}
+  - {fileID: 3765238391942657446}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2923941540571091805
@@ -103,6 +104,7 @@ MonoBehaviour:
   _animator: {fileID: 1823008113730173459}
   _animationTrigger: {fileID: 3219377947012573672}
   _hpBar: {fileID: 4891646949484611165}
+  _hitPoint: {fileID: 3765238391942657446}
   _ownColor: {r: 0, g: 0.6497364, b: 1, a: 1}
   _moveCurve:
     serializedVersion: 2
@@ -128,6 +130,37 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &7661883785944952345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3765238391942657446}
+  m_Layer: 0
+  m_Name: HitPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3765238391942657446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661883785944952345}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.02, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 214793796061132188}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2879964896941122183
 PrefabInstance:
   m_ObjectHideFlags: 0
