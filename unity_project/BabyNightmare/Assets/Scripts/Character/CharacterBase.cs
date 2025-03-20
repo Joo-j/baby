@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BabyNightmare.Match;
 using BabyNightmare.Util;
 using Supercent.Util;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace BabyNightmare.Character
         [SerializeField] protected Animator _animator;
         [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
+        [SerializeField] private Color _ownColor;
 
         private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
@@ -72,21 +74,25 @@ namespace BabyNightmare.Character
 
             _hp = Mathf.Max(0, _hp - damage);
 
+            if (_hp <= 0)
+            {
+                Die();
+                return;
+            }
+
             _hpBar.Refresh(_hp, _maxHealth, false);
 
             if (null != _coFlash)
                 StopCoroutine(_coFlash);
 
-            _coFlash = StartCoroutine(Co_FlashRed());
+            _coFlash = StartCoroutine(Co_ReceiveDamage());
 
-            if (_hp <= 0)
-            {
-                Die();
-            }
         }
 
-        private IEnumerator Co_FlashRed()
+        private IEnumerator Co_ReceiveDamage()
         {
+            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, transform.position, _ownColor);
+
             var mat = _renderer.material;
             var targetColor = Color.white;
             var duration = 0.1f;

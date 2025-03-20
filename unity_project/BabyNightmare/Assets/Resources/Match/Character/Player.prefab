@@ -145,6 +145,7 @@ MonoBehaviour:
   _animator: {fileID: 7265477811367614696}
   _animationTrigger: {fileID: 488257661798664165}
   _hpBar: {fileID: 1093458915853520808}
+  _ownColor: {r: 1, g: 0, b: 0.57734966, a: 1}
   _throwStartTF: {fileID: 5497047235258197999}
   _hitRadius: 4.5
 --- !u!1001 &202125535568705775

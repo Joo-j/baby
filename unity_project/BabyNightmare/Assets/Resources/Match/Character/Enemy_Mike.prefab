@@ -103,6 +103,7 @@ MonoBehaviour:
   _animator: {fileID: 5948638334016226332}
   _animationTrigger: {fileID: 244971239802859749}
   _hpBar: {fileID: 7575229609088098271}
+  _ownColor: {r: 0.13383985, g: 1, b: 0, a: 1}
   _moveCurve:
     serializedVersion: 2
     m_Curve:

@@ -87,6 +87,10 @@ namespace BabyNightmare.InventorySystem
             for (var i = 0; i < _equipmentList.Count; i++)
             {
                 onRemove?.Invoke(_equipmentList[i].transform.position);
+            }
+
+            for (var i = 0; i < _equipmentList.Count; i++)
+            {
                 Destroy(_equipmentList[i].gameObject);
             }
 

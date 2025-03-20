@@ -99,10 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 1823008113730173459}
   _renderer: {fileID: 2625159340128287687}
-  _hpBar: {fileID: 4891646949484611165}
+  _animator: {fileID: 1823008113730173459}
   _animationTrigger: {fileID: 3219377947012573672}
+  _hpBar: {fileID: 4891646949484611165}
+  _ownColor: {r: 0, g: 0.6497364, b: 1, a: 1}
   _moveCurve:
     serializedVersion: 2
     m_Curve:
