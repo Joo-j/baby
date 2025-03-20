@@ -31,8 +31,8 @@ namespace BabyNightmare.Lobby
         private HomeView _homeView = null;
         private ELobbyButtonType _focusButtonType = ELobbyButtonType.Unknown;
         private Dictionary<ELobbyButtonType, ELobbyButtonState> _buttonStateDict = new Dictionary<ELobbyButtonType, ELobbyButtonState>();
-        private LogClassPrinter _printer = new LogClassPrinter("LobbyManager", "333331");
         private bool _isEnterSequenceDone = false;
+        private LogClassPrinter _printer = new LogClassPrinter("LobbyManager", "333331");
 
         public ELobbyButtonType FocusButtonType => _focusButtonType;
 
@@ -208,19 +208,11 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        //CustomShopManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
 
                 case ELobbyButtonType.Shop:
                     {
-                        // if (null != identifier && Enum.TryParse(identifier.ToString(), out EShopScrollType scrollType))
-                        // {
-                        //     ShopManager.Instance.Show(_lobbyView.ScreenRTF, scrollType);
-                        //     return;
-                        // }
-
-                        // ShopManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
                 case ELobbyButtonType.Home:
@@ -236,7 +228,6 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        //MissionManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
             }
@@ -250,12 +241,10 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.CustomShop:
                     {
-                        //CustomShopManager.Instance.Hide(); 
                         return;
                     }
                 case ELobbyButtonType.Shop:
                     {
-                        //ShopManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Home:
@@ -270,7 +259,6 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Mission:
                     {
-                        //MissionManager.Instance.Hide();
                         return;
                     }
 
@@ -284,11 +272,11 @@ namespace BabyNightmare.Lobby
         {
             switch (type)
             {
-                // case ELobbyButtonType.CustomShop: return CustomShopManager.Instance.IsAnyNew();
-                // case ELobbyButtonType.Shop: return ShopUserData.IsExistFreeGem;
-                // case ELobbyButtonType.Home: return false;
-                // case ELobbyButtonType.Talent: return TalentManager.Instance.IsRedDot();
-                // case ELobbyButtonType.Mission: return MissionManager.Instance.IsClaimMission;
+                case ELobbyButtonType.CustomShop: return false;
+                case ELobbyButtonType.Shop: return false;
+                case ELobbyButtonType.Home: return false;
+                case ELobbyButtonType.Talent: return TalentManager.Instance.IsRedDot();
+                case ELobbyButtonType.Mission: return false;
                 default: return false;
             }
         }
@@ -336,24 +324,11 @@ namespace BabyNightmare.Lobby
         {
             switch (buttonType)
             {
-                case ELobbyButtonType.Home:
-                case ELobbyButtonType.Shop:
-                case ELobbyButtonType.CustomShop:
-                    return true;
-
-                // case ELobbyButtonType.Talent: return !TalentManager.Instance.NeedGuide;
-                // case ELobbyButtonType.Mission: return MissionManager.Instance.CompletedMissionViewShowCount > 0;
-                // case ELobbyButtonType.StepUp: return StepUpManager.Instance.GuideDone;
-                // case ELobbyButtonType.Luckyspin: return LuckyspinModel.Instance.IsExistAniSaveData;
-                // case ELobbyButtonType.LeaderBoard: return LeaderBoardManager.Instance.ResetCount > 0;
-                // case ELobbyButtonType.Christmas: return ChristmasEventManager.Instance.IsLive;
-                // case ELobbyButtonType.NoAds: //다른 컨텐츠는 매니저가 관리해서 버튼이 생성되지 않는데 NoAds는 따로 관리하는 주체가 없어 Remote Check
-                //     {
-                //         var isActive = DataBase.Get<RemoteConfig>(RemoteConfig.NOADS_ON).value.IntValue() == 1;
-                //         return true == isActive && false == User.NoAds && PlayerData.TotalISWatchCount > 0;
-                //     }
-                // case ELobbyButtonType.CoinBoost: return ConditionHelper.GetValue(EConditionType.TotalAttemptCount) >= 1;
-                // case ELobbyButtonType.Restaurant: return RestaurantEventManager.Instance.IsLive;
+                case ELobbyButtonType.Home: return true;
+                case ELobbyButtonType.Shop: return false;
+                case ELobbyButtonType.CustomShop: return false;
+                case ELobbyButtonType.Talent: return TalentManager.Instance.ShowCount > 0;
+                case ELobbyButtonType.Mission: return false;
 
                 default: return false;
             }

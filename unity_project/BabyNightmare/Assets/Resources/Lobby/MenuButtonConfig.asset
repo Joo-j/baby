@@ -15,21 +15,21 @@ MonoBehaviour:
   _menuButtonDataList:
   - Type: 2
     Index: 0
-    ShowGuide: 0
-    Guide_Force: 0
+    ShowGuide: 1
+    Guide_Force: 1
   - Type: 5
     Index: 1
-    ShowGuide: 0
-    Guide_Force: 0
+    ShowGuide: 1
+    Guide_Force: 1
   - Type: 1
     Index: 2
     ShowGuide: 0
     Guide_Force: 0
-  - Type: 4
+  - Type: 3
     Index: 3
     ShowGuide: 1
     Guide_Force: 1
-  - Type: 3
+  - Type: 4
     Index: 4
     ShowGuide: 1
     Guide_Force: 1

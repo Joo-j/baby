@@ -18,7 +18,6 @@ namespace BabyNightmare.Match
         public Action OnClearWave { get; }
         public Action OnFailWave { get; }
 
-
         public MatchFieldContext
         (
             int chapter,

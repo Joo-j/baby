@@ -12,12 +12,19 @@ namespace BabyNightmare.Talent
 {
     public class TalentManager : SingletonBase<TalentManager>
     {
-        private const string FILE_TALENT_DATA = "talent_data";
+        private const string FILE_TALENT_SAVE_DATA = "talent_data";
         private const string PATH_TALENT_DATA = "StaticData/TalentData";
         private const string PATH_TALENT_VIEW = "Talent/TalentView";
+        private const string KEY_SHOW_COUNT = "Talent_ShowCount";
         private List<TalentData> _dataList = null;
         private Dictionary<ETalentType, int> _levelDict = null;
         private TalentView _talentView = null;
+
+        public int ShowCount
+        {
+            get => PlayerPrefs.GetInt(KEY_SHOW_COUNT);
+            set => PlayerPrefs.SetInt(KEY_SHOW_COUNT, value);
+        }
 
         public void Init()
         {
@@ -53,6 +60,8 @@ namespace BabyNightmare.Talent
 
             _talentView.gameObject.SetActive(true);
             _talentView.RefreshButton(PlayerData.Instance.Gem);
+
+            ++ShowCount;
         }
 
         public void Hide()
@@ -100,10 +109,15 @@ namespace BabyNightmare.Talent
             Save();
         }
 
+        public bool IsRedDot()
+        {
+            return PlayerData.Instance.Gem >= GetPrice();
+        }
+
         private void Save()
         {
             var binaryData = JsonConvert.SerializeObject(_levelDict);
-            FileSaveUtil.Save(FILE_TALENT_DATA, binaryData, false, false);
+            FileSaveUtil.Save(FILE_TALENT_SAVE_DATA, binaryData, false, false);
         }
 
         private void Load()
@@ -112,7 +126,7 @@ namespace BabyNightmare.Talent
 
             var types = Enum.GetValues(typeof(ETalentType));
 
-            var binaryData = FileSaveUtil.Load(FILE_TALENT_DATA, false, false);
+            var binaryData = FileSaveUtil.Load(FILE_TALENT_SAVE_DATA, false, false);
             if (true == binaryData.IsNullOrEmpty())
             {
                 InitLevelDict(types); //저장 데이터가 없을 시 초기화 후 리턴

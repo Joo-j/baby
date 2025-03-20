@@ -17,4 +17,4 @@ MonoBehaviour:
   ConditionType: 2
   ConditionValue: 0
   Order: 1
-  ShowOpenAni: 0
+  ShowOpenAni: 1
