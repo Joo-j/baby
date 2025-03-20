@@ -197,6 +197,9 @@ namespace BabyNightmare.Match
         {
             _context.GetCoin?.Invoke(_totalCoin, _player.transform.position);
             _totalCoin = 0;
+            ProjectilePool.Instance.ReturnAll();
+            PopupTextPool.Instance.ReturnAll();
+            FXPool.Instance.ReturnAll();
         }
 
         public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)

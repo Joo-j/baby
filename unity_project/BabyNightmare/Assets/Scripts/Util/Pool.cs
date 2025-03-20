@@ -8,6 +8,7 @@ namespace BabyNightmare.Util
     public sealed class Pool<T> where T : Component
     {
         private List<T> _itemList = new List<T>();
+        private List<T> _activeList = new List<T>();
         private Func<T> _creator = null;
 
         public Pool(Func<T> creator, int initialCount = 0)
@@ -35,6 +36,7 @@ namespace BabyNightmare.Util
 
             var item = _itemList[_itemList.Count - 1];
             _itemList.RemoveAt(_itemList.Count - 1);
+            _activeList.Add(item);
 
             item.gameObject.SetActive(true);
 
@@ -46,6 +48,19 @@ namespace BabyNightmare.Util
             item.gameObject.SetActive(false);
 
             _itemList.Add(item);
+            _activeList.Remove(item);
+        }
+
+        public void ReturnAll()
+        {
+            for (var i = 0; i < _activeList.Count; i++)
+            {
+                var item = _activeList[i];
+                item.gameObject.SetActive(false);
+                _itemList.Add(item);
+            }
+
+            _activeList.Clear();
         }
     }
 }

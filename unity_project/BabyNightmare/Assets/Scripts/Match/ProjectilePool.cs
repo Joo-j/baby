@@ -28,5 +28,10 @@ namespace BabyNightmare.Match
         {
             _pool.Return(pj);
         }
+
+        public void ReturnAll()
+        {
+            _pool.ReturnAll();
+        }
     }
 }

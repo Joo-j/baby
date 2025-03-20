@@ -36,5 +36,10 @@ namespace BabyNightmare.Match
             pt.transform.rotation = rot;
             pt.Refresh(text, color, () => Return(pt));
         }
+
+        public void ReturnAll()
+        {
+            _pool.ReturnAll();
+        }
     }
 }

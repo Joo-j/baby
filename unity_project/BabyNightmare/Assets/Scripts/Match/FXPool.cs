@@ -56,5 +56,13 @@ namespace BabyNightmare.Match
             fx.transform.position = pos;
             GameLifeCycle.Start_Coroutine(SimpleLerp.Co_Invoke(fx.AppearDuration, () => Return(fx)));
         }
+
+        public void ReturnAll()
+        {
+            foreach (var pair in _poolDict)
+            {
+                pair.Value.ReturnAll();
+            }
+        }
     }
 }
