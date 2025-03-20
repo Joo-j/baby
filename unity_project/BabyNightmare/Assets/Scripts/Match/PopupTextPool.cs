@@ -16,15 +16,11 @@ namespace BabyNightmare.Match
         {
             _pool ??= new Pool<PopupText>(() => ObjectUtil.LoadAndInstantiate<PopupText>(PATH_POPUP_TEXT, null));
 
-            var pt = _pool.Get();
-            pt.gameObject.SetActive(true);
-
-            return pt;
+            return _pool.Get();
         }
 
         private void Return(PopupText pt)
         {
-            pt.gameObject.SetActive(false);
             _pool.Return(pt);
         }
 

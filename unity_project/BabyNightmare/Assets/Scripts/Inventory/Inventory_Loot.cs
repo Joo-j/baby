@@ -82,10 +82,11 @@ namespace BabyNightmare.InventorySystem
             Refresh();
         }
 
-        public void RemoveAll()
+        public void RemoveAll(Action<Vector3> onRemove = null)
         {
             for (var i = 0; i < _equipmentList.Count; i++)
             {
+                onRemove?.Invoke(_equipmentList[i].transform.position);
                 Destroy(_equipmentList[i].gameObject);
             }
 

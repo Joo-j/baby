@@ -61,8 +61,10 @@ namespace BabyNightmare.Match
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
         [SerializeField] private Transform _statItemViewGridTF;
+
         private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
+        private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
         private Action _onGetBox = null;
@@ -220,13 +222,19 @@ namespace BabyNightmare.Match
         {
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
-            _loot.RemoveAll();
+            _loot.RemoveAll(SellEquipment);
             _bag.StartUseEquipment(_context.OnCoolDown);
             _canvasGroup.blocksRaycasts = false;
 
             ChangeRectPos(true);
 
             _context.StartWave?.Invoke();
+        }
+
+        private void SellEquipment(Vector3 pos)
+        {
+            CoinHUD.SetSpreadPoint(pos);
+            PlayerData.Instance.Coin += EQUIPMENT_PRICE;
         }
 
         public void ChangeRectPos(bool top, bool immediate = false)

@@ -16,15 +16,11 @@ namespace BabyNightmare.Match
         {
             _pool ??= new Pool<Projectile>(() => ObjectUtil.LoadAndInstantiate<Projectile>(PATH_PROJECTILE, null));
 
-            var pj = _pool.Get();
-            pj.gameObject.SetActive(true);
-
-            return pj;
+            return _pool.Get();
         }
 
         public void Return(Projectile pj)
         {
-            pj.gameObject.SetActive(false);
             _pool.Return(pj);
         }
     }

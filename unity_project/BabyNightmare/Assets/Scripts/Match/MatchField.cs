@@ -51,6 +51,7 @@ namespace BabyNightmare.Match
         private const string PATH_PLAYER = "Match/Character/Player";
         private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
+        private const string PATH_COIN = "Match/Coin";
 
         private Transform _fieldTF;
         private RenderTexture _rt = null;
@@ -61,6 +62,8 @@ namespace BabyNightmare.Match
         private List<EnemyBase> _aliveEnemies = null;
         private MatchFieldContext _context = null;
         private int _enemySpawnCount = 0;
+        private Pool<Coin> _coinPool = null;
+        private int _totalCoin = 0;
 
         public RenderTexture RT => _rt;
         public Camera RenderCamera => _renderCamera;
@@ -84,6 +87,8 @@ namespace BabyNightmare.Match
 
             var playerContext = new PlayerContext(PlayerData.Instance.HP, CameraForward, OnDiePlayer, _context.GetCoin);
             _player.Init(playerContext);
+
+            _coinPool = new Pool<Coin>(() => ObjectUtil.LoadAndInstantiate<Coin>(PATH_COIN, transform), 10);
         }
 
         public void Release()
@@ -130,7 +135,12 @@ namespace BabyNightmare.Match
 
         private void OnDieEnemy(EnemyBase enemy)
         {
-            _context.GetCoin?.Invoke(enemy.GetRandomCoin(), enemy.transform.position);
+            var pos = enemy.transform.position;
+
+            var dieCoin = enemy.GetRandomCoin(); ;
+            _totalCoin += dieCoin;
+            StartCoroutine(Co_SpawnCoin(pos, dieCoin));
+
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
 
@@ -140,6 +150,20 @@ namespace BabyNightmare.Match
             if (_aliveEnemies.Count == 0)
             {
                 _context.OnClearWave?.Invoke();
+            }
+        }
+
+
+        private IEnumerator Co_SpawnCoin(Vector3 pos, int count)
+        {
+            var randDir = new Vector3(Random.Range(0f, 0.5f), 1f, Random.Range(0f, 0.5f));
+            var randForce = Random.Range(30f, 60f);
+            for (var i = 0; i < count; i++)
+            {
+                var coin = _coinPool.Get();
+                coin.transform.position = pos;
+                coin.Init(randDir, randForce, () => _coinPool.Return(coin));
+                yield return null;
             }
         }
 
@@ -163,10 +187,16 @@ namespace BabyNightmare.Match
             if (attackableEnemies.Count == 0)
                 return;
 
-            var rand = UnityEngine.Random.Range(0, attackableEnemies.Count);
+            var rand = Random.Range(0, attackableEnemies.Count);
             var randomEnemy = attackableEnemies[rand];
 
             _player.UseEquipment(equipmentData, randomEnemy);
+        }
+
+        public void OnClearWave()
+        {
+            _context.GetCoin?.Invoke(_totalCoin, _player.transform.position);
+            _totalCoin = 0;
         }
 
         public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)

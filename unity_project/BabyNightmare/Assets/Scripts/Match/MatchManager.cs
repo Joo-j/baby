@@ -139,6 +139,8 @@ namespace BabyNightmare.Match
             _matchView.OnClearWave();
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
 
+            _matchField.OnClearWave();
+
             var boxData = GetBoxData();
             _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, () => OnGetBox(boxData)));
         }

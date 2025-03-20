@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BabyNightmare.Util
 {
-    public sealed class Pool<T> where T : class
+    public sealed class Pool<T> where T : Component
     {
         private List<T> _itemList = new List<T>();
         private Func<T> _creator = null;
@@ -22,7 +22,9 @@ namespace BabyNightmare.Util
 
             while (_itemList.Count < initialCount)
             {
-                _itemList.Add(_creator?.Invoke());
+                var item = _creator?.Invoke();
+                item.gameObject.SetActive(false);
+                _itemList.Add(item);
             }
         }
 
@@ -31,13 +33,18 @@ namespace BabyNightmare.Util
             if (_itemList.Count == 0)
                 return _creator?.Invoke();
 
-            var obj = _itemList[_itemList.Count - 1];
+            var item = _itemList[_itemList.Count - 1];
             _itemList.RemoveAt(_itemList.Count - 1);
-            return obj;
+
+            item.gameObject.SetActive(true);
+
+            return item;
         }
 
         public void Return(T item)
         {
+            item.gameObject.SetActive(false);
+
             _itemList.Add(item);
         }
     }

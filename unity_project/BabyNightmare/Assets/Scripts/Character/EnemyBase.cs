@@ -6,6 +6,7 @@ using BabyNightmare.StaticData;
 using BabyNightmare.HUD;
 using BabyNightmare.Util;
 using BabyNightmare.Match;
+using Random = UnityEngine.Random;
 
 namespace BabyNightmare.Character
 {
