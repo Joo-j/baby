@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
@@ -66,10 +67,12 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
-        private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
         private Action _onGetBox = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
+        private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
+        private Dictionary<EStatType, float> _statDict = null;
+        private Dictionary<EStatType, float> _statChangeDict = null;
         private Vector2 _progressSize;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
@@ -78,18 +81,24 @@ namespace BabyNightmare.Match
         {
             _context = context;
             _statItemViewDict = new Dictionary<EStatType, StatItemView>();
+            _statDict = new Dictionary<EStatType, float>();
+            _statChangeDict = new Dictionary<EStatType, float>();
 
             foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
             {
                 var itemView = ObjectUtil.LoadAndInstantiate<StatItemView>(PATH_STAT_ITEM_VIEW, _statItemViewGridTF);
                 itemView.Init(type);
                 _statItemViewDict.Add(type, itemView);
+                _statChangeDict.Add(type, 0);
+                _statDict.Add(type, 0);
             }
 
             _fieldIMG.texture = _context.RT;
 
-            _loot.Init(context.GetUpgradeData);
-            _bag.Init(_loot, OnEquip, OnUnequip, context.GetUpgradeData);
+            _loot.InitBase(context.GetUpgradeData, RefreshStatChange);
+            _bag.InitBase(context.GetUpgradeData, RefreshStatChange);
+
+            _bag.Init(_loot, AddStat);
 
             var addedIndexList = PlayerData.Instance.AddedIndexList;
             if (null != addedIndexList)
@@ -283,49 +292,59 @@ namespace BabyNightmare.Match
             _coChangeRect = null;
         }
 
-        private void OnEquip(EquipmentData data)
+        private void AddStat(EquipmentData data, bool isEquip)
         {
-            if (data.Heal > 0)
+            var statDataList = data.StatDataList;
+
+            for (var i = 0; i < statDataList.Count; i++)
             {
-                _statItemViewDict[EStatType.HP].AddValue(Mathf.CeilToInt(data.Heal / data.CoolTime));
+                var statData = statDataList[i];
+                var value = statData.Value / data.CoolTime;
+                _statDict[statData.Type] += isEquip ? value : -value;
             }
 
-            if (data.Damage > 0)
+            foreach (var pair in _statItemViewDict)
             {
-                _statItemViewDict[EStatType.ATK].AddValue(Mathf.CeilToInt(data.Damage / data.CoolTime));
-            }
-
-            if (data.Defence > 0)
-            {
-                _statItemViewDict[EStatType.DEF].AddValue(Mathf.CeilToInt(data.Defence / data.CoolTime));
-            }
-
-            if (data.Coin > 0)
-            {
-                _statItemViewDict[EStatType.Coin].AddValue(Mathf.CeilToInt(data.Coin / data.CoolTime));
+                pair.Value.RefreshValue(Mathf.CeilToInt(_statDict[pair.Key]));
             }
         }
 
-        private void OnUnequip(EquipmentData data)
+        private void RefreshStatChange(Equipment dragEquipment, List<Equipment> overlapList)
         {
-            if (data.Heal > 0)
+            foreach (var key in _statChangeDict.Keys.ToList())
             {
-                _statItemViewDict[EStatType.HP].AddValue(-Mathf.CeilToInt(data.Heal / data.CoolTime));
+                _statChangeDict[key] = 0;
             }
 
-            if (data.Damage > 0)
+            if (null != overlapList && overlapList.Count > 0)
             {
-                _statItemViewDict[EStatType.ATK].AddValue(-Mathf.CeilToInt(data.Damage / data.CoolTime));
+                for (var i = 0; i < overlapList.Count; i++)
+                {
+                    var data = overlapList[i].Data;
+                    var overlapStatDataList = data.StatDataList;
+                    for (var j = 0; j < overlapStatDataList.Count; j++)
+                    {
+                        var statData = overlapStatDataList[j];
+                        _statChangeDict[statData.Type] -= statData.Value / data.CoolTime;
+                    }
+                }
             }
 
-            if (data.Defence > 0)
+            if (null != dragEquipment)
             {
-                _statItemViewDict[EStatType.DEF].AddValue(-Mathf.CeilToInt(data.Defence / data.CoolTime));
+                var data = dragEquipment.Data;
+                var statDataList = data.StatDataList;
+
+                for (var i = 0; i < statDataList.Count; i++)
+                {
+                    var statData = statDataList[i];
+                    _statChangeDict[statData.Type] += statData.Value / data.CoolTime;
+                }
             }
 
-            if (data.Coin > 0)
+            foreach (var pair in _statItemViewDict)
             {
-                _statItemViewDict[EStatType.Coin].AddValue(-Mathf.CeilToInt(data.Coin / data.CoolTime));
+                pair.Value.RefreshChangeValue(Mathf.CeilToInt(_statChangeDict[pair.Key]));
             }
         }
 

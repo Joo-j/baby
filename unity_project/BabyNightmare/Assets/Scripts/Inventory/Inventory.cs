@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 
@@ -14,6 +15,7 @@ namespace BabyNightmare.InventorySystem
         protected RectTransform _rtf;
         protected RectTransform _canvasRTF;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData;
+        protected Action<Equipment, List<Equipment>> _refreshChangeStat;
         private static Inventory _dragStartInventory = null;
         private static Inventory _currentInventory = null;
         protected static Equipment _draggedEquipment = null;
@@ -24,6 +26,7 @@ namespace BabyNightmare.InventorySystem
         public abstract void Equip(Equipment equipment);
         public abstract Equipment Unequip(Vector2 screenPos);
         public abstract Equipment Get(Vector2 screenPos);
+        public abstract List<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
 
         private void Awake()
         {
@@ -33,7 +36,18 @@ namespace BabyNightmare.InventorySystem
 
         protected virtual void OnEnable()
         {
-            StartCoroutine(Co_DetectEquipment());
+            StartCoroutine(Co_Refresh());
+        }
+
+
+        public void InitBase
+        (
+            Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
+            Action<Equipment, List<Equipment>> refreshChangeStat
+        )
+        {
+            _getUpgradeData = getUpgradeData;
+            _refreshChangeStat = refreshChangeStat;
         }
 
         public void TryAdd(EquipmentData data)
@@ -63,31 +77,49 @@ namespace BabyNightmare.InventorySystem
             _dragStartInventory = this;
         }
 
-        private IEnumerator Co_DetectEquipment()
+        private IEnumerator Co_Refresh()
         {
             while (true)
             {
                 yield return null;
-
-                if (null == _dragEventData)
-                    continue;
-
-                if (null == _draggedEquipment)
-                    continue;
-
-                if (null == _currentInventory)
-                    continue;
-
-                var equipment = _currentInventory.Get(_dragEventData.position);
-                if (null == equipment)
-                    continue;
-
-                var upgradeData = _getUpgradeData?.Invoke(_draggedEquipment.Data, equipment.Data);
-                if (null != upgradeData)
-                {
-                    equipment.Swing();
-                }
+                RefreshStatChange();
+                RefreshUpgradable();
             }
+        }
+
+        private void RefreshUpgradable()
+        {
+            if (null == _dragEventData)
+                return;
+
+            if (null == _draggedEquipment)
+                return;
+
+            if (null == _currentInventory)
+                return;
+
+            var equipment = _currentInventory.Get(_dragEventData.position);
+            if (null == equipment)
+                return;
+
+            var upgradeData = _getUpgradeData?.Invoke(_draggedEquipment.Data, equipment.Data);
+            if (null != upgradeData)
+            {
+                equipment.Swing();
+            }
+        }
+
+        private void RefreshStatChange()
+        {
+            if (null == _dragEventData || null == _currentInventory || null == _draggedEquipment)
+            {
+                _refreshChangeStat?.Invoke(null, null);
+                return;
+            }
+
+            var overlapList = _currentInventory.TryGetOverlap(_draggedEquipment, _dragEventData.position);
+            _refreshChangeStat?.Invoke(_draggedEquipment, overlapList);
+
         }
 
         public void OnPointerClick(PointerEventData eventData)

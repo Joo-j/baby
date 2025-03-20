@@ -14,11 +14,6 @@ namespace BabyNightmare.InventorySystem
 
         private List<Equipment> _equipmentList = new List<Equipment>();
 
-        public void Init(Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
-        {
-            _getUpgradeData = getUpgradeData;
-        }
-
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
             var getEquipment = Get(screenPos);
@@ -114,6 +109,13 @@ namespace BabyNightmare.InventorySystem
 
             return null;
         }
+
+
+        public override List<Equipment> TryGetOverlap(Equipment data, Vector2 screenPos)
+        {
+            return null;
+        }
+        
 
         private void Refresh()
         {

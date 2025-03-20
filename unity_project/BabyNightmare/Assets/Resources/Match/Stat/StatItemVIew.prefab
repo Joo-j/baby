@@ -781,7 +781,6 @@ GameObject:
   - component: {fileID: 4878342897093271705}
   - component: {fileID: 1944331159651973092}
   - component: {fileID: 6014660299683736466}
-  - component: {fileID: 4047371868963291208}
   m_Layer: 5
   m_Name: StatItemVIew
   m_TagString: Untagged
@@ -864,11 +863,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rtf: {fileID: 7172203331759530391}
-  _animator: {fileID: 4047371868963291208}
   _iconIMG: {fileID: 5486607508185821174}
   _valueTMP: {fileID: 6707839062532261824}
   _addTMP: {fileID: 1433379631495258031}
   _subTMP: {fileID: 8033564979491404870}
+  _addGO: {fileID: 7867885294923701352}
+  _subGO: {fileID: 511058924390509156}
   _bounceCurve:
     serializedVersion: 2
     m_Curve:
@@ -893,27 +893,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!95 &4047371868963291208
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6967757650402017380}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0c4fcaf386d6d144c89200ee09e27a59, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7867885294923701352
 GameObject:
   m_ObjectHideFlags: 0

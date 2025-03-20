@@ -27,19 +27,14 @@ namespace BabyNightmare.InventorySystem
         private List<Cell> _addableCells = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Inventory _outsideInventory = null;
-        private Action<EquipmentData> _onEquip = null;
-        private Action<EquipmentData> _onUnequip = null;
+        private Action<EquipmentData, bool> _applyStat = null;
 
         public void Init(
         Inventory outsideInventory,
-        Action<EquipmentData> onEquip,
-        Action<EquipmentData> onUnequip,
-        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
+        Action<EquipmentData, bool> applyStat)
         {
             _outsideInventory = outsideInventory;
-            _onEquip = onEquip;
-            _onUnequip = onUnequip;
-            _getUpgradeData = getUpgradeData;
+            _applyStat = applyStat;
 
             _cellDict = new Dictionary<Vector2Int, Cell>();
 
@@ -270,7 +265,7 @@ namespace BabyNightmare.InventorySystem
             equipment.Index = index;
             equipment.RTF.anchoredPosition = GetAnchoredPos(index, equipment.Data);
             _equipmentSet.Add(equipment);
-            _onEquip?.Invoke(equipment.Data);
+            _applyStat?.Invoke(equipment.Data, true);
         }
 
         public override void Equip(Equipment equipment)
@@ -283,7 +278,7 @@ namespace BabyNightmare.InventorySystem
             equipment.Index = randomIndex;
 
             var targetPos = GetAnchoredPos(randomIndex, equipment.Data);
-            equipment.Move(targetPos, () => _onEquip?.Invoke(equipment.Data));
+            equipment.Move(targetPos, () => _applyStat?.Invoke(equipment.Data, true));
         }
 
         private void Remove(Equipment equipment)
@@ -293,7 +288,7 @@ namespace BabyNightmare.InventorySystem
 
             Destroy(equipment.gameObject);
             _equipmentSet.Remove(equipment);
-            _onUnequip?.Invoke(equipment.Data);
+            _applyStat?.Invoke(equipment.Data, false);
         }
 
         private Equipment Unequip(Vector2Int targetIndex)
@@ -306,7 +301,7 @@ namespace BabyNightmare.InventorySystem
                 return null;
 
             _equipmentSet.Remove(equipment);
-            _onUnequip?.Invoke(equipment.Data);
+            _applyStat?.Invoke(equipment.Data, false);
             return equipment;
         }
 
@@ -326,7 +321,7 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             _equipmentSet.Remove(equipment);
-            _onUnequip?.Invoke(equipment.Data);
+            _applyStat?.Invoke(equipment.Data, false);
 
             _outsideInventory.Equip(equipment);
         }
@@ -396,6 +391,30 @@ namespace BabyNightmare.InventorySystem
             }
 
             return false;
+        }
+
+        public override List<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos)
+        {
+            List<Equipment> list = null;
+            var currentIndex = GetIndex(screenPos);
+
+            var data = equipment.Data;
+            var validList = data.Shape.ValidIndexList;
+            for (var i = 0; i < validList.Count; i++)
+            {
+                var index = validList[i];
+                var newIndex = currentIndex + index;
+                if (false == IsValid(newIndex))
+                    continue;
+
+                if (true == TryGetOverlap(newIndex, out var overlapped))
+                {
+                    list ??= new List<Equipment>();
+                    list.Add(overlapped);
+                }
+            }
+
+            return list;
         }
 
         private Vector2Int GetRandomIndex(EquipmentData data)

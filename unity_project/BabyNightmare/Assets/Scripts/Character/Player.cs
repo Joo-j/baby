@@ -86,7 +86,7 @@ namespace BabyNightmare.Character
         {
             if (null == gameObject)
                 return;
-                
+
             damage -= _def;
 
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
@@ -117,37 +117,48 @@ namespace BabyNightmare.Character
 
             var equipmentData = info.EquipmentData;
 
-            var enemy = info.Character;
-            if (null == enemy)
-                return;
-
-            if (false == enemy.IsAttackable)
-                return;
-
-            var damage = equipmentData.Damage;
-            enemy.ReserveDamage(damage);
-
             var pj = ProjectilePool.Instance.Get();
             pj.TF.position = _throwStartTF.position;
             pj.TF.rotation = Quaternion.identity;
             pj.Init(equipmentData.ID);
 
-            if (damage > 0)
+            var statDataList = equipmentData.StatDataList;
+            for (var i = 0; i < statDataList.Count; i++)
             {
-                StartCoroutine(Co_ThrowProjectile(pj, enemy.HitPoint, OnThrow));
-            }
-            else
-            {
-                StartCoroutine(Co_ThrowProjectile(pj, transform, OnThrow));
-            }
+                var statData = statDataList[i];
+                var value = statData.Value;
+                switch (statData.Type)
+                {
+                    case EStatType.ATK:
+                        var enemy = info.Character;
+                        if (null == enemy)
+                            return;
 
-            void OnThrow()
-            {
-                enemy?.ReceiveAttack(equipmentData.Damage);
-                _hp = Mathf.Min(_maxHealth, _hp + equipmentData.Heal);
-                _hpBar.Refresh(_hp, _maxHealth, false);
-                _def += equipmentData.Defence;
-                _context.GetCoin?.Invoke(equipmentData.Coin, transform.position);
+                        if (false == enemy.IsAttackable)
+                            return;
+
+                        enemy.ReserveDamage(value);
+                        StartCoroutine(Co_ThrowProjectile(pj, enemy.HitPoint, () => enemy?.ReceiveAttack(value)));
+                        break;
+
+                    case EStatType.HP:
+                        StartCoroutine(Co_ThrowProjectile(pj, transform, () =>
+                        {
+                            _hp = Mathf.Min(_maxHealth, _hp + value);
+                            _hpBar.Refresh(_hp, _maxHealth, false);
+                        }));
+                        break;
+
+                    case EStatType.DEF:
+                        StartCoroutine(Co_ThrowProjectile(pj, transform, () => _def += value));
+                        break;
+
+                    case EStatType.Coin:
+                        StartCoroutine(Co_ThrowProjectile(pj, transform, () => _context.GetCoin?.Invoke((int)value, transform.position)));
+                        break;
+
+                    default: throw new Exception($"{statData.Type}의 행동이 정해지지 않았습니다.");
+                }
             }
         }
 

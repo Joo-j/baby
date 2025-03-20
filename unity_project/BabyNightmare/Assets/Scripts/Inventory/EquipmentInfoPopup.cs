@@ -23,10 +23,20 @@ namespace BabyNightmare.InventorySystem
 
             _icon.sprite = data.Sprite;
             _nameTMP.text = $"{data.Name}";
-            _levelTMP.text = $"LV {data.Desc}";
+            _descTMP.text = $"LV {data.Desc}";
             _levelTMP.text = $"LV {data.Level}";
-            _damageTMP.text = $"{data.Damage}";
             _cooltimeTMP.text = $"{data.CoolTime:F1}s";
+
+            var statDataList = data.StatDataList;
+            for (var i = 0; i < statDataList.Count; i++)
+            {
+                var statData = statDataList[i];
+                if (statData.Type == EStatType.ATK)
+                {
+                    _damageTMP.text = $"{statData.Value}";
+                    break;
+                }
+            }
         }
 
         public void Hide()
