@@ -73,6 +73,8 @@ namespace BabyNightmare.Character
             _reserveDamage = 0;
 
             _hp = Mathf.Max(0, _hp - damage);
+            
+            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, transform.position, _ownColor);
 
             if (_hp <= 0)
             {
@@ -91,8 +93,6 @@ namespace BabyNightmare.Character
 
         private IEnumerator Co_ReceiveDamage()
         {
-            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, transform.position, _ownColor);
-
             var mat = _renderer.material;
             var targetColor = Color.white;
             var duration = 0.1f;

@@ -89,7 +89,7 @@ namespace BabyNightmare.Character
                 
             damage -= _def;
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.red);
+            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
 
             base.ReceiveAttack(damage);
         }
