@@ -11,7 +11,8 @@ namespace BabyNightmare.Match
         Receive_Damage,
         Equipment_Merge,
         Equipment_Level_2,
-        Equipment_Level_3
+        Equipment_Level_3,
+        Heal
     }
 
     public class FXPool : SingletonBase<FXPool>
@@ -53,6 +54,13 @@ namespace BabyNightmare.Match
                 return;
 
             pool.Return(fx);
+        }
+
+        public void ShowTemporary(EFXType type, Vector3 pos)
+        {
+            var fx = Get(type);
+            fx.transform.position = pos;
+            GameLifeCycle.Start_Coroutine(SimpleLerp.Co_Invoke(fx.AppearDuration, () => Return(fx)));
         }
 
         public void ShowTemporary(EFXType type, Vector3 pos, Color color)

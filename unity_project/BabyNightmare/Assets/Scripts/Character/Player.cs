@@ -174,6 +174,7 @@ namespace BabyNightmare.Character
                             {
                                 _hp = Mathf.Min(_maxHealth, _hp + value);
                                 _hpBar.Refresh(_hp, _maxHealth, false);
+                                FXPool.Instance.ShowTemporary(EFXType.Heal, transform.position);
                             }));
                             break;
                         }
