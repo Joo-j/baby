@@ -6,6 +6,7 @@ using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using UnityEngine.EventSystems;
 using Supercent.Util;
+using BabyNightmare.Match;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -21,16 +22,18 @@ namespace BabyNightmare.InventorySystem
 
         private const string PATH_EQUIPMENT_ICON_OUTLINE = "Inventory/Equipment_Icon_Outline/";
         private const string PATH_EQUIPMENT_ICON = "Inventory/Equipment_Icon/";
-        private const string PATH_EQUIPMENT_FX = "Inventory/FX/FX_";
+        private readonly Vector2 MERGE_FX_SCALE = Vector3.one * 80f;
+        private readonly Vector2 LEVEL_FX_SCALE_1X1 = Vector3.one * 55f;
+        private readonly Vector2 LEVEL_FX_SCALE_2X2 = Vector3.one * 70f;
         private Coroutine _coCoolDown = null;
         private Coroutine _coSwing = null;
-        private ParticleSystem _fx = null;
+        private FX _levelFX = null;
 
         public EquipmentData Data { get; private set; }
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
 
-        public void Refresh(EquipmentData data, bool isMerge)
+        public void Refresh(EquipmentData data)
         {
             this.Data = data;
 
@@ -47,28 +50,34 @@ namespace BabyNightmare.InventorySystem
             _iconOutline.sprite = icon_outline;
             _icon.sprite = Resources.Load<Sprite>(iconPath);
 
-            if (null != _fx)
+        }
+
+        public void ShowMergeFX(EquipmentData data, Mesh mesh)
+        {
+            var mergeFX = FXPool.Instance.Get(EFXType.Equipment_Merge);
+            mergeFX.transform.SetParent(transform);
+            mergeFX.transform.localPosition = Vector3.zero;
+            mergeFX.transform.localScale = MERGE_FX_SCALE;
+
+            StartCoroutine(SimpleLerp.Co_Invoke(2, () => FXPool.Instance.Return(mergeFX)));
+
+            if (null != _levelFX)
             {
-                Destroy(_fx.gameObject);
-                _fx = null;
+                FXPool.Instance.Return(_levelFX);
+                _levelFX = null;
             }
 
-            var fxPath = $"{PATH_EQUIPMENT_FX}{data.Name}_LV{data.Level}";
-            var fxRes = Resources.Load<ParticleSystem>(fxPath);
-            if (null != fxRes)
-            {
-                _fx = Instantiate(fxRes, _fxTF);
-                _fx.transform.localPosition = Vector3.zero;
-            }
+            var levelFXType = data.Level == 2 ? EFXType.Equipment_Level_2 : EFXType.Equipment_Level_3;
 
-            if (true == isMerge)
-            {
-                var mergeFxRes = Resources.Load<ParticleSystem>($"{PATH_EQUIPMENT_FX}Merge");
-                var mergeFX = Instantiate(mergeFxRes, transform);
-                mergeFX.transform.localPosition = Vector3.zero;
+            _levelFX = FXPool.Instance.Get(levelFXType);
+            _levelFX.transform.SetParent(_fxTF);
+            _levelFX.transform.localPosition = Vector3.zero;
+            _levelFX.ChangeShapeMesh(mesh);
 
-                StartCoroutine(SimpleLerp.Co_Invoke(2, () => Destroy(mergeFX.gameObject)));
-            }
+            if (data.Shape.Column >= 2 && data.Shape.Row >= 2)
+                _levelFX.transform.localScale = LEVEL_FX_SCALE_2X2;
+            else
+                _levelFX.transform.localScale = LEVEL_FX_SCALE_1X1;
         }
 
         public void Move(Vector2 targetPos, Action callback)

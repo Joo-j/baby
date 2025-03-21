@@ -22,13 +22,16 @@ namespace BabyNightmare.Match
         public Action StartWave { get; }
         public Action<EquipmentData> OnCoolDown { get; }
         public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
+        public Func<int, ProjectileData> GetProjectileData { get; }
+
         public MatchViewContext(
         RenderTexture rt,
         EquipmentData initEquipment,
         Action onClickReroll,
         Action startWave,
         Action<EquipmentData> onCooldown,
-        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
+        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
+        Func<int, ProjectileData> getProjectileData)
         {
             this.RT = rt;
             this.InitEquipment = initEquipment;
@@ -36,6 +39,7 @@ namespace BabyNightmare.Match
             this.StartWave = startWave;
             this.OnCoolDown = onCooldown;
             this.GetUpgradeData = getUpgradeData;
+            this.GetProjectileData = getProjectileData;
         }
     }
 
@@ -96,8 +100,8 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _loot.InitBase(context.GetUpgradeData, RefreshStatChange);
-            _bag.InitBase(context.GetUpgradeData, RefreshStatChange);
+            _loot.InitBase(context.GetUpgradeData, RefreshStatChange, context.GetProjectileData);
+            _bag.InitBase(context.GetUpgradeData, RefreshStatChange, context.GetProjectileData);
 
             _bag.Init(_loot, AddStat);
 

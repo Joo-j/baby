@@ -16,6 +16,7 @@ namespace BabyNightmare.Match
         private const string PATH_MATCH_VIEW = "Match/UI/MatchView";
         private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
+        private const string PATH_PROJECTILE_DATA = "StaticData/ProjectileData/ProjectileData_";
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int REROLL_INITIAL_COST = 10;
@@ -48,13 +49,27 @@ namespace BabyNightmare.Match
             _maxWave = _waveDataList.Count;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
-            var matchFieldContext = new MatchFieldContext(chapter, GetCoin, RefreshProgress, OnClearWave, OnFailMatch);
+            var matchFieldContext = new MatchFieldContext(
+                                        chapter,
+                                        GetCoin,
+                                        RefreshProgress,
+                                        OnClearWave, 
+                                        OnFailMatch,
+                                        GetProjectileData);
             _matchField.Init(matchFieldContext);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
-            var matchViewContext = new MatchViewContext(_matchField.RT, initEM, OnClickReroll, OnStartWave, _matchField.AttackEnemy, GetUpgradeData);
+            var matchViewContext = new MatchViewContext(
+                                        _matchField.RT,
+                                        initEM,
+                                        OnClickReroll,
+                                        OnStartWave,
+                                        _matchField.AttackEnemy,
+                                        GetUpgradeData, 
+                                        GetProjectileData
+                                        );
             _matchView.Init(matchViewContext);
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
             _matchView.RefreshProgress(0);
@@ -249,6 +264,12 @@ namespace BabyNightmare.Match
                 return null;
 
             return StaticDataManager.Instance.GetEquipmentData(data1.ID + 100);
+        }
+
+        private ProjectileData GetProjectileData(int id)
+        {
+            var ptPath = $"{PATH_PROJECTILE_DATA}{id}";
+            return Resources.Load<ProjectileData>(ptPath);
         }
     }
 }

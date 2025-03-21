@@ -23,8 +23,10 @@ namespace BabyNightmare.InventorySystem
                 if (null != upgradeData)
                 {
                     Remove(getEquipment);
+                    equipment.Refresh(upgradeData);
+                    var pt = _getProjectileData(upgradeData.ID);
+                    equipment.ShowMergeFX(upgradeData, pt.Mesh);
                     Equip(equipment);
-                    equipment.Refresh(upgradeData, true);
                 }
                 else
                 {

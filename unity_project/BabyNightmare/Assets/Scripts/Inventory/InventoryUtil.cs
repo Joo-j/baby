@@ -4,7 +4,7 @@ using Supercent.Util;
 
 namespace BabyNightmare.InventorySystem
 {
-    internal static class InventoryUtil
+    public static class InventoryUtil
     {
         private const string PATH_EQUIPMENT_INFO_POPUP = "Inventory/EquipmentInfoPopup";
         private static EquipmentInfoPopup _infoPopup = null;

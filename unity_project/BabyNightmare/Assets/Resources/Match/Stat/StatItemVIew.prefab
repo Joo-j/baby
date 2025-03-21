@@ -863,12 +863,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rtf: {fileID: 7172203331759530391}
+  _outlineIMG: {fileID: 3983443094529724149}
   _iconIMG: {fileID: 5486607508185821174}
   _valueTMP: {fileID: 6707839062532261824}
   _addTMP: {fileID: 1433379631495258031}
   _subTMP: {fileID: 8033564979491404870}
   _addGO: {fileID: 7867885294923701352}
   _subGO: {fileID: 511058924390509156}
+  _addColor: {r: 0.3372549, g: 0.8980392, b: 0.043137256, a: 1}
+  _subColor: {r: 1, g: 0.22352941, b: 0.32941177, a: 1}
   _bounceCurve:
     serializedVersion: 2
     m_Curve:

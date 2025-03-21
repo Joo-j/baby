@@ -12,10 +12,12 @@ namespace BabyNightmare.InventorySystem
     {
         private const string PATH_EQUIPMENT = "Inventory/Equipment";
 
-        protected RectTransform _rtf;
-        protected RectTransform _canvasRTF;
-        protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData;
-        protected Action<Equipment, List<Equipment>> _refreshChangeStat;
+        protected RectTransform _rtf = null;
+        protected RectTransform _canvasRTF = null;
+        protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
+        protected Action<Equipment, List<Equipment>> _refreshChangeStat = null;
+        protected Func<int, ProjectileData> _getProjectileData = null;
+
         private static Inventory _dragStartInventory = null;
         private static Inventory _currentInventory = null;
         protected static Equipment _draggedEquipment = null;
@@ -39,21 +41,22 @@ namespace BabyNightmare.InventorySystem
             StartCoroutine(Co_Refresh());
         }
 
-
         public void InitBase
         (
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
-            Action<Equipment, List<Equipment>> refreshChangeStat
+            Action<Equipment, List<Equipment>> refreshChangeStat,
+            Func<int, ProjectileData> getProjectileData
         )
         {
             _getUpgradeData = getUpgradeData;
             _refreshChangeStat = refreshChangeStat;
+            _getProjectileData = getProjectileData;
         }
 
         public void TryAdd(EquipmentData data)
         {
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
-            equipment.Refresh(data, false);
+            equipment.Refresh(data);
             Equip(equipment);
         }
 

@@ -8,7 +8,10 @@ namespace BabyNightmare.Match
 {
     public enum EFXType
     {
-        ReceiveDamage,
+        Receive_Damage,
+        Equipment_Merge,
+        Equipment_Level_2,
+        Equipment_Level_3
     }
 
     public class FXPool : SingletonBase<FXPool>
@@ -18,7 +21,7 @@ namespace BabyNightmare.Match
         private Dictionary<EFXType, Pool<FX>> _poolDict = null;
         private Transform _poolTF = null;
 
-        private FX Get(EFXType type)
+        public FX Get(EFXType type)
         {
             if (null == _poolDict)
             {
@@ -36,12 +39,15 @@ namespace BabyNightmare.Match
             }
 
             if (false == _poolDict.TryGetValue(type, out var pool))
+            {
+                Debug.LogError($"{type}에 관련된 풀이 없습니다.");
                 return null;
+            }
 
             return pool.Get();
         }
 
-        private void Return(FX fx)
+        public void Return(FX fx)
         {
             if (false == _poolDict.TryGetValue(fx.Type, out var pool))
                 return;
