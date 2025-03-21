@@ -240,11 +240,11 @@ namespace BabyNightmare.Lobby
         {
             switch (type)
             {
-                case ELobbyButtonType.CustomShop:
+                case ELobbyButtonType.Shop:
                     {
                         return;
                     }
-                case ELobbyButtonType.Shop:
+                case ELobbyButtonType.CustomShop:
                     {
                         CustomShopManager.Instance.Hide();
                         return;
