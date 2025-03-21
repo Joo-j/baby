@@ -82,6 +82,7 @@ namespace BabyNightmare.Match
         private Vector2 _progressSize;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
+        public Transform WaveCircleTF => _waveCircleTF;
 
         public void Init(MatchViewContext context)
         {
