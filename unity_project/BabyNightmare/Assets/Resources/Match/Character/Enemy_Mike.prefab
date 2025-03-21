@@ -105,7 +105,7 @@ MonoBehaviour:
   _animationTrigger: {fileID: 244971239802859749}
   _hpBar: {fileID: 7575229609088098271}
   _hitPoint: {fileID: 1273834155102348162}
-  _ownColor: {r: 0.13383985, g: 1, b: 0, a: 1}
+  _ownColor: {r: 0.627451, g: 0.9254902, b: 0.15294118, a: 1}
   _moveCurve:
     serializedVersion: 2
     m_Curve:
