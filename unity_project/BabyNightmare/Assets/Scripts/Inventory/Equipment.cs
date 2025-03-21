@@ -7,6 +7,7 @@ using BabyNightmare.Util;
 using UnityEngine.EventSystems;
 using Supercent.Util;
 using BabyNightmare.Match;
+using TMPro;
 
 namespace BabyNightmare.InventorySystem
 {
@@ -17,6 +18,7 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Image _iconOutline;
         [SerializeField] private Image _icon;
         [SerializeField] private Image _coolImage;
+        [SerializeField] private TextMeshProUGUI _levelTMP;
         [SerializeField] private AnimationCurve _moveCurve;
         [SerializeField] private AnimationCurve _swingCurve;
 
@@ -49,7 +51,7 @@ namespace BabyNightmare.InventorySystem
 
             _iconOutline.sprite = icon_outline;
             _icon.sprite = Resources.Load<Sprite>(iconPath);
-
+            _levelTMP.text = $"LV.{Data.Level}";
         }
 
         public void ShowMergeFX(EquipmentData data, Mesh mesh)
