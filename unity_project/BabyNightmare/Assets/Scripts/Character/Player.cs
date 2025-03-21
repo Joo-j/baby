@@ -7,11 +7,12 @@ using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using BabyNightmare.Match;
 using BabyNightmare.HUD;
-using Unity.VisualScripting;
+using BabyNightmare.Talent;
+using Random = UnityEngine.Random;
 
 namespace BabyNightmare.Character
 {
-    public class PlayerContext : ICharacterContext
+    public class PlayerContext
     {
         public float HP { get; }
         public Vector3 CameraForward { get; }
@@ -24,7 +25,7 @@ namespace BabyNightmare.Character
         Action onDiePlayer,
         Action<int, Vector3> getCoin)
         {
-            this.HP = Mathf.Max(50, hp);
+            this.HP = hp;
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
             this.GetCoin = getCoin;
@@ -48,17 +49,28 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
 
+        private const float CRITICAL_DAMAGE_RATE = 0.5f;
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
 
         public override float HitRadius => _hitRadius;
 
-        public override void Init(ICharacterContext context)
+        public void Init(PlayerContext context)
         {
-            base.Init(context);
+            _context = context;
 
-            _context = context as PlayerContext;
+            _originColor = _renderer.material.GetColor(KEY_EMISSION);
+
+            var hp = Mathf.Max(context.HP, 50);
+            var talentHP = TalentManager.Instance.GetValue(ETalentType.Max_HP_Amount);
+            hp += talentHP;
+
+            _hp = _maxHealth = hp;
+
+            _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
+            _hpBar.Refresh(_hp, _maxHealth, true);
+
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
             _animationTrigger.AddAction(1, TryUseEquipment);
@@ -134,6 +146,17 @@ namespace BabyNightmare.Character
                             if (false == enemy.IsAttackable)
                                 return;
 
+                            var talentDamage = TalentManager.Instance.GetValue(ETalentType.Damage_Percentage);
+                            value += value * talentDamage;
+
+                            var criticalProb = TalentManager.Instance.GetValue(ETalentType.Critical_Prob_Percentage);
+                            var rand = Random.value;
+                            if (rand < criticalProb)
+                            {
+                                var criticalDamage = TalentManager.Instance.GetValue(ETalentType.Critical_Damage_Percentage);
+                                value += value * criticalDamage;
+                            }
+
                             enemy.ReserveDamage(value);
 
                             StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, () => enemy?.ReceiveAttack(value)));
@@ -152,7 +175,11 @@ namespace BabyNightmare.Character
 
                     case EStatType.DEF:
                         {
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () => _def += value));
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () =>
+                            {
+                                var talentDef = TalentManager.Instance.GetValue(ETalentType.Defense_Percentage);
+                                _def += _def * value;
+                            }));
                             break;
                         }
                     case EStatType.Coin:
@@ -164,7 +191,7 @@ namespace BabyNightmare.Character
                 }
             }
         }
-        
+
         private IEnumerator Co_ThrowProjectile(EquipmentData data, Transform targetTF, Action doneCallback)
         {
             var pt = ProjectilePool.Instance.Get();

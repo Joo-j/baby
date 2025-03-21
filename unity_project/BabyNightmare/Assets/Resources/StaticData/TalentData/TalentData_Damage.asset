@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TalentType: 2
   IncreaseValue: 2
-  ValueType: 1
+  ValueType: 2
   Prob: 1
   Order: 2

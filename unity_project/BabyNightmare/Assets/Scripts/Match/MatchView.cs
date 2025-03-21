@@ -5,6 +5,7 @@ using System.Linq;
 using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
+using BabyNightmare.Talent;
 using BabyNightmare.Util;
 using Supercent.Util;
 using TMPro;
@@ -232,7 +233,8 @@ namespace BabyNightmare.Match
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
             _loot.RemoveAll(SellEquipment);
-            _bag.StartUseEquipment(_context.OnCoolDown);
+            var speed = TalentManager.Instance.GetValue(ETalentType.Attack_Speed_Percentage);
+            _bag.StartUseEquipment(_context.OnCoolDown, speed);
             _canvasGroup.blocksRaycasts = false;
 
             ChangeRectPos(true);

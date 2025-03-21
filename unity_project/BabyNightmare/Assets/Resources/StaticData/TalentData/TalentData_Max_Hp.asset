@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TalentType: 1
   IncreaseValue: 20
-  ValueType: 0
+  ValueType: 1
   Prob: 1
   Order: 0

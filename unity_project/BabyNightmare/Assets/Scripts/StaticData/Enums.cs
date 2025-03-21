@@ -57,19 +57,20 @@ namespace BabyNightmare.StaticData
     public enum ETalentType
     {
         Unknown = 0,
-        Max_HP = 1,
-        Damage,
-        Defense,
-        Attack_Speed,
-        Critical_Prob,
-        Critical_Damage,
-        Coin_Earn,
-        Gem_Earn,
-        Bag_Size,
+        Max_HP_Amount = 1,
+        Damage_Percentage,
+        Defense_Percentage,
+        Attack_Speed_Percentage,
+        Critical_Prob_Percentage,
+        Critical_Damage_Percentage,
+        Coin_Earn_Percentage,
+        Gem_Earn_Percentage,
+        Bag_Size_Amount,
     }
 
     public enum EValueType
     {
+        Unknown,
         Amount,
         Percentage,
     }

@@ -5,6 +5,8 @@ using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using BabyNightmare.HUD;
+using Random = UnityEngine.Random;
+using BabyNightmare.Talent;
 
 namespace BabyNightmare.Match
 {
@@ -17,6 +19,7 @@ namespace BabyNightmare.Match
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int REROLL_INITIAL_COST = 10;
+        private const int INITIAL_GEM = 10;
 
         private MatchField _matchField = null;
         private MatchView _matchView = null;
@@ -71,8 +74,12 @@ namespace BabyNightmare.Match
             HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
 
+            var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
+            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
+            gem += Mathf.CeilToInt(gem * talentGem);
+
             var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
-            failView.Init(100, CloseMatch);
+            failView.Init(gem, CloseMatch);
         }
 
         private void OnCompleteMatch()
@@ -80,8 +87,12 @@ namespace BabyNightmare.Match
             HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
 
+            var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
+            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
+            gem += Mathf.CeilToInt(gem * talentGem);
+
             var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
-            completeView.Init(100, CloseMatch);
+            completeView.Init(gem, CloseMatch);
 
             ++PlayerData.Instance.Chapter;
             PlayerData.Instance.Save();

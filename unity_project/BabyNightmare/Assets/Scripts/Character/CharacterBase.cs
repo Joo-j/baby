@@ -19,12 +19,6 @@ namespace BabyNightmare.Character
         public void ReceiveAttack(float damage);
     }
 
-    public interface ICharacterContext
-    {
-        public float HP { get; }
-        public Vector3 CameraForward { get; }
-    }
-
     public abstract class CharacterBase : BehaviourBase, ICharacter
     {
         [SerializeField] protected Renderer _renderer;
@@ -34,7 +28,7 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _hitPoint;
         [SerializeField] private Color _ownColor;
 
-        private static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
+        protected static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");
@@ -43,7 +37,7 @@ namespace BabyNightmare.Character
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
         private Coroutine _coFlash = null;
-        private Color _originColor;
+        protected Color _originColor;
         private float _reserveDamage = 0f;
         protected bool _isDead = false;
 
@@ -53,16 +47,6 @@ namespace BabyNightmare.Character
         public Transform HitPoint => _hitPoint;
         public float HP => _hp;
         public bool IsAttackable => _hp - _reserveDamage > 0;
-
-        public virtual void Init(ICharacterContext context)
-        {
-            _originColor = _renderer.material.GetColor(KEY_EMISSION);
-
-            _hp = _maxHealth = context.HP;
-
-            _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
-            _hpBar.Refresh(_hp, _maxHealth, true);
-        }
 
         public abstract void Die();
 

@@ -462,12 +462,14 @@ namespace BabyNightmare.InventorySystem
             return (index + offset) * _cellSize;
         }
 
-        public void StartUseEquipment(Action<EquipmentData> onCoolDown)
+        public void StartUseEquipment(Action<EquipmentData> onCoolDown, float speed)
         {
             foreach (var equipment in _equipmentSet)
             {
                 var data = equipment.Data;
-                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => equipment.StartCoolDown(data.CoolTime, () => onCoolDown?.Invoke(data)));
+                var coolTime = data.CoolTime;
+                coolTime -= coolTime * speed;
+                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => equipment.StartCoolDown(coolTime, () => onCoolDown?.Invoke(data)));
             }
 
             _canvasGroup.interactable = false;

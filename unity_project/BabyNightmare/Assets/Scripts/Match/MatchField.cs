@@ -7,6 +7,7 @@ using BabyNightmare.Character;
 using BabyNightmare.StaticData;
 using Random = UnityEngine.Random;
 using BabyNightmare.Util;
+using BabyNightmare.Talent;
 
 namespace BabyNightmare.Match
 {
@@ -136,9 +137,9 @@ namespace BabyNightmare.Match
         {
             var pos = enemy.transform.position;
 
-            var dieCoin = enemy.GetRandomCoin(); ;
-            _totalCoin += dieCoin;
+            var dieCoin = enemy.GetRandomCoin();
             StartCoroutine(Co_SpawnCoin(pos, dieCoin));
+            _totalCoin += dieCoin;
 
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
@@ -194,6 +195,9 @@ namespace BabyNightmare.Match
 
         public void OnClearWave()
         {
+            var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
+            _totalCoin += Mathf.CeilToInt(_totalCoin * talentCoin);
+
             _context.GetCoin?.Invoke(_totalCoin, _player.transform.position);
             _totalCoin = 0;
             ProjectilePool.Instance.ReturnAll();

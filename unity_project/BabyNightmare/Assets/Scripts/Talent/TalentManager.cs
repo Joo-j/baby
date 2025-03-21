@@ -16,7 +16,7 @@ namespace BabyNightmare.Talent
         private const string PATH_TALENT_DATA = "StaticData/TalentData";
         private const string PATH_TALENT_VIEW = "Talent/TalentView";
         private const string KEY_SHOW_COUNT = "Talent_ShowCount";
-        private List<TalentData> _dataList = null;
+        private Dictionary<ETalentType, TalentData> _dataDict = null;
         private Dictionary<ETalentType, int> _levelDict = null;
         private TalentView _talentView = null;
 
@@ -37,8 +37,14 @@ namespace BabyNightmare.Talent
                 return;
             }
 
-            _dataList = new List<TalentData>(talentDataArr);
-            _dataList.Sort();
+            _dataDict = new Dictionary<ETalentType, TalentData>();
+
+            for (var i = 0; i < talentDataArr.Length; i++)
+            {
+                var data = talentDataArr[i];
+                var type = data.TalentType;
+                _dataDict.Add(type, data);
+            }
         }
 
         public void Show(Transform parentTF)
@@ -54,7 +60,10 @@ namespace BabyNightmare.Talent
 
                 (_talentView.transform as RectTransform).SetFullStretch();
 
-                _talentView.Init(_dataList, Upgrade, GetPrice);
+                var dataList = _dataDict.Values.ToList();
+                dataList.Sort();
+
+                _talentView.Init(dataList, Upgrade, GetPrice);
                 _talentView.RefreshLevel(_levelDict);
             }
 
@@ -88,9 +97,10 @@ namespace BabyNightmare.Talent
             _talentView.RefreshButton(PlayerData.Instance.Gem);
 
             var randomPicker = new WeightedRandomPicker<TalentData>();
-            for (var i = 0; i < _dataList.Count; i++)
+
+            foreach (var pair in _dataDict)
             {
-                var data = _dataList[i];
+                var data = pair.Value;
                 randomPicker.Add(data, data.Prob);
             }
 
@@ -107,6 +117,22 @@ namespace BabyNightmare.Talent
             Debug.Log($"{upgradeType}타입 업그레이드");
 
             Save();
+        }
+
+        public float GetValue(ETalentType type)
+        {
+            if (false == _dataDict.TryGetValue(type, out var data))
+                return 0;
+
+            if (false == _levelDict.TryGetValue(type, out var level))
+                return 0;
+
+            switch (data.ValueType)
+            {
+                case EValueType.Amount: return level * data.IncreaseValue;
+                case EValueType.Percentage: return level * data.IncreaseValue * 0.01f;
+                default: return level * data.IncreaseValue;
+            }
         }
 
         public bool IsRedDot()

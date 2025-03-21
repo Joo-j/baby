@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace BabyNightmare.Character
 {
-    public class EnemyContext : ICharacterContext
+    public class EnemyContext
     {
         public EnemyData EnemyData { get; }
         public ICharacter Player { get; }
@@ -47,11 +47,17 @@ namespace BabyNightmare.Character
 
         public override float HitRadius => 2f;
 
-        public override void Init(ICharacterContext context)
+        public void Init(EnemyContext context)
         {
-            base.Init(context);
+            _context = context;
 
-            _context = context as EnemyContext;
+            _originColor = _renderer.material.GetColor(KEY_EMISSION);
+
+            _hp = _maxHealth = context.HP;
+
+            _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
+            _hpBar.Refresh(_hp, _maxHealth, true);
+
 
             _renderer.enabled = false;
             _hpBar.gameObject.SetActive(false);
