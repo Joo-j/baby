@@ -20,8 +20,8 @@ namespace BabyNightmare.Lobby
         }
     }
 
-    [CreateAssetMenu(fileName = "MenuButtonConfig", menuName = "SnakeClash/MenuButtonConfig")]
-    public class MenuButtonConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "LobbyMenuConfig", menuName = "BabyNightmare/LobbyMenuConfig")]
+    public class LobbyMenuConfig : ScriptableObject
     {
         [SerializeField] private List<MenuButtonData> _menuButtonDataList;
 

@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baa8d78e59a0091418ab19baab830f4a, type: 3}
-  m_Name: LobbyButtonData_CustomShop
+  m_Script: {fileID: 11500000, guid: 847d75175e60a4fd3aef2646595070b0, type: 3}
+  m_Name: CustomShopData 2
   m_EditorClassIdentifier: 
-  ButtonType: 5
-  ComparisonType: 3
-  ConditionType: 2
-  ConditionValue: 2
+  ID: 2
+  Item_ID: 102
   Order: 1
-  ShowOpenAni: 1
+  CurrencyType: 1
+  Price_Value: 10

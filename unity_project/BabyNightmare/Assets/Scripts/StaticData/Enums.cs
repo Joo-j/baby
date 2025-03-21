@@ -74,4 +74,29 @@ namespace BabyNightmare.StaticData
         Amount,
         Percentage,
     }
+
+    public enum ECurrencyType
+    {
+        Coin,
+        Gem,
+        RV,
+    }
+
+    public enum ECustomType
+    {
+        Unknown,
+        Bag,
+        Clothes,
+        Shoes,
+    }
+
+    public enum EGlobalEventType
+    {
+        Unknown = 0,
+        Game_Start = 1,
+        Kill_Enemy,
+        Die,
+        Purchase_CustomItem,
+    }
+
 }

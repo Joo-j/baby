@@ -9,6 +9,7 @@ using BabyNightmare.HUD;
 using BabyNightmare.Util;
 using BabyNightmare.Talent;
 using Newtonsoft.Json;
+using BabyNightmare.CustomShop;
 
 namespace BabyNightmare.Lobby
 {
@@ -21,12 +22,12 @@ namespace BabyNightmare.Lobby
             Unlocked,
         }
 
-        private const string PATH_MENU_BUTTON_CONFIG = "Lobby/MenuButtonConfig";
+        private const string PATH_MENU_BUTTON_CONFIG = "Lobby/LobbyMenuConfig";
         private const string PATH_LOBBY_BUTTON_SAVE_DATA = "lobby_button_save";
         private const string PATH_LOBBY_VIEW = "Lobby/LobbyView";
         private const string PATH_HOME_VIEW = "Lobby/HomeView";
 
-        private MenuButtonConfig _menuButtonConfig = null;
+        private LobbyMenuConfig _menuConfig = null;
         private LobbyView _lobbyView = null;
         private HomeView _homeView = null;
         private ELobbyButtonType _focusButtonType = ELobbyButtonType.Unknown;
@@ -40,8 +41,8 @@ namespace BabyNightmare.Lobby
         {
             Load();
 
-            _menuButtonConfig = Resources.Load<MenuButtonConfig>(PATH_MENU_BUTTON_CONFIG);
-            if (null == _menuButtonConfig)
+            _menuConfig = Resources.Load<LobbyMenuConfig>(PATH_MENU_BUTTON_CONFIG);
+            if (null == _menuConfig)
             {
                 _printer.Error("Init", $"{PATH_MENU_BUTTON_CONFIG}에 프리팹이 없습니다.");
                 return;
@@ -54,7 +55,7 @@ namespace BabyNightmare.Lobby
                 return;
             }
 
-            var menuButtonDataList = _menuButtonConfig.MenuButtonDataList;
+            var menuButtonDataList = _menuConfig.MenuButtonDataList;
             var menuButtonTypeList = new List<ELobbyButtonType>();
             for (var i = 0; i < menuButtonDataList.Count; i++)
                 menuButtonTypeList.Add(menuButtonDataList[i].Type);
@@ -206,13 +207,13 @@ namespace BabyNightmare.Lobby
         {
             switch (type)
             {
-                case ELobbyButtonType.CustomShop:
+                case ELobbyButtonType.Shop:
                     {
                         return;
                     }
-
-                case ELobbyButtonType.Shop:
+                case ELobbyButtonType.CustomShop:
                     {
+                        CustomShopManager.Instance.Show(_lobbyView.ScreenRTF);
                         return;
                     }
                 case ELobbyButtonType.Home:
@@ -245,6 +246,7 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Shop:
                     {
+                        CustomShopManager.Instance.Hide();
                         return;
                     }
                 case ELobbyButtonType.Home:
@@ -308,7 +310,7 @@ namespace BabyNightmare.Lobby
         private bool TryGetMenuButtonData(ELobbyButtonType type, out MenuButtonData lobbyButtonData)
         {
             lobbyButtonData = null;
-            var lobbyButtonDataList = _menuButtonConfig.MenuButtonDataList;
+            var lobbyButtonDataList = _menuConfig.MenuButtonDataList;
             for (var i = 0; i < lobbyButtonDataList.Count; i++)
             {
                 lobbyButtonData = lobbyButtonDataList[i];
@@ -326,7 +328,7 @@ namespace BabyNightmare.Lobby
             {
                 case ELobbyButtonType.Home: return true;
                 case ELobbyButtonType.Shop: return false;
-                case ELobbyButtonType.CustomShop: return false;
+                case ELobbyButtonType.CustomShop: return CustomShopManager.Instance.ShowCount > 0;
                 case ELobbyButtonType.Talent: return TalentManager.Instance.ShowCount > 0;
                 case ELobbyButtonType.Mission: return false;
 

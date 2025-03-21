@@ -7,6 +7,7 @@ using BabyNightmare.Lobby;
 using BabyNightmare.Match;
 using BabyNightmare.HUD;
 using BabyNightmare.Talent;
+using BabyNightmare.CustomShop;
 
 namespace BabyNightmare
 {
@@ -21,6 +22,7 @@ namespace BabyNightmare
             HUDManager.Instance.SetState(EHUDState.Show_Shortcut_Off, "AppOpen");
             StaticDataManager.Instance.Init();
             TalentManager.Instance.Init();
+            CustomShopManager.Instance.Init();
             LobbyManager.Instance.Init(StartMatch);
             MatchManager.Instance.Init(EnterLobby);
 
