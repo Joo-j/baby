@@ -201,16 +201,13 @@ namespace BabyNightmare.Match
             _player.UseEquipment(equipmentData, randomEnemy);
         }
 
-        public void OnClearWave()
+        public void OnClearWave(Transform coinGenTF)
         {
             var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
             _totalCoin += Mathf.CeilToInt(_totalCoin * talentCoin);
 
-            _context.GetCoin?.Invoke(_totalCoin, _player.transform.position);
+            _context.GetCoin?.Invoke(_totalCoin, coinGenTF.position);
             _totalCoin = 0;
-            ProjectilePool.Instance.ReturnAll();
-            PopupTextPool.Instance.ReturnAll();
-            FXPool.Instance.ReturnAll();
         }
 
         public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)
