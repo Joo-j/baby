@@ -412,8 +412,11 @@ namespace BabyNightmare.InventorySystem
 
                 if (true == TryGetOverlap(newIndex, out var overlapped))
                 {
-                    list ??= new List<Equipment>();
-                    list.Add(overlapped);
+                    if (equipment != overlapped)
+                    {
+                        list ??= new List<Equipment>();
+                        list.Add(overlapped);
+                    }
                 }
             }
 
