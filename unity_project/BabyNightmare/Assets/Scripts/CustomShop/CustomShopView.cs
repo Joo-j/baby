@@ -153,8 +153,8 @@ namespace BabyNightmare.CustomShop
 
             RefreshPreview(shopData.Item_ID);
             RefreshItemView(shopData, purchasedIDSet, equipeditemID);
-            RefreshEquipPurchaseButton(shopData, purchasedIDSet.Contains(selectID), selectID == equipeditemID);
-            RefreshFeedInfo(shopData.Item_ID);
+            RefreshButtons(shopData, purchasedIDSet.Contains(selectID), selectID == equipeditemID);
+            RefreshInfo(shopData.Item_ID);
         }
 
         private void RefreshPreview(int itemID)
@@ -194,7 +194,7 @@ namespace BabyNightmare.CustomShop
         }
 
         // 구매, 장착 버튼 활성화 여부
-        private void RefreshEquipPurchaseButton(CustomShopData shopData, bool isHasFeed, bool isEquipFeed)
+        private void RefreshButtons(CustomShopData shopData, bool isHasFeed, bool isEquipFeed)
         {
             if (true == isHasFeed)
             {
@@ -239,7 +239,7 @@ namespace BabyNightmare.CustomShop
         }
 
         // 먹이 아이템 정보 뷰 갱신
-        private void RefreshFeedInfo(int itemID)
+        private void RefreshInfo(int itemID)
         {
             var shopData = _context.ShopDataDict[itemID];
 
