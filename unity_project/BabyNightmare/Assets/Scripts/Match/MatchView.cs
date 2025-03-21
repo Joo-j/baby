@@ -52,6 +52,7 @@ namespace BabyNightmare.Match
         [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private TextMeshProUGUI _waveTMP;
         [SerializeField] private Image _waveProgressIMG;
+        [SerializeField] private Transform _waveCircleTF;
         [SerializeField] private Inventory_Bag _bag;
         [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
