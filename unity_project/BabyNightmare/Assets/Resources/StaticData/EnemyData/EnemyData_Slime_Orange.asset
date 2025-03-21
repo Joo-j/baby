@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
+  m_Name: EnemyData_Slime_Orange
+  m_EditorClassIdentifier: 
+  ID: 105
+  Name: Slime_Orange
+  Damage: 3
+  Health: 10
+  Attack_Interval: 1.5
+  Move_Step_Duration: 1.2
+  Move_Step_Speed: 1
+  Stop_Step_Duration: 0.4
+  Attack_Radius: 2
+  Coin_Min: 1
+  Coin_Max: 10
+  SpawnOrder: 1
+  Spawn_Delay_Min: 1
+  Spawn_Delay_Max: 2

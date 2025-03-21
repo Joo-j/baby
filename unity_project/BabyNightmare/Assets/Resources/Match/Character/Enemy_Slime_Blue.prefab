@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6010352579816549538}
   - component: {fileID: 1096807660319560227}
   m_Layer: 7
-  m_Name: Enemy_Slime
+  m_Name: Enemy_Slime_Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
