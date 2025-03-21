@@ -4850,6 +4850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6b234dca513a498798756155f488600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ps: {fileID: 7422193945044039055}
+  _psArr:
+  - {fileID: 7422193945044039055}
   _type: 0
   _appearDuration: 2
