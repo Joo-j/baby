@@ -95,7 +95,7 @@ namespace BabyNightmare.Character
             _isDead = true;
         }
 
-        public override void ReceiveAttack(float damage)
+        public override void ReceiveAttack(float damage, bool isCritical)
         {
             if (null == gameObject)
                 return;
@@ -104,7 +104,7 @@ namespace BabyNightmare.Character
 
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
 
-            base.ReceiveAttack(damage);
+            base.ReceiveAttack(damage, isCritical);
         }
 
         public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
@@ -149,17 +149,20 @@ namespace BabyNightmare.Character
                             var talentDamage = TalentManager.Instance.GetValue(ETalentType.Damage_Percentage);
                             value += value * talentDamage;
 
+                            var isCritical = false;
                             var criticalProb = TalentManager.Instance.GetValue(ETalentType.Critical_Prob_Percentage);
                             var rand = Random.value;
                             if (rand < criticalProb)
                             {
                                 var criticalDamage = TalentManager.Instance.GetValue(ETalentType.Critical_Damage_Percentage);
                                 value += value * criticalDamage;
+
+                                isCritical = true;
                             }
 
                             enemy.ReserveDamage(value);
 
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, () => enemy?.ReceiveAttack(value)));
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, () => enemy?.ReceiveAttack(value, isCritical)));
                             break;
                         }
 

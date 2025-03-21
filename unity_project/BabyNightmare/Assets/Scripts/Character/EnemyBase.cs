@@ -141,7 +141,7 @@ namespace BabyNightmare.Character
                 while (true)
                 {
                     _animationTrigger.Clear();
-                    _animationTrigger.AddAction(1, () => player.ReceiveAttack(_context.EnemyData.Damage));
+                    _animationTrigger.AddAction(1, () => player.ReceiveAttack(_context.EnemyData.Damage, false));
 
                     _animator.Rebind();
                     _animator.Play(HASH_ANI_ATTACK);
@@ -151,14 +151,14 @@ namespace BabyNightmare.Character
             }
         }
 
-        public override void ReceiveAttack(float damage)
+        public override void ReceiveAttack(float damage, bool isCritical)
         {
             if (null == gameObject)
                 return;
 
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
 
-            base.ReceiveAttack(damage);
+            base.ReceiveAttack(damage, isCritical);
         }
 
         public override void Die()

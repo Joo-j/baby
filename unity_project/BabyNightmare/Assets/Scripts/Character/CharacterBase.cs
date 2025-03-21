@@ -16,7 +16,7 @@ namespace BabyNightmare.Character
         public Transform HitPoint { get; }
         public bool IsAttackable { get; }
         public void ReserveDamage(float damage);
-        public void ReceiveAttack(float damage);
+        public void ReceiveAttack(float damage, bool isCritical);
     }
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
@@ -52,7 +52,7 @@ namespace BabyNightmare.Character
 
         public void ReserveDamage(float damage) => _reserveDamage += damage;
 
-        public virtual void ReceiveAttack(float damage)
+        public virtual void ReceiveAttack(float damage, bool isCritical)
         {
             if (damage <= 0)
                 return;
@@ -61,7 +61,11 @@ namespace BabyNightmare.Character
 
             _hp = Mathf.Max(0, _hp - damage);
 
-            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, HitPoint.position, _ownColor);
+            var fxColor = _ownColor;
+            if (isCritical)
+                fxColor = Color.yellow;
+
+            FXPool.Instance.ShowTemporary(EFXType.ReceiveDamage, HitPoint.position, fxColor);
 
             if (_hp <= 0)
             {
