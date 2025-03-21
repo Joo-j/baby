@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 8655944569128870504}
-  _appearDuration: 1
+  _appearDuration: 0.8
   _scaleCurve:
     serializedVersion: 2
     m_Curve:
