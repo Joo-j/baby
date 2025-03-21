@@ -145,7 +145,8 @@ MonoBehaviour:
   _nameTMP: {fileID: 4050128772944424612}
   _descTMP: {fileID: 3448433810560352648}
   _levelTMP: {fileID: 5416897984769386762}
-  _damageTMP: {fileID: 6009265489987279970}
+  _statValueTMP: {fileID: 6009265489987279970}
+  _statTMP: {fileID: 6181316930851224679}
   _cooltimeTMP: {fileID: 1161360859542549902}
 --- !u!225 &1213609557939085761
 CanvasGroup:
@@ -171,7 +172,7 @@ GameObject:
   - component: {fileID: 5723392060620197667}
   - component: {fileID: 6181316930851224679}
   m_Layer: 5
-  m_Name: text_damage
+  m_Name: TMP_Stat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1315,7 +1316,7 @@ GameObject:
   - component: {fileID: 6014989636123689178}
   - component: {fileID: 6009265489987279970}
   m_Layer: 5
-  m_Name: TMP_Damage
+  m_Name: TMP_StatValue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

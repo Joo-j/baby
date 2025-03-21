@@ -18,17 +18,20 @@ namespace BabyNightmare.Character
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
+        public Func<int, ProjectileData> GetProjectileData { get; }
 
         public PlayerContext(
         float hp,
         Vector3 cameraForward,
         Action onDiePlayer,
-        Action<int, Vector3> getCoin)
+        Action<int, Vector3> getCoin,
+        Func<int, ProjectileData> getProjectileData)
         {
             this.HP = hp;
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
             this.GetCoin = getCoin;
+            this.GetProjectileData = getProjectileData;
         }
     }
 
@@ -49,7 +52,6 @@ namespace BabyNightmare.Character
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
 
-        private const float CRITICAL_DAMAGE_RATE = 0.5f;
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
@@ -197,10 +199,11 @@ namespace BabyNightmare.Character
 
         private IEnumerator Co_ThrowProjectile(EquipmentData data, Transform targetTF, Action doneCallback)
         {
+            var ptData = _context.GetProjectileData(data.ID);
             var pt = ProjectilePool.Instance.Get();
             pt.TF.position = _throwStartTF.position;
             pt.TF.rotation = Quaternion.identity;
-            pt.Init(data.ID);
+            pt.Init(ptData);
 
             var duration = pt.Duration;
             var curve = pt.Curve;

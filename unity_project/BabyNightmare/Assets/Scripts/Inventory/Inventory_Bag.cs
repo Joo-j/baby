@@ -27,14 +27,14 @@ namespace BabyNightmare.InventorySystem
         private List<Cell> _addableCells = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Inventory _outsideInventory = null;
-        private Action<EquipmentData, bool> _applyStat = null;
+        private Action<EquipmentData, bool> _addStat = null;
 
         public void Init(
         Inventory outsideInventory,
-        Action<EquipmentData, bool> applyStat)
+        Action<EquipmentData, bool> addStat)
         {
             _outsideInventory = outsideInventory;
-            _applyStat = applyStat;
+            _addStat = addStat;
 
             _cellDict = new Dictionary<Vector2Int, Cell>();
 
@@ -268,7 +268,7 @@ namespace BabyNightmare.InventorySystem
             equipment.Index = index;
             equipment.RTF.anchoredPosition = GetAnchoredPos(index, equipment.Data);
             _equipmentSet.Add(equipment);
-            _applyStat?.Invoke(equipment.Data, true);
+            _addStat?.Invoke(equipment.Data, true);
         }
 
         public override void Equip(Equipment equipment)
@@ -281,7 +281,7 @@ namespace BabyNightmare.InventorySystem
             equipment.Index = randomIndex;
 
             var targetPos = GetAnchoredPos(randomIndex, equipment.Data);
-            equipment.Move(targetPos, () => _applyStat?.Invoke(equipment.Data, true));
+            equipment.Move(targetPos, () => _addStat?.Invoke(equipment.Data, true));
         }
 
         private void Remove(Equipment equipment)
@@ -291,7 +291,7 @@ namespace BabyNightmare.InventorySystem
 
             Destroy(equipment.gameObject);
             _equipmentSet.Remove(equipment);
-            _applyStat?.Invoke(equipment.Data, false);
+            _addStat?.Invoke(equipment.Data, false);
         }
 
         private Equipment Unequip(Vector2Int targetIndex)
@@ -304,7 +304,7 @@ namespace BabyNightmare.InventorySystem
                 return null;
 
             _equipmentSet.Remove(equipment);
-            _applyStat?.Invoke(equipment.Data, false);
+            _addStat?.Invoke(equipment.Data, false);
             return equipment;
         }
 
@@ -324,7 +324,7 @@ namespace BabyNightmare.InventorySystem
                 return;
 
             _equipmentSet.Remove(equipment);
-            _applyStat?.Invoke(equipment.Data, false);
+            _addStat?.Invoke(equipment.Data, false);
 
             _outsideInventory.Equip(equipment);
         }

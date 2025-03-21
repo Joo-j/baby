@@ -76,8 +76,8 @@ namespace BabyNightmare.Match
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
-        private Dictionary<EStatType, float> _statDict = null;
-        private Dictionary<EStatType, float> _statChangeDict = null;
+        private Dictionary<EStatType, int> _statDict = null;
+        private Dictionary<EStatType, int> _statChangeDict = null;
         private Vector2 _progressSize;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
@@ -86,8 +86,8 @@ namespace BabyNightmare.Match
         {
             _context = context;
             _statItemViewDict = new Dictionary<EStatType, StatItemView>();
-            _statDict = new Dictionary<EStatType, float>();
-            _statChangeDict = new Dictionary<EStatType, float>();
+            _statDict = new Dictionary<EStatType, int>();
+            _statChangeDict = new Dictionary<EStatType, int>();
 
             foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
             {
@@ -236,20 +236,32 @@ namespace BabyNightmare.Match
         {
             _rerollGO.SetActive(false);
             _fightGO.SetActive(false);
-            _loot.RemoveAll(SellEquipment);
-            var speed = TalentManager.Instance.GetValue(ETalentType.Attack_Speed_Percentage);
-            _bag.StartUseEquipment(_context.OnCoolDown, speed);
-            _canvasGroup.blocksRaycasts = false;
 
-            ChangeRectPos(true);
+            StartCoroutine(Co_ReadyFight());
 
-            _context.StartWave?.Invoke();
-        }
+            IEnumerator Co_ReadyFight()
+            {
+                var lootEquipmentList = _loot.EquipmentList;
+                for (var i = 0; i < lootEquipmentList.Count; i++)
+                {
+                    var equipment = lootEquipmentList[i];
+                    CoinHUD.SetSpreadPoint(equipment.transform.position);
+                    PlayerData.Instance.Coin += EQUIPMENT_PRICE;
+                    yield return null;
+                }
 
-        private void SellEquipment(Vector3 pos)
-        {
-            CoinHUD.SetSpreadPoint(pos);
-            PlayerData.Instance.Coin += EQUIPMENT_PRICE;
+                yield return CoroutineUtil.WaitForSeconds(0.1f);
+
+                _loot.RemoveAll();
+
+                var speed = TalentManager.Instance.GetValue(ETalentType.Attack_Speed_Percentage);
+                _bag.StartUseEquipment(_context.OnCoolDown, speed);
+                _canvasGroup.blocksRaycasts = false;
+
+                ChangeRectPos(true);
+
+                _context.StartWave?.Invoke();
+            }
         }
 
         public void ChangeRectPos(bool top, bool immediate = false)
@@ -301,17 +313,17 @@ namespace BabyNightmare.Match
         private void AddStat(EquipmentData data, bool isEquip)
         {
             var statDataList = data.StatDataList;
-
             for (var i = 0; i < statDataList.Count; i++)
             {
                 var statData = statDataList[i];
-                var value = statData.Value / data.CoolTime;
+                var value = data.GetStatValueByCool(statData.Value);
                 _statDict[statData.Type] += isEquip ? value : -value;
+                //Debug.Log($"{data.Name} {data.Level} {statData.Type} {statData.Value}  {data.CoolTime}");
             }
 
             foreach (var pair in _statItemViewDict)
             {
-                pair.Value.RefreshValue(Mathf.CeilToInt(_statDict[pair.Key]));
+                pair.Value.RefreshValue(_statDict[pair.Key]);
             }
         }
 
@@ -322,21 +334,38 @@ namespace BabyNightmare.Match
                 _statChangeDict[key] = 0;
             }
 
-            if (null != overlapList && overlapList.Count > 0)
+            var isUpgradable = false;
+            if (null != overlapList && overlapList.Count > 0) // 겹치는 장비가 있을 때 
             {
-                for (var i = 0; i < overlapList.Count; i++)
+                var upgradeData = _context.GetUpgradeData(dragEquipment.Data, overlapList[0].Data);
+                if (overlapList.Count == 1 && null != upgradeData) //업그레이드 상황일 때 업그레이드 데이터 스탯 계산
                 {
-                    var data = overlapList[i].Data;
-                    var overlapStatDataList = data.StatDataList;
-                    for (var j = 0; j < overlapStatDataList.Count; j++)
+                    var statDataList = upgradeData.StatDataList;
+                    for (var i = 0; i < statDataList.Count; i++)
                     {
-                        var statData = overlapStatDataList[j];
-                        _statChangeDict[statData.Type] -= statData.Value / data.CoolTime;
+                        var statData = statDataList[i];
+                        var value = upgradeData.GetStatValueByCool(statData.Value);
+                        _statChangeDict[statData.Type] += value;
+                    }
+
+                    isUpgradable = true;
+                }
+                else //업그레이드 상황이 아닐 때 겹치는 장비 스탯 계산
+                {
+                    for (var i = 0; i < overlapList.Count; i++)
+                    {
+                        var data = overlapList[i].Data;
+                        var overlapStatDataList = data.StatDataList;
+                        for (var j = 0; j < overlapStatDataList.Count; j++)
+                        {
+                            var statData = overlapStatDataList[j];
+                            _statChangeDict[statData.Type] -= data.GetStatValueByCool(statData.Value);
+                        }
                     }
                 }
             }
 
-            if (null != dragEquipment)
+            if (null != dragEquipment && false == isUpgradable) // 드래그 중인 장비 스탯 계산
             {
                 var data = dragEquipment.Data;
                 var statDataList = data.StatDataList;
@@ -344,13 +373,13 @@ namespace BabyNightmare.Match
                 for (var i = 0; i < statDataList.Count; i++)
                 {
                     var statData = statDataList[i];
-                    _statChangeDict[statData.Type] += statData.Value / data.CoolTime;
+                    _statChangeDict[statData.Type] += data.GetStatValueByCool(statData.Value);
                 }
             }
 
             foreach (var pair in _statItemViewDict)
             {
-                pair.Value.RefreshChangeValue(Mathf.CeilToInt(_statChangeDict[pair.Key]));
+                pair.Value.RefreshChangeValue(_statChangeDict[pair.Key]);
             }
         }
 

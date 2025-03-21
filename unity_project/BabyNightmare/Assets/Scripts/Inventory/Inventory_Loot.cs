@@ -14,6 +14,8 @@ namespace BabyNightmare.InventorySystem
 
         private List<Equipment> _equipmentList = new List<Equipment>();
 
+        public List<Equipment> EquipmentList => _equipmentList;
+
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
             var getEquipment = Get(screenPos);
@@ -79,13 +81,8 @@ namespace BabyNightmare.InventorySystem
             Refresh();
         }
 
-        public void RemoveAll(Action<Vector3> onRemove = null)
+        public void RemoveAll()
         {
-            for (var i = 0; i < _equipmentList.Count; i++)
-            {
-                onRemove?.Invoke(_equipmentList[i].transform.position);
-            }
-
             for (var i = 0; i < _equipmentList.Count; i++)
             {
                 Destroy(_equipmentList[i].gameObject);
@@ -117,7 +114,7 @@ namespace BabyNightmare.InventorySystem
         {
             return null;
         }
-        
+
 
         private void Refresh()
         {

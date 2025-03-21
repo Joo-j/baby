@@ -14,7 +14,8 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private TextMeshProUGUI _nameTMP;
         [SerializeField] private TextMeshProUGUI _descTMP;
         [SerializeField] private TextMeshProUGUI _levelTMP;
-        [SerializeField] private TextMeshProUGUI _damageTMP;
+        [SerializeField] private TextMeshProUGUI _statValueTMP;
+        [SerializeField] private TextMeshProUGUI _statTMP;
         [SerializeField] private TextMeshProUGUI _cooltimeTMP;
 
         public void Show(EquipmentData data)
@@ -27,16 +28,9 @@ namespace BabyNightmare.InventorySystem
             _levelTMP.text = $"LV {data.Level}";
             _cooltimeTMP.text = $"{data.CoolTime:F1}s";
 
-            var statDataList = data.StatDataList;
-            for (var i = 0; i < statDataList.Count; i++)
-            {
-                var statData = statDataList[i];
-                if (statData.Type == EStatType.ATK)
-                {
-                    _damageTMP.text = $"{statData.Value}";
-                    break;
-                }
-            }
+            var firstStatData = data.StatDataList[0];
+            _statTMP.text = $"{firstStatData.Type}";
+            _statValueTMP.text = $"{data.GetStatValueByCool(firstStatData.Value)}";
         }
 
         public void Hide()

@@ -24,5 +24,11 @@ namespace BabyNightmare.StaticData
         public float CoolTime;
         public Sprite Sprite;
         public RectShape Shape;
+
+
+        public int GetStatValueByCool(float value)
+        {
+            return Mathf.CeilToInt(value / CoolTime);
+        }
     }
 }
