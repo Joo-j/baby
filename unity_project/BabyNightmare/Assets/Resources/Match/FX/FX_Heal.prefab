@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 479342001240657061}
   - component: {fileID: 479342001225375727}
   - component: {fileID: 479342001224500675}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cross
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4830,8 +4830,9 @@ GameObject:
   - component: {fileID: 479342001331036696}
   - component: {fileID: 479342001331036697}
   - component: {fileID: 479342001331036698}
-  m_Layer: 0
-  m_Name: FX_Healing
+  - component: {fileID: -4131501705494928166}
+  m_Layer: 9
+  m_Name: FX_Heal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9668,6 +9669,29 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &-4131501705494928166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 479342001331036699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b234dca513a498798756155f488600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _psArr:
+  - {fileID: 479342001331036697}
+  - {fileID: 852132838837956770}
+  - {fileID: 8959562601627352789}
+  - {fileID: 479342001225375727}
+  - {fileID: 1756952858447809447}
+  - {fileID: 4822485519245768732}
+  - {fileID: 3797405331635964521}
+  - {fileID: 1140212607649523491}
+  _type: 4
+  _appearDuration: 3
 --- !u!1 &878605604225034912
 GameObject:
   m_ObjectHideFlags: 0
@@ -9679,7 +9703,7 @@ GameObject:
   - component: {fileID: 1286725062604214075}
   - component: {fileID: 1140212607649523491}
   - component: {fileID: 2027259977766287005}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trails
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14471,7 +14495,7 @@ GameObject:
   - component: {fileID: 1756952858447809441}
   - component: {fileID: 1756952858447809447}
   - component: {fileID: 1756952858447809440}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Embers_AB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19322,7 +19346,7 @@ GameObject:
   - component: {fileID: 4771370743447311856}
   - component: {fileID: 852132838837956770}
   - component: {fileID: 2318535630195304447}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CircleMovement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24114,7 +24138,7 @@ GameObject:
   - component: {fileID: 3797405331635964535}
   - component: {fileID: 3797405331635964521}
   - component: {fileID: 3797405331635964520}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Glow_AA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29023,7 +29047,7 @@ GameObject:
   - component: {fileID: 4822485519245768706}
   - component: {fileID: 4822485519245768732}
   - component: {fileID: 4822485519245768733}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33932,7 +33956,7 @@ GameObject:
   - component: {fileID: 8959562601645614833}
   - component: {fileID: 8959562601627352789}
   - component: {fileID: 8959562601625373391}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: CircleStatic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
