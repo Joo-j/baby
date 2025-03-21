@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CustomShopData 2
   m_EditorClassIdentifier: 
   ID: 2
+  Name: Pink BackPack
   Item_ID: 102
   Order: 1
   CurrencyType: 1

@@ -660,7 +660,7 @@ GameObject:
   - component: {fileID: 4312275765409091642}
   - component: {fileID: 7221055555315935658}
   m_Layer: 9
-  m_Name: right_circle_bg
+  m_Name: TF_Wave_Circle_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1661,6 +1661,7 @@ MonoBehaviour:
   _fieldIMG: {fileID: 7978898618099795721}
   _waveTMP: {fileID: 8454046752978044597}
   _waveProgressIMG: {fileID: 3916522500993640960}
+  _waveCircleTF: {fileID: 6283710122870639218}
   _bag: {fileID: 5794669616219534498}
   _loot: {fileID: 6865182795960360940}
   _topYPosRange: {x: 100, y: 260}

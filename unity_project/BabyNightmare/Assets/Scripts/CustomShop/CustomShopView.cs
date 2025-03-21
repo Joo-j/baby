@@ -243,7 +243,7 @@ namespace BabyNightmare.CustomShop
         {
             var shopData = _context.ShopDataDict[itemID];
 
-            TMP_ItemName.text = $"{shopData.name}";
+            TMP_ItemName.text = $"{shopData.Name}";
         }
 
         // 콘텐츠 목록들 중 itemID 에 해당하는 항목으로 스크롤 갱신
