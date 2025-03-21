@@ -5517,7 +5517,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: CHANGE THE SNAKE'S FEED!
+  m_text: CHANGE COSTUME!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3520f0354d1ca4af087ccd460f96f17d, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 3dd660a74dad647ffa5fdc67e97d9202, type: 2}
