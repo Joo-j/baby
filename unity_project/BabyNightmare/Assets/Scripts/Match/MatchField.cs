@@ -56,6 +56,7 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _boxSpawnTF;
         [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _attackRadius = 10f;
+        [SerializeField] private float _cameraMoveDuration = 0.01f;
 
         private const string PATH_FIELD = "Match/Field/Field_";
         private const string PATH_PLAYER = "Match/Character/Player";
@@ -265,9 +266,6 @@ namespace BabyNightmare.Match
 
         public void MoveCamera(ECameraPosType type)
         {
-            if (null != _coMoveCamera)
-                StopCoroutine(_coMoveCamera);
-
             var tf = _renderCamera.transform;
             var startPos = tf.position;
             var targetPos = tf.position;
@@ -285,7 +283,13 @@ namespace BabyNightmare.Match
                     break;
             }
 
-            _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, 0.3f, () => _coMoveCamera = null));
+            if (startPos == targetPos)
+                return;
+
+            if (null != _coMoveCamera)
+                StopCoroutine(_coMoveCamera);
+
+            _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, _cameraMoveDuration, () => _coMoveCamera = null));
         }
     }
 }

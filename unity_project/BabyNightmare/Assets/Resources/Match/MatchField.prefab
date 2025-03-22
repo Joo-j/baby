@@ -89,6 +89,7 @@ MonoBehaviour:
   _boxSpawnTF: {fileID: 8339263573230450734}
   _groundMoveAmount: 5
   _attackRadius: 10
+  _cameraMoveDuration: 0.01
 --- !u!1 &2173026360070404481
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +178,7 @@ Transform:
   m_GameObject: {fileID: 4137748423088630219}
   serializedVersion: 2
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0, y: 9, z: -10}
+  m_LocalPosition: {x: 0, y: 11, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
