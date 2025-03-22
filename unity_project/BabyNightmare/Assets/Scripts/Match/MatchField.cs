@@ -39,6 +39,13 @@ namespace BabyNightmare.Match
         }
     }
 
+    public enum ECameraPosType
+    {
+        Low,
+        Mid,
+        High
+    }
+
     public class MatchField : MonoBehaviour
     {
         [SerializeField] private Camera _renderCamera;
@@ -67,6 +74,7 @@ namespace BabyNightmare.Match
         private int _enemySpawnCount = 0;
         private Pool<Coin> _coinPool = null;
         private int _totalCoin = 0;
+        private Coroutine _coMoveCamera = null;
 
         public RenderTexture RT => _rt;
         public Camera RenderCamera => _renderCamera;
@@ -89,9 +97,9 @@ namespace BabyNightmare.Match
             _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
             var playerContext = new PlayerContext(
-                                    PlayerData.Instance.HP, 
+                                    PlayerData.Instance.HP,
                                     CameraForward,
-                                    OnDiePlayer, 
+                                    OnDiePlayer,
                                     _context.GetCoin,
                                     _context.GetProjectileData);
             _player.Init(playerContext);
@@ -253,6 +261,31 @@ namespace BabyNightmare.Match
                     var typeCount = Enum.GetValues(typeof(ESpawnOrder)).Length;
                     return GetSpawnTF((ESpawnOrder)(Random.Range(0, typeCount)));
             }
+        }
+
+        public void MoveCamera(ECameraPosType type)
+        {
+            if (null != _coMoveCamera)
+                StopCoroutine(_coMoveCamera);
+
+            var tf = _renderCamera.transform;
+            var startPos = tf.position;
+            var targetPos = tf.position;
+
+            switch (type)
+            {
+                case ECameraPosType.Low:
+                    targetPos = new Vector3(0, 7f, -10);
+                    break;
+                case ECameraPosType.Mid:
+                    targetPos = new Vector3(0, 9, -10);
+                    break;
+                case ECameraPosType.High:
+                    targetPos = new Vector3(0, 11f, -10);
+                    break;
+            }
+
+            _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, 0.3f, () => _coMoveCamera = null));
         }
     }
 }

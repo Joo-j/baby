@@ -21,6 +21,7 @@ namespace BabyNightmare.Match
         public Action OnClickReroll { get; }
         public Action StartWave { get; }
         public Action<EquipmentData> OnCoolDown { get; }
+        public Action<ECameraPosType> MoveCameraPos { get; }
         public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
         public Func<int, ProjectileData> GetProjectileData { get; }
 
@@ -30,6 +31,7 @@ namespace BabyNightmare.Match
         Action onClickReroll,
         Action startWave,
         Action<EquipmentData> onCooldown,
+        Action<ECameraPosType> moveCameraPos,
         Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
         Func<int, ProjectileData> getProjectileData)
         {
@@ -38,6 +40,7 @@ namespace BabyNightmare.Match
             this.OnClickReroll = onClickReroll;
             this.StartWave = startWave;
             this.OnCoolDown = onCooldown;
+            this.MoveCameraPos = moveCameraPos;
             this.GetUpgradeData = getUpgradeData;
             this.GetProjectileData = getProjectileData;
         }
@@ -127,6 +130,7 @@ namespace BabyNightmare.Match
             _startGO.SetActive(true);
 
             ChangeRectPos(false, true);
+            _context.MoveCameraPos?.Invoke(ECameraPosType.High);
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
@@ -213,6 +217,7 @@ namespace BabyNightmare.Match
         public void ShowBox(EBoxType type, Action onGetBox)
         {
             ChangeRectPos(false);
+            _context.MoveCameraPos?.Invoke(ECameraPosType.High);
 
             _onGetBox = onGetBox;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
@@ -261,6 +266,7 @@ namespace BabyNightmare.Match
                 _canvasGroup.blocksRaycasts = false;
 
                 ChangeRectPos(true);
+                _context.MoveCameraPos?.Invoke(ECameraPosType.Mid);
 
                 _context.StartWave?.Invoke();
             }

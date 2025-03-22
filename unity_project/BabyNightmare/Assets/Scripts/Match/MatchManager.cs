@@ -53,7 +53,7 @@ namespace BabyNightmare.Match
                                         chapter,
                                         GetCoin,
                                         RefreshProgress,
-                                        OnClearWave, 
+                                        OnClearWave,
                                         OnFailMatch,
                                         GetProjectileData);
             _matchField.Init(matchFieldContext);
@@ -67,7 +67,8 @@ namespace BabyNightmare.Match
                                         OnClickReroll,
                                         OnStartWave,
                                         _matchField.AttackEnemy,
-                                        GetUpgradeData, 
+                                        _matchField.MoveCamera,
+                                        GetUpgradeData,
                                         GetProjectileData
                                         );
             _matchView.Init(matchViewContext);
