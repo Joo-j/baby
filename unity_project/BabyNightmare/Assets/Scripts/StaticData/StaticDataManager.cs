@@ -212,7 +212,9 @@ namespace BabyNightmare.StaticData
         public ChapterData GetChapterData(int chapter)
         {
             if (false == _chapterDataDict.TryGetValue(chapter, out var chapterData))
-                return null;
+            {
+                return _chapterDataDict[_lastChapter];
+            }
 
             return chapterData;
         }
