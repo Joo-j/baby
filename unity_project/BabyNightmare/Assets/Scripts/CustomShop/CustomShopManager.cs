@@ -98,19 +98,17 @@ namespace BabyNightmare.CustomShop
                                 _itemDataDict,
                                 _shopDataDict,
                                 _rvDataDict,
-                                Select,
                                 TryPurchase);
 
                 _customShopView.Init(context);
             }
 
             _customShopView.Show();
-            _customShopView.RefreshEquip(_equipItems);
             _customShopView.RefreshPurchase(_hasItems);
 
             foreach (var id in _equipItems)
             {
-                Select(id);
+                _customShopView?.RefreshSelect(id);
             }
 
             ShowRedDot();
@@ -194,16 +192,9 @@ namespace BabyNightmare.CustomShop
 
             _equipItems.Add(itemData.ID);
 
-            _customShopView?.RefreshEquip(_equipItems);
-            _customShopView?.RefreshSelect(itemID);
             _customShopView?.OnEquip();
-            RemoveNewItem(itemID);
-        }
-
-        private void Select(int itemID)
-        {
-            _selectItems.Add(itemID);
             _customShopView?.RefreshSelect(itemID);
+            RemoveNewItem(itemID);
         }
 
         public CustomItemData GetItemData(int itemID)

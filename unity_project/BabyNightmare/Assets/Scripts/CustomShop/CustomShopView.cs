@@ -13,20 +13,17 @@ namespace BabyNightmare.CustomShop
         public Dictionary<int, CustomItemData> ItemDataDict { get; }
         public Dictionary<int, CustomShopData> ShopDataDict { get; }
         public Dictionary<int, int> RvDataDict { get; }
-        public Action<int> Select { get; }
         public Action<int> TryPurchase { get; }
 
         public CustomShopViewContext(
             Dictionary<int, CustomItemData> itemDataDict,
             Dictionary<int, CustomShopData> shopDataDict,
             Dictionary<int, int> rvDataDict,
-            Action<int> select,
             Action<int> tryPurchase)
         {
             this.ItemDataDict = itemDataDict;
             this.ShopDataDict = shopDataDict;
             this.RvDataDict = rvDataDict;
-            this.Select = select;
             this.TryPurchase = tryPurchase;
         }
 
@@ -103,7 +100,7 @@ namespace BabyNightmare.CustomShop
                 _context.GetRVCount(shopData.ID),
                 () =>
                 {
-                    _context.Select?.Invoke(itemID);
+                    RefreshSelect(itemID);
                     PTC_Select.Simulate(0f, true, true, false);
                     PTC_Select.Play();
                 },
@@ -144,35 +141,12 @@ namespace BabyNightmare.CustomShop
             gameObject.SetActive(false);
         }
 
-        public void RefreshPurchase(HashSet<int> purchasedIDSet)
+        public void RefreshPurchase(HashSet<int> hasItemSet)
         {
-            foreach (var id in purchasedIDSet)
+            foreach (var id in hasItemSet)
             {
-                var item = _context.GetItemData(id);
-                var type = item.Type;
-
-                var typeDict = _itemViewDict[type];
-
-                foreach (var pair in typeDict)
-                {
-                    pair.Value.RefreshPurchase(pair.Key == id, _context.GetRVCount(pair.Key));
-                }
-            }
-        }
-
-        public void RefreshEquip(HashSet<int> equipItemIDSet)
-        {
-            foreach (var id in equipItemIDSet)
-            {
-                var item = _context.GetItemData(id);
-                var type = item.Type;
-
-                var typeDict = _itemViewDict[type];
-
-                foreach (var pair in typeDict)
-                {
-                    pair.Value.RefreshSelect(pair.Key == id);
-                }
+                var itemView = GetItemView(id);
+                itemView.RefreshPurchase(true);
             }
         }
 
@@ -198,7 +172,7 @@ namespace BabyNightmare.CustomShop
                 var type = pair_1.Key;
                 if (type != itemData.Type)
                     continue;
-                    
+
                 var typeDict = pair_1.Value;
                 foreach (var pair_2 in typeDict)
                 {
