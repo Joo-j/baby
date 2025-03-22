@@ -80,12 +80,12 @@ namespace BabyNightmare.Character
 
         public void ShowMoveAni()
         {
-            _animator.Play(HASH_ANI_MOVE);
+            _animator.SetTrigger(HASH_ANI_MOVE);
         }
 
         public void ShowIdleAni()
         {
-            _animator.Play(HASH_ANI_IDLE);
+            _animator.SetTrigger(HASH_ANI_IDLE);
         }
 
         public override void Die()
@@ -119,8 +119,7 @@ namespace BabyNightmare.Character
                 return;
             }
 
-            _animator.Rebind();
-            _animator.Play(HASH_ANI_ATTACK);
+            _animator.SetTrigger(HASH_ANI_ATTACK);
         }
 
         private void TryUseEquipment()
