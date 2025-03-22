@@ -218,8 +218,11 @@ namespace BabyNightmare.Lobby
                     }
                 case ELobbyButtonType.Home:
                     {
+                        var chapter = PlayerData.Instance.Chapter;
+                        var chapterData = StaticDataManager.Instance.GetChapterData(chapter);
+
                         _homeView.gameObject.SetActive(true);
-                        _homeView.Refresh();
+                        _homeView.Refresh(chapterData);
                         return;
                     }
                 case ELobbyButtonType.Talent:

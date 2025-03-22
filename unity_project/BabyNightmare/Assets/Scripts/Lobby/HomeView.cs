@@ -14,7 +14,7 @@ namespace BabyNightmare.Lobby
         [SerializeField] private RectTransform _center;
         [SerializeField] private TextMeshProUGUI _chapterTMP;
         [SerializeField] private Image _chapterICN;
-        [SerializeField] private TextMeshProUGUI _fieldTMP;
+        [SerializeField] private TextMeshProUGUI _titleTMP;
         [SerializeField] private Transform _buttonTF;
         [SerializeField] private AnimationCurve _bounceCurve;
 
@@ -26,11 +26,12 @@ namespace BabyNightmare.Lobby
             _startGame = startGame;
         }
 
-        public void Refresh()
+        public void Refresh(ChapterData chapterData)
         {
             _isStarted = false;
-            _chapterTMP.text = $"Chapter {PlayerData.Instance.Chapter}";
-            _fieldTMP.text = "Night of Dessert";
+            _chapterTMP.text = $"Chapter {chapterData.Chapter}";
+            _chapterICN.sprite = chapterData.Icon;
+            _titleTMP.text = chapterData.Title;
 
             StartCoroutine(SimpleLerp.Co_BounceScale(_buttonTF, Vector3.one * 1.1f, _bounceCurve, 2f, true));
         }

@@ -8,7 +8,7 @@ namespace BabyNightmare.StaticData
     public class WaveData : ScriptableObject
     {
         public int ID;
-        public int Chapter;
+        public int Group;
         public int EquipmentProbDataID;
         public int EquipmentBoxDataID;
         public int EnemySpawnDataID;

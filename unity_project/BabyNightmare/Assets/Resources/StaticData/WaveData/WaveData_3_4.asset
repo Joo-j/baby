@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WaveData_3_4
   m_EditorClassIdentifier: 
   ID: 10
-  Chapter: 3
+  Group: 3
   EquipmentProbDataID: 1
   EquipmentBoxDataID: 1
   EnemySpawnDataID: 3

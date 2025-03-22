@@ -40,7 +40,9 @@ namespace BabyNightmare
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, false);
 
             LobbyManager.Instance.Exit();
-            MatchManager.Instance.StartMatch();
+
+            var chapter = PlayerData.Instance.Chapter;
+            MatchManager.Instance.StartMatch(chapter);
         }
     }
 }

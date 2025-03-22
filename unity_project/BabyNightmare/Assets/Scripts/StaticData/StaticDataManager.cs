@@ -7,6 +7,7 @@ namespace BabyNightmare.StaticData
     public class StaticDataManager : SingletonBase<StaticDataManager>
     {
         private const string PATH_LOBBY_BUTTON_DATA = "StaticData/LobbyButtonData";
+        private const string PATH_CHAPTER_DATA = "StaticData/ChapterData";
         private const string PATH_WAVE_DATA = "StaticData/WaveData";
         private const string PATH_EQUIPMENT_DATA = "StaticData/EquipmentData";
         private const string PATH_EQUIPMENT_PROB_DATA = "StaticData/EquipmentProbData";
@@ -15,6 +16,7 @@ namespace BabyNightmare.StaticData
         private const string PATH_ENEMY_SPAWN_DATA = "StaticData/EnemySpawnData";
 
         private Dictionary<ELobbyButtonType, LobbyButtonData> _lobbyButtonDict = null;
+        private Dictionary<int, ChapterData> _chapterDataDict = null;
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
         private Dictionary<int, EquipmentProbData> _equipmentProbDataDict = null;
@@ -27,6 +29,7 @@ namespace BabyNightmare.StaticData
         public void Init()
         {
             InitLobbyButtonData();
+            InitChapterData();
             InitWaveData();
             InitEquipmentData();
             InitEquipmentProbData();
@@ -55,6 +58,28 @@ namespace BabyNightmare.StaticData
             }
         }
 
+        private void InitChapterData()
+        {
+            var chapterDataArr = Resources.LoadAll<ChapterData>(PATH_CHAPTER_DATA);
+            if (null == chapterDataArr || chapterDataArr.Length == 0)
+            {
+                Debug.LogError($"{PATH_CHAPTER_DATA}에 데이터가 없습니다.");
+                return;
+            }
+
+            _chapterDataDict = new Dictionary<int, ChapterData>();
+            for (var i = 0; i < chapterDataArr.Length; i++)
+            {
+                var chapterData = chapterDataArr[i];
+
+                var chapter = chapterData.Chapter;
+                if (false == _chapterDataDict.ContainsKey(chapter))
+                    _chapterDataDict.Add(chapter, chapterData);
+
+                _lastChapter = Mathf.Max(_lastChapter, chapter);
+            }
+        }
+
         private void InitWaveData()
         {
             var waveDataArr = Resources.LoadAll<WaveData>(PATH_WAVE_DATA);
@@ -70,13 +95,13 @@ namespace BabyNightmare.StaticData
             {
                 var waveData = waveDataArr[i];
 
-                var chapter = waveData.Chapter;
-                if (false == _waveDataDict.ContainsKey(chapter))
-                    _waveDataDict.Add(chapter, new List<WaveData>());
+                var group = waveData.Group;
+                if (false == _waveDataDict.ContainsKey(group))
+                    _waveDataDict.Add(group, new List<WaveData>());
 
-                _waveDataDict[chapter].Add(waveData);
+                _waveDataDict[group].Add(waveData);
 
-                _lastChapter = Mathf.Max(_lastChapter, chapter);
+                _lastChapter = Mathf.Max(_lastChapter, group);
             }
         }
 
@@ -184,17 +209,21 @@ namespace BabyNightmare.StaticData
             return data;
         }
 
-        public List<WaveData> GetWaveDataList(int chapter)
+        public ChapterData GetChapterData(int chapter)
         {
-            if (false == _waveDataDict.TryGetValue(chapter, out var waveDataList))
-            {
-                Debug.Log($"{chapter} Chapter가 없어 마지막 챕터 {_lastChapter} 데이터로 대체");
-                return _waveDataDict[_lastChapter];
-            }
+            if (false == _chapterDataDict.TryGetValue(chapter, out var chapterData))
+                return null;
+
+            return chapterData;
+        }
+
+        public List<WaveData> GetWaveDataList(int group)
+        {
+            if (false == _waveDataDict.TryGetValue(group, out var waveDataList))
+                return null;
 
             return waveDataList;
         }
-
 
         public EquipmentData GetEquipmentData(int id)
         {

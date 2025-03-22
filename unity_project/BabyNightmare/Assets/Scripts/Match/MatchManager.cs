@@ -36,15 +36,22 @@ namespace BabyNightmare.Match
             _enterLobby = enterLobby;
         }
 
-        public void StartMatch()
+        public void StartMatch(int chapter)
         {
-            var chapter = PlayerData.Instance.Chapter;
-            _waveDataList = StaticDataManager.Instance.GetWaveDataList(chapter);
-            if (null == _waveDataList)
+            var chapterData = StaticDataManager.Instance.GetChapterData(chapter);
+            if (null == chapterData)
             {
-                Debug.LogError($"{chapter}chapter no wave data");
+                Debug.LogError($"{chapter} no chapter data");
                 return;
             }
+
+            _waveDataList = StaticDataManager.Instance.GetWaveDataList(chapterData.WaveDataGroup);
+            if (null == _waveDataList)
+            {
+                Debug.LogError($"{chapterData.WaveDataGroup} no wave data");
+                return;
+            }
+
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
 
