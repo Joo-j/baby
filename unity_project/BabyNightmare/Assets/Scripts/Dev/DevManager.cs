@@ -108,6 +108,7 @@ namespace BabyNightmare
                 return;
 
             PlayerData.Instance.Coin = Mathf.Clamp(PlayerData.Instance.Coin + coin, 0, int.MaxValue);
+            PlayerData.Instance.Save();
         }
 
         private void AddGem(string text)
@@ -119,6 +120,7 @@ namespace BabyNightmare
                 return;
 
             PlayerData.Instance.Gem = Mathf.Clamp(PlayerData.Instance.Gem + gem, 0, int.MaxValue);
+            PlayerData.Instance.Save();
         }
 
         private void SetCoin(string text)
@@ -130,6 +132,7 @@ namespace BabyNightmare
                 return;
 
             PlayerData.Instance.Coin = Mathf.Clamp(coin, 0, int.MaxValue);
+            PlayerData.Instance.Save();
         }
 
         private void SetGem(string text)
@@ -141,6 +144,7 @@ namespace BabyNightmare
                 return;
 
             PlayerData.Instance.Gem = Mathf.Clamp(gem, 0, int.MaxValue);
+            PlayerData.Instance.Save();
         }
 
 

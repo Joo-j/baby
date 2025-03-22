@@ -4,21 +4,23 @@ using System;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using TMPro;
+using Supercent.Util.STM;
 
 namespace BabyNightmare.CustomShop
 {
     public class CustomItemView : MonoBehaviour
     {
         [SerializeField] private RectTransform _rtf;
-        [SerializeField] private Button BTN_Purchase;
-        [SerializeField] private GameObject GO_Select;
-        [SerializeField] private GameObject GO_Equip;
-        [SerializeField] private GameObject GO_RedDot;
         [SerializeField] private Image IMG_Icon;
-        [SerializeField] private Image IMG_Price;
-        [SerializeField] private TextMeshProUGUI TMP_Price;
-        [SerializeField] private Sprite _buttonOn;
-        [SerializeField] private Sprite _buttonOff;
+        [SerializeField] private GameObject GO_Select;
+        [SerializeField] private GameObject GO_Purchased;
+        [SerializeField] private GameObject GO_RedDot;
+        [SerializeField] private GameObject GO_PurchaseButton;
+        [SerializeField] private Image IMG_Price_Purchase;
+        [SerializeField] private TextMeshProUGUI TMP_Price_Purchase;
+        [SerializeField] private GameObject GO_NoPurchaseButton;
+        [SerializeField] private Image IMG_Price_NoPurchase;
+        [SerializeField] private TextMeshProUGUI TMP_Price_No_Purchase;
         [SerializeField] private AnimationCurve _bounceCurve;
 
         private Action _onClickSelect = null;
@@ -49,26 +51,16 @@ namespace BabyNightmare.CustomShop
 
             var currencyIcon = Resources.Load<Sprite>($"Icon/ICN_{_shopData.CurrencyType}");
             if (null == currencyIcon)
-                IMG_Price.gameObject.SetActive(false);
+                IMG_Price_Purchase.gameObject.SetActive(false);
             else
-                IMG_Price.sprite = currencyIcon;
+                IMG_Price_Purchase.sprite = currencyIcon;
 
-            var cost = _shopData.Price_Value;
-            switch (_shopData.CurrencyType)
-            {
-                case ECurrencyType.Coin:
-                case ECurrencyType.Gem:
-                    TMP_Price.text = $"{cost}";
-                    break;
+            if (null == currencyIcon)
+                IMG_Price_NoPurchase.gameObject.SetActive(false);
+            else
+                IMG_Price_NoPurchase.sprite = currencyIcon;
 
-                case ECurrencyType.RV:
-                    TMP_Price.text = $"{rvCount}/{cost}";
-                    break;
-
-                default:
-                    TMP_Price.gameObject.SetActive(false);
-                    break;
-            }
+            RefreshPurchase(false);
         }
 
         public void RefreshSelect(bool isSelect)
@@ -78,38 +70,37 @@ namespace BabyNightmare.CustomShop
 
         public void RefreshEquip(bool isEquip)
         {
-            GO_Equip.SetActive(isEquip);
+            GO_Purchased.SetActive(isEquip);
         }
 
-        public void RefreshPurchase(bool hasSkin, int rvCount)
+        public void RefreshPurchase(bool purchased)
         {
-            if (hasSkin == true)
+            if (purchased == true)
             {
-                GO_Equip.SetActive(true);
-                BTN_Purchase.gameObject.SetActive(false);
+                GO_Purchased.SetActive(true);
+                GO_PurchaseButton.gameObject.SetActive(false);
+                GO_NoPurchaseButton.gameObject.SetActive(false);
+                return;
             }
-            else if (hasSkin == false)
+
+            GO_PurchaseButton.gameObject.SetActive(true);
+            var price = _shopData.Price_Value;
+
+            var isPurchasable = PlayerData.Instance.Gem >= price;
+            GO_PurchaseButton.SetActive(isPurchasable);
+            GO_NoPurchaseButton.SetActive(!isPurchasable);
+
+            switch (_shopData.CurrencyType)
             {
-                BTN_Purchase.gameObject.SetActive(true);
-                var price = _shopData.Price_Value;
+                case ECurrencyType.Gem:
+                    TMP_Price_Purchase.text = $"{price}";
+                    TMP_Price_No_Purchase.text = $"{price}";
+                    break;
 
-                BTN_Purchase.image.sprite = PlayerData.Instance.Gem >= price ? _buttonOn : _buttonOff;
-
-                switch (_shopData.CurrencyType)
-                {
-                    case ECurrencyType.Coin:
-                    case ECurrencyType.Gem:
-                        TMP_Price.text = $"{price}";
-                        break;
-
-                    case ECurrencyType.RV:
-                        TMP_Price.text = $"{rvCount}/{price}";
-                        break;
-
-                    default:
-                        TMP_Price.gameObject.SetActive(false);
-                        break;
-                }
+                default:
+                    TMP_Price_Purchase.gameObject.SetActive(false);
+                    TMP_Price_No_Purchase.gameObject.SetActive(false);
+                    break;
             }
         }
 
@@ -126,9 +117,13 @@ namespace BabyNightmare.CustomShop
             StartCoroutine(SimpleLerp.Co_BounceScale(_rtf, Vector3.one * 1.1f, _bounceCurve, 0.05f));
         }
 
+        public void OnClickNoPurchase()
+        {
+            SimpleToastMessage.Show("Need More Gem!", null);
+        }
+
         public void OnClickPurchase()
         {
-            Debug.Log("Purchase");
             _onClickPurchase?.Invoke();
 
             _rtf.localScale = Vector3.one;
