@@ -51,20 +51,23 @@ namespace BabyNightmare.Character
         {
             _context = context;
 
-            _originColor = _renderer.material.GetColor(KEY_EMISSION);
+            _originEmissionColor = _mainRenderer.material.GetColor(KEY_EMISSION_COLOR);
 
             _hp = _maxHealth = context.HP;
 
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
 
+            for (var i = 0; i < _allRenderers.Length; i++)
+                _allRenderers[i].enabled = false;
 
-            _renderer.enabled = false;
             _hpBar.gameObject.SetActive(false);
 
             StartCoroutine(SimpleLerp.Co_Invoke(_context.Delay, () =>
             {
-                _renderer.enabled = true;
+                for (var i = 0; i < _allRenderers.Length; i++)
+                    _allRenderers[i].enabled = true;
+
                 _hpBar.gameObject.SetActive(true);
                 StartMove();
             }));

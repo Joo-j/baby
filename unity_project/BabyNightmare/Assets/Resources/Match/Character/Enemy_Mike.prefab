@@ -100,7 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28d34b66ed8ef40e2a4b25b095806087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 5297901199775490593}
+  _mainRenderer: {fileID: 5297901199775490593}
+  _allRenderers:
+  - {fileID: 5297901199775490593}
   _animator: {fileID: 5948638334016226332}
   _animationTrigger: {fileID: 244971239802859749}
   _hpBar: {fileID: 7575229609088098271}

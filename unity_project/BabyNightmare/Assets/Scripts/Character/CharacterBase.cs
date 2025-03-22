@@ -21,14 +21,15 @@ namespace BabyNightmare.Character
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
     {
-        [SerializeField] protected Renderer _renderer;
+        [SerializeField] protected Renderer _mainRenderer;
+        [SerializeField] protected Renderer[] _allRenderers;
         [SerializeField] protected Animator _animator;
         [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
         [SerializeField] private Transform _hitPoint;
         [SerializeField] private Color _ownColor;
 
-        protected static readonly int KEY_EMISSION = Shader.PropertyToID("_EmissionColor");
+        protected static readonly int KEY_EMISSION_COLOR = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");
         protected static readonly int HASH_ANI_ATTACK = Animator.StringToHash("Attack");
         protected static readonly int HASH_ANI_MOVE = Animator.StringToHash("Move");
@@ -36,10 +37,10 @@ namespace BabyNightmare.Character
         protected float _hp = 0;
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
-        private Coroutine _coFlash = null;
-        protected Color _originColor;
+        protected Color _originEmissionColor;
         private float _reserveDamage = 0f;
         protected bool _isDead = false;
+        private bool _isFlash = false;
 
         public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
@@ -75,16 +76,14 @@ namespace BabyNightmare.Character
 
             _hpBar.Refresh(_hp, _maxHealth, false);
 
-            if (null != _coFlash)
-                StopCoroutine(_coFlash);
-
-            _coFlash = StartCoroutine(Co_ReceiveDamage());
-
+            for (var i = 0; i < _allRenderers.Length; i++)
+                StartCoroutine(Co_Flash(_allRenderers[i].material));
         }
 
-        private IEnumerator Co_ReceiveDamage()
+        private IEnumerator Co_Flash(Material mat)
         {
-            var mat = _renderer.material;
+            var originEmissionColor = mat.GetColor(KEY_EMISSION_COLOR);
+
             var targetColor = Color.white;
             var duration = 0.1f;
 
@@ -95,7 +94,7 @@ namespace BabyNightmare.Character
                 elapsed += Time.deltaTime;
 
                 var factor = elapsed / duration;
-                mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
+                mat.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColor, targetColor, factor));
             }
 
             while (elapsed > 0)
@@ -104,11 +103,10 @@ namespace BabyNightmare.Character
                 elapsed -= Time.deltaTime;
 
                 var factor = elapsed / duration;
-                mat.SetColor(KEY_EMISSION, Color.Lerp(_originColor, targetColor, factor));
+                mat.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColor, targetColor, factor));
             }
 
-            mat.SetColor(KEY_EMISSION, _originColor);
-            _coFlash = null;
+            mat.SetColor(KEY_EMISSION_COLOR, originEmissionColor);
         }
 
 #if UNITY_EDITOR
@@ -116,7 +114,8 @@ namespace BabyNightmare.Character
         {
             base.OnBindSerializedField();
 
-            _renderer = this.GetComponentInChildren<Renderer>();
+            _mainRenderer = this.GetComponentInChildren<Renderer>();
+            _allRenderers = this.GetComponentsInChildren<Renderer>();
             _animator = this.GetComponentInChildren<Animator>();
             _animationTrigger = _animator.gameObject.GetComponent<AnimationTrigger>();
             _hpBar = this.FindComponent<SimpleProgress>("HPBar");

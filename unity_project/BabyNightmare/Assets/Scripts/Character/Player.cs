@@ -68,7 +68,7 @@ namespace BabyNightmare.Character
         {
             _context = context;
 
-            _originColor = _renderer.material.GetColor(KEY_EMISSION);
+            _originEmissionColor = _mainRenderer.material.GetColor(KEY_EMISSION_COLOR);
 
             var hp = Mathf.Max(context.HP, 50);
             var talentHP = TalentManager.Instance.GetValue(ETalentType.Max_HP_Amount);
@@ -93,6 +93,7 @@ namespace BabyNightmare.Character
 
         public void ShowMoveAni()
         {
+            AddDef(-_def);
             _animator.Play(HASH_ANI_MOVE);
         }
 
