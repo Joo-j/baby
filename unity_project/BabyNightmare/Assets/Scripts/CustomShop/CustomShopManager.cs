@@ -101,8 +101,7 @@ namespace BabyNightmare.CustomShop
                                 _rvDataDict,
                                 _equipItemID,
                                 SelectItem,
-                                () => EquipItem(_selectedItemID),
-                                OnClickPurchase);
+                                TryPurchase);
 
 
                 _customShopView.Init(context);
@@ -137,16 +136,17 @@ namespace BabyNightmare.CustomShop
             Save();
         }
 
-        private void OnClickPurchase()
+        private void TryPurchase(int itemID)
         {
-            var itemID = _selectedItemID;
-
             if (true == _hasItems.Contains(itemID))
+            {
+                _printer.Error("TryPurchase", $"이미 가지고 있는 아이템 입니다. {itemID}.");
                 return;
+            }
 
             if (false == _shopDataDict.TryGetValue(itemID, out var shopData))
             {
-                _printer.Error("OnClickPurchase", $"{itemID}에 해당하는 ItemData가 없습니다.");
+                _printer.Error("TryPurchase", $"{itemID}에 해당하는 ItemData가 없습니다.");
                 return;
             }
 

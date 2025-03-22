@@ -18,8 +18,7 @@ namespace BabyNightmare.CustomShop
         public Dictionary<int, int> RvDataDict { get; }
         public int EquipItemID { get; }
         public Action<int> OnClickSelect { get; }
-        public Action OnClickEquip { get; }
-        public Action OnClickPurchase { get; }
+        public Action<int> TryPurchase { get; }
 
         public CustomShopViewContext(
             Dictionary<int, CustomItemData> itemDataDict,
@@ -27,16 +26,14 @@ namespace BabyNightmare.CustomShop
             Dictionary<int, int> rvDataDict,
             int equipitemID,
             Action<int> onClickSelect,
-            Action onClickEquip,
-            Action onClickPurchase)
+            Action<int> tryPurchase)
         {
             this.ItemDataDict = itemDataDict;
             this.ShopDataDict = shopDataDict;
             this.RvDataDict = rvDataDict;
             this.EquipItemID = equipitemID;
             this.OnClickSelect = onClickSelect;
-            this.OnClickEquip = onClickEquip;
-            this.OnClickPurchase = onClickPurchase;
+            this.TryPurchase = tryPurchase;
         }
 
         public int GetRVCount(int shopDataID)
@@ -50,21 +47,12 @@ namespace BabyNightmare.CustomShop
 
     public class CustomShopView : UIBase
     {
-        [SerializeField] protected Image IMG_CurrenyTypeIcon;
         [SerializeField] protected ParticleSystem PTC_Select;
         [SerializeField] protected ParticleSystem PTC_Equip;
-        [SerializeField] protected TextMeshProUGUI TMP_CurrenyAmount;
-        [SerializeField] protected Image IMG_AlreadyEquip;
         [SerializeField] protected RawImage RIMG_Preview;
-        [SerializeField] protected Button BTN_Equip;
-        [SerializeField] protected Button BTN_Purchase;
         [SerializeField] protected ScrollRect SR_Content;
         [SerializeField] protected RectTransform RTF_Viewport;
-        [SerializeField] protected RectTransform RTF_Button;
         [SerializeField] protected RectTransform RTF_Guide;
-        [SerializeField] protected TextMeshProUGUI TMP_ItemName;
-        [SerializeField] private RectTransform _purchaseBtnRTF;
-        [SerializeField] private RectTransform _equipBtnRTF;
         [SerializeField] private AnimationCurve _scrollCurve;
         [SerializeField] private Sprite _purchaseGemButtonSprite;
         [SerializeField] private Sprite _purchaseGemIconSprite;
@@ -74,7 +62,6 @@ namespace BabyNightmare.CustomShop
         private CustomShopViewContext _context = null;
         private Dictionary<int, CustomItemView> _itemViewDict = null;
         private CustomItemPreview _itemPreview = null;
-        private bool _isGuide = false;
 
         public void Init(CustomShopViewContext context)
         {
@@ -109,6 +96,10 @@ namespace BabyNightmare.CustomShop
                 {
                     _context.OnClickSelect?.Invoke(itemID);
                     OnSelect();
+                },
+                () =>
+                {
+                    _context.TryPurchase?.Invoke(itemID);
                 });
 
                 _itemViewDict.Add(itemID, itemView);
@@ -153,8 +144,6 @@ namespace BabyNightmare.CustomShop
 
             RefreshPreview(shopData.Item_ID);
             RefreshItemView(shopData, purchasedIDSet, equipeditemID);
-            RefreshButtons(shopData, purchasedIDSet.Contains(selectID), selectID == equipeditemID);
-            RefreshInfo(shopData.Item_ID);
         }
 
         private void RefreshPreview(int itemID)
@@ -191,59 +180,6 @@ namespace BabyNightmare.CustomShop
                 itemView.RefreshEquip(itemID == equipitemID);
                 itemView.RefreshCost(purchasedIDSet.Contains(itemID), _context.GetRVCount(itemID));
             }
-        }
-
-        // 구매, 장착 버튼 활성화 여부
-        private void RefreshButtons(CustomShopData shopData, bool isHasFeed, bool isEquipFeed)
-        {
-            if (true == isHasFeed)
-            {
-                BTN_Purchase.gameObject.SetActive(false);
-                BTN_Equip.gameObject.SetActive(!isEquipFeed);
-                IMG_AlreadyEquip.gameObject.SetActive(isEquipFeed);
-
-                if (true == isEquipFeed)
-                {
-                    IMG_AlreadyEquip.rectTransform.localScale = Vector3.one;
-                    StartCoroutine(SimpleLerp.Co_BounceScale(IMG_AlreadyEquip.rectTransform, Vector3.one * 1.1f, _scrollCurve, 0.05f));
-                }
-                else
-                {
-                    _equipBtnRTF.localScale = Vector3.one;
-                    StartCoroutine(SimpleLerp.Co_BounceScale(_equipBtnRTF, Vector3.one * 1.1f, _scrollCurve, 0.05f));
-                }
-
-                return;
-            }
-
-            BTN_Purchase.gameObject.SetActive(true);
-            BTN_Equip.gameObject.SetActive(false);
-            IMG_AlreadyEquip.gameObject.SetActive(false);
-
-            _purchaseBtnRTF.localScale = Vector3.one;
-            StartCoroutine(SimpleLerp.Co_BounceScale(_purchaseBtnRTF, Vector3.one * 1.1f, _scrollCurve, 0.05f));
-
-            var currencyType = shopData.CurrencyType;
-            var cost = shopData.Price_Value;
-            var itemID = shopData.Item_ID;
-
-            switch (currencyType)
-            {
-                case ECurrencyType.Gem:
-                    BTN_Purchase.image.sprite = _purchaseGemButtonSprite;
-                    IMG_CurrenyTypeIcon.sprite = _purchaseGemIconSprite;
-                    TMP_CurrenyAmount.text = $"{cost}";
-                    TMP_CurrenyAmount.color = cost > PlayerData.Instance.Gem ? Color.red : Color.white;
-                    break;
-            }
-        }
-
-        // 먹이 아이템 정보 뷰 갱신
-        private void RefreshInfo(int itemID)
-        {
-            var itemData = _context.ItemDataDict[itemID];
-
-            TMP_ItemName.text = $"{itemData.Name}";
         }
 
         // 콘텐츠 목록들 중 itemID 에 해당하는 항목으로 스크롤 갱신
@@ -294,40 +230,6 @@ namespace BabyNightmare.CustomShop
         {
             PTC_Equip.Simulate(0f, true, true, false);
             PTC_Equip.Play();
-
-            if (true == _isGuide)
-            {
-                FocusOverlayHelper.Clear();
-                RTF_Guide.gameObject.SetActive(false);
-                _isGuide = false;
-            }
-        }
-
-        public void GuideItemView(int itemID)
-        {
-            if (false == _itemViewDict.TryGetValue(itemID, out var itemView))
-            {
-                Debug.LogError($"ID: {itemID} 먹이 아이템 뷰가 없습니다.");
-                return;
-            }
-
-            Scroll(itemID, () =>
-            {
-                RTF_Guide.gameObject.SetActive(true);
-                RTF_Guide.SetParent(itemView.transform);
-                RTF_Guide.anchoredPosition = Vector2.zero;
-
-                itemView.ShowGuide(
-                () =>
-                {
-                    FocusOverlayHelper.Apply(BTN_Equip.gameObject, 0.75f);
-                    RTF_Guide.gameObject.SetActive(true);
-                    RTF_Guide.SetParent(BTN_Equip.transform);
-                    RTF_Guide.anchoredPosition = Vector2.zero;
-
-                    _isGuide = true;
-                });
-            });
         }
 
         public void SetActiveRedDot(int itemID, bool active)
@@ -336,18 +238,6 @@ namespace BabyNightmare.CustomShop
                 return;
 
             itemView.SetActive_RedDot(active);
-        }
-
-        public override void OnButtonEvent(Button button)
-        {
-            if (button == BTN_Equip)
-            {
-                _context.OnClickEquip?.Invoke();
-            }
-            else if (button == BTN_Purchase)
-            {
-                _context.OnClickPurchase?.Invoke();
-            }
         }
     }
 }
