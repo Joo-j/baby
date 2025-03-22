@@ -101,7 +101,7 @@ namespace BabyNightmare.CustomShop
                                 _rvDataDict,
                                 _equipItemID,
                                 SelectItem,
-                                () => EquipFeed(_selectedItemID),
+                                () => EquipItem(_selectedItemID),
                                 OnClickPurchase);
 
 
@@ -146,7 +146,7 @@ namespace BabyNightmare.CustomShop
 
             if (false == _shopDataDict.TryGetValue(itemID, out var shopData))
             {
-                _printer.Error("OnClickPurchase", $"{itemID}에 해당하는 FeedData가 없습니다.");
+                _printer.Error("OnClickPurchase", $"{itemID}에 해당하는 ItemData가 없습니다.");
                 return;
             }
 
@@ -168,7 +168,7 @@ namespace BabyNightmare.CustomShop
         {
             if (true == _hasItems.Contains(itemID))
             {
-                _printer.Log("PurchaseFeed", $"itemID:{itemID} 이미 존재하는 먹이입니다.");
+                _printer.Log("Purchase", $"itemID:{itemID} 이미 존재하는 먹이입니다.");
                 return;
             }
 
@@ -176,17 +176,17 @@ namespace BabyNightmare.CustomShop
             AddNewItem(itemID);
 
             if (true == equip)
-                EquipFeed(itemID);
+                EquipItem(itemID);
 
             Save();
             GlobalEventManager.AddValue(EGlobalEventType.Purchase_CustomItem, 1);
 
-            _printer.Log("PurchaseFeed", $"FeedItem ID {itemID} 구매 완료");
+            _printer.Log("Purchase", $"Item ID {itemID} 구매 완료");
         }
 
         public bool IsPurchased(int itemID) => _hasItems.Contains(itemID);
 
-        private void EquipFeed(int itemID)
+        private void EquipItem(int itemID)
         {
             _customShopView?.OnEquip();
 
@@ -204,22 +204,22 @@ namespace BabyNightmare.CustomShop
 
         public CustomItemData GetItemData(int itemID)
         {
-            if (false == _itemDataDict.TryGetValue(itemID, out var feedItem))
+            if (false == _itemDataDict.TryGetValue(itemID, out var itemData))
                 return null;
 
-            return feedItem;
+            return itemData;
         }
 
         public CustomItemData GetEquippedItemData()
         {
-            var feedItem = GetItemData(_equipItemID);
-            if (null == feedItem)
+            var itemData = GetItemData(_equipItemID);
+            if (null == itemData)
             {
-                _printer.Error("GetEquippedItemData", $"{_equipItemID}에 해당하는 FeedItem이 없습니다.");
+                _printer.Error("GetEquippedItemData", $"{_equipItemID}에 해당하는 ItemData이 없습니다.");
                 return null;
             }
 
-            return feedItem;
+            return itemData;
         }
 
         private void AddNewItem(int itemID)
@@ -264,14 +264,14 @@ namespace BabyNightmare.CustomShop
         {
             var itemData = GetItemData(itemID);
 
-            var feedRewardView = ObjectUtil.LoadAndInstantiate<CustomItemRewardView>(PATH_CUSTOM_ITEM_REWARD_VIEW, null);
-            feedRewardView.Init(
+            var itemRewardView = ObjectUtil.LoadAndInstantiate<CustomItemRewardView>(PATH_CUSTOM_ITEM_REWARD_VIEW, null);
+            itemRewardView.Init(
             equip,
             itemData,
             doneCallback,
             () =>
             {
-                EquipFeed(itemID);
+                EquipItem(itemID);
                 doneCallback?.Invoke();
             });
 
@@ -293,7 +293,7 @@ namespace BabyNightmare.CustomShop
 
                 if (false == _shopDataDict.TryGetValue(id, out var shopData))
                 {
-                    _printer.Error("OnClickPurchase", $"{id}에 해당하는 FeedData가 없습니다.");
+                    _printer.Error("OnClickPurchase", $"{id}에 해당하는 ItemData가 없습니다.");
                     return;
                 }
 

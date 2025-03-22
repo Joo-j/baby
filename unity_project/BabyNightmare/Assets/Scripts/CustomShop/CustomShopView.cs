@@ -242,7 +242,6 @@ namespace BabyNightmare.CustomShop
         private void RefreshInfo(int itemID)
         {
             var itemData = _context.ItemDataDict[itemID];
-            var shopData = _context.ShopDataDict[itemID];
 
             TMP_ItemName.text = $"{itemData.Name}";
         }

@@ -9,6 +9,7 @@ using BabyNightmare.Match;
 using BabyNightmare.HUD;
 using BabyNightmare.Talent;
 using Random = UnityEngine.Random;
+using BabyNightmare.CustomShop;
 
 namespace BabyNightmare.Character
 {
@@ -49,6 +50,7 @@ namespace BabyNightmare.Character
 
     public class Player : CharacterBase
     {
+        [SerializeField] private PlayerModel _model;
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
 
@@ -72,6 +74,9 @@ namespace BabyNightmare.Character
 
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
+
+            var equippedItemData = CustomShopManager.Instance.GetEquippedItemData();
+            _model.RefreshCustomItem(equippedItemData);
 
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
