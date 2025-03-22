@@ -91,13 +91,13 @@ namespace BabyNightmare.Character
             _animationTrigger.AddAction(1, TryUseEquipment);
         }
 
-        public void ShowMoveAni()
+        public void ReadyNextWave()
         {
             AddDef(-_def);
             _animator.Play(HASH_ANI_MOVE);
         }
 
-        public void ShowIdleAni()
+        public void ReadyOpenBox()
         {
             _animator.SetTrigger(HASH_ANI_IDLE);
         }

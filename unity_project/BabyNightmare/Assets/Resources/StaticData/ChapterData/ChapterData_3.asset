@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Chapter: 3
   Title: 'Dunes of Dusk  '
+  Field: {fileID: 764722810890600659, guid: 348a6aad0948846988c478424e76c2a0, type: 3}
   Icon: {fileID: 21300000, guid: ae17aca5e747c4f0eb5dea6e2b73ebc4, type: 3}
   WaveDataGroup: 3

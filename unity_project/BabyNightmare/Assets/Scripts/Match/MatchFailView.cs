@@ -26,6 +26,8 @@ namespace BabyNightmare.Match
 
         public void Init(int gem, Action doneCallback)
         {
+            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
+
             CLS_Reward.GO_Self.transform.localScale = new Vector3(0, 1, 1);
             CLS_Roulette.RTF_Self.localScale = Vector3.zero;
             BTN_RVReward.transform.localScale = Vector3.zero;

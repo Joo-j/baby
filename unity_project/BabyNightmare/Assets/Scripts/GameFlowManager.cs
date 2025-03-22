@@ -32,13 +32,14 @@ namespace BabyNightmare
         public void EnterLobby()
         {
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
+            HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
             LobbyManager.Instance.Enter();
         }
 
         private void StartMatch()
         {
             HUDManager.Instance.ActiveHUD(EHUDType.Gem, false);
-
+            HUDManager.Instance.ActiveHUD(EHUDType.Coin, true);
             LobbyManager.Instance.Exit();
 
             var chapter = PlayerData.Instance.Chapter;

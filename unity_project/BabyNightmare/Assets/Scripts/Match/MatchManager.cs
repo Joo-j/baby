@@ -57,7 +57,7 @@ namespace BabyNightmare.Match
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             var matchFieldContext = new MatchFieldContext(
-                                        chapter,
+                                        chapterData,
                                         GetCoin,
                                         RefreshProgress,
                                         OnClearWave,
@@ -82,7 +82,6 @@ namespace BabyNightmare.Match
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
             _matchView.RefreshProgress(0);
 
-            HUDManager.Instance.ActiveHUD(EHUDType.Coin, true);
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
             PlayerData.Instance.Coin = 0;
         }
@@ -94,9 +93,6 @@ namespace BabyNightmare.Match
 
         private void OnFailMatch()
         {
-            HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
-            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
-
             var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
             var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
             gem += Mathf.CeilToInt(gem * talentGem);
@@ -107,9 +103,6 @@ namespace BabyNightmare.Match
 
         private void OnCompleteMatch()
         {
-            HUDManager.Instance.ActiveHUD(EHUDType.Coin, false);
-            HUDManager.Instance.ActiveHUD(EHUDType.Gem, true);
-
             var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
             var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
             gem += Mathf.CeilToInt(gem * talentGem);
@@ -232,7 +225,7 @@ namespace BabyNightmare.Match
 
         private void RefreshRerollCost(int coin)
         {
-            _matchView?.RefreshRerollCost(_rerollCost, coin);
+            _matchView?.RefreshRerollPrice(_rerollCost, coin);
         }
 
         private List<EquipmentData> GetRerollData()
