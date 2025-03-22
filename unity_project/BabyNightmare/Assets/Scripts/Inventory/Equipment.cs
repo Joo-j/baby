@@ -35,6 +35,15 @@ namespace BabyNightmare.InventorySystem
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
 
+        private void OnDestroy()
+        {
+            if (null != _levelFX)
+            {
+                FXPool.Instance.Return(_levelFX);
+                _levelFX = null;
+            }
+        }
+
         public void Refresh(EquipmentData data)
         {
             this.Data = data;
