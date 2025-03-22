@@ -275,6 +275,9 @@ namespace BabyNightmare.Lobby
 
         private bool CheckRedDot(ELobbyButtonType type)
         {
+            if (false == IsUnlocked(type))
+                return false;
+
             switch (type)
             {
                 case ELobbyButtonType.CustomShop: return false;
