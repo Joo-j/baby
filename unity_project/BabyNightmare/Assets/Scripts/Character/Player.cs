@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
@@ -10,6 +11,7 @@ using BabyNightmare.HUD;
 using BabyNightmare.Talent;
 using Random = UnityEngine.Random;
 using BabyNightmare.CustomShop;
+using TMPro;
 
 namespace BabyNightmare.Character
 {
@@ -53,6 +55,8 @@ namespace BabyNightmare.Character
         [SerializeField] private PlayerModel _model;
         [SerializeField] private Transform _throwStartTF;
         [SerializeField] private float _hitRadius = 2f;
+        [SerializeField] private Image _shieldImage;
+        [SerializeField] private TextMeshProUGUI _shieldText;
 
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
@@ -74,6 +78,9 @@ namespace BabyNightmare.Character
 
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
+
+            _shieldImage.gameObject.SetActive(false);
+            _shieldText.gameObject.SetActive(false);
 
             var equipItemListData = CustomShopManager.Instance.GetEquipItemListData();
             for (var i = 0; i < equipItemListData.Count; i++)
@@ -103,12 +110,23 @@ namespace BabyNightmare.Character
             _isDead = true;
         }
 
+        private void AddDef(float value)
+        {
+            _def += value;
+
+            _shieldImage.gameObject.SetActive(_def > 0);
+            _shieldText.gameObject.SetActive(_def > 0);
+            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{_def}"));
+        }
+
         public override void ReceiveAttack(float damage, bool isCritical)
         {
             if (null == gameObject)
                 return;
 
-            damage -= _def;
+            var blocked = Mathf.Min(_def, damage);
+            AddDef(-blocked);
+            damage -= blocked;
 
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
 
@@ -211,7 +229,9 @@ namespace BabyNightmare.Character
                             void OnThrow()
                             {
                                 var talentDef = TalentManager.Instance.GetValue(ETalentType.Defense_Percentage);
-                                _def += _def * value;
+                                value += value * talentDef;
+
+                                AddDef(value);
                             }
                             break;
                         }
