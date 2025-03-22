@@ -12,8 +12,8 @@ namespace BabyNightmare.StaticData
 
     public enum EStatType
     {
-        HP,
-        ATK,
+        HP = 0,
+        ATK = 1,
         DEF,
         Coin,
     }
