@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 102
   Type: 1
-  Mesh: {fileID: -8276393035567641992, guid: 1248a8b22dbbc40d19b7f47f7c07aa56, type: 3}
+  Mesh: {fileID: -4410818672949257656, guid: ec4e828ccee534374b2b7a9da65e7b84, type: 3}
   Material: {fileID: 2100000, guid: 8d42cf0b40b3d4c29b2a38d113a4f0f4, type: 2}
   Name: Pink BackPack
   Thumbnail: {fileID: 21300000, guid: a8de30dade9bb4a50aea7770dfdab2ae, type: 3}

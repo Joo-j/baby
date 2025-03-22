@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_Backpag
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1248a8b22dbbc40d19b7f47f7c07aa56, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
