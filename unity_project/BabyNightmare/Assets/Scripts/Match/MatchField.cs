@@ -13,7 +13,7 @@ namespace BabyNightmare.Match
 {
     public class MatchFieldContext
     {
-        public int Chapter { get; }
+        public ChapterData ChapterData { get; }
         public Action<int, Vector3> GetCoin { get; }
         public Action<float> RefreshProgress { get; }
         public Action OnClearWave { get; }
@@ -22,7 +22,7 @@ namespace BabyNightmare.Match
 
         public MatchFieldContext
         (
-            int chapter,
+            ChapterData chapterData,
             Action<int, Vector3> getCoin,
             Action<float> refreshProgress,
             Action onClearWave,
@@ -30,7 +30,7 @@ namespace BabyNightmare.Match
             Func<int, ProjectileData> getProjectileData
         )
         {
-            this.Chapter = chapter;
+            this.ChapterData = chapterData;
             this.GetCoin = getCoin;
             this.RefreshProgress = refreshProgress;
             this.OnClearWave = onClearWave;
@@ -58,7 +58,6 @@ namespace BabyNightmare.Match
         [SerializeField] private float _attackRadius = 10f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
 
-        private const string PATH_FIELD = "Match/Field/Field_";
         private const string PATH_PLAYER = "Match/Character/Player";
         private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
@@ -85,7 +84,7 @@ namespace BabyNightmare.Match
         {
             _context = context;
 
-            _fieldTF = ObjectUtil.LoadAndInstantiate<Transform>($"{PATH_FIELD}{_context.Chapter}", transform);
+            _fieldTF = ObjectUtil.Instantiate<Transform>(context.ChapterData.Field, transform);
 
             _nearSpawnTFArr = _nearSpawnTF.GetComponentsInChildren<Transform>();
             _midSpawnTFArr = _midSpawnTF.GetComponentsInChildren<Transform>();
@@ -230,7 +229,7 @@ namespace BabyNightmare.Match
 
                 yield return CoroutineUtil.WaitForSeconds(1.5f);
 
-                _player.ShowMoveAni();
+                _player.ReadyNextWave();
 
                 var startPos = _fieldTF.localPosition;
                 var targetPos = startPos + Vector3.left * _groundMoveAmount;
@@ -245,7 +244,7 @@ namespace BabyNightmare.Match
                 }
 
                 _fieldTF.localPosition = targetPos;
-                _player.ShowIdleAni();
+                _player.ReadyOpenBox();
 
                 box.Open(doneCallback);
             }

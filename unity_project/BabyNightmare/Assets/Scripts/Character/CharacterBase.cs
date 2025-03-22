@@ -37,10 +37,10 @@ namespace BabyNightmare.Character
         protected float _hp = 0;
         protected float _maxHealth = 0;
         protected Coroutine _coAct = null;
+        private Coroutine _coFlash = null;
         protected Color _originEmissionColor;
         private float _reserveDamage = 0f;
         protected bool _isDead = false;
-        private bool _isFlash = false;
 
         public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
@@ -76,13 +76,18 @@ namespace BabyNightmare.Character
 
             _hpBar.Refresh(_hp, _maxHealth, false);
 
-            for (var i = 0; i < _allRenderers.Length; i++)
-                StartCoroutine(Co_Flash(_allRenderers[i].material));
+            if (null != _coFlash)
+                return;
+
+            _coFlash = StartCoroutine(Co_Flash());
         }
 
-        private IEnumerator Co_Flash(Material mat)
+        private IEnumerator Co_Flash()
         {
-            var originEmissionColor = mat.GetColor(KEY_EMISSION_COLOR);
+            var originEmissionColorList = new List<Color>();
+
+            for (var i = 0; i < _allRenderers.Length; i++)
+                originEmissionColorList.Add(_allRenderers[i].material.GetColor(KEY_EMISSION_COLOR));
 
             var targetColor = Color.white;
             var duration = 0.1f;
@@ -94,7 +99,8 @@ namespace BabyNightmare.Character
                 elapsed += Time.deltaTime;
 
                 var factor = elapsed / duration;
-                mat.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColor, targetColor, factor));
+                for (var i = 0; i < _allRenderers.Length; i++)
+                    _allRenderers[i].material.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColorList[i], targetColor, factor));
             }
 
             while (elapsed > 0)
@@ -103,10 +109,14 @@ namespace BabyNightmare.Character
                 elapsed -= Time.deltaTime;
 
                 var factor = elapsed / duration;
-                mat.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColor, targetColor, factor));
+                for (var i = 0; i < _allRenderers.Length; i++)
+                    _allRenderers[i].material.SetColor(KEY_EMISSION_COLOR, Color.Lerp(originEmissionColorList[i], targetColor, factor));
             }
 
-            mat.SetColor(KEY_EMISSION_COLOR, originEmissionColor);
+            for (var i = 0; i < _allRenderers.Length; i++)
+                _allRenderers[i].material.SetColor(KEY_EMISSION_COLOR, originEmissionColorList[i]);
+
+            _coFlash = null;
         }
 
 #if UNITY_EDITOR

@@ -9,6 +9,7 @@ namespace BabyNightmare.StaticData
     {
         public int Chapter;
         public string Title;
+        public GameObject Field;
         public Sprite Icon;
         public int WaveDataGroup;
     }

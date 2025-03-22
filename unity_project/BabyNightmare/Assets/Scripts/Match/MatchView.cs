@@ -62,11 +62,9 @@ namespace BabyNightmare.Match
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private float _rectChangeDruation = 0.4f;
         [SerializeField] private GameObject _startGO;
-        [SerializeField] private GameObject _rerollGO;
-        [SerializeField] private GameObject _rerollGO_Normal;
-        [SerializeField] private GameObject _rerollGO_Free;
-        [SerializeField] private GameObject _rerollGO_AD;
-        [SerializeField] private TextMeshProUGUI _rerollCostTMP;
+        [SerializeField] private CanvasGroup _rerollCVG;
+        [SerializeField] private GameObject _rerollIcon;
+        [SerializeField] private TextMeshProUGUI _rerollPriceTMP;
         [SerializeField] private GameObject _fightGO;
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
@@ -120,9 +118,7 @@ namespace BabyNightmare.Match
                 }
             }
 
-            _bag.TryAdd(_context.InitEquipment);
-
-            _rerollGO.SetActive(false);
+            _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
 
             _boxGO.SetActive(false);
@@ -143,6 +139,7 @@ namespace BabyNightmare.Match
 
         public void RefreshProgress(float factor)
         {
+            Debug.Log($"@@ {factor}");
             var startSize = _waveProgressIMG.rectTransform.sizeDelta;
             var targetSize = Vector2.Lerp(startSize, _progressSize, factor);
 
@@ -177,34 +174,34 @@ namespace BabyNightmare.Match
             }
         }
 
-        public void RefreshRerollCost(int cost, int coin)
+        public void RefreshRerollPrice(int price, int coin)
         {
-            _rerollGO_Free.SetActive(false);
-            _rerollGO_AD.SetActive(false);
-            _rerollGO_Normal.SetActive(false);
-
-            _rerollCostTMP.text = $"{cost}";
-
-            if (cost <= 0)
+            if (price <= 0)
             {
-                _rerollGO_Free.SetActive(true);
+                _rerollIcon.gameObject.SetActive(false);
+                _rerollPriceTMP.text = $"Free";
+                _rerollPriceTMP.rectTransform.anchoredPosition = new Vector2(0, -20);
                 return;
             }
 
-            if (cost > coin)
+            _rerollPriceTMP.text = $"{price}";
+            _rerollIcon.gameObject.SetActive(true);
+            _rerollPriceTMP.rectTransform.anchoredPosition = new Vector2(25.6f, -20);
+
+            if (price > coin)
             {
-                _rerollGO_AD.SetActive(true);
+                _rerollCVG.alpha = 0.7f;
+                _rerollCVG.interactable = false;
                 return;
             }
 
-            _rerollGO_Normal.SetActive(true);
+            _rerollCVG.alpha = 1f;
+            _rerollCVG.interactable = true;
         }
 
         public void OnClickStart()
         {
             _startGO.SetActive(false);
-            _rerollGO.SetActive(true);
-            _fightGO.SetActive(true);
             _canvasGroup.blocksRaycasts = true;
         }
 
@@ -228,7 +225,7 @@ namespace BabyNightmare.Match
         public void OnClickBox()
         {
             _boxGO.SetActive(false);
-            _rerollGO.SetActive(true);
+            _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
 
             _onGetBox?.Invoke();
@@ -241,7 +238,7 @@ namespace BabyNightmare.Match
 
         public void OnClickFight()
         {
-            _rerollGO.SetActive(false);
+            _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
 
             StartCoroutine(Co_ReadyFight());
@@ -390,16 +387,5 @@ namespace BabyNightmare.Match
                 pair.Value.RefreshChangeValue(_statChangeDict[pair.Key]);
             }
         }
-
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                _bag.ShowAddableCell();
-            }
-        }
-
-#endif
     }
 }
