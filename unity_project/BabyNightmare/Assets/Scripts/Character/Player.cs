@@ -131,7 +131,6 @@ namespace BabyNightmare.Character
             var info = _useInfoQueue.Dequeue();
 
             var equipmentData = info.EquipmentData;
-
             var statDataList = equipmentData.StatDataList;
             for (var i = 0; i < statDataList.Count; i++)
             {
@@ -164,13 +163,26 @@ namespace BabyNightmare.Character
 
                             enemy.ReserveDamage(value);
 
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, () => enemy?.ReceiveAttack(value, isCritical)));
+                            if (i == 0)
+                                StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
+                            else
+                                OnThrow();
+
+                            void OnThrow()
+                            {
+                                enemy?.ReceiveAttack(value, isCritical);
+                            }
                             break;
                         }
 
                     case EStatType.HP:
                         {
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () =>
+                            if (i == 0)
+                                StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
+                            else
+                                OnThrow();
+
+                            void OnThrow()
                             {
                                 _hp = Mathf.Min(_maxHealth, _hp + value);
                                 _hpBar.Refresh(_hp, _maxHealth, false);
@@ -178,22 +190,37 @@ namespace BabyNightmare.Character
                                 var pos = transform.position;
                                 pos.y = 0.01f;
                                 FXPool.Instance.ShowTemporary(EFXType.Heal, pos);
-                            }));
+                            }
                             break;
                         }
 
                     case EStatType.DEF:
                         {
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () =>
+                            if (i == 0)
+                                StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
+                            else
+                                OnThrow();
+
+                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
+
+                            void OnThrow()
                             {
                                 var talentDef = TalentManager.Instance.GetValue(ETalentType.Defense_Percentage);
                                 _def += _def * value;
-                            }));
+                            }
                             break;
                         }
                     case EStatType.Coin:
                         {
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, () => _context.GetCoin?.Invoke((int)value, transform.position)));
+                            if (i == 0)
+                                StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
+                            else
+                                OnThrow();
+
+                            void OnThrow()
+                            {
+                                _context.GetCoin?.Invoke((int)value, transform.position);
+                            }
                             break;
                         }
                     default: throw new Exception($"{statData.Type}의 행동이 정해지지 않았습니다.");
