@@ -28,6 +28,11 @@ namespace BabyNightmare.CustomShop
             }
         }
 
+        private void OnEnable()
+        {
+            _playerModel.PlayMoveAni();
+        }
+
         public void RefreshCustomItem(CustomItemData itemData)
         {
             _playerModel.RefreshCustomItem(itemData);

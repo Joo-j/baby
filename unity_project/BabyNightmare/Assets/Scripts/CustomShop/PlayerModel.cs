@@ -33,5 +33,10 @@ namespace BabyNightmare.Character
                     break;
             }
         }
+
+        public void PlayMoveAni()
+        {
+            _animator.Play("Move");
+        }
     }
 }
