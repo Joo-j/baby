@@ -116,6 +116,10 @@ namespace BabyNightmare.Match
 
         private void CloseMatch()
         {
+            ProjectilePool.Instance.ReturnAll();
+            FXPool.Instance.ReturnAll();
+            PopupTextPool.Instance.ReturnAll();
+
             PlayerData.Instance.OnChangedCoinEvent.RemoveListener(RefreshRerollCost);
 
             GameObject.Destroy(_matchField.gameObject);
