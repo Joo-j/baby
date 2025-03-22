@@ -12,12 +12,13 @@ namespace BabyNightmare.Match
         Equipment_Merge,
         Equipment_Level_2,
         Equipment_Level_3,
-        Heal
+        Heal,
+        Pop,
     }
 
     public class FXPool : SingletonBase<FXPool>
     {
-        private const string PATH_FX = "Match/FX";
+        private const string PATH_FX = "FX";
 
         private Dictionary<EFXType, Pool<FX>> _poolDict = null;
         private Transform _poolTF = null;
@@ -60,6 +61,15 @@ namespace BabyNightmare.Match
         {
             var fx = Get(type);
             fx.transform.position = pos;
+            GameLifeCycle.Start_Coroutine(SimpleLerp.Co_Invoke(fx.AppearDuration, () => Return(fx)));
+        }
+
+
+        public void ShowTemporary(EFXType type, Vector3 pos, Vector3 scale)
+        {
+            var fx = Get(type);
+            fx.transform.position = pos;
+            fx.transform.localScale = scale;
             GameLifeCycle.Start_Coroutine(SimpleLerp.Co_Invoke(fx.AppearDuration, () => Return(fx)));
         }
 

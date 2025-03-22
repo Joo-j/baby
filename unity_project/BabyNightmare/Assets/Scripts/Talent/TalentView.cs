@@ -43,7 +43,7 @@ namespace BabyNightmare.Talent
             _getPrice = getPrice;
         }
 
-        public void RefreshLevel(Dictionary<ETalentType, int> levelDict)
+        public void RefreshLevel(Dictionary<ETalentType, int> levelDict, bool showFx)
         {
             foreach (var pair in _itemViewDict)
             {
@@ -52,7 +52,7 @@ namespace BabyNightmare.Talent
                     continue;
 
                 var itemView = pair.Value;
-                itemView.RefreshLevel(level);
+                itemView.RefreshLevel(level, showFx);
             }
         }
 

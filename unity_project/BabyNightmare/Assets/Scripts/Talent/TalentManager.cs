@@ -64,7 +64,7 @@ namespace BabyNightmare.Talent
                 dataList.Sort();
 
                 _talentView.Init(dataList, Upgrade, GetPrice);
-                _talentView.RefreshLevel(_levelDict);
+                _talentView.RefreshLevel(_levelDict, false);
             }
 
             _talentView.gameObject.SetActive(true);
@@ -110,7 +110,7 @@ namespace BabyNightmare.Talent
 
             _talentView.ShowGacha(() =>
             {
-                _talentView.RefreshLevel(_levelDict);
+                _talentView.RefreshLevel(_levelDict, true);
                 _talentView.RefreshButton(PlayerData.Instance.Gem);
             });
 
