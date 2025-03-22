@@ -241,9 +241,10 @@ namespace BabyNightmare.CustomShop
         // 먹이 아이템 정보 뷰 갱신
         private void RefreshInfo(int itemID)
         {
+            var itemData = _context.ItemDataDict[itemID];
             var shopData = _context.ShopDataDict[itemID];
 
-            TMP_ItemName.text = $"{shopData.Name}";
+            TMP_ItemName.text = $"{itemData.Name}";
         }
 
         // 콘텐츠 목록들 중 itemID 에 해당하는 항목으로 스크롤 갱신

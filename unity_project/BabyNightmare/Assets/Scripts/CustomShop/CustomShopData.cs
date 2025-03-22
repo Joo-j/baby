@@ -10,7 +10,6 @@ namespace BabyNightmare.StaticData
     public class CustomShopData : ScriptableObject, IComparable<CustomShopData>
     {
         public int ID;
-        public string Name;
         public int Item_ID;
         public int Order;
         public ECurrencyType CurrencyType;

@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 847d75175e60a4fd3aef2646595070b0, type: 3}
-  m_Name: CustomShopData 2
+  m_Name: CustomShopData_5
   m_EditorClassIdentifier: 
-  ID: 2
-  Name: Pink BackPack
-  Item_ID: 102
+  ID: 5
+  Item_ID: 105
   Order: 1
   CurrencyType: 1
   Price_Value: 10

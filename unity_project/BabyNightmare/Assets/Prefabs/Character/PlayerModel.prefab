@@ -1300,9 +1300,21 @@ MonoBehaviour:
   _animator: {fileID: 7357247409192640519}
   _bagMeshFilter: {fileID: 4763783202624064783}
   _bagMeshRenderer: {fileID: 7347812855656331717}
+  _clothesMeshRenderer: {fileID: 7392425456299499272}
+  _shoesMeshRenderer: {fileID: 6674362318413779837}
 --- !u!4 &5538508966857610455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8385327893941879212, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
+  m_PrefabInstance: {fileID: 4071843149738775931}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &6674362318413779837 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -2008026059999033850, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
+  m_PrefabInstance: {fileID: 4071843149738775931}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &7392425456299499272 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6779390837622098547, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
   m_PrefabInstance: {fileID: 4071843149738775931}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5908254874753231238
