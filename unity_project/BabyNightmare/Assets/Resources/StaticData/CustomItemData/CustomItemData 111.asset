@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 654c4decb9a2c403b9e747324b10f51a, type: 3}
-  m_Name: CustomItemData 102
+  m_Name: CustomItemData 111
   m_EditorClassIdentifier: 
-  ID: 102
+  ID: 111
   Type: 1
-  Mesh: {fileID: -6992460982402217847, guid: c4132e97d4d224569a48962cea28e2d2, type: 3}
+  Mesh: {fileID: -4543843983206668473, guid: c4132e97d4d224569a48962cea28e2d2, type: 3}
   Material: {fileID: 2100000, guid: 8d42cf0b40b3d4c29b2a38d113a4f0f4, type: 2}
-  Name: Blue BackPack
-  Thumbnail: {fileID: 21300000, guid: a8833da3a11eb45bda3165be1239a560, type: 3}
+  Name: Purple BackPack
+  Thumbnail: {fileID: 21300000, guid: 3bc06c91402b94d029c19cafdf6e4df3, type: 3}

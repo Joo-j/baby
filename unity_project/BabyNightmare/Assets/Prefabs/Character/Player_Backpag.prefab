@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 8d42cf0b40b3d4c29b2a38d113a4f0f4, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 1248a8b22dbbc40d19b7f47f7c07aa56, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4752338385144046710, guid: c4132e97d4d224569a48962cea28e2d2, type: 3}
     - target: {fileID: 919132149155446097, guid: 1248a8b22dbbc40d19b7f47f7c07aa56, type: 3}
       propertyPath: m_Name
       value: Player_Backpag
