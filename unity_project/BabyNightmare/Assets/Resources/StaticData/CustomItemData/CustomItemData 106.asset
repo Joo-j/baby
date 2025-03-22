@@ -17,4 +17,4 @@ MonoBehaviour:
   Mesh: {fileID: 4886774361886616554, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
   Material: {fileID: 2100000, guid: 8d42cf0b40b3d4c29b2a38d113a4f0f4, type: 2}
   Name: Yellow Clothes
-  Thumbnail: {fileID: 21300000, guid: a8de30dade9bb4a50aea7770dfdab2ae, type: 3}
+  Thumbnail: {fileID: 21300000, guid: de161358d22f644d78fd24356b405a26, type: 3}

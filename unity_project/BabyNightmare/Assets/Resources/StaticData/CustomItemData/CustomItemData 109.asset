@@ -17,4 +17,4 @@ MonoBehaviour:
   Mesh: {fileID: -2876817739006965462, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
   Material: {fileID: 2100000, guid: 8d42cf0b40b3d4c29b2a38d113a4f0f4, type: 2}
   Name: Green Socks
-  Thumbnail: {fileID: 21300000, guid: a8de30dade9bb4a50aea7770dfdab2ae, type: 3}
+  Thumbnail: {fileID: 21300000, guid: b4d522ec04371477db25be5b5f1574da, type: 3}
