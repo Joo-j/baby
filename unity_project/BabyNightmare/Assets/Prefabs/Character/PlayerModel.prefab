@@ -143,6 +143,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5ffe7fd1155c6489785dbd7294683606, type: 3}
+--- !u!33 &4763783202624064783 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 7970634684524330233, guid: 5ffe7fd1155c6489785dbd7294683606, type: 3}
+  m_PrefabInstance: {fileID: 3206907728859214326}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7347812855656331717 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 5294426982135236659, guid: 5ffe7fd1155c6489785dbd7294683606, type: 3}
+  m_PrefabInstance: {fileID: 3206907728859214326}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8481263260982461098 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6427403674983986012, guid: 5ffe7fd1155c6489785dbd7294683606, type: 3}
@@ -570,7 +580,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: PlayerModel
       objectReference: {fileID: 0}
     - target: {fileID: 1059989450195421988, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -860,6 +870,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7357247409192640519}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9174526824863609704}
   m_SourcePrefab: {fileID: 100100000, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
 --- !u!4 &1152908457502019607 stripped
 Transform:
@@ -892,6 +905,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9174526824863609704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3765992340146399274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5fe199bf22546b1bd1f45788d94683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 7357247409192640519}
+  _bagMeshFilter: {fileID: 4763783202624064783}
+  _bagMeshRenderer: {fileID: 7347812855656331717}
 --- !u!4 &5538508966857610455 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8385327893941879212, guid: b4f01369074aa4ac690ad03f6691268b, type: 3}
