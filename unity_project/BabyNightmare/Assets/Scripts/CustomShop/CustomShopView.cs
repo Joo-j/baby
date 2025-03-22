@@ -13,17 +13,20 @@ namespace BabyNightmare.CustomShop
         public Dictionary<int, CustomItemData> ItemDataDict { get; }
         public Dictionary<int, CustomShopData> ShopDataDict { get; }
         public Dictionary<int, int> RvDataDict { get; }
+        public Action<int> Select { get; }
         public Action<int> TryPurchase { get; }
 
         public CustomShopViewContext(
             Dictionary<int, CustomItemData> itemDataDict,
             Dictionary<int, CustomShopData> shopDataDict,
             Dictionary<int, int> rvDataDict,
+            Action<int> select,
             Action<int> tryPurchase)
         {
             this.ItemDataDict = itemDataDict;
             this.ShopDataDict = shopDataDict;
             this.RvDataDict = rvDataDict;
+            this.Select = select;
             this.TryPurchase = tryPurchase;
         }
 
@@ -73,14 +76,14 @@ namespace BabyNightmare.CustomShop
         private const string PATH_CUSTOM_ITEM_VIEW = "CustomShop/CustomItemView";
         private const string PATH_CUSTOM_ITEM_PREVIEW = "CustomShop/CustomItemPreview";
         private CustomShopViewContext _context = null;
-        private Dictionary<int, CustomItemView> _itemViewDict = null;
+        private Dictionary<ECustomItemType, Dictionary<int, CustomItemView>> _itemViewDict = null;
         private CustomItemPreview _itemPreview = null;
 
         public void Init(CustomShopViewContext context)
         {
             _context = context;
 
-            _itemViewDict = new Dictionary<int, CustomItemView>();
+            _itemViewDict = new Dictionary<ECustomItemType, Dictionary<int, CustomItemView>>();
 
             foreach (var pair in _context.ShopDataDict)
             {
@@ -88,21 +91,10 @@ namespace BabyNightmare.CustomShop
                 var itemID = shopData.Item_ID;
 
                 var itemData = _context.ItemDataDict[itemID];
-                if (null == itemData)
-                {
-                    Debug.LogError($"{itemID}에 대한 CustomItem이 없습니다.");
-                    return;
-                }
-
                 var type = itemData.Type;
                 var content = _contentsArr[(int)type - 1];
 
                 var itemView = ObjectUtil.LoadAndInstantiate<CustomItemView>(PATH_CUSTOM_ITEM_VIEW, content);
-                if (null == itemView)
-                {
-                    Debug.LogError($"{PATH_CUSTOM_ITEM_VIEW}에 프리팹이 업습니다.");
-                    return;
-                }
 
                 itemView.Init(
                 type,
@@ -111,7 +103,7 @@ namespace BabyNightmare.CustomShop
                 _context.GetRVCount(shopData.ID),
                 () =>
                 {
-                    RefreshPreview(shopData.Item_ID);
+                    _context.Select?.Invoke(itemID);
                     PTC_Select.Simulate(0f, true, true, false);
                     PTC_Select.Play();
                 },
@@ -120,7 +112,11 @@ namespace BabyNightmare.CustomShop
                     _context.TryPurchase?.Invoke(itemID);
                 });
 
-                _itemViewDict.Add(itemID, itemView);
+                if (false == _itemViewDict.ContainsKey(type))
+                    _itemViewDict.Add(type, new Dictionary<int, CustomItemView>());
+
+                var typeDict = _itemViewDict[type];
+                typeDict.Add(itemID, itemView);
             }
 
             OnClickTab(0);
@@ -129,6 +125,7 @@ namespace BabyNightmare.CustomShop
         public void Release()
         {
             _context = null;
+            _itemViewDict = null;
             _itemViewDict = null;
             _itemPreview?.Release();
             _itemPreview = null;
@@ -147,20 +144,39 @@ namespace BabyNightmare.CustomShop
             gameObject.SetActive(false);
         }
 
-        public void Refresh(HashSet<int> purchasedIDSet, List<int> equipItemIDs)
+        public void RefreshPurchase(HashSet<int> purchasedIDSet)
         {
-            for (var i = 0; i < equipItemIDs.Count; i++)
+            foreach (var id in purchasedIDSet)
             {
-                var id = equipItemIDs[i];
-                var shopData = _context.GetShopData(id);
-                RefreshPreview(id);
-                RefreshItemView(shopData, purchasedIDSet, equipItemIDs);
+                var item = _context.GetItemData(id);
+                var type = item.Type;
 
-                Debug.Log($"refresh {id}");
+                var typeDict = _itemViewDict[type];
+
+                foreach (var pair in typeDict)
+                {
+                    pair.Value.RefreshPurchase(pair.Key == id, _context.GetRVCount(pair.Key));
+                }
             }
         }
 
-        private void RefreshPreview(int itemID)
+        public void RefreshEquip(HashSet<int> equipItemIDSet)
+        {
+            foreach (var id in equipItemIDSet)
+            {
+                var item = _context.GetItemData(id);
+                var type = item.Type;
+
+                var typeDict = _itemViewDict[type];
+
+                foreach (var pair in typeDict)
+                {
+                    pair.Value.RefreshSelect(pair.Key == id);
+                }
+            }
+        }
+
+        public void RefreshSelect(int selectID)
         {
             if (null == _itemPreview)
             {
@@ -174,37 +190,71 @@ namespace BabyNightmare.CustomShop
                 RIMG_Preview.texture = _itemPreview.RT;
             }
 
-            var itemData = _context.GetItemData(itemID);
+            var itemData = _context.GetItemData(selectID);
             _itemPreview.RefreshCustomItem(itemData);
-        }
 
-        private void RefreshItemView(CustomShopData shopData, HashSet<int> purchasedIDSet, List<int> equipitemIDList)
-        {
-            var itemData = _context.GetItemData(shopData.Item_ID);
-            var type = itemData.Type;
-
-            foreach (var pair in _itemViewDict)
+            foreach (var pair_1 in _itemViewDict)
             {
-                var itemView = pair.Value;
-                if (type != itemView.Type)
+                var type = pair_1.Key;
+                if (type != itemData.Type)
                     continue;
-
-                var itemID = pair.Key;
-                itemView.RefreshSelect(itemID == shopData.Item_ID);
-                itemView.RefreshEquip(equipitemIDList.Contains(itemID));
-                itemView.RefreshCost(purchasedIDSet.Contains(itemID), _context.GetRVCount(itemID));
+                    
+                var typeDict = pair_1.Value;
+                foreach (var pair_2 in typeDict)
+                {
+                    pair_2.Value.RefreshSelect(pair_2.Key == selectID);
+                }
             }
 
-            for (var i = 0; i < equipitemIDList.Count; i++)
+            Scroll(selectID);
+        }
+
+        //select
+        //equip -> select
+        //purchase -> equip -> select
+
+        public void OnEquip()
+        {
+            PTC_Equip.Simulate(0f, true, true, false);
+            PTC_Equip.Play();
+        }
+
+        public void SetActiveRedDot(int itemID, bool active)
+        {
+            var itemView = GetItemView(itemID);
+            itemView.SetActive_RedDot(active);
+        }
+
+        private CustomItemView GetItemView(int itemID)
+        {
+            foreach (var typeDict in _itemViewDict.Values)
             {
-                Scroll(equipitemIDList[i]);
+                if (true == typeDict.TryGetValue(itemID, out var itemView))
+                    return itemView;
+            }
+
+            return null;
+        }
+
+        public void OnClickTab(int index)
+        {
+            for (var i = 0; i < _tabArr.Length; i++)
+                _tabArr[i].sprite = index == i ? _focusTab : _noFocusTab;
+
+            for (var i = 0; i < _contentsArr.Length; i++)
+            {
+                _contentsArr[i].gameObject.SetActive(index == i);
+
+                if (index == i)
+                {
+                    SR_Content.content = _contentsArr[i];
+                }
             }
         }
 
         private void Scroll(int itemID, Action doneCallback = null)
         {
-            if (false == _itemViewDict.TryGetValue(itemID, out var customItemView))
-                return;
+            var itemView = GetItemView(itemID);
 
             StartCoroutine(Co_Scroll());
 
@@ -212,7 +262,7 @@ namespace BabyNightmare.CustomShop
             {
                 yield return CoroutineUtil.WaitForSeconds(0.2f);
 
-                var viewRTF = customItemView.RTF;
+                var viewRTF = itemView.RTF;
                 var contentHeight = SR_Content.content.rect.height;
                 var scrollPos = contentHeight + viewRTF.anchoredPosition.y;
                 var viewHeight = SR_Content.viewport.rect.height;
@@ -238,32 +288,5 @@ namespace BabyNightmare.CustomShop
             }
         }
 
-        public void OnEquip()
-        {
-            PTC_Equip.Simulate(0f, true, true, false);
-            PTC_Equip.Play();
-        }
-
-        public void SetActiveRedDot(int itemID, bool active)
-        {
-            if (false == _itemViewDict.TryGetValue(itemID, out var itemView))
-                return;
-
-            itemView.SetActive_RedDot(active);
-        }
-
-        public void OnClickTab(int index)
-        {
-            for (var i = 0; i < _tabArr.Length; i++)
-                _tabArr[i].sprite = index == i ? _focusTab : _noFocusTab;
-
-            for (var i = 0; i < _contentsArr.Length; i++)
-            {
-                _contentsArr[i].gameObject.SetActive(index == i);
-
-                if (index == i)
-                    SR_Content.content = _contentsArr[i];
-            }
-        }
     }
 }

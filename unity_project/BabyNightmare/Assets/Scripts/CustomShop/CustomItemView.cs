@@ -81,7 +81,7 @@ namespace BabyNightmare.CustomShop
             GO_Equip.SetActive(isEquip);
         }
 
-        public void RefreshCost(bool hasSkin, int rvCount)
+        public void RefreshPurchase(bool hasSkin, int rvCount)
         {
             if (hasSkin == true)
             {

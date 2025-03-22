@@ -15,7 +15,6 @@ namespace BabyNightmare.Character
 
         public void RefreshCustomItem(CustomItemData itemData)
         {
-            Debug.Log($"RefreshCustomItem {itemData.Type}");
             switch (itemData.Type)
             {
                 case ECustomItemType.Bag:

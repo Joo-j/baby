@@ -31,7 +31,8 @@ namespace BabyNightmare.CustomShop
         private CustomShopView _customShopView = null;
         private HashSet<int> _hasItems = null;
         private HashSet<int> _newItems = null;
-        private List<int> _equipItemIDs = null;
+        private HashSet<int> _equipItems = null;
+        private HashSet<int> _selectItems = null;
         private bool _initiated = false;
 
         public int ShowCount { get; private set; }
@@ -97,13 +98,20 @@ namespace BabyNightmare.CustomShop
                                 _itemDataDict,
                                 _shopDataDict,
                                 _rvDataDict,
+                                Select,
                                 TryPurchase);
 
                 _customShopView.Init(context);
             }
 
             _customShopView.Show();
-            _customShopView.Refresh(_hasItems, _equipItemIDs);
+            _customShopView.RefreshEquip(_equipItems);
+            _customShopView.RefreshPurchase(_hasItems);
+
+            foreach (var id in _equipItems)
+            {
+                Select(id);
+            }
 
             ShowRedDot();
 
@@ -142,7 +150,7 @@ namespace BabyNightmare.CustomShop
                 case ECurrencyType.Gem:
 
                     PlayerData.Instance.Gem -= price;
-                    ShowCustomItemRewardView(itemID, true, () => EquipItem(itemID), "CustomShop", currencyType.ToString(), price.ToString());
+                    ShowCustomItemRewardView(itemID, true, () => Equip(itemID), "CustomShop", currencyType.ToString(), price.ToString());
                     Save();
                     break;
             }
@@ -160,7 +168,9 @@ namespace BabyNightmare.CustomShop
             AddNewItem(itemID);
 
             if (true == equip)
-                EquipItem(itemID);
+                Equip(itemID);
+
+            _customShopView?.RefreshPurchase(_hasItems);
 
             Save();
             GlobalEventManager.AddValue(EGlobalEventType.Purchase_CustomItem, 1);
@@ -168,28 +178,32 @@ namespace BabyNightmare.CustomShop
             _printer.Log("Purchase", $"Item ID {itemID} 구매 완료");
         }
 
-        public bool IsPurchased(int itemID) => _hasItems.Contains(itemID);
-
-        private void EquipItem(int itemID)
+        private void Equip(int itemID)
         {
             var itemData = GetItemData(itemID);
 
-            for (var i = 0; i < _equipItemIDs.Count; i++)
+            foreach (var id in _equipItems)
             {
-                var id = _equipItemIDs[i];
                 var equipItemData = GetItemData(id);
                 if (itemData.Type == equipItemData.Type)
                 {
-                    _equipItemIDs.Remove(id);
+                    _equipItems.Remove(id);
                     break;
                 }
             }
 
-            _equipItemIDs.Add(itemData.ID);
+            _equipItems.Add(itemData.ID);
 
-            _customShopView?.Refresh(_hasItems, _equipItemIDs);
+            _customShopView?.RefreshEquip(_equipItems);
+            _customShopView?.RefreshSelect(itemID);
             _customShopView?.OnEquip();
             RemoveNewItem(itemID);
+        }
+
+        private void Select(int itemID)
+        {
+            _selectItems.Add(itemID);
+            _customShopView?.RefreshSelect(itemID);
         }
 
         public CustomItemData GetItemData(int itemID)
@@ -204,9 +218,8 @@ namespace BabyNightmare.CustomShop
         {
             var list = new List<CustomItemData>();
 
-            for (var i = 0; i < _equipItemIDs.Count; i++)
+            foreach (var id in _equipItems)
             {
-                var id = _equipItemIDs[i];
                 var itemData = GetItemData(id);
                 if (null == itemData)
                 {
@@ -269,7 +282,7 @@ namespace BabyNightmare.CustomShop
             doneCallback,
             () =>
             {
-                EquipItem(itemID);
+                Equip(itemID);
                 doneCallback?.Invoke();
             });
 
@@ -281,7 +294,8 @@ namespace BabyNightmare.CustomShop
             _hasItems = new HashSet<int>();
             _newItems = new HashSet<int>();
             _rvDataDict = new Dictionary<int, int>();
-            _equipItemIDs = new List<int>();
+            _equipItems = new HashSet<int>();
+            _selectItems = new HashSet<int>();
 
             var rvIDList = new List<int>();
 
@@ -349,7 +363,7 @@ namespace BabyNightmare.CustomShop
                     if (false == int.TryParse(node, out var id))
                         continue;
 
-                    _equipItemIDs.Add(id);
+                    _equipItems.Add(id);
                 }
             }
 
@@ -373,7 +387,7 @@ namespace BabyNightmare.CustomShop
 
             var jsonArray = new JSONArray();
 
-            foreach (var id in _equipItemIDs)
+            foreach (var id in _equipItems)
             {
                 jsonArray.Add(new JSONData(id));
             }
