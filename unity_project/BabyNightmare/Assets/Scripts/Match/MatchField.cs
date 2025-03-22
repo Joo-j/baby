@@ -286,10 +286,12 @@ namespace BabyNightmare.Match
             if (startPos == targetPos)
                 return;
 
-            if (null != _coMoveCamera)
-                StopCoroutine(_coMoveCamera);
+            tf.position = targetPos;
 
-            _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, _cameraMoveDuration, () => _coMoveCamera = null));
+            // if (null != _coMoveCamera)
+            //     StopCoroutine(_coMoveCamera);
+
+            // _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, _cameraMoveDuration, () => _coMoveCamera = null));
         }
     }
 }

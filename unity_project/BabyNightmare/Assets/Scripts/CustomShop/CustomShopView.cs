@@ -63,7 +63,7 @@ namespace BabyNightmare.CustomShop
         [SerializeField] private RawImage RIMG_Preview;
         [SerializeField] private ScrollRect SR_Content;
         [SerializeField] private Image[] _tabArr;
-        [SerializeField] private Transform[] _contentsArr;
+        [SerializeField] private RectTransform[] _contentsArr;
         [SerializeField] private ParticleSystem PTC_Select;
         [SerializeField] private ParticleSystem PTC_Equip;
         [SerializeField] private AnimationCurve _scrollCurve;
@@ -194,6 +194,11 @@ namespace BabyNightmare.CustomShop
                 itemView.RefreshEquip(equipitemIDList.Contains(itemID));
                 itemView.RefreshCost(purchasedIDSet.Contains(itemID), _context.GetRVCount(itemID));
             }
+
+            for (var i = 0; i < equipitemIDList.Count; i++)
+            {
+                Scroll(equipitemIDList[i]);
+            }
         }
 
         private void Scroll(int itemID, Action doneCallback = null)
@@ -253,7 +258,12 @@ namespace BabyNightmare.CustomShop
                 _tabArr[i].sprite = index == i ? _focusTab : _noFocusTab;
 
             for (var i = 0; i < _contentsArr.Length; i++)
+            {
                 _contentsArr[i].gameObject.SetActive(index == i);
+
+                if (index == i)
+                    SR_Content.content = _contentsArr[i];
+            }
         }
     }
 }

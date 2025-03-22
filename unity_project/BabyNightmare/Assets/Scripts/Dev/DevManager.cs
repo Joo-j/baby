@@ -34,7 +34,7 @@ namespace BabyNightmare
             CheatManager<ECheatGroup>.Instance.RegisterLabel(ECheatGroup.PlayerData, "Chapter", "chapter number", () => $"{PlayerData.Instance.Chapter}");
             CheatManager<ECheatGroup>.Instance.RegisterLabel(ECheatGroup.PlayerData, "Attempts", "attempt count (total)", () => $"{PlayerData.Instance.TotalAttemptCount}");
             //            CheatManager<ECheatGroup>.Instance.RegisterLabel(ECheatGroup.PlayerData, "NoAds", "is purchased noads", () => $"{User.NoAds}");
-            CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.PlayerData, "Set Stage", "set stage number", SetChapter);
+            CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.PlayerData, "Set Chapter", "set chapter number", SetChapter);
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.PlayerData, "Set Attempt", "set attempt count", SetAttempt);
             CheatManager<ECheatGroup>.Instance.RegisterButton(ECheatGroup.PlayerData, "Reset Data", "reset all data", ResetData);
 

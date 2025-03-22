@@ -99,7 +99,6 @@ namespace BabyNightmare.CustomShop
                                 _rvDataDict,
                                 TryPurchase);
 
-
                 _customShopView.Init(context);
             }
 
@@ -342,7 +341,7 @@ namespace BabyNightmare.CustomShop
                 }
             }
 
-            var equipItemIDArr = jsonClass[KEY_NEW_ITEM_ID] as JSONArray;
+            var equipItemIDArr = jsonClass[KEY_EQUIPED_ITEM_ID] as JSONArray;
             if (null != equipItemIDArr)
             {
                 foreach (JSONNode node in equipItemIDArr)

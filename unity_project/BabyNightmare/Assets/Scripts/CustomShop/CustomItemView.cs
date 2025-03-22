@@ -10,22 +10,15 @@ namespace BabyNightmare.CustomShop
     public class CustomItemView : MonoBehaviour
     {
         [SerializeField] private RectTransform _rtf;
-        [SerializeField] protected Button BTN_Select;
-        [SerializeField] protected Button BTN_Purchase;
-
-        [SerializeField] protected GameObject GO_Equip;
-        [SerializeField] protected GameObject GO_Select;
-        [SerializeField] protected GameObject GO_RedDot;
-
-        [SerializeField] protected Image IMG_Icon;
-        [SerializeField] protected Image IMG_EquipCheckBox;
-        [SerializeField] protected Image IMG_Price;
-
-        [SerializeField] protected TextMeshProUGUI TMP_Price;
-        [SerializeField] protected TextMeshProUGUI TMP_FeedID;
-
-        [SerializeField] private Sprite _bg;
-        [SerializeField] private Sprite _checkBoxBG;
+        [SerializeField] private Button BTN_Purchase;
+        [SerializeField] private GameObject GO_Select;
+        [SerializeField] private GameObject GO_Equip;
+        [SerializeField] private GameObject GO_RedDot;
+        [SerializeField] private Image IMG_Icon;
+        [SerializeField] private Image IMG_Price;
+        [SerializeField] private TextMeshProUGUI TMP_Price;
+        [SerializeField] private Sprite _buttonOn;
+        [SerializeField] private Sprite _buttonOff;
         [SerializeField] private AnimationCurve _bounceCurve;
 
         private Action _onClickSelect = null;
@@ -49,11 +42,7 @@ namespace BabyNightmare.CustomShop
             _onClickSelect = onClickSelect;
             _onClickPurchase = onClickPurchase;
 
-            BTN_Select.image.sprite = _bg;
-            IMG_EquipCheckBox.sprite = _checkBoxBG;
             IMG_Icon.sprite = thumbnail;
-
-            TMP_FeedID.text = $"{_shopData.Item_ID}";
 
             if (null == IMG_Icon.sprite)
                 IMG_Icon.color = Color.clear;
@@ -96,23 +85,25 @@ namespace BabyNightmare.CustomShop
         {
             if (hasSkin == true)
             {
-                IMG_EquipCheckBox.gameObject.SetActive(true);
+                GO_Equip.SetActive(true);
                 BTN_Purchase.gameObject.SetActive(false);
             }
             else if (hasSkin == false)
             {
-                IMG_EquipCheckBox.gameObject.SetActive(false);
+                BTN_Purchase.gameObject.SetActive(true);
+                var price = _shopData.Price_Value;
 
-                var cost = _shopData.Price_Value;
+                BTN_Purchase.image.sprite = PlayerData.Instance.Gem >= price ? _buttonOn : _buttonOff;
+
                 switch (_shopData.CurrencyType)
                 {
                     case ECurrencyType.Coin:
                     case ECurrencyType.Gem:
-                        TMP_Price.text = $"{cost}";
+                        TMP_Price.text = $"{price}";
                         break;
 
                     case ECurrencyType.RV:
-                        TMP_Price.text = $"{rvCount}/{cost}";
+                        TMP_Price.text = $"{rvCount}/{price}";
                         break;
 
                     default:

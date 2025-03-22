@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LobbyButtonData_Talent
   m_EditorClassIdentifier: 
   ButtonType: 3
-  ComparisonType: 1
+  ComparisonType: 3
   ConditionType: 2
-  ConditionValue: 0
+  ConditionValue: 2
   Order: 1
   ShowOpenAni: 1
