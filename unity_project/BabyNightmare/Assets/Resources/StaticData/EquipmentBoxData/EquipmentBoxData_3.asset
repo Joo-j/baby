@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: EquipmentBoxData_3
   m_EditorClassIdentifier: 
   ID: 3
-  Type: 2
+  Type: 1
   EquipmentProbDataID: 1

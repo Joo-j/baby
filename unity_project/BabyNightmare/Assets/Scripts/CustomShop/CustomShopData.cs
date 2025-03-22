@@ -6,7 +6,6 @@ using UnityEngine;
 namespace BabyNightmare.StaticData
 {
     [CreateAssetMenu(fileName = "CustomShopData", menuName = "BabyNightmare/CustomShopData")]
-
     public class CustomShopData : ScriptableObject, IComparable<CustomShopData>
     {
         public int ID;

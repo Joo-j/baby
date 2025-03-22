@@ -75,8 +75,9 @@ namespace BabyNightmare.Character
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
 
-            var equippedItemData = CustomShopManager.Instance.GetEquippedItemData();
-            _model.RefreshCustomItem(equippedItemData);
+            var equipItemListData = CustomShopManager.Instance.GetEquipItemListData();
+            for (var i = 0; i < equipItemListData.Count; i++)
+                _model.RefreshCustomItem(equipItemListData[i]);
 
             _useInfoQueue = new Queue<EquipmentUseInfo>();
 
@@ -85,7 +86,7 @@ namespace BabyNightmare.Character
 
         public void ShowMoveAni()
         {
-            _animator.SetTrigger(HASH_ANI_MOVE);
+            _animator.Play(HASH_ANI_MOVE);
         }
 
         public void ShowIdleAni()

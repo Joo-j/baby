@@ -6,8 +6,7 @@ namespace BabyNightmare.StaticData
 {
     public enum EBoxType
     {
-        Bronze,
-        Silver,
+        Blue,
         Gold
     }
 
@@ -82,11 +81,11 @@ namespace BabyNightmare.StaticData
         RV,
     }
 
-    public enum ECustomType
+    public enum ECustomItemType
     {
-        Unknown,
-        Bag,
-        Clothes,
+        Unknown = 0,
+        Bag = 1,
+        Clothes = 2,
         Shoes,
     }
 

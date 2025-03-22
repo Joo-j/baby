@@ -33,9 +33,18 @@ namespace BabyNightmare.CustomShop
         private CustomShopData _shopData = null;
 
         public RectTransform RTF => _rtf;
+        public ECustomItemType Type { get; private set; }
 
-        public void Init(CustomShopData shopData, Sprite thumbnail, int rvCount, Action onClickSelect, Action onClickPurchase)
+        public void Init
+        (
+                    ECustomItemType type,
+                    CustomShopData shopData,
+                    Sprite thumbnail,
+                    int rvCount,
+                    Action onClickSelect,
+                    Action onClickPurchase)
         {
+            Type = type;
             _shopData = shopData;
             _onClickSelect = onClickSelect;
             _onClickPurchase = onClickPurchase;

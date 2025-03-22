@@ -17,17 +17,17 @@ namespace BabyNightmare.Character
         {
             switch (itemData.Type)
             {
-                case ECustomType.Bag:
+                case ECustomItemType.Bag:
                     _bagMeshFilter.mesh = itemData.Mesh;
                     _bagMeshRenderer.material = itemData.Material;
                     break;
 
-                case ECustomType.Clothes:
+                case ECustomItemType.Clothes:
                     _clothesMeshRenderer.sharedMesh = itemData.Mesh;
                     _clothesMeshRenderer.material = itemData.Material;
                     break;
 
-                case ECustomType.Shoes:
+                case ECustomItemType.Shoes:
                     _shoesMeshRenderer.sharedMesh = itemData.Mesh;
                     _shoesMeshRenderer.material = itemData.Material;
                     break;

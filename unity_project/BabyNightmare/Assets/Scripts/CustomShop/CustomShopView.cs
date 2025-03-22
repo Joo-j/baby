@@ -4,10 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Supercent.Util;
-using BabyNightmare.Util;
 using BabyNightmare.StaticData;
-using TMPro;
-using Supercent.UIv2;
 
 namespace BabyNightmare.CustomShop
 {
@@ -16,24 +13,40 @@ namespace BabyNightmare.CustomShop
         public Dictionary<int, CustomItemData> ItemDataDict { get; }
         public Dictionary<int, CustomShopData> ShopDataDict { get; }
         public Dictionary<int, int> RvDataDict { get; }
-        public int EquipItemID { get; }
-        public Action<int> OnClickSelect { get; }
         public Action<int> TryPurchase { get; }
 
         public CustomShopViewContext(
             Dictionary<int, CustomItemData> itemDataDict,
             Dictionary<int, CustomShopData> shopDataDict,
             Dictionary<int, int> rvDataDict,
-            int equipitemID,
-            Action<int> onClickSelect,
             Action<int> tryPurchase)
         {
             this.ItemDataDict = itemDataDict;
             this.ShopDataDict = shopDataDict;
             this.RvDataDict = rvDataDict;
-            this.EquipItemID = equipitemID;
-            this.OnClickSelect = onClickSelect;
             this.TryPurchase = tryPurchase;
+        }
+
+        public CustomItemData GetItemData(int itemID)
+        {
+            if (false == ItemDataDict.TryGetValue(itemID, out var itemData))
+            {
+                Debug.LogError($"{itemID} itemData null");
+                return null;
+            }
+
+            return itemData;
+        }
+
+        public CustomShopData GetShopData(int itemID)
+        {
+            if (false == ShopDataDict.TryGetValue(itemID, out var shopData))
+            {
+                Debug.LogError($"{itemID} shop data null");
+                return null;
+            }
+
+            return shopData;
         }
 
         public int GetRVCount(int shopDataID)
@@ -45,17 +58,17 @@ namespace BabyNightmare.CustomShop
         }
     }
 
-    public class CustomShopView : UIBase
+    public class CustomShopView : MonoBehaviour
     {
-        [SerializeField] protected ParticleSystem PTC_Select;
-        [SerializeField] protected ParticleSystem PTC_Equip;
-        [SerializeField] protected RawImage RIMG_Preview;
-        [SerializeField] protected ScrollRect SR_Content;
-        [SerializeField] protected RectTransform RTF_Viewport;
-        [SerializeField] protected RectTransform RTF_Guide;
+        [SerializeField] private RawImage RIMG_Preview;
+        [SerializeField] private ScrollRect SR_Content;
+        [SerializeField] private Image[] _tabArr;
+        [SerializeField] private Transform[] _contentsArr;
+        [SerializeField] private ParticleSystem PTC_Select;
+        [SerializeField] private ParticleSystem PTC_Equip;
         [SerializeField] private AnimationCurve _scrollCurve;
-        [SerializeField] private Sprite _purchaseGemButtonSprite;
-        [SerializeField] private Sprite _purchaseGemIconSprite;
+        [SerializeField] private Sprite _focusTab;
+        [SerializeField] private Sprite _noFocusTab;
 
         private const string PATH_CUSTOM_ITEM_VIEW = "CustomShop/CustomItemView";
         private const string PATH_CUSTOM_ITEM_PREVIEW = "CustomShop/CustomItemPreview";
@@ -74,14 +87,17 @@ namespace BabyNightmare.CustomShop
                 var shopData = pair.Value;
                 var itemID = shopData.Item_ID;
 
-                var customData = _context.ItemDataDict[itemID];
-                if (null == customData)
+                var itemData = _context.ItemDataDict[itemID];
+                if (null == itemData)
                 {
                     Debug.LogError($"{itemID}에 대한 CustomItem이 없습니다.");
                     return;
                 }
 
-                var itemView = ObjectUtil.LoadAndInstantiate<CustomItemView>(PATH_CUSTOM_ITEM_VIEW, SR_Content.content);
+                var type = itemData.Type;
+                var content = _contentsArr[(int)type - 1];
+
+                var itemView = ObjectUtil.LoadAndInstantiate<CustomItemView>(PATH_CUSTOM_ITEM_VIEW, content);
                 if (null == itemView)
                 {
                     Debug.LogError($"{PATH_CUSTOM_ITEM_VIEW}에 프리팹이 업습니다.");
@@ -89,13 +105,15 @@ namespace BabyNightmare.CustomShop
                 }
 
                 itemView.Init(
+                type,
                 shopData,
-                customData.Thumbnail,
+                itemData.Thumbnail,
                 _context.GetRVCount(shopData.ID),
                 () =>
                 {
-                    _context.OnClickSelect?.Invoke(itemID);
-                    OnSelect();
+                    RefreshPreview(shopData.Item_ID);
+                    PTC_Select.Simulate(0f, true, true, false);
+                    PTC_Select.Play();
                 },
                 () =>
                 {
@@ -104,6 +122,8 @@ namespace BabyNightmare.CustomShop
 
                 _itemViewDict.Add(itemID, itemView);
             }
+
+            OnClickTab(0);
         }
 
         public void Release()
@@ -114,18 +134,12 @@ namespace BabyNightmare.CustomShop
             _itemPreview = null;
         }
 
-        public void Show(object identifier)
+        public void Show()
         {
             (transform as RectTransform).SetFullStretch();
             gameObject.SetActive(true);
 
-            OnSelect();
             PTC_Equip.Stop();
-
-            if (false == identifier is int equipID)
-                return;
-
-            Scroll(equipID);
         }
 
         public void Hide()
@@ -133,17 +147,17 @@ namespace BabyNightmare.CustomShop
             gameObject.SetActive(false);
         }
 
-        public void SelectItem(HashSet<int> purchasedIDSet, int selectID, int equipeditemID)
+        public void Refresh(HashSet<int> purchasedIDSet, List<int> equipItemIDs)
         {
-            var shopData = _context.ShopDataDict[selectID];
-            if (null == shopData)
+            for (var i = 0; i < equipItemIDs.Count; i++)
             {
-                Debug.LogError($"{selectID}에 대한 FeedShopData가 없습니다.");
-                return;
-            }
+                var id = equipItemIDs[i];
+                var shopData = _context.GetShopData(id);
+                RefreshPreview(id);
+                RefreshItemView(shopData, purchasedIDSet, equipItemIDs);
 
-            RefreshPreview(shopData.Item_ID);
-            RefreshItemView(shopData, purchasedIDSet, equipeditemID);
+                Debug.Log($"refresh {id}");
+            }
         }
 
         private void RefreshPreview(int itemID)
@@ -160,29 +174,28 @@ namespace BabyNightmare.CustomShop
                 RIMG_Preview.texture = _itemPreview.RT;
             }
 
-            var customData = _context.ItemDataDict[itemID];
-            if (null == customData)
-            {
-                Debug.Log($"{itemID} 먹이 아이템이 null 입니다.");
-            }
-
-            _itemPreview.RefreshCustomItem(customData);
+            var itemData = _context.GetItemData(itemID);
+            _itemPreview.RefreshCustomItem(itemData);
         }
 
-        private void RefreshItemView(CustomShopData shopData, HashSet<int> purchasedIDSet, int equipitemID)
+        private void RefreshItemView(CustomShopData shopData, HashSet<int> purchasedIDSet, List<int> equipitemIDList)
         {
+            var itemData = _context.GetItemData(shopData.Item_ID);
+            var type = itemData.Type;
+
             foreach (var pair in _itemViewDict)
             {
-                var itemID = pair.Key;
                 var itemView = pair.Value;
+                if (type != itemView.Type)
+                    continue;
 
+                var itemID = pair.Key;
                 itemView.RefreshSelect(itemID == shopData.Item_ID);
-                itemView.RefreshEquip(itemID == equipitemID);
+                itemView.RefreshEquip(equipitemIDList.Contains(itemID));
                 itemView.RefreshCost(purchasedIDSet.Contains(itemID), _context.GetRVCount(itemID));
             }
         }
 
-        // 콘텐츠 목록들 중 itemID 에 해당하는 항목으로 스크롤 갱신
         private void Scroll(int itemID, Action doneCallback = null)
         {
             if (false == _itemViewDict.TryGetValue(itemID, out var customItemView))
@@ -197,7 +210,7 @@ namespace BabyNightmare.CustomShop
                 var viewRTF = customItemView.RTF;
                 var contentHeight = SR_Content.content.rect.height;
                 var scrollPos = contentHeight + viewRTF.anchoredPosition.y;
-                var viewHeight = RTF_Viewport.rect.height;
+                var viewHeight = SR_Content.viewport.rect.height;
                 var viewHalfHeight = viewHeight * 0.5f;
                 var end = Mathf.Clamp((scrollPos - viewHalfHeight) / (contentHeight - viewHeight), 0f, 1f); //뷰 렉트가 어디로 갈지 비율 맞추기
 
@@ -220,12 +233,6 @@ namespace BabyNightmare.CustomShop
             }
         }
 
-        private void OnSelect()
-        {
-            PTC_Select.Simulate(0f, true, true, false);
-            PTC_Select.Play();
-        }
-
         public void OnEquip()
         {
             PTC_Equip.Simulate(0f, true, true, false);
@@ -238,6 +245,15 @@ namespace BabyNightmare.CustomShop
                 return;
 
             itemView.SetActive_RedDot(active);
+        }
+
+        public void OnClickTab(int index)
+        {
+            for (var i = 0; i < _tabArr.Length; i++)
+                _tabArr[i].sprite = index == i ? _focusTab : _noFocusTab;
+
+            for (var i = 0; i < _contentsArr.Length; i++)
+                _contentsArr[i].gameObject.SetActive(index == i);
         }
     }
 }

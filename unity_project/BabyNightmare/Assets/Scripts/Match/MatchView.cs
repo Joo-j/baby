@@ -73,7 +73,7 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _statItemViewGridTF;
 
         private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
-        private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_Box_";
+        private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
         private Action _onGetBox = null;
