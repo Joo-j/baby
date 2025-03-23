@@ -20,6 +20,7 @@ namespace BabyNightmare.Talent
         [SerializeField] private TextMeshProUGUI _priceTMP;
         [SerializeField] private AnimationCurve _gachaCurve;
         [SerializeField] private float _delayDuration = 0.5f;
+        [SerializeField] private GameObject _guide;
 
         private const string PATH_TALENT_ITEM_VIEW = "Talent/TalentItemView";
 
@@ -39,6 +40,8 @@ namespace BabyNightmare.Talent
             }
 
             _upgrade = upgrade;
+
+            _guide.SetActive(false);
         }
 
         public void RefreshLevel(Dictionary<ETalentType, int> levelDict, bool showFx)
@@ -127,6 +130,14 @@ namespace BabyNightmare.Talent
         public void OnClickUpgrade()
         {
             _upgrade?.Invoke();
+            FocusOverlayHelper.Clear();
+            _guide.SetActive(false);
+        }
+
+        public void ShowGuide()
+        {
+            FocusOverlayHelper.Apply(_upgradeBTN.gameObject);
+            _guide.SetActive(true);
         }
     }
 }

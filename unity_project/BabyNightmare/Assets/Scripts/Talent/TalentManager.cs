@@ -70,6 +70,11 @@ namespace BabyNightmare.Talent
             _talentView.gameObject.SetActive(true);
             _talentView.RefreshButton(PlayerData.Instance.Gem, GetPrice());
 
+            if (ShowCount == 0)
+            {
+                _talentView.ShowGuide();
+            }
+
             ++ShowCount;
         }
 
