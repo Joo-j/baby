@@ -16,7 +16,6 @@ namespace BabyNightmare.InventorySystem
         protected RectTransform _canvasRTF = null;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
         protected Action<Equipment, HashSet<Equipment>> _refreshChangeStat = null;
-        protected Func<int, ProjectileData> _getProjectileData = null;
 
         private static Inventory _dragStartInventory = null;
         private static Inventory _currentInventory = null;
@@ -44,19 +43,17 @@ namespace BabyNightmare.InventorySystem
         public void InitBase
         (
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
-            Action<Equipment, HashSet<Equipment>> refreshChangeStat,
-            Func<int, ProjectileData> getProjectileData
+            Action<Equipment, HashSet<Equipment>> refreshChangeStat
         )
         {
             _getUpgradeData = getUpgradeData;
             _refreshChangeStat = refreshChangeStat;
-            _getProjectileData = getProjectileData;
         }
 
         public void TryAdd(EquipmentData data)
         {
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
-            equipment.Refresh(data);
+            equipment.Refresh(data, false);
             Equip(equipment);
         }
 

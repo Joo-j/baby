@@ -23,7 +23,6 @@ namespace BabyNightmare.Match
         public Action<EquipmentData> OnCoolDown { get; }
         public Action<ECameraPosType> MoveCameraPos { get; }
         public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
-        public Func<int, ProjectileData> GetProjectileData { get; }
 
         public MatchViewContext(
         RenderTexture rt,
@@ -32,8 +31,7 @@ namespace BabyNightmare.Match
         Action startWave,
         Action<EquipmentData> onCooldown,
         Action<ECameraPosType> moveCameraPos,
-        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
-        Func<int, ProjectileData> getProjectileData)
+        Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
         {
             this.RT = rt;
             this.InitEquipment = initEquipment;
@@ -42,7 +40,6 @@ namespace BabyNightmare.Match
             this.OnCoolDown = onCooldown;
             this.MoveCameraPos = moveCameraPos;
             this.GetUpgradeData = getUpgradeData;
-            this.GetProjectileData = getProjectileData;
         }
     }
 
@@ -101,8 +98,8 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _loot.InitBase(context.GetUpgradeData, RefreshStatChange, context.GetProjectileData);
-            _bag.InitBase(context.GetUpgradeData, RefreshStatChange, context.GetProjectileData);
+            _loot.InitBase(context.GetUpgradeData, RefreshStatChange);
+            _bag.InitBase(context.GetUpgradeData, RefreshStatChange);
 
             _bag.Init(_loot, AddStat);
 
@@ -117,6 +114,8 @@ namespace BabyNightmare.Match
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
+
+            _bag.TryAdd(_context.InitEquipment);
         }
 
         public void RefreshWave(int curWave, int maxWave)
@@ -196,7 +195,6 @@ namespace BabyNightmare.Match
             _startGO.SetActive(false);
             _canvasGroup.blocksRaycasts = true;
 
-            _bag.TryAdd(_context.InitEquipment);
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
         }

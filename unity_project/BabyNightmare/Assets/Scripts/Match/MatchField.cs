@@ -18,7 +18,6 @@ namespace BabyNightmare.Match
         public Action<float, bool> RefreshProgress { get; }
         public Action OnClearWave { get; }
         public Action OnFailWave { get; }
-        public Func<int, ProjectileData> GetProjectileData { get; }
 
         public MatchFieldContext
         (
@@ -26,8 +25,7 @@ namespace BabyNightmare.Match
             Action<int, Vector3> getCoin,
             Action<float, bool> refreshProgress,
             Action onClearWave,
-            Action onFailWave,
-            Func<int, ProjectileData> getProjectileData
+            Action onFailWave
         )
         {
             this.ChapterData = chapterData;
@@ -35,7 +33,6 @@ namespace BabyNightmare.Match
             this.RefreshProgress = refreshProgress;
             this.OnClearWave = onClearWave;
             this.OnFailWave = onFailWave;
-            this.GetProjectileData = getProjectileData;
         }
     }
 
@@ -100,8 +97,7 @@ namespace BabyNightmare.Match
                                     PlayerData.Instance.HP,
                                     CameraForward,
                                     OnDiePlayer,
-                                    _context.GetCoin,
-                                    _context.GetProjectileData);
+                                    _context.GetCoin);
             _player.Init(playerContext);
 
             _coinPool = new Pool<Coin>(() => ObjectUtil.LoadAndInstantiate<Coin>(PATH_COIN, transform), 10);

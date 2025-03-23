@@ -21,20 +21,17 @@ namespace BabyNightmare.Character
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
-        public Func<int, ProjectileData> GetProjectileData { get; }
 
         public PlayerContext(
         float hp,
         Vector3 cameraForward,
         Action onDiePlayer,
-        Action<int, Vector3> getCoin,
-        Func<int, ProjectileData> getProjectileData)
+        Action<int, Vector3> getCoin)
         {
             this.HP = hp;
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
             this.GetCoin = getCoin;
-            this.GetProjectileData = getProjectileData;
         }
     }
 
@@ -58,6 +55,7 @@ namespace BabyNightmare.Character
         [SerializeField] private Image _shieldImage;
         [SerializeField] private TextMeshProUGUI _shieldText;
 
+        private const string PATH_PROJECTILE_DATA = "StaticData/ProjectileData/ProjectileData_";
         private PlayerContext _context = null;
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
@@ -70,7 +68,7 @@ namespace BabyNightmare.Character
 
             _originEmissionColor = _mainRenderer.material.GetColor(KEY_EMISSION_COLOR);
 
-            var hp = Mathf.Max(context.HP, 50);
+            var hp = Mathf.Max(context.HP, 100);
             var talentHP = TalentManager.Instance.GetValue(ETalentType.Max_HP_Amount);
             hp += talentHP;
 
@@ -256,7 +254,9 @@ namespace BabyNightmare.Character
 
         private IEnumerator Co_ThrowProjectile(EquipmentData data, Transform targetTF, Action doneCallback)
         {
-            var ptData = _context.GetProjectileData(data.ID);
+            var ptPath = $"{PATH_PROJECTILE_DATA}{data.ID}";
+            var ptData = Resources.Load<ProjectileData>(ptPath);
+
             var pt = ProjectilePool.Instance.Get();
             pt.TF.position = _throwStartTF.position;
             pt.TF.rotation = Quaternion.identity;

@@ -16,7 +16,6 @@ namespace BabyNightmare.Match
         private const string PATH_MATCH_VIEW = "Match/UI/MatchView";
         private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
-        private const string PATH_PROJECTILE_DATA = "StaticData/ProjectileData/ProjectileData_";
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int INITIAL_COIN = 10;
@@ -64,8 +63,7 @@ namespace BabyNightmare.Match
                                         GetCoin,
                                         (factor, immediate) => _matchView?.RefreshProgress(factor, immediate),
                                         OnClearWave,
-                                        OnFailMatch,
-                                        GetProjectileData);
+                                        OnFailMatch);
             _matchField.Init(matchFieldContext);
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
@@ -78,8 +76,7 @@ namespace BabyNightmare.Match
                                         OnStartWave,
                                         _matchField.AttackEnemy,
                                         _matchField.MoveCamera,
-                                        GetUpgradeData,
-                                        GetProjectileData
+                                        GetUpgradeData
                                         );
             _matchView.Init(matchViewContext);
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
@@ -220,13 +217,17 @@ namespace BabyNightmare.Match
                 var probData = randomPicker.RandomPick();
                 randomPicker.Remove(probData);
 
-                var equipment = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
-                dataList.Add(equipment);
+                var data = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
+                if (null == data)
+                {
+                    Debug.Log($"{probData.EquipmentID} probData equipment data가 없습니다.");
+                }
+                dataList.Add(data);
             }
 
-            if (dataList.Count == 0)
+            if (null == dataList || dataList.Count == 0)
             {
-                Debug.LogError($"{_currentWave}웨이브 EuipmetnData가 없습니다");                
+                Debug.LogError($"{_currentWave}웨이브 EuipmetnData가 없습니다");
             }
 
             return dataList;
@@ -244,12 +245,6 @@ namespace BabyNightmare.Match
                 return null;
 
             return StaticDataManager.Instance.GetEquipmentData(data1.ID + 100);
-        }
-
-        private ProjectileData GetProjectileData(int id)
-        {
-            var ptPath = $"{PATH_PROJECTILE_DATA}{id}";
-            return Resources.Load<ProjectileData>(ptPath);
         }
     }
 }

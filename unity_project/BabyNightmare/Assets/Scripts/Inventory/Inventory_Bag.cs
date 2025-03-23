@@ -240,10 +240,7 @@ namespace BabyNightmare.InventorySystem
                 {
                     //Debug.Log($"업그레이드 데이터가 존재하면, 기존 장비 삭제 후 배치, 업그레이드");
                     Remove(oe);
-                    equipment.Refresh(upgradeData);
-
-                    var pt = _getProjectileData(upgradeData.ID);
-                    equipment.ShowMergeFX(upgradeData, pt.Mesh);
+                    equipment.Refresh(upgradeData, true);
                     Equip(equipment, targetIndex);
                     return true;
                 }
