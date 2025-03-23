@@ -55,7 +55,6 @@ namespace BabyNightmare.Match
         [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private TextMeshProUGUI _waveTMP;
         [SerializeField] private Image _waveProgressIMG;
-        [SerializeField] private Transform _waveCircleTF;
         [SerializeField] private Inventory_Bag _bag;
         [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
@@ -74,7 +73,7 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
-        private Action _onGetBox = null;
+        private Action<Vector3> _onOpenBox = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
@@ -83,7 +82,6 @@ namespace BabyNightmare.Match
         private Vector2 _progressSize;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
-        public Transform WaveCircleTF => _waveCircleTF;
 
         public void Init(MatchViewContext context)
         {
@@ -139,9 +137,9 @@ namespace BabyNightmare.Match
 
         public void RefreshProgress(float factor)
         {
-            Debug.Log($"@@ {factor}");
             var startSize = _waveProgressIMG.rectTransform.sizeDelta;
             var targetSize = Vector2.Lerp(startSize, _progressSize, factor);
+            Debug.Log($"@@ {factor} {startSize} {targetSize}");
 
             if (null != _coRefreshProgress)
                 StopCoroutine(_coRefreshProgress);
@@ -203,20 +201,38 @@ namespace BabyNightmare.Match
         {
             _startGO.SetActive(false);
             _canvasGroup.blocksRaycasts = true;
+
+            StartCoroutine(Co_SizeUpBag());
+            IEnumerator Co_SizeUpBag()
+            {
+                var waiter = new CoroutineWaiter();
+
+                var talentBagSize = TalentManager.Instance.GetValue(ETalentType.Bag_Size_Amount);
+                for (var i = 0; i < talentBagSize; i++)
+                {
+                    _bag.ShowAddableCell(waiter.Signal);
+                    yield return waiter.Wait();
+                }
+
+                _bag.TryAdd(_context.InitEquipment);
+                _rerollCVG.gameObject.SetActive(true);
+                _fightGO.SetActive(true);
+            }
         }
 
         public void OnClearWave()
         {
             _bag.StopUseEquipment();
             _canvasGroup.blocksRaycasts = true;
+            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
         }
 
-        public void ShowBox(EBoxType type, Action onGetBox)
+        public void ShowBox(EBoxType type, Action<Vector3> onOpenBox)
         {
             ChangeRectPos(false);
             _context.MoveCameraPos?.Invoke(ECameraPosType.High);
 
-            _onGetBox = onGetBox;
+            _onOpenBox = onOpenBox;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
@@ -228,7 +244,7 @@ namespace BabyNightmare.Match
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
 
-            _onGetBox?.Invoke();
+            _onOpenBox?.Invoke(_boxGO.transform.position);
         }
 
         public void OnClickReroll()

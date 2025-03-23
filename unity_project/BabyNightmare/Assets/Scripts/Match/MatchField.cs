@@ -73,7 +73,7 @@ namespace BabyNightmare.Match
         private MatchFieldContext _context = null;
         private int _enemySpawnCount = 0;
         private Pool<Coin> _coinPool = null;
-        private int _totalCoin = 0;
+        private int _waveCoin = 0;
         private Coroutine _coMoveCamera = null;
 
         public RenderTexture RT => _rt;
@@ -155,7 +155,7 @@ namespace BabyNightmare.Match
 
             var dieCoin = enemy.GetRandomCoin();
             StartCoroutine(Co_SpawnCoin(pos, dieCoin));
-            _totalCoin += dieCoin;
+            _waveCoin += dieCoin;
 
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
@@ -208,16 +208,6 @@ namespace BabyNightmare.Match
 
             _player.UseEquipment(equipmentData, randomEnemy);
         }
-
-        public void OnClearWave(Transform coinGenTF)
-        {
-            var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
-            _totalCoin += Mathf.CeilToInt(_totalCoin * talentCoin);
-
-            _context.GetCoin?.Invoke(_totalCoin, coinGenTF.position);
-            _totalCoin = 0;
-        }
-
         public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)
         {
             StartCoroutine(Co_EncounterBox());
@@ -248,6 +238,15 @@ namespace BabyNightmare.Match
 
                 box.Open(doneCallback);
             }
+        }
+
+        public void GetWaveCoin(Vector3 coinGenPos)
+        {
+            var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
+            _waveCoin += Mathf.CeilToInt(_waveCoin * talentCoin);
+
+            _context.GetCoin?.Invoke(_waveCoin, coinGenPos);
+            _waveCoin = 0;
         }
 
         private Transform GetSpawnTF(ESpawnOrder order)

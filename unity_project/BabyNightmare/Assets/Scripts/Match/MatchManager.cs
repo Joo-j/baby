@@ -19,8 +19,9 @@ namespace BabyNightmare.Match
         private const string PATH_PROJECTILE_DATA = "StaticData/ProjectileData/ProjectileData_";
 
         private const int REROLL_EQUIPMENT_COUNT = 3;
-        private const int REROLL_INITIAL_COST = 10;
-        private const int INITIAL_GEM = 10;
+        private const int INITIAL_COIN = 10;
+        private const int REROLL_BASE_PRICE = 10;
+        private const int BASE_REWARD_GEM = 10;
 
         private MatchField _matchField = null;
         private MatchView _matchView = null;
@@ -29,7 +30,7 @@ namespace BabyNightmare.Match
         private int _currentWave = 0;
         private int _maxWave = 0;
         private int _rerollCount = 0;
-        private int _rerollCost = 0;
+        private int _rerollPrice = 0;
 
         public void Init(Action enterLobby)
         {
@@ -84,6 +85,8 @@ namespace BabyNightmare.Match
 
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
             PlayerData.Instance.Coin = 0;
+
+            _rerollCount = INITIAL_COIN;
         }
 
         private void RefreshProgress(float factor)
@@ -93,7 +96,7 @@ namespace BabyNightmare.Match
 
         private void OnFailMatch()
         {
-            var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
+            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
             var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
             gem += Mathf.CeilToInt(gem * talentGem);
 
@@ -103,7 +106,7 @@ namespace BabyNightmare.Match
 
         private void OnCompleteMatch()
         {
-            var gem = PlayerData.Instance.Chapter * INITIAL_GEM;
+            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
             var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
             gem += Mathf.CeilToInt(gem * talentGem);
 
@@ -170,10 +173,8 @@ namespace BabyNightmare.Match
             _matchView.OnClearWave();
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
 
-            _matchField.OnClearWave(_matchView.WaveCircleTF);
-
             var boxData = GetBoxData();
-            _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, () => OnGetBox(boxData)));
+            _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, (boxPos) => OnGetBox(boxData, boxPos)));
         }
 
         private EquipmentBoxData GetBoxData()
@@ -191,13 +192,13 @@ namespace BabyNightmare.Match
             var dataList = GetRerollData();
             _matchView.Reroll(dataList);
 
-            var preCost = _rerollCost;
+            var preCost = _rerollPrice;
             ++_rerollCount;
-            _rerollCost = REROLL_INITIAL_COST * (int)Mathf.Pow(_rerollCount, 2);
+            _rerollPrice = REROLL_BASE_PRICE * (int)Mathf.Pow(_rerollCount, 2);
             PlayerData.Instance.Coin -= preCost;
         }
 
-        private void OnGetBox(EquipmentBoxData boxData)
+        private void OnGetBox(EquipmentBoxData boxData, Vector3 boxPos)
         {
             var probID = boxData.EquipmentProbDataID;
             var probData = StaticDataManager.Instance.GetEquipmentProbData(probID);
@@ -221,11 +222,12 @@ namespace BabyNightmare.Match
             }
 
             _matchView.Reroll(dataList);
+            _matchField.GetWaveCoin(boxPos);
         }
 
         private void RefreshRerollCost(int coin)
         {
-            _matchView?.RefreshRerollPrice(_rerollCost, coin);
+            _matchView?.RefreshRerollPrice(_rerollPrice, coin);
         }
 
         private List<EquipmentData> GetRerollData()
