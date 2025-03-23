@@ -79,7 +79,9 @@ namespace BabyNightmare.Match
                                         GetUpgradeData
                                         );
             _matchView.Init(matchViewContext);
-            _matchView.RefreshWave(_currentWave + 1, _maxWave);
+
+            var waveData = _waveDataList[_currentWave];
+            _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
             CoinHUD.UseFX(false);
@@ -163,11 +165,10 @@ namespace BabyNightmare.Match
                 return;
             }
 
-            _matchView.OnClearWave();
-            _matchView.RefreshWave(_currentWave + 1, _maxWave);
-
-
             var waveData = _waveDataList[_currentWave];
+
+            _matchView.OnClearWave();
+            _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
             _matchField.EncounterBox(waveData.BoxType,
             () => _matchView.ShowBox(waveData.BoxType,

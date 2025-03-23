@@ -27,6 +27,7 @@ namespace BabyNightmare.InventorySystem
                     Remove(getEquipment);
                     equipment.Refresh(upgradeData, true);
                     Equip(equipment);
+                    _showMergeMessage?.Invoke(equipment.transform, $"LV {upgradeData.Level}!");
                 }
                 else
                 {

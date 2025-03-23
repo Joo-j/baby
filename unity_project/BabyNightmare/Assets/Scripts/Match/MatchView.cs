@@ -52,6 +52,8 @@ namespace BabyNightmare.Match
         [SerializeField] private RawImage _fieldIMG;
         [SerializeField] private TextMeshProUGUI _waveTMP;
         [SerializeField] private Image _waveProgressIMG;
+        [SerializeField] private Image _waveBoxBGIMG;
+        [SerializeField] private GameObject _twincle;
         [SerializeField] private Inventory_Bag _bag;
         [SerializeField] private Inventory_Loot _loot;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
@@ -64,7 +66,11 @@ namespace BabyNightmare.Match
         [SerializeField] private GameObject _fightGO;
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
+        [SerializeField] private GameObject _luckyBoxMessageRTF;
+        [SerializeField] private TextMeshProUGUI _equipmentLevelTMP;
         [SerializeField] private Transform _statItemViewGridTF;
+        [SerializeField] private Sprite _blueBoxBG;
+        [SerializeField] private Sprite _goldBoxBG;
 
         private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
@@ -98,8 +104,8 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _loot.InitBase(context.GetUpgradeData, RefreshStatChange);
-            _bag.InitBase(context.GetUpgradeData, RefreshStatChange);
+            _loot.InitBase(context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
+            _bag.InitBase(context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
 
             _bag.Init(_loot, AddStat);
 
@@ -109,6 +115,9 @@ namespace BabyNightmare.Match
             _boxGO.SetActive(false);
             _canvasGroup.blocksRaycasts = false;
             _startGO.SetActive(true);
+            _luckyBoxMessageRTF.gameObject.SetActive(false);
+            _equipmentLevelTMP.gameObject.SetActive(false);
+            _twincle.SetActive(false);
 
             ChangeRectPos(false, true, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
 
@@ -118,9 +127,20 @@ namespace BabyNightmare.Match
             _bag.TryAdd(_context.InitEquipment);
         }
 
-        public void RefreshWave(int curWave, int maxWave)
+        public void RefreshWave(int curWave, int maxWave, EBoxType boxType)
         {
             _waveTMP.text = $"Wave {curWave}/{maxWave}";
+
+            if (boxType == EBoxType.Blue)
+            {
+                _waveBoxBGIMG.sprite = _blueBoxBG;
+                _twincle.SetActive(false);
+            }
+            else if (boxType == EBoxType.Gold)
+            {
+                _waveBoxBGIMG.sprite = _goldBoxBG;
+                _twincle.SetActive(true);
+            }
         }
 
         public void RefreshProgress(float factor, bool immediate)
@@ -213,6 +233,12 @@ namespace BabyNightmare.Match
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
+
+            if (type == EBoxType.Gold)
+            {
+                _luckyBoxMessageRTF.gameObject.SetActive(false);
+                _luckyBoxMessageRTF.gameObject.SetActive(true);
+            }
         }
 
         public void OnClickBox()
@@ -306,6 +332,15 @@ namespace BabyNightmare.Match
 
             doneCallback?.Invoke();
             _coChangeRect = null;
+        }
+
+        private void ShowEquipmentMergeMessage(Transform tf, string message)
+        {
+            _equipmentLevelTMP.transform.SetParent(tf);
+            _equipmentLevelTMP.transform.localPosition = Vector3.zero;
+            _equipmentLevelTMP.text = message;
+            _equipmentLevelTMP.gameObject.SetActive(false);
+            _equipmentLevelTMP.gameObject.SetActive(true);
         }
 
         private void AddStat(EquipmentData data, bool isEquip)

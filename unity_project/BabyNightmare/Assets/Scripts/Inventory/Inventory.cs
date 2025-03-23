@@ -15,6 +15,7 @@ namespace BabyNightmare.InventorySystem
         protected RectTransform _rtf = null;
         protected RectTransform _canvasRTF = null;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
+        protected Action<Transform, String> _showMergeMessage = null;
         protected Action<Equipment, HashSet<Equipment>> _refreshChangeStat = null;
 
         private static Inventory _dragStartInventory = null;
@@ -43,10 +44,12 @@ namespace BabyNightmare.InventorySystem
         public void InitBase
         (
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
+            Action<Transform, String> showMergeMessage,
             Action<Equipment, HashSet<Equipment>> refreshChangeStat
         )
         {
             _getUpgradeData = getUpgradeData;
+            _showMergeMessage = showMergeMessage;
             _refreshChangeStat = refreshChangeStat;
         }
 
