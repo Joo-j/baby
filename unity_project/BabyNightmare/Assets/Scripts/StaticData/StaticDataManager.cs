@@ -20,7 +20,6 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
         private Dictionary<int, EquipmentProbData> _equipmentProbDataDict = null;
-        private Dictionary<int, EquipmentBoxData> _equipmentBoxDataDict = null;
         private Dictionary<int, EnemyData> _enemyDataDict = null;
         private Dictionary<int, EnemySpawnData> _enemySpawnDataDict = null;
 
@@ -33,7 +32,6 @@ namespace BabyNightmare.StaticData
             InitWaveData();
             InitEquipmentData();
             InitEquipmentProbData();
-            InitEquipmentBoxData();
             InitEnemyData();
             InitEnemySpawnData();
         }
@@ -144,24 +142,6 @@ namespace BabyNightmare.StaticData
             }
         }
 
-        private void InitEquipmentBoxData()
-        {
-            var equipmentBoxDataArr = Resources.LoadAll<EquipmentBoxData>(PATH_EQUIPMENT_BOX_DATA);
-            if (null == equipmentBoxDataArr || equipmentBoxDataArr.Length == 0)
-            {
-                Debug.LogError($"{PATH_EQUIPMENT_BOX_DATA}에 데이터가 없습니다.");
-                return;
-            }
-
-            _equipmentBoxDataDict = new Dictionary<int, EquipmentBoxData>();
-
-            for (var i = 0; i < equipmentBoxDataArr.Length; i++)
-            {
-                var data = equipmentBoxDataArr[i];
-                _equipmentBoxDataDict.Add(data.ID, data);
-            }
-        }
-
         private void InitEnemyData()
         {
             var enemyDataArr = Resources.LoadAll<EnemyData>(PATH_ENEMY_DATA);
@@ -244,18 +224,6 @@ namespace BabyNightmare.StaticData
             }
 
             return data;
-        }
-
-
-        public EquipmentBoxData GetEquipmentBoxDataList(int id)
-        {
-            if (false == _equipmentBoxDataDict.TryGetValue(id, out var boxData))
-            {
-                Debug.LogError($"{id} box data is not exist");
-                return null;
-            }
-
-            return boxData;
         }
 
         public EnemyData GetEnemyData(int id)

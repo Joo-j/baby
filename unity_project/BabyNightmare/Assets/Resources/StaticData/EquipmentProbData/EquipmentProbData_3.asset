@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac1cbe6ac93284d0daa5a5cad743c358, type: 3}
-  m_Name: EquipmentProbData
+  m_Name: EquipmentProbData_3
   m_EditorClassIdentifier: 
-  ID: 1
+  ID: 3
   ProbDataList:
-  - EquipmentID: 1001
+  - EquipmentID: 1011
     Prob: 1
   - EquipmentID: 1002
     Prob: 1
   - EquipmentID: 1003
     Prob: 1
-  - EquipmentID: 1004
+  - EquipmentID: 1014
     Prob: 1
   - EquipmentID: 1005
     Prob: 1
-  - EquipmentID: 1006
+  - EquipmentID: 1016
     Prob: 1
-  - EquipmentID: 1007
+  - EquipmentID: 1017
     Prob: 1
   - EquipmentID: 1008
     Prob: 1

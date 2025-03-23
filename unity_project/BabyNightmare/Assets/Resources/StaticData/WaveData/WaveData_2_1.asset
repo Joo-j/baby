@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa0f6935fcbb4e4986131bbe16aab7a, type: 3}
   m_Name: WaveData_2_1
   m_EditorClassIdentifier: 
-  ID: 4
-  Group: 2
+  ID: 7
+  Group: 201
   EquipmentProbDataID: 1
-  EquipmentBoxDataID: 1
-  EnemySpawnDataID: 2
+  EnemySpawnDataID: 3
+  BoxType: 0

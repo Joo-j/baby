@@ -17,13 +17,10 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public string Name;
-        public string Desc;
         public int Level;
         public List<StatData> StatDataList;
         public float CoolTime;
-        public Sprite Sprite;
         public RectShape Shape;
-
 
         public int GetStatValueByCool(float value)
         {
