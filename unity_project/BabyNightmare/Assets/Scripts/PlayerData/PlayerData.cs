@@ -22,7 +22,6 @@ namespace BabyNightmare
         private const string KEY_CHAPTER = "player_data_chapter";
         private const string KEY_TOTAL_ATTEMPT_COUNT = "player_data_total_attempt_count";
         private const string KEY_CHAPTER_ATTEMPT_COUNT = "player_data_chapter_attempt_count";
-        private const string KEY_ADDED_INDEX = "player_data_added_index";
 
         public static int Version = 1;
         public static float TotalPlayTime = 0f;
@@ -35,7 +34,6 @@ namespace BabyNightmare
         public int Chapter = 1;
         public int TotalAttemptCount;
         public int ChapterAttemptCount;
-        public List<Vector2Int> AddedIndexList = new List<Vector2Int>();
         public bool Haptic_Active;
 
 
@@ -133,19 +131,6 @@ namespace BabyNightmare
             TotalAttemptCount = jsonClass[KEY_TOTAL_ATTEMPT_COUNT]?.AsInt ?? 0;
             ChapterAttemptCount = jsonClass[KEY_CHAPTER_ATTEMPT_COUNT]?.AsInt ?? 0;
 
-            var arr = jsonClass[KEY_ADDED_INDEX]?.AsArray ?? null;
-            if (null != arr)
-            {
-                for (var i = 0; i < arr.Count; i++)
-                {
-                    var node = arr[i];
-                    var x = node["x"]?.AsInt ?? 0;
-                    var y = node["y"]?.AsInt ?? 0;
-
-                    AddedIndexList.Add(new Vector2Int(x, y));
-                }
-            }
-
             Debug.Log("PlayerData Load Success");
         }
 
@@ -163,17 +148,6 @@ namespace BabyNightmare
             jsonClass[KEY_CHAPTER] = new JSONData(Chapter);
             jsonClass[KEY_TOTAL_ATTEMPT_COUNT] = new JSONData(TotalAttemptCount);
             jsonClass[KEY_CHAPTER_ATTEMPT_COUNT] = new JSONData(ChapterAttemptCount);
-
-            var jsonArr = new JSONArray();
-            for (var i = 0; i < AddedIndexList.Count; i++)
-            {
-                var node = new JSONNode();
-                node["x"] = AddedIndexList[i].x.ToString();
-                node["y"] = AddedIndexList[i].y.ToString();
-                jsonArr.Add(node);
-            }
-
-            jsonClass[KEY_ADDED_INDEX] = jsonArr;
 
             var binaryData = jsonClass.ToString();
             FileSaveUtil.Save(FILE_PLAYER_DATA, binaryData, false, false);
