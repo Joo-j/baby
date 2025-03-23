@@ -106,16 +106,6 @@ namespace BabyNightmare.Match
 
             _bag.Init(_loot, AddStat);
 
-            var addedIndexList = PlayerData.Instance.AddedIndexList;
-            if (null != addedIndexList)
-            {
-                for (var i = 0; i < addedIndexList.Count; i++)
-                {
-                    var index = addedIndexList[i];
-                    _bag.AddCell(index);
-                }
-            }
-
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
 
