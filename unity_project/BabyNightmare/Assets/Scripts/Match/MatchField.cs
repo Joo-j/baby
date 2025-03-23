@@ -15,7 +15,7 @@ namespace BabyNightmare.Match
     {
         public ChapterData ChapterData { get; }
         public Action<int, Vector3> GetCoin { get; }
-        public Action<float> RefreshProgress { get; }
+        public Action<float, bool> RefreshProgress { get; }
         public Action OnClearWave { get; }
         public Action OnFailWave { get; }
         public Func<int, ProjectileData> GetProjectileData { get; }
@@ -24,7 +24,7 @@ namespace BabyNightmare.Match
         (
             ChapterData chapterData,
             Action<int, Vector3> getCoin,
-            Action<float> refreshProgress,
+            Action<float, bool> refreshProgress,
             Action onClearWave,
             Action onFailWave,
             Func<int, ProjectileData> getProjectileData
@@ -161,10 +161,11 @@ namespace BabyNightmare.Match
             Destroy(enemy.GO);
 
             var progressFactor = 1 - ((float)_aliveEnemies.Count / _enemySpawnCount);
-            _context.RefreshProgress?.Invoke(progressFactor);
+            _context.RefreshProgress?.Invoke(progressFactor, false);
 
             if (_aliveEnemies.Count == 0)
             {
+                _context.RefreshProgress?.Invoke(0, true);
                 _context.OnClearWave?.Invoke();
             }
         }

@@ -60,7 +60,7 @@ namespace BabyNightmare.Match
             var matchFieldContext = new MatchFieldContext(
                                         chapterData,
                                         GetCoin,
-                                        RefreshProgress,
+                                        (factor, immediate) => _matchView?.RefreshProgress(factor, immediate),
                                         OnClearWave,
                                         OnFailMatch,
                                         GetProjectileData);
@@ -81,17 +81,14 @@ namespace BabyNightmare.Match
                                         );
             _matchView.Init(matchViewContext);
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
-            _matchView.RefreshProgress(0);
 
             PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
-            PlayerData.Instance.Coin = 0;
+            CoinHUD.UseFX(false);
+            PlayerData.Instance.Coin = INITIAL_COIN;
+            CoinHUD.UseFX(true);
 
-            _rerollCount = INITIAL_COIN;
-        }
-
-        private void RefreshProgress(float factor)
-        {
-            _matchView?.RefreshProgress(factor);
+            _rerollCount = 0;
+            _rerollPrice = 0;
         }
 
         private void OnFailMatch()

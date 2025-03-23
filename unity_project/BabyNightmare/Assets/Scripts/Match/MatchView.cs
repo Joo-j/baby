@@ -135,14 +135,20 @@ namespace BabyNightmare.Match
             _waveTMP.text = $"Wave {curWave}/{maxWave}";
         }
 
-        public void RefreshProgress(float factor)
+        public void RefreshProgress(float factor, bool immediate)
         {
             var startSize = _waveProgressIMG.rectTransform.sizeDelta;
-            var targetSize = Vector2.Lerp(startSize, _progressSize, factor);
+            var targetSize = Vector2.Lerp(new Vector2(0, _progressSize.y), _progressSize, factor);
             Debug.Log($"@@ {factor} {startSize} {targetSize}");
 
             if (null != _coRefreshProgress)
                 StopCoroutine(_coRefreshProgress);
+
+            if (true == immediate)
+            {
+                _waveProgressIMG.rectTransform.sizeDelta = targetSize;
+                return;
+            }
 
             _coRefreshProgress = StartCoroutine(Co_RefreshProgress());
 
@@ -202,22 +208,9 @@ namespace BabyNightmare.Match
             _startGO.SetActive(false);
             _canvasGroup.blocksRaycasts = true;
 
-            StartCoroutine(Co_SizeUpBag());
-            IEnumerator Co_SizeUpBag()
-            {
-                var waiter = new CoroutineWaiter();
-
-                var talentBagSize = TalentManager.Instance.GetValue(ETalentType.Bag_Size_Amount);
-                for (var i = 0; i < talentBagSize; i++)
-                {
-                    _bag.ShowAddableCell(waiter.Signal);
-                    yield return waiter.Wait();
-                }
-
-                _bag.TryAdd(_context.InitEquipment);
-                _rerollCVG.gameObject.SetActive(true);
-                _fightGO.SetActive(true);
-            }
+            _bag.TryAdd(_context.InitEquipment);
+            _rerollCVG.gameObject.SetActive(true);
+            _fightGO.SetActive(true);
         }
 
         public void OnClearWave()
