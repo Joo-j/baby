@@ -63,12 +63,12 @@ namespace BabyNightmare.Talent
                 var dataList = _dataDict.Values.ToList();
                 dataList.Sort();
 
-                _talentView.Init(dataList, Upgrade, GetPrice);
+                _talentView.Init(dataList, Upgrade);
                 _talentView.RefreshLevel(_levelDict, false);
             }
 
             _talentView.gameObject.SetActive(true);
-            _talentView.RefreshButton(PlayerData.Instance.Gem);
+            _talentView.RefreshButton(PlayerData.Instance.Gem, GetPrice());
 
             ++ShowCount;
         }
@@ -92,10 +92,6 @@ namespace BabyNightmare.Talent
 
         private void Upgrade()
         {
-            var price = GetPrice();
-            PlayerData.Instance.Gem -= price;
-            _talentView.RefreshButton(PlayerData.Instance.Gem);
-
             var randomPicker = new WeightedRandomPicker<TalentData>();
 
             foreach (var pair in _dataDict)
@@ -108,10 +104,15 @@ namespace BabyNightmare.Talent
             var upgradeType = pickData.TalentType;
             ++_levelDict[upgradeType];
 
+            var price = GetPrice();
+            PlayerData.Instance.Gem -= price;
+            PlayerData.Instance.Save();
+            _talentView.RefreshButton(PlayerData.Instance.Gem, price);
+
             _talentView.ShowGacha(() =>
             {
                 _talentView.RefreshLevel(_levelDict, true);
-                _talentView.RefreshButton(PlayerData.Instance.Gem);
+                _talentView.RefreshButton(PlayerData.Instance.Gem, price);
             });
 
             Debug.Log($"{upgradeType}타입 업그레이드");

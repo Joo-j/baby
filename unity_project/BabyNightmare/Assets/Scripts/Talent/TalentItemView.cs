@@ -25,6 +25,7 @@ namespace BabyNightmare
         private Sprite _iconSprite = null;
         private string _titleText = null;
         private int _level = 0;
+        private FX _fx = null;
 
         public void Init(TalentData data)
         {
@@ -55,12 +56,12 @@ namespace BabyNightmare
             if (level > _level && true == showFX)
             {
                 StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.2f, CurveHelper.Preset.Linear, 0.1f));
-                var fx = FXPool.Instance.Get(EFXType.Pop);
-                fx.transform.SetParent(transform);
-                fx.transform.localPosition = Vector3.zero;
-                fx.transform.localScale = Vector3.one * 150f;
+                _fx = FXPool.Instance.Get(EFXType.Pop);
+                _fx.transform.SetParent(transform);
+                _fx.transform.localPosition = Vector3.zero;
+                _fx.transform.localScale = Vector3.one * 150f;
 
-                this.Invoke(CoroutineUtil.WaitForSeconds(3f), () => FXPool.Instance.Return(fx));
+                this.Invoke(CoroutineUtil.WaitForSeconds(2.5f), () => FXPool.Instance.Return(_fx));
             }
 
             _level = level;
@@ -71,6 +72,12 @@ namespace BabyNightmare
             _bg.sprite = on ? _focusBG : _normalBG;
             if (on)
                 StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.1f, CurveHelper.Preset.Linear, 0.1f));
+        }
+
+        private void OnDisable()
+        {
+            if (null != _fx)
+                FXPool.Instance.Return(_fx);
         }
     }
 }

@@ -25,9 +25,8 @@ namespace BabyNightmare.Talent
 
         private Dictionary<ETalentType, TalentItemView> _itemViewDict = null;
         private Action _upgrade = null;
-        private Func<int> _getPrice = null;
 
-        public void Init(List<TalentData> dataList, Action upgrade, Func<int> getPrice)
+        public void Init(List<TalentData> dataList, Action upgrade)
         {
             _itemViewDict = new Dictionary<ETalentType, TalentItemView>();
 
@@ -40,7 +39,6 @@ namespace BabyNightmare.Talent
             }
 
             _upgrade = upgrade;
-            _getPrice = getPrice;
         }
 
         public void RefreshLevel(Dictionary<ETalentType, int> levelDict, bool showFx)
@@ -56,9 +54,8 @@ namespace BabyNightmare.Talent
             }
         }
 
-        public void RefreshButton(int gem)
+        public void RefreshButton(int gem, int price)
         {
-            var price = _getPrice.Invoke();
             if (price == 0)
             {
                 _priceTMP.text = $"FREE";
@@ -79,7 +76,7 @@ namespace BabyNightmare.Talent
 
             IEnumerator Co_Gacha()
             {
-                _canvasGroup.interactable = false;
+                var touchBlocker = TempViewHelper.GetTouchBlocker();
                 _upgradeBTN.enabled = false;
                 _upgradeBTN.image.sprite = _disenableButtonSprite;
 
@@ -92,10 +89,19 @@ namespace BabyNightmare.Talent
 
                 yield return CoroutineUtil.WaitForSeconds(0.5f);
 
+                TalentItemView preItemView = null;
                 var count = _itemViewDict.Count;
                 for (var i = 0; i < count; i++)
                 {
                     var itemView = randomPicker.RandomPick();
+                    if (preItemView == itemView)
+                    {
+                        --i;
+                        continue;
+                    }
+
+                    preItemView = itemView;
+
                     foreach (var pair in _itemViewDict)
                     {
                         pair.Value.Focus(pair.Value == itemView);
@@ -111,7 +117,9 @@ namespace BabyNightmare.Talent
                     pair.Value.Focus(false);
                 }
 
-                _canvasGroup.interactable = true;
+                _upgradeBTN.enabled = true;
+                _upgradeBTN.image.sprite = _enableButtonSprite;
+                Destroy(touchBlocker.gameObject);
                 doneCallback?.Invoke();
             }
         }
