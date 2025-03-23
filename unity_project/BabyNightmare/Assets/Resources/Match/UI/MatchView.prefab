@@ -1234,7 +1234,6 @@ MonoBehaviour:
   _fieldIMG: {fileID: 7978898618099795721}
   _waveTMP: {fileID: 8454046752978044597}
   _waveProgressIMG: {fileID: 3916522500993640960}
-  _waveCircleTF: {fileID: 6283710122870639218}
   _bag: {fileID: 5794669616219534498}
   _loot: {fileID: 6865182795960360940}
   _topYPosRange: {x: 100, y: 360}
@@ -2235,8 +2234,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -150}
-  m_SizeDelta: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: -400}
+  m_SizeDelta: {x: 0, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1331366800164794290
 CanvasRenderer:
@@ -2356,7 +2355,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -200}
+  m_AnchoredPosition: {x: 0, y: -300}
   m_SizeDelta: {x: 500, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5304263475963652897
