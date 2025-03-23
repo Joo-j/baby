@@ -779,7 +779,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3765992340146399274, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
       propertyPath: m_Name
-      value: PlayerModel
+      value: Player_Model
       objectReference: {fileID: 0}
     - target: {fileID: 3765992340146399274, guid: c1e48ae3f00eb4cd8ad04c77b71809fa, type: 3}
       propertyPath: m_Layer

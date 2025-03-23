@@ -357,7 +357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6305070987602529719, guid: 860192760fb6f431bad76ce141cb884e, type: 3}
       propertyPath: m_Name
-      value: Enemy_Slime
+      value: Enemy_Slime_Model
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

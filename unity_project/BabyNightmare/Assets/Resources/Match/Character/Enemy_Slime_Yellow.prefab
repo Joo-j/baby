@@ -32,9 +32,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7347067298595614010}
   - {fileID: 8614077766103016918}
   - {fileID: 4756224774065195935}
+  - {fileID: 7347067298595614010}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2923941540571091805
@@ -441,7 +441,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6305070987602529719, guid: 860192760fb6f431bad76ce141cb884e, type: 3}
       propertyPath: m_Name
-      value: Enemy_Slime
+      value: Enemy_Slime_Model
       objectReference: {fileID: 0}
     - target: {fileID: 6472976828890351816, guid: 860192760fb6f431bad76ce141cb884e, type: 3}
       propertyPath: m_Materials.Array.data[0]
