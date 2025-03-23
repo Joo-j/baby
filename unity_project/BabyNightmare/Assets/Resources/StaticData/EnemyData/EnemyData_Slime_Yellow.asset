@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
-  m_Name: EnemyData_Slime_Blue
+  m_Name: EnemyData_Slime_Yellow
   m_EditorClassIdentifier: 
-  ID: 103
-  Name: Slime_Blue
-  Damage: 1
+  ID: 107
+  Name: Slime_Yellow
+  Damage: 1.6
   Health: 5
   Attack_Interval: 1.5
   Move_Step_Duration: 1.2

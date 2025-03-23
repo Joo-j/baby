@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 101
   Name: Sullivan
-  Damage: 7
-  Health: 20
+  Damage: 5
+  Health: 15
   Attack_Interval: 3
   Move_Step_Duration: 1.2
   Move_Step_Speed: 2
