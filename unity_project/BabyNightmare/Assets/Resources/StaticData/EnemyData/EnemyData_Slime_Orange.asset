@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 105
   Name: Slime_Orange
-  Damage: 1.4
-  Health: 7
+  Damage: 2.8
+  Health: 14
   Attack_Interval: 1.9
   Move_Step_Duration: 1
   Move_Step_Speed: 2.1
   Stop_Step_Duration: 0.1
-  Attack_Radius: 1.5
+  Attack_Radius: 1
   Coin_Min: 3
   Coin_Max: 10
   SpawnOrder: 1

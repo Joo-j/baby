@@ -24,12 +24,8 @@ MonoBehaviour:
     Prob: 1
   - EquipmentID: 1005
     Prob: 1
-  - EquipmentID: 1016
-    Prob: 1
-  - EquipmentID: 1017
-    Prob: 1
   - EquipmentID: 1008
-    Prob: 1
+    Prob: 11
   - EquipmentID: 1009
     Prob: 1
   - EquipmentID: 1010
@@ -39,6 +35,4 @@ MonoBehaviour:
   - EquipmentID: 1012
     Prob: 1
   - EquipmentID: 1013
-    Prob: 1
-  - EquipmentID: 1014
     Prob: 1

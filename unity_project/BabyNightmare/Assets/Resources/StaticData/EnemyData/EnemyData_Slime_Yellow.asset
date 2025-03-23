@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 107
   Name: Slime_Yellow
-  Damage: 1.6
-  Health: 8
+  Damage: 3.2
+  Health: 16
   Attack_Interval: 1.9
   Move_Step_Duration: 0.9
   Move_Step_Speed: 2.1
   Stop_Step_Duration: 0.1
-  Attack_Radius: 1.5
+  Attack_Radius: 1
   Coin_Min: 3
   Coin_Max: 10
   SpawnOrder: 1

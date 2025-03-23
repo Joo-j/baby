@@ -17,7 +17,7 @@ MonoBehaviour:
   Level: 1
   StatDataList:
   - Type: 1
-    Value: 2
+    Value: 4
   CoolTime: 1.64
   Shape:
     _column: 2

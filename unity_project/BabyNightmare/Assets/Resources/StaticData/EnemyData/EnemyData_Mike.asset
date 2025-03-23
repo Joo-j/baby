@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 102
   Name: Mike
-  Damage: 3
-  Health: 10
+  Damage: 6
+  Health: 20
   Attack_Interval: 2.5
   Move_Step_Duration: 0.8
   Move_Step_Speed: 2
