@@ -209,12 +209,12 @@ namespace BabyNightmare.Match
 
             _player.UseEquipment(equipmentData, randomEnemy);
         }
-        public void EncounterBox(EquipmentBoxData boxData, Action doneCallback)
+        public void EncounterBox(EBoxType boxType, Action doneCallback)
         {
             StartCoroutine(Co_EncounterBox());
             IEnumerator Co_EncounterBox()
             {
-                var path = $"{PATH_EQUIPMENT_BOX}{boxData.Type}";
+                var path = $"{PATH_EQUIPMENT_BOX}{boxType}";
                 var box = ObjectUtil.LoadAndInstantiate<EquipmentBox>(path, _boxSpawnTF);
                 box.TF.SetParent(_fieldTF);
 
@@ -243,6 +243,7 @@ namespace BabyNightmare.Match
 
         public void GetWaveCoin(Vector3 coinGenPos)
         {
+            _waveCoin = Mathf.CeilToInt(_waveCoin * 0.5f);
             var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
             _waveCoin += Mathf.CeilToInt(_waveCoin * talentCoin);
 

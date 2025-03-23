@@ -55,6 +55,8 @@ namespace BabyNightmare.Match
 
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
+            _rerollCount = 0;
+            _rerollPrice = 0;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             var matchFieldContext = new MatchFieldContext(
@@ -86,9 +88,6 @@ namespace BabyNightmare.Match
             CoinHUD.UseFX(false);
             PlayerData.Instance.Coin = INITIAL_COIN;
             CoinHUD.UseFX(true);
-
-            _rerollCount = 0;
-            _rerollPrice = 0;
         }
 
         private void OnFailMatch()
@@ -170,20 +169,18 @@ namespace BabyNightmare.Match
             _matchView.OnClearWave();
             _matchView.RefreshWave(_currentWave + 1, _maxWave);
 
-            var boxData = GetBoxData();
-            _matchField.EncounterBox(boxData, () => _matchView.ShowBox(boxData.Type, (boxPos) => OnGetBox(boxData, boxPos)));
-        }
 
-        private EquipmentBoxData GetBoxData()
-        {
             var waveData = _waveDataList[_currentWave];
 
-            var id = waveData.EquipmentBoxDataID;
-            var boxData = StaticDataManager.Instance.GetEquipmentBoxDataList(id);
-
-            return boxData;
+            _matchField.EncounterBox(waveData.BoxType,
+            () => _matchView.ShowBox(waveData.BoxType,
+            (boxPos) =>
+            {
+                var dataList = GetRerollData();
+                _matchView.Reroll(dataList);
+                _matchField.GetWaveCoin(boxPos);
+            }));
         }
-
         private void OnClickReroll()
         {
             var dataList = GetRerollData();
@@ -192,34 +189,8 @@ namespace BabyNightmare.Match
             var preCost = _rerollPrice;
             ++_rerollCount;
             _rerollPrice = REROLL_BASE_PRICE * (int)Mathf.Pow(_rerollCount, 2);
+
             PlayerData.Instance.Coin -= preCost;
-        }
-
-        private void OnGetBox(EquipmentBoxData boxData, Vector3 boxPos)
-        {
-            var probID = boxData.EquipmentProbDataID;
-            var probData = StaticDataManager.Instance.GetEquipmentProbData(probID);
-            var probDataList = probData.ProbDataList;
-
-            var randomPicker = new WeightedRandomPicker<ProbData>();
-            for (var i = 0; i < probDataList.Count; i++)
-            {
-                var data = probDataList[i];
-                randomPicker.Add(data, data.Prob);
-            }
-
-            var dataList = new List<EquipmentData>();
-            for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
-            {
-                var data = randomPicker.RandomPick();
-                var equipment = StaticDataManager.Instance.GetEquipmentData(data.EquipmentID);
-                dataList.Add(equipment);
-
-                randomPicker.Remove(data);
-            }
-
-            _matchView.Reroll(dataList);
-            _matchField.GetWaveCoin(boxPos);
         }
 
         private void RefreshRerollCost(int coin)
@@ -251,6 +222,11 @@ namespace BabyNightmare.Match
 
                 var equipment = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
                 dataList.Add(equipment);
+            }
+
+            if (dataList.Count == 0)
+            {
+                Debug.LogError($"{_currentWave}웨이브 EuipmetnData가 없습니다");                
             }
 
             return dataList;

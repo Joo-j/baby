@@ -158,7 +158,7 @@ namespace BabyNightmare.Character
             if (null == gameObject)
                 return;
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{damage}", Color.white);
+            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{Mathf.RoundToInt(damage)}", Color.white);
 
             base.ReceiveAttack(damage, isCritical);
         }
