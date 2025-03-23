@@ -11,6 +11,7 @@ namespace BabyNightmare.CustomShop
     {
         [SerializeField] protected Camera _renderCamera;
         [SerializeField] private PlayerModel _playerModel;
+        [SerializeField] private EAniType _aniType = EAniType.Move;
 
         private RenderTexture _rt = null;
 
@@ -31,7 +32,7 @@ namespace BabyNightmare.CustomShop
 
         public void RefreshCustomItem(CustomItemData itemData)
         {
-            _playerModel.PlayMoveAni();
+            _playerModel.PlayAni(_aniType);
             _playerModel.RefreshCustomItem(itemData);
         }
 

@@ -34,9 +34,14 @@ namespace BabyNightmare.Character
             }
         }
 
-        public void PlayMoveAni()
+        public void PlayAni(EAniType aniType)
         {
-            _animator.Play("Move");
+            switch (aniType)
+            {
+                case EAniType.Move: _animator.Play("Move"); break;
+                case EAniType.Idle: _animator.Play("Idle"); break;
+                case EAniType.Attack: _animator.Play("Attack"); break;
+            }
         }
     }
 }

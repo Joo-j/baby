@@ -18,6 +18,13 @@ namespace BabyNightmare.Character
         public void ReserveDamage(float damage);
         public void ReceiveAttack(float damage, bool isCritical);
     }
+    public enum EAniType
+    {
+        Idle,
+        Move,
+        Attack,
+    }
+
 
     public abstract class CharacterBase : BehaviourBase, ICharacter
     {

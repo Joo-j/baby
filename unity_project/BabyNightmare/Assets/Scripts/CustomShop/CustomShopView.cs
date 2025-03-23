@@ -71,7 +71,7 @@ namespace BabyNightmare.CustomShop
         [SerializeField] private Sprite _noFocusTab;
 
         private const string PATH_CUSTOM_ITEM_VIEW = "CustomShop/CustomItemView";
-        private const string PATH_CUSTOM_ITEM_PREVIEW = "CustomShop/CustomItemPreview";
+        private const string PATH_CUSTOM_ITEM_PREVIEW_SHOP = "CustomShop/CustomItemPreview_Shop";
         private CustomShopViewContext _context = null;
         private Dictionary<ECustomItemType, Dictionary<int, CustomItemView>> _itemViewDict = null;
         private CustomItemPreview _itemPreview = null;
@@ -154,10 +154,10 @@ namespace BabyNightmare.CustomShop
         {
             if (null == _itemPreview)
             {
-                _itemPreview = ObjectUtil.LoadAndInstantiate<CustomItemPreview>(PATH_CUSTOM_ITEM_PREVIEW, transform);
+                _itemPreview = ObjectUtil.LoadAndInstantiate<CustomItemPreview>(PATH_CUSTOM_ITEM_PREVIEW_SHOP, transform);
                 if (null == _itemPreview)
                 {
-                    Debug.LogError($"{PATH_CUSTOM_ITEM_PREVIEW}에 프리팹이 없습니다.");
+                    Debug.LogError($"{PATH_CUSTOM_ITEM_PREVIEW_SHOP}에 프리팹이 없습니다.");
                     return;
                 }
 

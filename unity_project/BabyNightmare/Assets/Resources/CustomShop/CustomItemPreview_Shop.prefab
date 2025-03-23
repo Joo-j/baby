@@ -605,7 +605,7 @@ GameObject:
   - component: {fileID: 6690937069478726681}
   - component: {fileID: 8015192655925054710}
   m_Layer: 10
-  m_Name: CustomItemPreview
+  m_Name: CustomItemPreview_Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -643,6 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _renderCamera: {fileID: 837034766712003291}
   _playerModel: {fileID: 2771634889598228798}
+  _aniType: 1
 --- !u!1 &1200592251707437587
 GameObject:
   m_ObjectHideFlags: 0
@@ -15838,7 +15839,7 @@ MonoBehaviour:
   _y: 1
   _z: 0
   _speedX: 0
-  _speedY: 60
+  _speedY: 50
   _speedZ: 0
 --- !u!1001 &6434822493115705949
 PrefabInstance:

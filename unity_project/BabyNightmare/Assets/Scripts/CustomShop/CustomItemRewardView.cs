@@ -15,14 +15,14 @@ namespace BabyNightmare.CustomShop
         [SerializeField] private AnimationCurve _scaleCurve;
 
         private readonly static int ANI_SHOW = Animator.StringToHash("Show");
-        private const string PATH_CUSTOM_ITEM_PRIVIEW = "CustomShop/CustomItemPreview";
+        private const string PATH_CUSTOM_ITEM_PRIVIEW_REWARD = "CustomShop/CustomItemPreview_Reward";
         private CustomItemPreview _preview;
         private Action _onTapToClaim = null;
         private Action _onEquip = null;
 
         public void Init(bool isShowEquip, CustomItemData itemData, Action onTapToClaim, Action onEquip)
         {
-            _preview = ObjectUtil.LoadAndInstantiate<CustomItemPreview>(PATH_CUSTOM_ITEM_PRIVIEW, transform);
+            _preview = ObjectUtil.LoadAndInstantiate<CustomItemPreview>(PATH_CUSTOM_ITEM_PRIVIEW_REWARD, transform);
             if (null == _preview)
             {
                 Debug.LogError("먹이 프리뷰가 없습니다.");
