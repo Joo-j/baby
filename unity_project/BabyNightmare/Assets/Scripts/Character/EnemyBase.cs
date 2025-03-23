@@ -146,7 +146,7 @@ namespace BabyNightmare.Character
                     _animationTrigger.Clear();
                     _animationTrigger.AddAction(1, () => player.ReceiveAttack(_context.EnemyData.Damage, false));
 
-                    _animator.SetTrigger(HASH_ANI_ATTACK);
+                    _animator.Play(HASH_ANI_ATTACK);
 
                     yield return new WaitForSeconds(interval);
                 }

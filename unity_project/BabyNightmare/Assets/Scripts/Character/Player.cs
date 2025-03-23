@@ -99,7 +99,7 @@ namespace BabyNightmare.Character
 
         public void ReadyOpenBox()
         {
-            _animator.SetTrigger(HASH_ANI_IDLE);
+            _animator.Play(HASH_ANI_IDLE);
         }
 
         public override void Die()
@@ -138,13 +138,13 @@ namespace BabyNightmare.Character
         {
             _useInfoQueue.Enqueue(new EquipmentUseInfo(equipmentData, enemy));
 
-            if (_useInfoQueue.Count > 1)
+            if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash == HASH_ANI_ATTACK)
             {
                 TryUseEquipment();
                 return;
             }
 
-            _animator.SetTrigger(HASH_ANI_ATTACK);
+            _animator.Play(HASH_ANI_ATTACK);
         }
 
         private void TryUseEquipment()

@@ -139,7 +139,6 @@ namespace BabyNightmare.Match
         {
             var startSize = _waveProgressIMG.rectTransform.sizeDelta;
             var targetSize = Vector2.Lerp(new Vector2(0, _progressSize.y), _progressSize, factor);
-            Debug.Log($"@@ {factor} {startSize} {targetSize}");
 
             if (null != _coRefreshProgress)
                 StopCoroutine(_coRefreshProgress);
