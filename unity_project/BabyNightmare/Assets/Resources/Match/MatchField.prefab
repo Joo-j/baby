@@ -89,7 +89,7 @@ MonoBehaviour:
   _boxSpawnTF: {fileID: 8339263573230450734}
   _groundMoveAmount: 5
   _attackRadius: 10
-  _cameraMoveDuration: 0.01
+  _cameraMoveDuration: 0.5
 --- !u!1 &2173026360070404481
 GameObject:
   m_ObjectHideFlags: 0

@@ -123,8 +123,7 @@ namespace BabyNightmare.Match
             _canvasGroup.blocksRaycasts = false;
             _startGO.SetActive(true);
 
-            ChangeRectPos(false, true);
-            _context.MoveCameraPos?.Invoke(ECameraPosType.High);
+            ChangeRectPos(false, true, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
@@ -220,8 +219,7 @@ namespace BabyNightmare.Match
 
         public void ShowBox(EBoxType type, Action<Vector3> onOpenBox)
         {
-            ChangeRectPos(false);
-            _context.MoveCameraPos?.Invoke(ECameraPosType.High);
+            ChangeRectPos(false, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
 
             _onOpenBox = onOpenBox;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
@@ -269,14 +267,13 @@ namespace BabyNightmare.Match
                 _bag.StartUseEquipment(_context.OnCoolDown, speed);
                 _canvasGroup.blocksRaycasts = false;
 
-                ChangeRectPos(true);
-                _context.MoveCameraPos?.Invoke(ECameraPosType.Mid);
+                ChangeRectPos(true, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.Mid));
 
                 _context.StartWave?.Invoke();
             }
         }
 
-        public void ChangeRectPos(bool top, bool immediate = false)
+        public void ChangeRectPos(bool top, bool immediate, Action doneCallback)
         {
             var topStartPos = _topRTF.anchoredPosition;
             var topTargetPos = top ? new Vector2(topStartPos.x, _topYPosRange.x) : new Vector2(topStartPos.x, _topYPosRange.y);
@@ -298,10 +295,10 @@ namespace BabyNightmare.Match
             if (null != _coChangeRect)
                 StopCoroutine(_coChangeRect);
 
-            _coChangeRect = StartCoroutine(Co_ChangeRectPos(topTargetPos, botTargetPos));
+            _coChangeRect = StartCoroutine(Co_ChangeRectPos(topTargetPos, botTargetPos, doneCallback));
         }
 
-        private IEnumerator Co_ChangeRectPos(Vector2 topTargetPos, Vector2 botTargetPos)
+        private IEnumerator Co_ChangeRectPos(Vector2 topTargetPos, Vector2 botTargetPos, Action doneCallback)
         {
             var elapsed = 0f;
 
@@ -319,6 +316,7 @@ namespace BabyNightmare.Match
             _topRTF.anchoredPosition = topTargetPos;
             _botRTF.anchoredPosition = botTargetPos;
 
+            doneCallback?.Invoke();
             _coChangeRect = null;
         }
 
