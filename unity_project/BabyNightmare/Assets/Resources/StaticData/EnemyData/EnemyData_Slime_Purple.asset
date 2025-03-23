@@ -16,11 +16,11 @@ MonoBehaviour:
   Name: Slime_Purple
   Damage: 1.8
   Health: 7
-  Attack_Interval: 1.6
+  Attack_Interval: 1.9
   Move_Step_Duration: 0.9
   Move_Step_Speed: 2.1
   Stop_Step_Duration: 0.1
-  Attack_Radius: 2
+  Attack_Radius: 1.5
   Coin_Min: 3
   Coin_Max: 10
   SpawnOrder: 1
