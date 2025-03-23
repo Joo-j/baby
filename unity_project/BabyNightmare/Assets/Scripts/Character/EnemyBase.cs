@@ -45,8 +45,6 @@ namespace BabyNightmare.Character
 
         private EnemyContext _context = null;
 
-        public override float HitRadius => 2f;
-
         public void Init(EnemyContext context)
         {
             _context = context;
@@ -114,7 +112,7 @@ namespace BabyNightmare.Character
                     var factor = _moveCurve.Evaluate(elapsed / moveStepDuration);
                     transform.position = Vector3.Lerp(startPos_interval, targetPos_interval, factor);
 
-                    if (Vector3.Distance(transform.position, targetPos) <= player.HitRadius)
+                    if (Vector3.Distance(transform.position, targetPos) <= attackRadius)
                     {
                         Attack();
                         break;

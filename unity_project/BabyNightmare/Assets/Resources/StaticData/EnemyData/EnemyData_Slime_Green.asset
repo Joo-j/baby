@@ -20,7 +20,7 @@ MonoBehaviour:
   Move_Step_Duration: 1.1
   Move_Step_Speed: 2.1
   Stop_Step_Duration: 0.1
-  Attack_Radius: 1
+  Attack_Radius: 3
   Coin_Min: 3
   Coin_Max: 10
   SpawnOrder: 1

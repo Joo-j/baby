@@ -12,7 +12,6 @@ namespace BabyNightmare.Character
         public GameObject GO { get; }
         public Transform TF { get; }
         public float HP { get; }
-        public float HitRadius { get; }
         public Transform HitPoint { get; }
         public bool IsAttackable { get; }
         public void ReserveDamage(float damage);
@@ -49,7 +48,6 @@ namespace BabyNightmare.Character
         private float _reserveDamage = 0f;
         protected bool _isDead = false;
 
-        public abstract float HitRadius { get; }
         public GameObject GO => gameObject;
         public Transform TF => transform;
         public Transform HitPoint => _hitPoint;

@@ -60,8 +60,6 @@ namespace BabyNightmare.Character
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
 
-        public override float HitRadius => _hitRadius;
-
         public void Init(PlayerContext context)
         {
             _context = context;
@@ -139,10 +137,10 @@ namespace BabyNightmare.Character
             if (_animator.GetCurrentAnimatorStateInfo(0).shortNameHash == HASH_ANI_ATTACK)
             {
                 TryUseEquipment();
-                return;
             }
 
-            _animator.Play(HASH_ANI_ATTACK);
+            if (_useInfoQueue.Count > 0)
+                _animator.Play(HASH_ANI_ATTACK);
         }
 
         private void TryUseEquipment()
