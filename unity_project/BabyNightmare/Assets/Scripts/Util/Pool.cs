@@ -36,8 +36,11 @@ namespace BabyNightmare.Util
 
             var item = _itemList[_itemList.Count - 1];
             _itemList.RemoveAt(_itemList.Count - 1);
-            _activeList.Add(item);
 
+            if (null == item.gameObject)
+                return Get();
+
+            _activeList.Add(item);
             item.gameObject.SetActive(true);
 
             return item;
