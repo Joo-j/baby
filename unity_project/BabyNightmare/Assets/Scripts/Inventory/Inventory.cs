@@ -15,7 +15,7 @@ namespace BabyNightmare.InventorySystem
         protected RectTransform _rtf = null;
         protected RectTransform _canvasRTF = null;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
-        protected Action<Equipment, List<Equipment>> _refreshChangeStat = null;
+        protected Action<Equipment, HashSet<Equipment>> _refreshChangeStat = null;
         protected Func<int, ProjectileData> _getProjectileData = null;
 
         private static Inventory _dragStartInventory = null;
@@ -28,7 +28,7 @@ namespace BabyNightmare.InventorySystem
         public abstract void Equip(Equipment equipment);
         public abstract Equipment Unequip(Vector2 screenPos);
         public abstract Equipment Get(Vector2 screenPos);
-        public abstract List<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
+        public abstract HashSet<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
 
         private void Awake()
         {
@@ -44,7 +44,7 @@ namespace BabyNightmare.InventorySystem
         public void InitBase
         (
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
-            Action<Equipment, List<Equipment>> refreshChangeStat,
+            Action<Equipment, HashSet<Equipment>> refreshChangeStat,
             Func<int, ProjectileData> getProjectileData
         )
         {
@@ -120,8 +120,8 @@ namespace BabyNightmare.InventorySystem
                 return;
             }
 
-            var overlapList = _currentInventory.TryGetOverlap(_draggedEquipment, _dragEventData.position);
-            _refreshChangeStat?.Invoke(_draggedEquipment, overlapList);
+            var overlapSet = _currentInventory.TryGetOverlap(_draggedEquipment, _dragEventData.position);
+            _refreshChangeStat?.Invoke(_draggedEquipment, overlapSet);
 
         }
 

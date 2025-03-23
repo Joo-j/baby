@@ -110,7 +110,7 @@ namespace BabyNightmare.InventorySystem
         }
 
 
-        public override List<Equipment> TryGetOverlap(Equipment data, Vector2 screenPos)
+        public override HashSet<Equipment> TryGetOverlap(Equipment data, Vector2 screenPos)
         {
             return null;
         }

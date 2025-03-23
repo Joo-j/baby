@@ -216,7 +216,6 @@ namespace BabyNightmare.Match
         {
             _bag.StopUseEquipment();
             _canvasGroup.blocksRaycasts = true;
-            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
         }
 
         public void ShowBox(EBoxType type, Action<Vector3> onOpenBox)
@@ -235,7 +234,7 @@ namespace BabyNightmare.Match
             _boxGO.SetActive(false);
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
-
+            _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
             _onOpenBox?.Invoke(_boxGO.transform.position);
         }
 
@@ -331,7 +330,6 @@ namespace BabyNightmare.Match
                 var statData = statDataList[i];
                 var value = data.GetStatValueByCool(statData.Value);
                 _statDict[statData.Type] += isEquip ? value : -value;
-                //Debug.Log($"{data.Name} {data.Level} {statData.Type} {statData.Value}  {data.CoolTime}");
             }
 
             foreach (var pair in _statItemViewDict)
@@ -340,7 +338,7 @@ namespace BabyNightmare.Match
             }
         }
 
-        private void RefreshStatChange(Equipment dragEquipment, List<Equipment> overlapList)
+        private void RefreshStatChange(Equipment dragEquipment, HashSet<Equipment> overlapSet)
         {
             foreach (var key in _statChangeDict.Keys.ToList())
             {
@@ -348,17 +346,26 @@ namespace BabyNightmare.Match
             }
 
             var isUpgradable = false;
-            if (null != overlapList && overlapList.Count > 0) // 겹치는 장비가 있을 때 
+            if (null != overlapSet && overlapSet.Count > 0) // 겹치는 장비가 있을 때 
             {
+                var overlapList = overlapSet.ToList();
                 var upgradeData = _context.GetUpgradeData(dragEquipment.Data, overlapList[0].Data);
-                if (overlapList.Count == 1 && null != upgradeData) //업그레이드 상황일 때 업그레이드 데이터 스탯 계산
+                if (overlapSet.Count == 1 && null != upgradeData) //업그레이드 상황일 때 업그레이드 데이터 스탯 계산
                 {
-                    var statDataList = upgradeData.StatDataList;
-                    for (var i = 0; i < statDataList.Count; i++)
+                    var upgradeStatDataList = upgradeData.StatDataList;
+                    for (var i = 0; i < upgradeStatDataList.Count; i++)
                     {
-                        var statData = statDataList[i];
+                        var statData = upgradeStatDataList[i];
                         var value = upgradeData.GetStatValueByCool(statData.Value);
                         _statChangeDict[statData.Type] += value;
+                    }
+
+                    var dragStatDataList = dragEquipment.Data.StatDataList;
+                    for (var i = 0; i < dragStatDataList.Count; i++)
+                    {
+                        var statData = dragStatDataList[i];
+                        var value = upgradeData.GetStatValueByCool(statData.Value);
+                        _statChangeDict[statData.Type] -= value;
                     }
 
                     isUpgradable = true;
