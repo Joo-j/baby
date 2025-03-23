@@ -474,7 +474,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _delayDuration: 1.3
+  _delayDuration: 1.5
 --- !u!225 &6958321612333139297
 CanvasGroup:
   m_ObjectHideFlags: 0
