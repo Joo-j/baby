@@ -117,7 +117,7 @@ namespace BabyNightmare.Character
 
             _shieldImage.gameObject.SetActive(_def > 0);
             _shieldText.gameObject.SetActive(_def > 0);
-            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{_def}"));
+            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{Mathf.RoundToInt(_def)}"));
         }
 
         public override void ReceiveAttack(float damage, bool isCritical)

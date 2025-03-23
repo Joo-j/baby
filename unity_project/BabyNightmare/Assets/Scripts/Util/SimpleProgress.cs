@@ -26,7 +26,7 @@ namespace BabyNightmare.Util
         {
             if (true == immediate)
             {
-                _progressTMP.text = $"{current}";
+                _progressTMP.text = $"{Mathf.RoundToInt(current)}";
                 _progressIMG.rectTransform.sizeDelta = new Vector2(Mathf.Lerp(0, _progressSize.x, current / max), _progressSize.y);
                 return;
             }
@@ -51,7 +51,7 @@ namespace BabyNightmare.Util
             }
 
             _progressIMG.rectTransform.sizeDelta = targetSize;
-            _progressTMP.text = $"{current}";
+            _progressTMP.text = $"{Mathf.RoundToInt(current)}";
 
             _coFill = null;
         }
