@@ -24,6 +24,7 @@ namespace BabyNightmare.Match
         [SerializeField] private AnimationCurve _bounceCurve;
 
         private const string PATH_ICON = "Match/Stat/ICN_";
+        private Coroutine _coBounce = null;
 
         public void Init(EStatType type)
         {
@@ -63,7 +64,10 @@ namespace BabyNightmare.Match
             if (value == 0)
                 return;
 
-            StartCoroutine(SimpleLerp.Co_BounceScale(_rtf, Vector3.one * 1.2f, _bounceCurve, 0.1f));
+            if (null != _coBounce)
+                StopCoroutine(_coBounce);
+
+            _coBounce = StartCoroutine(SimpleLerp.Co_BounceScale(_rtf, Vector3.one * 1.2f, _bounceCurve, 0.1f));
         }
     }
 }
