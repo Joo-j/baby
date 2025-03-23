@@ -92,5 +92,10 @@ namespace BabyNightmare.HUD
         {
             _shortcutButton.gameObject.SetActive(enable);
         }
+
+        public void OnClickCheat()
+        {
+            PlayerData.Instance.Coin += 100;
+        }
     }
 }
