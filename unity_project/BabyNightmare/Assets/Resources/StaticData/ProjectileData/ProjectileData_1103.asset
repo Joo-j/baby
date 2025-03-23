@@ -15,7 +15,7 @@ MonoBehaviour:
   _mesh: {fileID: 422595455621684716, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}
   _materials:
   - {fileID: 2100000, guid: 8ec67bf67546a43608d50caab1a1d98b, type: 2}
-  _throwDuration: 0.75
+  _throwDuration: 0.5
   _throwCurve:
     serializedVersion: 2
     m_Curve:
