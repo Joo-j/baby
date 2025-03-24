@@ -49,8 +49,9 @@ namespace BabyNightmare.InventorySystem
         public override void Equip(Equipment equipment)
         {
             equipment.RTF.SetParent(transform);
-            _rtf.sizeDelta += new Vector2(equipment.RTF.sizeDelta.x + _spacing, 0);
             _equipmentList.Add(equipment);
+
+            _rtf.sizeDelta += new Vector2(equipment.RTF.sizeDelta.x + _spacing, 0);
             Refresh();
         }
 
@@ -61,8 +62,9 @@ namespace BabyNightmare.InventorySystem
                 return null;
 
             _equipmentList.Remove(equipment);
-            Refresh();
 
+            _rtf.sizeDelta -= new Vector2(equipment.RTF.sizeDelta.x + _spacing, 0);
+            Refresh();
             return equipment;
         }
 
@@ -74,9 +76,10 @@ namespace BabyNightmare.InventorySystem
             if (false == _equipmentList.Contains(equipment))
                 return;
 
-            _equipmentList.Remove(equipment);
             Destroy(equipment.gameObject);
+            _equipmentList.Remove(equipment);
 
+            _rtf.sizeDelta -= new Vector2(equipment.RTF.sizeDelta.x + _spacing, 0);
             Refresh();
         }
 
@@ -84,22 +87,26 @@ namespace BabyNightmare.InventorySystem
         {
             for (var i = 0; i < _equipmentList.Count; i++)
             {
-                Destroy(_equipmentList[i].gameObject);
+                var equipment = _equipmentList[i];
+                Destroy(equipment.gameObject);
+                _rtf.sizeDelta -= new Vector2(equipment.RTF.sizeDelta.x + _spacing, 0);
             }
 
             _equipmentList.Clear();
+            Refresh();
         }
 
         public override Equipment Get(Vector2 screenPos)
         {
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var anchoredPos);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var localPos);
+            Debug.Log($"{screenPos} {localPos}");
 
             for (var i = 0; i < _equipmentList.Count; i++)
             {
                 var equipment = _equipmentList[i];
                 var equipmentPos = equipment.RTF.anchoredPosition;
                 var clickSize = equipment.RTF.sizeDelta * 0.5f;
-                var dist = Vector2.Distance(equipmentPos, anchoredPos);
+                var dist = Vector2.Distance(equipmentPos, localPos);
 
                 if (dist < clickSize.x || dist < clickSize.y)
                     return equipment;
