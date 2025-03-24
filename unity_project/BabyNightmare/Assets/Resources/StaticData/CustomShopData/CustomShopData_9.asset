@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 9
   Item_ID: 109
-  Order: 1
+  Order: 2
   CurrencyType: 1
   Price_Value: 20

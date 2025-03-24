@@ -6,6 +6,7 @@ using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.GlobalEvent;
+using System.Linq;
 
 namespace BabyNightmare.CustomShop
 {
@@ -63,10 +64,12 @@ namespace BabyNightmare.CustomShop
             }
 
             var shopArr = Resources.LoadAll<CustomShopData>(PATH_CUSTOM_SHOP_DATA);
+            var shopList = shopArr.ToList();
+            shopList.Sort();
             _shopDataDict = new Dictionary<int, CustomShopData>();
-            for (var i = 0; i < shopArr.Length; i++)
+            for (var i = 0; i < shopList.Count; i++)
             {
-                var shopData = shopArr[i];
+                var shopData = shopList[i];
                 _shopDataDict.Add(shopData.Item_ID, shopData);
             }
 
