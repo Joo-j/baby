@@ -66,21 +66,13 @@ namespace BabyNightmare.InventorySystem
             _icon.sprite = Resources.Load<Sprite>(iconPath);
             _levelTMP.text = $"LV.{Data.Level}";
 
-            if (true == isMerge)
+            if (data.Level >= 2)
             {
-                _mergeFX = FXPool.Instance.Get(EFXType.Equipment_Merge);
-                _mergeFX.transform.SetParent(transform);
-                _mergeFX.transform.localPosition = Vector3.zero;
-                _mergeFX.transform.localScale = MERGE_FX_SCALE;
-
-                StartCoroutine(SimpleLerp.Co_Invoke(2, () => FXPool.Instance.Return(_mergeFX)));
-
                 var levelFXType = data.Level == 2 ? EFXType.Equipment_Level_2 : EFXType.Equipment_Level_3;
 
                 _levelFX = FXPool.Instance.Get(levelFXType);
                 _levelFX.transform.SetParent(_fxTF);
                 _levelFX.transform.localPosition = Vector3.zero;
-
 
                 var ptPath = $"{PATH_PROJECTILE_DATA}{data.ID}";
                 var ptData = Resources.Load<ProjectileData>(ptPath);
@@ -91,6 +83,16 @@ namespace BabyNightmare.InventorySystem
                     _levelFX.transform.localScale = LEVEL_FX_SCALE_2X2;
                 else
                     _levelFX.transform.localScale = LEVEL_FX_SCALE_1X1;
+            }
+
+            if (true == isMerge)
+            {
+                _mergeFX = FXPool.Instance.Get(EFXType.Equipment_Merge);
+                _mergeFX.transform.SetParent(transform);
+                _mergeFX.transform.localPosition = Vector3.zero;
+                _mergeFX.transform.localScale = MERGE_FX_SCALE;
+
+                StartCoroutine(SimpleLerp.Co_Invoke(2, () => FXPool.Instance.Return(_mergeFX)));
             }
         }
 
