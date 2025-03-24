@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 14
   Group: 201
-  EquipmentProbDataID: 3
   EnemySpawnDataID: 6
   BoxType: 0

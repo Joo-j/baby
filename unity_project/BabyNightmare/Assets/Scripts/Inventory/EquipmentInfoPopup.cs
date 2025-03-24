@@ -23,11 +23,11 @@ namespace BabyNightmare.InventorySystem
         {
             gameObject.SetActive(true);
 
-            var iconPath = $"{PATH_EQUIPMENT_ICON_INFO}{data.Name}";
+            var iconPath = $"{PATH_EQUIPMENT_ICON_INFO}{data.Type}";
             _icon.sprite = Resources.Load<Sprite>(iconPath);
             Debug.Assert(null != iconPath, $"{iconPath} no icon");
 
-            _nameTMP.text = $"{data.Name}";
+            _nameTMP.text = $"{data.Type}";
             _levelTMP.text = $"LV {data.Level}";
             _cooltimeTMP.text = $"Cool Down : {data.CoolTime:F1}s";
 

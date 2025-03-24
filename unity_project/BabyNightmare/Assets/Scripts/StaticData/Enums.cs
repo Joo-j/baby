@@ -7,7 +7,7 @@ namespace BabyNightmare.StaticData
     public enum EBoxType
     {
         Blue,
-        Gold
+        Gold,
     }
 
     public enum EStatType
@@ -98,4 +98,21 @@ namespace BabyNightmare.StaticData
         Purchase_CustomItem,
     }
 
+    public enum EEquipmentType
+    {
+        BaseBall,
+        Boomerang,
+        Horse,
+        Knife,
+        Lego,
+        Rabbit,
+        RingToy,
+        Robot,
+        WaterGun,
+        Pouch,
+        Glove,
+        Shield,
+        Milk,
+        MilkBottle
+    }
 }

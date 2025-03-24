@@ -9,7 +9,6 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public int Group;
-        public int EquipmentProbDataID;
         public int EnemySpawnDataID;
         public EBoxType BoxType = EBoxType.Blue;
     }

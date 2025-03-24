@@ -7,6 +7,8 @@ using BabyNightmare.Util;
 using BabyNightmare.HUD;
 using Random = UnityEngine.Random;
 using BabyNightmare.Talent;
+using UnityEngine.AI;
+using System.Linq;
 
 namespace BabyNightmare.Match
 {
@@ -17,10 +19,13 @@ namespace BabyNightmare.Match
         private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
 
+        private const int EQUIPMENT_MAX_LEVEL = 3;
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int INITIAL_COIN = 10;
         private const int REROLL_BASE_PRICE = 10;
         private const int BASE_REWARD_GEM = 10;
+        private const int EQUIPMENT_WEIGHT_FACTOR_MAX = 5;
+        private const int EQUIPMENT_WEIGHT_FACTOR_MIN = 2;
 
         private MatchField _matchField = null;
         private MatchView _matchView = null;
@@ -83,10 +88,11 @@ namespace BabyNightmare.Match
             var waveData = _waveDataList[_currentWave];
             _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
-            PlayerData.Instance.OnChangedCoinEvent.AddListener(RefreshRerollCost);
             CoinHUD.UseFX(false);
             PlayerData.Instance.Coin = INITIAL_COIN;
             CoinHUD.UseFX(true);
+
+            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
         }
 
         private void OnFailMatch()
@@ -117,8 +123,6 @@ namespace BabyNightmare.Match
             ProjectilePool.Instance.ReturnAll();
             FXPool.Instance.ReturnAll();
             PopupTextPool.Instance.ReturnAll();
-
-            PlayerData.Instance.OnChangedCoinEvent.RemoveListener(RefreshRerollCost);
 
             GameObject.Destroy(_matchField.gameObject);
             _matchField = null;
@@ -179,6 +183,7 @@ namespace BabyNightmare.Match
                 _matchField.GetWaveCoin(boxPos);
             }));
         }
+
         private void OnClickReroll()
         {
             var dataList = GetRerollData();
@@ -189,55 +194,53 @@ namespace BabyNightmare.Match
             _rerollPrice = REROLL_BASE_PRICE * (int)Mathf.Pow(_rerollCount, 2);
 
             PlayerData.Instance.Coin -= preCost;
-        }
-
-        private void RefreshRerollCost(int coin)
-        {
-            _matchView?.RefreshRerollPrice(_rerollPrice, coin);
+            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
         }
 
         private List<EquipmentData> GetRerollData()
         {
             var waveData = _waveDataList[_currentWave];
-
-            var id = waveData.EquipmentProbDataID;
-            var equipmentProbData = StaticDataManager.Instance.GetEquipmentProbData(id);
-
-            var randomPicker = new WeightedRandomPicker<ProbData>();
-
-            var probDataList = equipmentProbData.ProbDataList;
-            for (var i = 0; i < probDataList.Count; i++)
+            var weightFactor = 3;
+            switch (waveData.BoxType)
             {
-                var data = probDataList[i];
-                randomPicker.Add(data, data.Prob);
+                case EBoxType.Blue:
+                    weightFactor = 5;
+                    break;
+                case EBoxType.Gold:
+                    weightFactor = 3;
+                    break;
             }
 
-            var dataList = new List<EquipmentData>();
-            for (var i = 0; i < REROLL_EQUIPMENT_COUNT; i++)
-            {
-                var probData = randomPicker.RandomPick();
-                randomPicker.Remove(probData);
+            var equipmentDataList = StaticDataManager.Instance.EquipmentDataList;
+            var randomPicker = new WeightedRandomPicker<EquipmentData>();
 
-                var data = StaticDataManager.Instance.GetEquipmentData(probData.EquipmentID);
-                if (null == data)
-                {
-                    Debug.Log($"{probData.EquipmentID} probData equipment data가 없습니다.");
-                }
-                dataList.Add(data);
+            for (var i = 0; i < equipmentDataList.Count; i++)
+            {
+                var data = equipmentDataList[i];
+                var prob = data.Prob * Mathf.RoundToInt(Mathf.Pow(EQUIPMENT_MAX_LEVEL - data.Level + 1, weightFactor));
+                randomPicker.Add(data, prob);
+
             }
 
-            if (null == dataList || dataList.Count == 0)
+            var dataDict = new Dictionary<EEquipmentType, EquipmentData>();
+            while (dataDict.Count < REROLL_EQUIPMENT_COUNT)
             {
-                Debug.LogError($"{_currentWave}웨이브 EuipmetnData가 없습니다");
+                var data = randomPicker.RandomPick();
+                randomPicker.Remove(data);
+                if (true == dataDict.ContainsKey(data.Type))
+                    continue;
+
+                dataDict.Add(data.Type, data);
             }
 
-            return dataList;
+            return dataDict.Values.ToList();
         }
 
         private void GetCoin(int coin, Vector3 worldPos)
         {
             CoinHUD.SetSpreadPoint(worldPos, _matchField.RenderCamera, _matchView.FieldImage);
             PlayerData.Instance.Coin += coin;
+            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
         }
 
         private EquipmentData GetUpgradeData(EquipmentData data1, EquipmentData data2)

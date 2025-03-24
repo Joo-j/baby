@@ -52,11 +52,11 @@ namespace BabyNightmare.InventorySystem
         {
             this.Data = data;
 
-            var iconOutlinePath = $"{PATH_EQUIPMENT_ICON_OUTLINE}{data.Name}_Outline";
+            var iconOutlinePath = $"{PATH_EQUIPMENT_ICON_OUTLINE}{data.Type}_Outline";
             var icon_outline = Resources.Load<Sprite>(iconOutlinePath);
             Debug.Assert(null != icon_outline, $"{iconOutlinePath} | no outline icon");
 
-            var iconPath = $"{PATH_EQUIPMENT_ICON}{data.Name}";
+            var iconPath = $"{PATH_EQUIPMENT_ICON}{data.Type}";
             var icon = Resources.Load<Sprite>(iconPath);
             Debug.Assert(null != icon, $"{iconPath} | no icon");
 

@@ -16,8 +16,9 @@ namespace BabyNightmare.StaticData
     public class EquipmentData : ScriptableObject
     {
         public int ID;
-        public string Name;
+        public EEquipmentType Type;
         public int Level;
+        public int Prob = 1;
         public List<StatData> StatDataList;
         public float CoolTime;
         public RectShape Shape;

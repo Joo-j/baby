@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BabyNightmare.StaticData
@@ -10,8 +11,6 @@ namespace BabyNightmare.StaticData
         private const string PATH_CHAPTER_DATA = "StaticData/ChapterData";
         private const string PATH_WAVE_DATA = "StaticData/WaveData";
         private const string PATH_EQUIPMENT_DATA = "StaticData/EquipmentData";
-        private const string PATH_EQUIPMENT_PROB_DATA = "StaticData/EquipmentProbData";
-        private const string PATH_EQUIPMENT_BOX_DATA = "StaticData/EquipmentBoxData";
         private const string PATH_ENEMY_DATA = "StaticData/EnemyData";
         private const string PATH_ENEMY_SPAWN_DATA = "StaticData/EnemySpawnData";
 
@@ -19,11 +18,12 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, ChapterData> _chapterDataDict = null;
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
-        private Dictionary<int, EquipmentProbData> _equipmentProbDataDict = null;
         private Dictionary<int, EnemyData> _enemyDataDict = null;
         private Dictionary<int, EnemySpawnData> _enemySpawnDataDict = null;
 
-        private int _lastChapter = 0;
+        public int LastChapter { get; private set; }
+
+        public List<EquipmentData> EquipmentDataList => _equipmentDataDict.Values.ToList();
 
         public void Init()
         {
@@ -31,7 +31,6 @@ namespace BabyNightmare.StaticData
             InitChapterData();
             InitWaveData();
             InitEquipmentData();
-            InitEquipmentProbData();
             InitEnemyData();
             InitEnemySpawnData();
         }
@@ -74,7 +73,7 @@ namespace BabyNightmare.StaticData
                 if (false == _chapterDataDict.ContainsKey(chapter))
                     _chapterDataDict.Add(chapter, chapterData);
 
-                _lastChapter = Mathf.Max(_lastChapter, chapter);
+                LastChapter = Mathf.Max(LastChapter, chapter);
             }
         }
 
@@ -99,7 +98,7 @@ namespace BabyNightmare.StaticData
 
                 _waveDataDict[group].Add(waveData);
 
-                _lastChapter = Mathf.Max(_lastChapter, group);
+                LastChapter = Mathf.Max(LastChapter, group);
             }
         }
 
@@ -118,27 +117,6 @@ namespace BabyNightmare.StaticData
             {
                 var data = equipmentDataArr[i];
                 _equipmentDataDict.Add(data.ID, data);
-            }
-        }
-
-        private void InitEquipmentProbData()
-        {
-            var equipmentProbDataArr = Resources.LoadAll<EquipmentProbData>(PATH_EQUIPMENT_PROB_DATA);
-            if (null == equipmentProbDataArr || equipmentProbDataArr.Length == 0)
-            {
-                Debug.LogError($"{PATH_EQUIPMENT_PROB_DATA}에 데이터가 없습니다.");
-                return;
-            }
-
-            _equipmentProbDataDict = new Dictionary<int, EquipmentProbData>();
-
-            for (var i = 0; i < equipmentProbDataArr.Length; i++)
-            {
-                var data = equipmentProbDataArr[i];
-                var id = data.ID;
-
-                if (false == _equipmentProbDataDict.ContainsKey(id))
-                    _equipmentProbDataDict.Add(id, data);
             }
         }
 
@@ -193,7 +171,7 @@ namespace BabyNightmare.StaticData
         {
             if (false == _chapterDataDict.TryGetValue(chapter, out var chapterData))
             {
-                return _chapterDataDict[_lastChapter];
+                return _chapterDataDict[LastChapter];
             }
 
             return chapterData;
@@ -211,17 +189,6 @@ namespace BabyNightmare.StaticData
         {
             if (false == _equipmentDataDict.TryGetValue(id, out var data))
                 return null;
-
-            return data;
-        }
-
-        public EquipmentProbData GetEquipmentProbData(int id)
-        {
-            if (false == _equipmentProbDataDict.TryGetValue(id, out var data))
-            {
-                Debug.LogError($"{id} equipment prob data is null");
-                return null;
-            }
 
             return data;
         }
