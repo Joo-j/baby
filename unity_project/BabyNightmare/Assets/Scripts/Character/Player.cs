@@ -50,8 +50,8 @@ namespace BabyNightmare.Character
     public class Player : CharacterBase
     {
         [SerializeField] private PlayerModel _model;
+        [SerializeField] private int _startHP = 200;
         [SerializeField] private Transform _throwStartTF;
-        [SerializeField] private float _hitRadius = 2f;
         [SerializeField] private Image _shieldImage;
         [SerializeField] private TextMeshProUGUI _shieldText;
 
@@ -66,7 +66,7 @@ namespace BabyNightmare.Character
 
             _originEmissionColor = _mainRenderer.material.GetColor(KEY_EMISSION_COLOR);
 
-            var hp = Mathf.Max(context.HP, 100);
+            var hp = Mathf.Max(context.HP, _startHP);
             var talentHP = TalentManager.Instance.GetValue(ETalentType.Max_HP_Amount);
             hp += talentHP;
 

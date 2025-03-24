@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: COIN_Pouch_2
   m_EditorClassIdentifier: 
   ID: 1110
-  Name: Pouch
+  Type: 9
   Level: 2
+  Prob: 1
   StatDataList:
   - Type: 3
     Value: 3

@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_Boomerang_2
   m_EditorClassIdentifier: 
   ID: 1102
-  Name: Boomerang
+  Type: 1
   Level: 2
+  Prob: 1
   StatDataList:
   - Type: 1
-    Value: 14
+    Value: 28
   CoolTime: 3.5
   Shape:
     _column: 2

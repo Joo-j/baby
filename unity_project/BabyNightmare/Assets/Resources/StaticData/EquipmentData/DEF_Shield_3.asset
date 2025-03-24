@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: DEF_Shield_3
   m_EditorClassIdentifier: 
   ID: 1212
-  Name: Shield
+  Type: 11
   Level: 3
+  Prob: 1
   StatDataList:
   - Type: 2
-    Value: 5
+    Value: 6
   CoolTime: 5
   Shape:
     _column: 1

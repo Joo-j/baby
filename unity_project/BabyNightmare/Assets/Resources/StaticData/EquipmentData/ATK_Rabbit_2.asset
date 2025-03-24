@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_Rabbit_2
   m_EditorClassIdentifier: 
   ID: 1106
-  Name: Rabbit
+  Type: 5
   Level: 2
+  Prob: 2
   StatDataList:
   - Type: 1
-    Value: 12
+    Value: 24
   CoolTime: 3.65
   Shape:
     _column: 1

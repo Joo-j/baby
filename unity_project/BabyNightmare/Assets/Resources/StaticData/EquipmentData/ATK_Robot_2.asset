@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_Robot_2
   m_EditorClassIdentifier: 
   ID: 1108
-  Name: Robot
+  Type: 7
   Level: 2
+  Prob: 1
   StatDataList:
   - Type: 1
-    Value: 26
+    Value: 52
   CoolTime: 4.5
   Shape:
     _column: 2

@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_BaseBall_3
   m_EditorClassIdentifier: 
   ID: 1201
-  Name: BaseBall
+  Type: 0
   Level: 3
+  Prob: 3
   StatDataList:
   - Type: 1
-    Value: 14
+    Value: 28
   CoolTime: 2.7
   Shape:
     _column: 1

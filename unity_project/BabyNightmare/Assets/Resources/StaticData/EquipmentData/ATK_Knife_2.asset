@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_Knife_2
   m_EditorClassIdentifier: 
   ID: 1104
-  Name: Knife
+  Type: 3
   Level: 2
+  Prob: 2
   StatDataList:
   - Type: 1
-    Value: 8
+    Value: 16
   CoolTime: 1.64
   Shape:
     _column: 2

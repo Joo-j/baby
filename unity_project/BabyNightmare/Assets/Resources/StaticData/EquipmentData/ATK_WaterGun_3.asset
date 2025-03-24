@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: ATK_WaterGun_3
   m_EditorClassIdentifier: 
   ID: 1209
-  Name: WaterGun
+  Type: 8
   Level: 3
+  Prob: 1
   StatDataList:
   - Type: 1
-    Value: 19
+    Value: 38
   - Type: 0
-    Value: 2
+    Value: 4
   CoolTime: 4.5
   Shape:
     _column: 2

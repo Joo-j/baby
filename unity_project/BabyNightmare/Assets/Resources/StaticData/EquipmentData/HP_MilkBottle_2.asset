@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: HP_MilkBottle_2
   m_EditorClassIdentifier: 
   ID: 1114
-  Name: MilkBottle
+  Type: 13
   Level: 2
+  Prob: 1
   StatDataList:
   - Type: 0
-    Value: 7
+    Value: 9
   - Type: 1
-    Value: 4
+    Value: 8
   CoolTime: 5.2
   Shape:
     _column: 1

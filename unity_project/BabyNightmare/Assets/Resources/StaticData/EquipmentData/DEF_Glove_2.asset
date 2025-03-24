@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: DEF_Glove_2
   m_EditorClassIdentifier: 
   ID: 1111
-  Name: Glove
+  Type: 10
   Level: 2
+  Prob: 2
   StatDataList:
   - Type: 2
-    Value: 3
+    Value: 4
   CoolTime: 3.9
   Shape:
     _column: 1

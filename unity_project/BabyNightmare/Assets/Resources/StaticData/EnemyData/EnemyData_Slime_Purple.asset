@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 106
   Name: Slime_Purple
-  Damage: 3.6
-  Health: 16
+  Damage: 7.2
+  Health: 32
   Attack_Interval: 1.9
   Move_Step_Duration: 0.9
   Move_Step_Speed: 2.1

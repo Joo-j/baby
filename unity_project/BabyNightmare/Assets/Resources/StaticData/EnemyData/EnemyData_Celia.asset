@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 108
   Name: Celia
-  Damage: 12
-  Health: 30
+  Damage: 24
+  Health: 60
   Attack_Interval: 2.5
   Move_Step_Duration: 1.5
   Move_Step_Speed: 2

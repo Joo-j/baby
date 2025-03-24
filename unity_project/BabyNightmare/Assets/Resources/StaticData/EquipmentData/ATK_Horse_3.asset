@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: ATK_Horse_3
   m_EditorClassIdentifier: 
   ID: 1203
-  Name: Horse
+  Type: 2
   Level: 3
+  Prob: 1
   StatDataList:
   - Type: 1
-    Value: 22
+    Value: 44
   CoolTime: 4
   Shape:
     _column: 1
