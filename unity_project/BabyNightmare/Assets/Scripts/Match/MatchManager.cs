@@ -90,11 +90,18 @@ namespace BabyNightmare.Match
             var waveData = _waveDataList[_currentWave];
             _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
+            PlayerData.Instance.OnChangedCoinEvent.AddListener(OnChangeCoin);
+
             CoinHUD.UseFX(false);
             PlayerData.Instance.Coin = MATCH_START_COIN;
             CoinHUD.UseFX(true);
 
-            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
+        }
+
+        private void OnChangeCoin(int coin)
+        {
+            _matchView?.RefreshRerollPrice(_rerollPrice, coin);
+            _matchView?.RefreshBagSizeUpPrice(_bagSizeUpPrice, coin);
         }
 
         private void OnFailMatch()
@@ -124,6 +131,8 @@ namespace BabyNightmare.Match
 
         private void CloseMatch()
         {
+            PlayerData.Instance.OnChangedCoinEvent.RemoveListener(OnChangeCoin);
+
             ProjectilePool.Instance.ReturnAll();
             FXPool.Instance.ReturnAll();
             PopupTextPool.Instance.ReturnAll();
@@ -193,7 +202,6 @@ namespace BabyNightmare.Match
             _rerollPrice = BASE_REROLL_PRICE * (int)Mathf.Pow(_rerollCount, 2);
 
             PlayerData.Instance.Coin -= preCost;
-            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
         }
 
         private void OnClickBagSizeUp()
@@ -205,7 +213,6 @@ namespace BabyNightmare.Match
             _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * (int)Mathf.Pow(_bagSizeUpCount, 2);
 
             PlayerData.Instance.Coin -= preCost;
-            _matchView?.RefreshBagSizeUpPrice(_bagSizeUpPrice, PlayerData.Instance.Coin);        
         }
 
         private List<EquipmentData> GetRerollData()
@@ -251,7 +258,6 @@ namespace BabyNightmare.Match
         {
             CoinHUD.SetSpreadPoint(worldPos, _matchField.RenderCamera, _matchView.FieldImage);
             PlayerData.Instance.Coin += coin;
-            _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
         }
 
         private EquipmentData GetUpgradeData(EquipmentData data1, EquipmentData data2)
