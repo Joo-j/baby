@@ -21,6 +21,7 @@ namespace BabyNightmare.Match
 
         Projectile_Bomb,
         Projectile_Missle,
+        Projectile_WaterGun,
     }
 
     public class FXPool : SingletonBase<FXPool>

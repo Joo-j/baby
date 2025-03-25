@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 604835175581617215}
   - component: {fileID: 2932971362140806396}
   - component: {fileID: 4499693406737115477}
+  - component: {fileID: 4703072795965511456}
   m_Layer: 9
   m_Name: FX_Projectile_Watergun
   m_TagString: Untagged
@@ -4831,6 +4832,23 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &4703072795965511456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 226014295467190175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b234dca513a498798756155f488600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _psArr:
+  - {fileID: 2932971362140806396}
+  - {fileID: 6710254564866686576}
+  _type: 10
+  _appearDuration: 3
 --- !u!1 &3064778410160701992
 GameObject:
   m_ObjectHideFlags: 0

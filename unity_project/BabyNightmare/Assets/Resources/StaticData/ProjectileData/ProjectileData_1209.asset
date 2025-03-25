@@ -15,7 +15,7 @@ MonoBehaviour:
   _mesh: {fileID: 7835108540920046023, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}
   _materials:
   - {fileID: 2100000, guid: f7dfb1c52bd1f4beb999812cfe988aec, type: 2}
-  _throwDuration: 0.5
+  _throwDuration: 0.3
   _throwCurve:
     serializedVersion: 2
     m_Curve:
@@ -40,5 +40,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  _bezierHeight: 7
-  _targetAngleZ: -480
+  _bezierHeight: 0.5
+  _targetAngleZ: 60

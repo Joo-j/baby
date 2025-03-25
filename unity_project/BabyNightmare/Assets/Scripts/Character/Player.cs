@@ -233,6 +233,10 @@ namespace BabyNightmare.Character
                                                 FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
                                                 AudioManager.PlaySFX("AudioClip/Projectile_Missile");
                                                 break;
+                                            case EEquipmentType.WaterGun:
+                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_WaterGun, enemy.HitPoint.position);
+                                                AudioManager.PlaySFX("AudioClip/Projectile_Missile");
+                                                break;
                                         }
 
 
