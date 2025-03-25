@@ -72,7 +72,8 @@ namespace BabyNightmare.Character
 
             _hp = _maxHealth = hp;
 
-            _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
+            var rotationLocker = _hpBar.GetComponent<RotationLocker>();
+            rotationLocker.Init(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);
 
             _shieldImage.gameObject.SetActive(false);
@@ -90,6 +91,7 @@ namespace BabyNightmare.Character
         public void ReadyNextWave()
         {
             AddDef(-_def);
+            transform.localRotation = Quaternion.identity;
             _animator.Play(HASH_ANI_MOVE);
         }
 
@@ -110,10 +112,11 @@ namespace BabyNightmare.Character
         private void AddDef(float value)
         {
             _def += value;
+            _def = Mathf.RoundToInt(_def);
 
             _shieldImage.gameObject.SetActive(_def > 0);
             _shieldText.gameObject.SetActive(_def > 0);
-            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{Mathf.RoundToInt(_def)}"));
+            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{_def}"));
         }
 
         public override void ReceiveAttack(float damage, bool isCritical)
@@ -273,7 +276,11 @@ namespace BabyNightmare.Character
             {
                 if (null == targetTF)
                 {
-                    ProjectilePool.Instance.Return(pt);
+                    StartCoroutine(SimpleLerp.Co_LerpScale(pt.TF, Vector3.one, Vector3.zero, CurveHelper.Preset.Linear, 0.1f, () =>
+                    {
+                        ProjectilePool.Instance.Return(pt);
+                        pt.TF.localScale = Vector3.one;
+                    }));
                     yield break;
                 }
 
