@@ -212,8 +212,26 @@ namespace BabyNightmare.Match
 
         public void OnClickStart()
         {
+            StartCoroutine(Co_StartSequence());
+
+        }
+
+        private IEnumerator Co_StartSequence()
+        {
             _startGO.SetActive(false);
             _canvasGroup.blocksRaycasts = true;
+
+            var talentBagSize = TalentManager.Instance.GetValue(ETalentType.Bag_Size_Amount);
+            if (talentBagSize > 0)
+            {
+                var waiter = new CoroutineWaiter();
+
+                for (var i = 0; i < talentBagSize; i++)
+                {
+                    _bag.ShowAddableCell(waiter.Signal);
+                    yield return waiter.Wait();
+                }
+            }
 
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
