@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Supercent.Util;
+using Supercent.Core.Audio;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 
@@ -165,8 +166,10 @@ namespace BabyNightmare.Lobby
             FocusOverlayHelper.SetDimdViewAlpha(0.4f);
 
             StartCoroutine(SimpleLerp.Co_LerpScale(icon, targetScale, Vector3.one, CurveHelper.Preset.EaseOut, 0.3f));
+            AudioManager.PlaySFX("AudioClip/Lobby_Menu_Move");
 
             yield return SimpleLerp.Co_LerpPoision_Bezier(icon, targetPos, midPos, originPos, 0.35f, CurveHelper.Preset.EaseIn, () => StartCoroutine(SimpleLerp.Co_Bounce_Horizontal(button.Icon, 0.15f, CurveHelper.Preset.EaseOut)));
+            AudioManager.PlaySFX("AudioClip/Skin_Slot_Card");
 
             FocusOverlayHelper.Clear();
             button.AfterOpen();

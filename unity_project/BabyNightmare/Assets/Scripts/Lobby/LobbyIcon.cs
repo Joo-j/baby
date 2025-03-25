@@ -6,6 +6,7 @@ using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using TMPro;
+using Supercent.Core.Audio;
 
 namespace BabyNightmare.Lobby
 {
@@ -28,6 +29,9 @@ namespace BabyNightmare.Lobby
         public void Init(ELobbyButtonType type)
         {
             _bounceAni = LobbyUtil.GetLobbyIconAni(type, _bounceAniTF);
+
+            _aniTrigger.AddAction(1, () => AudioManager.PlaySFX("AudioClip/Unlock_2"));
+            _aniTrigger.AddAction(2, () => AudioManager.PlaySFX("AudioClip/Lobby_Menu_Unlock"));
         }
 
         public void RefreshDesc(ELobbyButtonType type)
