@@ -312,11 +312,7 @@ namespace BabyNightmare.Character
             {
                 if (null == targetTF)
                 {
-                    StartCoroutine(SimpleLerp.Co_LerpScale(pt.TF, Vector3.one, Vector3.zero, CurveHelper.Preset.Linear, 0.1f, () =>
-                    {
-                        ProjectilePool.Instance.Return(pt);
-                        pt.TF.localScale = Vector3.one;
-                    }));
+                    ProjectilePool.Instance.Return(pt);
                     yield break;
                 }
 
