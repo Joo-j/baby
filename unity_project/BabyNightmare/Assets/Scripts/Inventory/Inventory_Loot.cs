@@ -99,7 +99,6 @@ namespace BabyNightmare.InventorySystem
         public override Equipment Get(Vector2 screenPos)
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var localPos);
-            Debug.Log($"{screenPos} {localPos}");
 
             for (var i = 0; i < _equipmentList.Count; i++)
             {
