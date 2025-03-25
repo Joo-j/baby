@@ -113,7 +113,9 @@ namespace BabyNightmare.StaticData
         Glove,
         Shield,
         Milk,
-        MilkBottle
+        MilkBottle,
+        Bomb,
+        Missile,
     }
     
     public enum EDamageType

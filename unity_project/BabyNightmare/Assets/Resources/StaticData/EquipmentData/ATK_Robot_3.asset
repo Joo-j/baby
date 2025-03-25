@@ -20,6 +20,7 @@ MonoBehaviour:
   - Type: 1
     Value: 64
   CoolTime: 4.5
+  DamageType: 0
   Shape:
     _column: 2
     _row: 2

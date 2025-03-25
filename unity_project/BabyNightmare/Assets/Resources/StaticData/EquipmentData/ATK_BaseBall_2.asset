@@ -15,11 +15,12 @@ MonoBehaviour:
   ID: 1101
   Type: 0
   Level: 2
-  Prob: 3
+  Prob: 5
   StatDataList:
   - Type: 1
     Value: 20
   CoolTime: 2.6
+  DamageType: 0
   Shape:
     _column: 1
     _row: 1
