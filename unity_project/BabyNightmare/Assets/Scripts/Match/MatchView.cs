@@ -82,14 +82,16 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
-        private bool _enableBagSizeUp = false;
-        private List<EquipmentData> _boxRerollDataList = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
         private Dictionary<EStatType, int> _statDict = null;
         private Dictionary<EStatType, int> _statChangeDict = null;
         private Vector2 _progressSize;
+
+        private int _waveCoin = 0;
+        private bool _enableBagSizeUp = false;
+        private List<EquipmentData> _boxRerollDataList = null;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
 
@@ -306,9 +308,7 @@ namespace BabyNightmare.Match
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
 
-            CoinHUD.SetSpreadPoint(_boxGO.transform.position);
-            PlayerData.Instance.Coin += waveCoin;
-            AudioManager.PlaySFX("AudioClip/Coin");
+            _waveCoin = waveCoin;
 
             if (type == EBoxType.Gold)
             {
@@ -325,6 +325,10 @@ namespace BabyNightmare.Match
             _fightGO.SetActive(true);
             _bagSizeUpCVG.gameObject.SetActive(_enableBagSizeUp);
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
+
+            CoinHUD.SetSpreadPoint(_boxGO.transform.position);
+            PlayerData.Instance.Coin += _waveCoin;
+            AudioManager.PlaySFX("AudioClip/Coin");
 
             Reroll(_boxRerollDataList);
             _boxRerollDataList = null;
