@@ -19,6 +19,7 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Color _cellEnableColor;
         [SerializeField] private Color _cellOverlappedColor;
         [SerializeField] private Color _cellUpgradableColor;
+        [SerializeField] private Color _cellAddableColor;
 
         private const string PATH_CELL = "Inventory/Cell";
         private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
@@ -149,7 +150,7 @@ namespace BabyNightmare.InventorySystem
                     continue;
 
                 var cell = CreateCell(index);
-                cell.RefreshColor(Color.yellow);
+                cell.RefreshColor(_cellAddableColor);
                 cell.AddButton(() => OnClickButton(index));
                 addableCells.Add(cell);
             }

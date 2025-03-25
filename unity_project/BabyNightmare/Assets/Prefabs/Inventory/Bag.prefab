@@ -141,10 +141,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasGroup: {fileID: 554474317169077232}
   _cellSize: {x: 100, y: 100}
+  _padding: 10
   _cellClearColor: {r: 0.8862745, g: 0.8117647, b: 0.69411767, a: 1}
   _cellEnableColor: {r: 0, g: 1, b: 0.08719444, a: 1}
   _cellOverlappedColor: {r: 1, g: 0, b: 0, a: 1}
   _cellUpgradableColor: {r: 0.96933126, g: 1, b: 0, a: 1}
+  _cellAddableColor: {r: 1, g: 0.80166054, b: 0, a: 0.5019608}
 --- !u!1 &3921005165605859629
 GameObject:
   m_ObjectHideFlags: 0
