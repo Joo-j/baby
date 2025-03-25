@@ -21,19 +21,22 @@ namespace BabyNightmare.Character
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
         public Func<Vector3, List<EnemyBase>> GetEnemiesInArea { get; }
+        public Action ShakeCamera { get; }
 
         public PlayerContext(
         float hp,
         Vector3 cameraForward,
         Action onDiePlayer,
         Action<int, Vector3> getCoin,
-        Func<Vector3, List<EnemyBase>> getEnemiesInArea)
+        Func<Vector3, List<EnemyBase>> getEnemiesInArea,
+        Action shakeCamera)
         {
             this.HP = hp;
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
             this.GetCoin = getCoin;
             this.GetEnemiesInArea = getEnemiesInArea;
+            this.ShakeCamera = shakeCamera;
         }
     }
 
@@ -214,6 +217,7 @@ namespace BabyNightmare.Character
                                         {
                                             enemies[j]?.ReceiveAttack(value, isCritical);
                                         }
+                                        _context.ShakeCamera?.Invoke();
                                         break;
                                 }
                             }

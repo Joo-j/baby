@@ -55,6 +55,8 @@ namespace BabyNightmare.Match
         [SerializeField] private float _playerAttackRadius = 10f;
         [SerializeField] private float _areaAttackRadius = 3f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
+        [SerializeField] private float _cameraShakeAmount = 0.2f;
+        [SerializeField] private float _cameraShakeDuraton = 0.2f;
 
         private const string PATH_PLAYER = "Match/Character/Player";
         private const string PATH_ENEMY = "Match/Character/Enemy_";
@@ -73,6 +75,7 @@ namespace BabyNightmare.Match
         private Pool<Coin> _coinPool = null;
         private int _waveCoin = 0;
         private Coroutine _coMoveCamera = null;
+        private Coroutine _coShakeCamera = null;
 
         public RenderTexture RT => _rt;
         public Camera RenderCamera => _renderCamera;
@@ -99,7 +102,8 @@ namespace BabyNightmare.Match
                                     CameraForward,
                                     OnDiePlayer,
                                     _context.GetCoin,
-                                    GetEnemiesInArea);
+                                    GetEnemiesInArea,
+                                    ShakeCamera);
             _player.Init(playerContext);
 
             _coinPool = new Pool<Coin>(() => ObjectUtil.LoadAndInstantiate<Coin>(PATH_COIN, transform), 10);
@@ -311,6 +315,34 @@ namespace BabyNightmare.Match
                 StopCoroutine(_coMoveCamera);
 
             _coMoveCamera = StartCoroutine(SimpleLerp.Co_LerpPosition(tf, startPos, targetPos, CurveHelper.Preset.EaseIn, _cameraMoveDuration, () => _coMoveCamera = null));
+        }
+
+        private void ShakeCamera()
+        {
+            if (null != _coShakeCamera)
+                return;
+
+            _coShakeCamera = StartCoroutine(Co_ShakeCamera());
+
+            IEnumerator Co_ShakeCamera()
+            {
+                var originPos = _renderCamera.transform.position;
+
+                float elapsed = 0f;
+                while (elapsed < _cameraMoveDuration)
+                {
+                    yield return null;
+                    elapsed += Time.deltaTime;
+
+                    float x = Random.Range(-1f, 1f) * _cameraShakeAmount;
+                    float y = Random.Range(-1f, 1f) * _cameraShakeAmount;
+
+                    _renderCamera.transform.position += new Vector3(x, y, 0);
+                }
+
+                _renderCamera.transform.position = originPos;
+                _coShakeCamera = null;
+            }
         }
     }
 }
