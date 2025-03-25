@@ -12,6 +12,7 @@ namespace BabyNightmare.Talent
         public ETalentType TalentType;
         public float IncreaseValue;
         public EValueType ValueType;
+        public int MaxLevel = 100;
         public int Prob;
         public int Order;
 

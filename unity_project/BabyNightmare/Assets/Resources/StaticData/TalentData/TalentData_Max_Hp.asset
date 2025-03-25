@@ -15,5 +15,6 @@ MonoBehaviour:
   TalentType: 1
   IncreaseValue: 20
   ValueType: 1
-  Prob: 1
+  MaxLevel: 100
+  Prob: 5
   Order: 0

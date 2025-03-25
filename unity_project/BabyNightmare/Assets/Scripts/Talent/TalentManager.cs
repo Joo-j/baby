@@ -101,7 +101,11 @@ namespace BabyNightmare.Talent
 
             foreach (var pair in _dataDict)
             {
+                var type = pair.Key;
                 var data = pair.Value;
+                if (_levelDict[type] >= data.MaxLevel)
+                    continue;
+
                 randomPicker.Add(data, data.Prob);
             }
 
@@ -135,8 +139,12 @@ namespace BabyNightmare.Talent
 
             switch (data.ValueType)
             {
-                case EValueType.Amount: return level * data.IncreaseValue;
-                case EValueType.Percentage: return level * data.IncreaseValue * 0.01f;
+                case EValueType.Amount:
+                    Debug.Log($"Talent GetValue {type} {data.ValueType} : {level * data.IncreaseValue}");
+                    return level * data.IncreaseValue;
+                case EValueType.Percentage:
+                    Debug.Log($"Talent GetValue {type} {data.ValueType} : {level * data.IncreaseValue * 0.01f}");
+                    return level * data.IncreaseValue * 0.01f;
                 default: return level * data.IncreaseValue;
             }
         }
