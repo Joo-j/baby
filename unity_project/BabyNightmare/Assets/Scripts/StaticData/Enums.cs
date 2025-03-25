@@ -115,4 +115,11 @@ namespace BabyNightmare.StaticData
         Milk,
         MilkBottle
     }
+    
+    public enum EDamageType
+    {
+        Direct,
+        Area,
+    }
+
 }

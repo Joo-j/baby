@@ -7,7 +7,6 @@ using Supercent.Util;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Match;
-using BabyNightmare.HUD;
 using BabyNightmare.Talent;
 using Random = UnityEngine.Random;
 using BabyNightmare.CustomShop;
@@ -21,17 +20,20 @@ namespace BabyNightmare.Character
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
+        public Func<Vector3, List<EnemyBase>> GetEnemiesInArea { get; }
 
         public PlayerContext(
         float hp,
         Vector3 cameraForward,
         Action onDiePlayer,
-        Action<int, Vector3> getCoin)
+        Action<int, Vector3> getCoin,
+        Func<Vector3, List<EnemyBase>> getEnemiesInArea)
         {
             this.HP = hp;
             this.CameraForward = cameraForward;
             this.OnDiePlayer = onDiePlayer;
             this.GetCoin = getCoin;
+            this.GetEnemiesInArea = getEnemiesInArea;
         }
     }
 
@@ -145,7 +147,12 @@ namespace BabyNightmare.Character
             }
 
             if (_useInfoQueue.Count > 0)
+            {
+                var enemyPos = enemy.TF.position;
+                enemyPos.y = transform.position.y;
+                transform.LookAt(enemyPos);
                 _animator.Play(HASH_ANI_ATTACK);
+            }
         }
 
         private void TryUseEquipment()
@@ -186,7 +193,8 @@ namespace BabyNightmare.Character
                                 isCritical = true;
                             }
 
-                            enemy.ReserveDamage(value);
+                            if (equipmentData.DamageType == EDamageType.Direct)
+                                enemy.ReserveDamage(value);
 
                             if (i == 0)
                                 StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
@@ -195,7 +203,19 @@ namespace BabyNightmare.Character
 
                             void OnThrow()
                             {
-                                enemy?.ReceiveAttack(value, isCritical);
+                                switch (equipmentData.DamageType)
+                                {
+                                    case EDamageType.Direct:
+                                        enemy?.ReceiveAttack(value, isCritical);
+                                        break;
+                                    case EDamageType.Area:
+                                        var enemies = _context.GetEnemiesInArea?.Invoke(enemy.HitPoint.position);
+                                        for (var j = 0; j < enemies.Count; j++)
+                                        {
+                                            enemies[j]?.ReceiveAttack(value, isCritical);
+                                        }
+                                        break;
+                                }
                             }
                             break;
                         }

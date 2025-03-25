@@ -52,7 +52,8 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _farSpawnTF;
         [SerializeField] private Transform _boxSpawnTF;
         [SerializeField] private float _groundMoveAmount = 5f;
-        [SerializeField] private float _attackRadius = 10f;
+        [SerializeField] private float _playerAttackRadius = 10f;
+        [SerializeField] private float _areaAttackRadius = 3f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
 
         private const string PATH_PLAYER = "Match/Character/Player";
@@ -97,7 +98,8 @@ namespace BabyNightmare.Match
                                     PlayerData.Instance.HP,
                                     CameraForward,
                                     OnDiePlayer,
-                                    _context.GetCoin);
+                                    _context.GetCoin,
+                                    GetEnemiesInArea);
             _player.Init(playerContext);
 
             _coinPool = new Pool<Coin>(() => ObjectUtil.LoadAndInstantiate<Coin>(PATH_COIN, transform), 10);
@@ -191,7 +193,7 @@ namespace BabyNightmare.Match
                     continue;
 
                 var dist = Vector3.Distance(_player.TF.position, enemy.TF.position);
-                if (dist > _attackRadius)
+                if (dist > _playerAttackRadius)
                     continue;
 
                 attackableEnemies.Add(enemy);
@@ -205,6 +207,29 @@ namespace BabyNightmare.Match
 
             _player.UseEquipment(equipmentData, randomEnemy);
         }
+
+        private List<EnemyBase> GetEnemiesInArea(Vector3 areaPos)
+        {
+            var enemies = new List<EnemyBase>();
+            for (var i = 0; i < _aliveEnemies.Count; i++)
+            {
+                var enemy = _aliveEnemies[i];
+                var playerPos = _player.TF.position;
+                var enemyPos = enemy.TF.position;
+                var dist = Vector3.Distance(playerPos, enemyPos);
+                if (dist > _playerAttackRadius)
+                    continue;
+
+                dist = Vector3.Distance(areaPos, enemyPos);
+                if (dist > _areaAttackRadius)
+                    continue;
+
+                enemies.Add(enemy);
+            }
+
+            return enemies;
+        }
+
         public void EncounterBox(EBoxType boxType, Action doneCallback)
         {
             StartCoroutine(Co_EncounterBox());

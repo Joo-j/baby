@@ -21,6 +21,7 @@ namespace BabyNightmare.StaticData
         public int Prob = 1;
         public List<StatData> StatDataList;
         public float CoolTime;
+        public EDamageType DamageType = EDamageType.Direct;
         public RectShape Shape;
 
         public int GetStatValueByCool(float value)
