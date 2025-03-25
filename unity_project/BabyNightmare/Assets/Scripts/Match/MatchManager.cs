@@ -22,11 +22,10 @@ namespace BabyNightmare.Match
 
         private const int EQUIPMENT_MAX_LEVEL = 3;
         private const int REROLL_EQUIPMENT_COUNT = 3;
-        private const int INITIAL_COIN = 10;
-        private const int REROLL_BASE_PRICE = 10;
+        private const int MATCH_START_COIN = 10;
+        private const int BASE_REROLL_PRICE = 10;
+        private const int BASE_BAG_SIZE_UP_PRICE = 100;
         private const int BASE_REWARD_GEM = 10;
-        private const int EQUIPMENT_WEIGHT_FACTOR_MAX = 5;
-        private const int EQUIPMENT_WEIGHT_FACTOR_MIN = 2;
 
         private MatchField _matchField = null;
         private MatchView _matchView = null;
@@ -36,6 +35,8 @@ namespace BabyNightmare.Match
         private int _maxWave = 0;
         private int _rerollCount = 0;
         private int _rerollPrice = 0;
+        private int _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE;
+        private int _bagSizeUpCount = 0;
 
         public void Init(Action enterLobby)
         {
@@ -79,6 +80,7 @@ namespace BabyNightmare.Match
                                         _matchField.RT,
                                         initEM,
                                         OnClickReroll,
+                                        OnClickBagSizeUp,
                                         OnStartWave,
                                         _matchField.AttackEnemy,
                                         _matchField.MoveCamera,
@@ -89,7 +91,7 @@ namespace BabyNightmare.Match
             _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
             CoinHUD.UseFX(false);
-            PlayerData.Instance.Coin = INITIAL_COIN;
+            PlayerData.Instance.Coin = MATCH_START_COIN;
             CoinHUD.UseFX(true);
 
             _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
@@ -159,6 +161,7 @@ namespace BabyNightmare.Match
             }
 
             _matchField.StartWave(enemyDataList);
+            _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
         }
 
         private void OnClearWave()
@@ -176,7 +179,8 @@ namespace BabyNightmare.Match
             _matchView.OnClearWave();
 
             var dataList = GetRerollData();
-            _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), dataList));
+            _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), waveData.EnableBagSizeUp, dataList));
+            AudioManager.PlaySFX("AudioClip/Clear_Wave");
         }
 
         private void OnClickReroll()
@@ -186,10 +190,22 @@ namespace BabyNightmare.Match
 
             var preCost = _rerollPrice;
             ++_rerollCount;
-            _rerollPrice = REROLL_BASE_PRICE * (int)Mathf.Pow(_rerollCount, 2);
+            _rerollPrice = BASE_REROLL_PRICE * (int)Mathf.Pow(_rerollCount, 2);
 
             PlayerData.Instance.Coin -= preCost;
             _matchView?.RefreshRerollPrice(_rerollPrice, PlayerData.Instance.Coin);
+        }
+
+        private void OnClickBagSizeUp()
+        {
+            _matchView.SizeUpBag();
+
+            var preCost = _bagSizeUpPrice;
+            ++_bagSizeUpCount;
+            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * (int)Mathf.Pow(_bagSizeUpCount, 2);
+
+            PlayerData.Instance.Coin -= preCost;
+            _matchView?.RefreshBagSizeUpPrice(_bagSizeUpPrice, PlayerData.Instance.Coin);        
         }
 
         private List<EquipmentData> GetRerollData()

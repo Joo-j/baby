@@ -16,3 +16,4 @@ MonoBehaviour:
   Group: 301
   EnemySpawnDataID: 8
   BoxType: 0
+  EnableBagSizeUp: 1

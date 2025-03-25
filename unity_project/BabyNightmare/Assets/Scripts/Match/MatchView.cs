@@ -19,6 +19,7 @@ namespace BabyNightmare.Match
         public RenderTexture RT { get; }
         public EquipmentData InitEquipment { get; }
         public Action OnClickReroll { get; }
+        public Action OnClickBagSizeUp { get; }
         public Action StartWave { get; }
         public Action<EquipmentData> OnCoolDown { get; }
         public Action<ECameraPosType> MoveCameraPos { get; }
@@ -28,6 +29,7 @@ namespace BabyNightmare.Match
         RenderTexture rt,
         EquipmentData initEquipment,
         Action onClickReroll,
+        Action onClickBagSizeUp,
         Action startWave,
         Action<EquipmentData> onCooldown,
         Action<ECameraPosType> moveCameraPos,
@@ -36,6 +38,7 @@ namespace BabyNightmare.Match
             this.RT = rt;
             this.InitEquipment = initEquipment;
             this.OnClickReroll = onClickReroll;
+            this.OnClickBagSizeUp = onClickBagSizeUp;
             this.StartWave = startWave;
             this.OnCoolDown = onCooldown;
             this.MoveCameraPos = moveCameraPos;
@@ -63,6 +66,9 @@ namespace BabyNightmare.Match
         [SerializeField] private CanvasGroup _rerollCVG;
         [SerializeField] private GameObject _rerollIcon;
         [SerializeField] private TextMeshProUGUI _rerollPriceTMP;
+        [SerializeField] private CanvasGroup _bagSizeUpCVG;
+        [SerializeField] private GameObject _bagSizeUpIcon;
+        [SerializeField] private TextMeshProUGUI _bagSizeUpPriceTMP;
         [SerializeField] private GameObject _fightGO;
         [SerializeField] private GameObject _boxGO;
         [SerializeField] private Image _boxIMG;
@@ -76,6 +82,7 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
+        private bool _enableBagSizeUp = false;
         private List<EquipmentData> _boxRerollDataList = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
@@ -111,6 +118,7 @@ namespace BabyNightmare.Match
 
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
+            _bagSizeUpCVG.gameObject.SetActive(false);
 
             _boxGO.SetActive(false);
             _canvasGroup.blocksRaycasts = false;
@@ -181,6 +189,28 @@ namespace BabyNightmare.Match
             {
                 _loot.TryAdd(dataList[i]);
             }
+
+            AudioManager.PlaySFX("AudioClip/Reroll");
+        }
+
+        public void SizeUpBag()
+        {
+            _bagSizeUpCVG.gameObject.SetActive(false);
+            _rerollCVG.gameObject.SetActive(false);
+            _fightGO.SetActive(false);
+            _loot.gameObject.SetActive(false);
+
+            StartCoroutine(Co_BagSizeUp());
+            IEnumerator Co_BagSizeUp()
+            {
+                var waiter = new CoroutineWaiter();
+                _bag.ShowAddableCell(waiter.Signal);
+                yield return waiter.Wait();
+
+                _rerollCVG.gameObject.SetActive(true);
+                _fightGO.SetActive(true);
+                _loot.gameObject.SetActive(true);
+            }
         }
 
         public void RefreshRerollPrice(int price, int coin)
@@ -206,6 +236,31 @@ namespace BabyNightmare.Match
 
             _rerollCVG.alpha = 1f;
             _rerollCVG.interactable = true;
+        }
+
+        public void RefreshBagSizeUpPrice(int price, int coin)
+        {
+            if (price <= 0)
+            {
+                _bagSizeUpIcon.gameObject.SetActive(false);
+                _bagSizeUpPriceTMP.text = $"Free";
+                _bagSizeUpPriceTMP.rectTransform.anchoredPosition = new Vector2(0, -20);
+                return;
+            }
+
+            _bagSizeUpPriceTMP.text = $"{price}";
+            _bagSizeUpIcon.gameObject.SetActive(true);
+            _bagSizeUpPriceTMP.rectTransform.anchoredPosition = new Vector2(25.6f, -20);
+
+            if (price > coin)
+            {
+                _bagSizeUpCVG.alpha = 0.7f;
+                _bagSizeUpCVG.interactable = false;
+                return;
+            }
+
+            _bagSizeUpCVG.alpha = 1f;
+            _bagSizeUpCVG.interactable = true;
         }
 
         public void OnClickStart()
@@ -242,10 +297,10 @@ namespace BabyNightmare.Match
             _canvasGroup.blocksRaycasts = true;
         }
 
-        public void ShowBox(EBoxType type, int waveCoin, List<EquipmentData> boxRerollDataList)
+        public void ShowBox(EBoxType type, int waveCoin, bool enableBagSizeUp, List<EquipmentData> boxRerollDataList)
         {
             ChangeRectPos(false, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
-
+            _enableBagSizeUp = enableBagSizeUp;
             _boxRerollDataList = boxRerollDataList;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
@@ -267,6 +322,7 @@ namespace BabyNightmare.Match
             _boxGO.SetActive(false);
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
+            _bagSizeUpCVG.gameObject.SetActive(_enableBagSizeUp);
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
 
             Reroll(_boxRerollDataList);

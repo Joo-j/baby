@@ -16,3 +16,4 @@ MonoBehaviour:
   Group: 201
   EnemySpawnDataID: 5
   BoxType: 0
+  EnableBagSizeUp: 1
