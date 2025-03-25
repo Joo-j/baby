@@ -14,6 +14,9 @@ namespace BabyNightmare.Match
         Equipment_Level_3,
         Heal,
         Pop,
+
+        Projectile_Level_2,
+        Projectile_Level_3,
     }
 
     public class FXPool : SingletonBase<FXPool>

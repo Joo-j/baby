@@ -15,7 +15,9 @@ namespace BabyNightmare.Match
         public Vector3 TargetAngle { get; private set; }
         public Transform TF => transform;
 
-        public void Init(ProjectileData data)
+        private FX _levelFX = null;
+
+        public void Init(ProjectileData data, int level)
         {
             _meshFilter.mesh = data.Mesh;
             _render.materials = data.Materials;
@@ -24,6 +26,25 @@ namespace BabyNightmare.Match
             Curve = data.Curve;
             BezierHeight = data.BezierHeight;
             TargetAngle = new Vector3(0, 0, data.TargetAngleZ);
+
+            if (level >= 2)
+            {
+                var levelFXType = level == 2 ? EFXType.Projectile_Level_2 : EFXType.Projectile_Level_3;
+
+                _levelFX = FXPool.Instance.Get(levelFXType);
+                _levelFX.transform.SetParent(transform);
+                _levelFX.transform.localPosition = Vector3.zero;
+                _levelFX.ChangeShapeMesh(data.Mesh);
+            }
+        }
+
+        void OnDisable()
+        {
+            if (null != _levelFX)
+            {
+                FXPool.Instance.Return(_levelFX);
+                _levelFX = null;
+            }
         }
     }
 }

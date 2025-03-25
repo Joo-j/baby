@@ -283,6 +283,7 @@ namespace BabyNightmare.Match
 
                 ChangeRectPos(true, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.Mid));
 
+                yield return CoroutineUtil.WaitForSeconds(1f);
                 _context.StartWave?.Invoke();
             }
         }

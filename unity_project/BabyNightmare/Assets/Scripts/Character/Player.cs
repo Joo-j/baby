@@ -125,7 +125,9 @@ namespace BabyNightmare.Character
             AddDef(-blocked);
             damage -= blocked;
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{Mathf.RoundToInt(damage)}", Color.white);
+            var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
+
+            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), message, Color.white);
 
             base.ReceiveAttack(damage, isCritical);
         }
@@ -258,7 +260,7 @@ namespace BabyNightmare.Character
             var pt = ProjectilePool.Instance.Get();
             pt.TF.position = _throwStartTF.position;
             pt.TF.rotation = Quaternion.identity;
-            pt.Init(ptData);
+            pt.Init(ptData, data.Level);
 
             var duration = pt.Duration;
             var curve = pt.Curve;
