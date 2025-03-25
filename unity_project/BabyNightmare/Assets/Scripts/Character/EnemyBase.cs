@@ -4,7 +4,7 @@ using UnityEngine;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 using Supercent.Util;
-using BabyNightmare.HUD;
+using Supercent.Core.Audio;
 using BabyNightmare.Match;
 using Random = UnityEngine.Random;
 
@@ -159,6 +159,7 @@ namespace BabyNightmare.Character
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{Mathf.RoundToInt(damage)}", Color.white);
 
             base.ReceiveAttack(damage, isCritical);
+            AudioManager.PlaySFX("AudioClip/Enemy_ReceiveAttack");
         }
 
         public override void Die()

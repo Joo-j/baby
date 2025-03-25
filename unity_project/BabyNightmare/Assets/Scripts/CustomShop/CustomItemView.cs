@@ -4,6 +4,7 @@ using System;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using TMPro;
+using Supercent.Core.Audio;
 using Supercent.Util.STM;
 
 namespace BabyNightmare.CustomShop
@@ -115,11 +116,13 @@ namespace BabyNightmare.CustomShop
 
             _rtf.localScale = Vector3.one;
             StartCoroutine(SimpleLerp.Co_BounceScale(_rtf, Vector3.one * 1.1f, _bounceCurve, 0.05f));
+            AudioManager.PlaySFX("AudioClip/Click");
         }
 
         public void OnClickNoPurchase()
         {
             SimpleToastMessage.Show("Need More Gem!", null);
+            AudioManager.PlaySFX("AudioClip/Click_Fail");
         }
 
         public void OnClickPurchase()

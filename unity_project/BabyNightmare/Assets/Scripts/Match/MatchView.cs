@@ -6,7 +6,7 @@ using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using BabyNightmare.Talent;
-using BabyNightmare.Util;
+using Supercent.Core.Audio;
 using Supercent.Util;
 using TMPro;
 using UnityEngine;
@@ -258,6 +258,7 @@ namespace BabyNightmare.Match
             {
                 _luckyBoxMessageRTF.gameObject.SetActive(false);
                 _luckyBoxMessageRTF.gameObject.SetActive(true);
+                AudioManager.PlaySFX("AudioClip/Lucky_Box");
             }
         }
 
@@ -270,17 +271,29 @@ namespace BabyNightmare.Match
 
             Reroll(_boxRerollDataList);
             _boxRerollDataList = null;
+            AudioManager.PlaySFX("AudioClip/Reroll");
         }
 
         public void OnClickReroll()
         {
             _context.OnClickReroll?.Invoke();
+            AudioManager.PlaySFX("AudioClip/Click");
         }
+
+        public void OnClickSizeUpBag()
+        {
+            _context.OnClickBagSizeUp.Invoke();
+            AudioManager.PlaySFX("AudioClip/Click");
+        }
+
 
         public void OnClickFight()
         {
+            AudioManager.PlaySFX("AudioClip/Click");
+
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
+            _bagSizeUpCVG.gameObject.SetActive(false);
 
             StartCoroutine(Co_ReadyFight());
 

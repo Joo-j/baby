@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
+using Supercent.Core.Audio;
 using Supercent.Util;
 using TMPro;
 using UnityEngine;
@@ -91,6 +92,7 @@ namespace BabyNightmare.Talent
                 }
 
                 yield return CoroutineUtil.WaitForSeconds(0.5f);
+                AudioManager.PlaySFX("AudioClip/Talent_Gacha");
 
                 TalentItemView preItemView = null;
                 var count = _itemViewDict.Count;
@@ -119,6 +121,7 @@ namespace BabyNightmare.Talent
                 {
                     pair.Value.Focus(false);
                 }
+                AudioManager.PlaySFX("AudioClip/Talent_Upgrade");
 
                 _upgradeBTN.enabled = true;
                 _upgradeBTN.image.sprite = _enableButtonSprite;
@@ -132,6 +135,7 @@ namespace BabyNightmare.Talent
             _upgrade?.Invoke();
             FocusOverlayHelper.Clear();
             _guide.SetActive(false);
+            AudioManager.PlaySFX("AudioClip/Click");
         }
 
         public void ShowGuide()

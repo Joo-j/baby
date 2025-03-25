@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections;
 using Supercent.Util;
+using Supercent.Core.Audio;
 using BabyNightmare.Util;
 using BabyNightmare.HUD;
 
@@ -54,6 +55,7 @@ namespace BabyNightmare.Match
 
                 GemHUD.SetSpreadPoint(BTN_RVReward.transform.position);
                 PlayerData.Instance.Gem += _rvMultiplyValue * gem;
+                AudioManager.PlaySFX("AudioClip/Earn_Gem");
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;
@@ -75,6 +77,7 @@ namespace BabyNightmare.Match
 
                 GemHUD.SetSpreadPoint(BTN_NoThanks.transform.position);
                 PlayerData.Instance.Gem += gem;
+                AudioManager.PlaySFX("AudioClip/Earn_Gem");
 
                 BTN_RVReward.enabled = false;
                 BTN_NoThanks.enabled = false;

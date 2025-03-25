@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using Supercent.Core.Audio;
 using Supercent.Util.STM;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
@@ -122,15 +123,19 @@ namespace BabyNightmare.Lobby
         {
             if (button == BTN_Click)
             {
+
                 if (false == _unlocked)
                 {
                     SimpleToastMessage.Show("Play More", null);
+                    AudioManager.PlaySFX("AudioClip/Click_Fail");
                     return;
                 }
-                
+
                 FocusOverlayHelper.Clear();
 
                 _onClick?.Invoke();
+                AudioManager.PlaySFX("AudioClip/Click");
+
                 HideGuide();
 
                 _guideCallback?.Invoke();

@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 using BabyNightmare.Talent;
 using UnityEngine.AI;
 using System.Linq;
+using Supercent.Core.Audio;
 
 namespace BabyNightmare.Match
 {
@@ -102,6 +103,7 @@ namespace BabyNightmare.Match
 
             var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
             failView.Init(gem, CloseMatch);
+            AudioManager.PlaySFX("AudioClip/Match_Fail");
         }
 
         private void OnCompleteMatch()
@@ -115,6 +117,7 @@ namespace BabyNightmare.Match
 
             ++PlayerData.Instance.Chapter;
             PlayerData.Instance.Save();
+            AudioManager.PlaySFX("AudioClip/Match_Complete");
         }
 
         private void CloseMatch()

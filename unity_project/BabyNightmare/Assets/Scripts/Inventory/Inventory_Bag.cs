@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using Supercent.Core.Audio;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
@@ -14,7 +14,6 @@ namespace BabyNightmare.InventorySystem
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private Vector2 _cellSize = default;
-        [SerializeField] private float _padding = 10;
         [SerializeField] private Color _cellClearColor;
         [SerializeField] private Color _cellEnableColor;
         [SerializeField] private Color _cellOverlappedColor;
@@ -61,7 +60,6 @@ namespace BabyNightmare.InventorySystem
 
             return _cellDict.ContainsKey(index);
         }
-
 
         private Cell CreateCell(Vector2Int index)
         {
@@ -169,6 +167,7 @@ namespace BabyNightmare.InventorySystem
                 }
 
                 doneCallback?.Invoke();
+                AudioManager.PlaySFX("AudioClip/Inventory_AddCell");
             }
         }
 
@@ -228,7 +227,6 @@ namespace BabyNightmare.InventorySystem
             }
         }
 
-
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
             var data = equipment.Data;
@@ -256,6 +254,7 @@ namespace BabyNightmare.InventorySystem
             {
                 //Debug.Log($"겹친 장비가 없다면 바로 배치");
                 Equip(equipment, targetIndex);
+                AudioManager.PlaySFX("AudioClip/Inventory_Equip");
                 return true;
             }
 
@@ -270,6 +269,7 @@ namespace BabyNightmare.InventorySystem
                     Remove(oe);
                     equipment.Refresh(upgradeData, true);
                     Equip(equipment, targetIndex);
+                    AudioManager.PlaySFX("AudioClip/Inventory_Merge");
                     _showMergeMessage?.Invoke(equipment.transform, $"LV {upgradeData.Level}!");
                     return true;
                 }
@@ -278,6 +278,7 @@ namespace BabyNightmare.InventorySystem
                     //Debug.Log($"같은 장비가 아니면 기존 장비 밖으로 내보내고 배치");
                     Eject(oe);
                     Equip(equipment, targetIndex);
+                    AudioManager.PlaySFX("AudioClip/Inventory_Equip");
                     return true;
                 }
             }
@@ -287,6 +288,7 @@ namespace BabyNightmare.InventorySystem
                 Eject(oe);
 
             Equip(equipment, targetIndex);
+            AudioManager.PlaySFX("AudioClip/Inventory_Equip");
             return true;
         }
 

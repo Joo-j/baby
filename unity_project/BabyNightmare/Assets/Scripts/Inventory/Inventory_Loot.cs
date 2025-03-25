@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Supercent.Core.Audio;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 
@@ -27,6 +28,7 @@ namespace BabyNightmare.InventorySystem
                     Remove(getEquipment);
                     equipment.Refresh(upgradeData, true);
                     Equip(equipment, false);
+                    AudioManager.PlaySFX("AudioClip/Inventory_Merge");
                     _showMergeMessage?.Invoke(equipment.transform, $"LV {upgradeData.Level}!");
                 }
                 else

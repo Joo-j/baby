@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Supercent.Util;
+using Supercent.Core.Audio;
 using BabyNightmare.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Match;
@@ -112,6 +113,7 @@ namespace BabyNightmare.Character
 
             _context.OnDiePlayer?.Invoke();
             _isDead = true;
+            AudioManager.PlaySFX("AudioClip/Player_Die");
         }
 
         private void AddDef(float value)
@@ -138,6 +140,7 @@ namespace BabyNightmare.Character
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), message, Color.white);
 
             base.ReceiveAttack(damage, isCritical);
+            AudioManager.PlaySFX("AudioClip/Player_ReceiveAttack");
         }
 
         public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
@@ -155,6 +158,7 @@ namespace BabyNightmare.Character
                 enemyPos.y = transform.position.y;
                 transform.LookAt(enemyPos);
                 _animator.Play(HASH_ANI_ATTACK);
+                AudioManager.PlaySFX("AudioClip/Player_Throw");
             }
         }
 
@@ -223,9 +227,11 @@ namespace BabyNightmare.Character
                                         {
                                             case EEquipmentType.Bomb:
                                                 FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, enemy.HitPoint.position);
+                                                AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
                                                 break;
                                             case EEquipmentType.Missile:
                                                 FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
+                                                AudioManager.PlaySFX("AudioClip/Projectile_Missile");
                                                 break;
                                         }
 
@@ -251,6 +257,7 @@ namespace BabyNightmare.Character
                                 var pos = transform.position;
                                 pos.y = 0.01f;
                                 FXPool.Instance.ShowTemporary(EFXType.Heal, pos);
+                                AudioManager.PlaySFX("AudioClip/Player_Heal");
                             }
                             break;
                         }
@@ -270,6 +277,7 @@ namespace BabyNightmare.Character
                                 value += value * talentDef;
 
                                 AddDef(value);
+                                AudioManager.PlaySFX("AudioClip/Player_Defense");
                             }
                             break;
                         }
@@ -283,6 +291,7 @@ namespace BabyNightmare.Character
                             void OnThrow()
                             {
                                 _context.GetCoin?.Invoke((int)value, transform.position);
+                                AudioManager.PlaySFX("AudioClip/Field_Coin");
                             }
                             break;
                         }

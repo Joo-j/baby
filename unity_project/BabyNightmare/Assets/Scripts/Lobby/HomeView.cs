@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Supercent.Util;
+using Supercent.Core.Audio;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using TMPro;
@@ -163,12 +164,14 @@ namespace BabyNightmare.Lobby
                 return;
             }
 
+            AudioManager.PlaySFX("AudioClip/Game_Start");
             _startGame?.Invoke();
         }
 
         public void OnClickSetting()
         {
-            SimpleToastMessage.Show("Ready", null);
+            SimpleToastMessage.Show("Not Ready", null);
+            AudioManager.PlaySFX("AudioClip/Click_Fail");
         }
 
         public void OnClickCheat()

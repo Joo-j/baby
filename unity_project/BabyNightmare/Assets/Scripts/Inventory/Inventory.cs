@@ -3,6 +3,7 @@ using UnityEngine.EventSystems;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Supercent.Core.Audio;
 using Supercent.Util;
 using BabyNightmare.StaticData;
 
@@ -122,7 +123,6 @@ namespace BabyNightmare.InventorySystem
 
             var overlapSet = _currentInventory.TryGetOverlap(_draggedEquipment, _dragEventData.position);
             _refreshChangeStat?.Invoke(_draggedEquipment, overlapSet);
-
         }
 
         public void OnPointerClick(PointerEventData eventData)

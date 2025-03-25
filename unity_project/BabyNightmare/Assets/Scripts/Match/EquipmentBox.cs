@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Supercent.Core.Audio;
 using Supercent.Util;
 
 namespace BabyNightmare.Match
@@ -25,6 +26,7 @@ namespace BabyNightmare.Match
 
         IEnumerator Co_Open(Action doneCallback)
         {
+            AudioManager.PlaySFX("AudioClip/Field_Box_Open");
             _animator.Rebind();
             _animator.Play(HASH_ANI_OPEN);
             yield return null;

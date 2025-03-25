@@ -276,7 +276,6 @@ namespace BabyNightmare.Match
             totalCoin += Mathf.CeilToInt(_waveCoin * talentCoin);
 
             return _waveCoin;
-
         }
 
         private Transform GetSpawnTF(ESpawnOrder order)
