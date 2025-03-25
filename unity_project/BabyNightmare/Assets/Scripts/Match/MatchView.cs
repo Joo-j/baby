@@ -436,6 +436,7 @@ namespace BabyNightmare.Match
         {
             _equipmentLevelTMP.transform.SetParent(tf);
             _equipmentLevelTMP.transform.localPosition = Vector3.zero;
+            _equipmentLevelTMP.transform.SetParent(transform);
             _equipmentLevelTMP.text = message;
             _equipmentLevelTMP.gameObject.SetActive(false);
             _equipmentLevelTMP.gameObject.SetActive(true);
