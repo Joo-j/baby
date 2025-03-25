@@ -19513,7 +19513,6 @@ GameObject:
   - component: {fileID: 6337048723004828300}
   - component: {fileID: 732172465218659059}
   - component: {fileID: 955968648987397253}
-  - component: {fileID: 1779075736090418091}
   m_Layer: 9
   m_Name: FX_Box_Idle
   m_TagString: Untagged
@@ -24353,27 +24352,6 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!65 &1779075736090418091
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4014627760101585799}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &6099585510852832253
 GameObject:
   m_ObjectHideFlags: 0

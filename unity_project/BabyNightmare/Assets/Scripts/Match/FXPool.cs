@@ -8,8 +8,9 @@ namespace BabyNightmare.Match
 {
     public enum EFXType
     {
-        Receive_Damage,
-        Equipment_Merge,
+        Unknown = -1,
+        Receive_Damage = 0,
+        Equipment_Merge = 1,
         Equipment_Level_2,
         Equipment_Level_3,
         Heal,
@@ -17,6 +18,9 @@ namespace BabyNightmare.Match
 
         Projectile_Level_2,
         Projectile_Level_3,
+
+        Projectile_Bomb,
+        Projectile_Missle,
     }
 
     public class FXPool : SingletonBase<FXPool>

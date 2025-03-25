@@ -218,6 +218,18 @@ namespace BabyNightmare.Character
                                             enemies[j]?.ReceiveAttack(value, isCritical);
                                         }
                                         _context.ShakeCamera?.Invoke();
+
+                                        switch (equipmentData.Type)
+                                        {
+                                            case EEquipmentType.Bomb:
+                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, enemy.HitPoint.position);
+                                                break;
+                                            case EEquipmentType.Missile:
+                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
+                                                break;
+                                        }
+
+
                                         break;
                                 }
                             }
