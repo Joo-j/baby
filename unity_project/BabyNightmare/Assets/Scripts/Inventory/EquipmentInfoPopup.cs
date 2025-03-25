@@ -14,7 +14,7 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private TextMeshProUGUI _nameTMP;
         [SerializeField] private TextMeshProUGUI _levelTMP;
         [SerializeField] private TextMeshProUGUI _cooltimeTMP;
-        [SerializeField] private List<GameObject> _statPanelList;
+        [SerializeField] private TextMeshProUGUI _descTMP;
         [SerializeField] private List<TextMeshProUGUI> _statValueList;
 
         private const string PATH_EQUIPMENT_ICON_INFO = "Inventory/Equipment_Icon_Info/";
@@ -30,6 +30,7 @@ namespace BabyNightmare.InventorySystem
             _nameTMP.text = $"{data.Type}";
             _levelTMP.text = $"LV {data.Level}";
             _cooltimeTMP.text = $"Cool Down : {data.CoolTime:F1}s";
+            _descTMP.text = $"{data.Desc}";
 
             var statDataList = data.StatDataList;
 

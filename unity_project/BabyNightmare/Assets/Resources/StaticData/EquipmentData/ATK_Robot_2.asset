@@ -25,3 +25,4 @@ MonoBehaviour:
     _column: 2
     _row: 2
     _shape: 01010101
+  Desc: A toy robot that zaps with tiny lasers.

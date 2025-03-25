@@ -23,6 +23,7 @@ namespace BabyNightmare.StaticData
         public float CoolTime;
         public EDamageType DamageType = EDamageType.Direct;
         public RectShape Shape;
+        public String Desc;
 
         public int GetStatValueByCool(float value)
         {

@@ -27,3 +27,4 @@ MonoBehaviour:
     _column: 1
     _row: 2
     _shape: 0101
+  Desc: Thrown bottle that explodes on impact.
