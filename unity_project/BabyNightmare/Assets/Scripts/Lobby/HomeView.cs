@@ -6,6 +6,7 @@ using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using TMPro;
+using Supercent.Util.STM;
 
 namespace BabyNightmare.Lobby
 {
@@ -163,6 +164,11 @@ namespace BabyNightmare.Lobby
             }
 
             _startGame?.Invoke();
+        }
+
+        public void OnClickSetting()
+        {
+            SimpleToastMessage.Show("Ready", null);
         }
 
         public void OnClickCheat()
