@@ -65,7 +65,7 @@ namespace BabyNightmare.Match
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             var matchFieldContext = new MatchFieldContext(
                                         chapterData,
-                                        GetCoin,
+                                        GetCoinInField,
                                         (factor, immediate) => _matchView?.RefreshProgress(factor, immediate),
                                         OnClearWave,
                                         OnFailMatch);
@@ -81,8 +81,7 @@ namespace BabyNightmare.Match
                                         OnStartWave,
                                         _matchField.AttackEnemy,
                                         _matchField.MoveCamera,
-                                        GetUpgradeData
-                                        );
+                                        GetUpgradeData);
             _matchView.Init(matchViewContext);
 
             var waveData = _waveDataList[_currentWave];
@@ -172,16 +171,9 @@ namespace BabyNightmare.Match
             var waveData = _waveDataList[_currentWave];
 
             _matchView.OnClearWave();
-            _matchView.RefreshWave(_currentWave + 1, _maxWave, waveData.BoxType);
 
-            _matchField.EncounterBox(waveData.BoxType,
-            () => _matchView.ShowBox(waveData.BoxType,
-            (boxPos) =>
-            {
-                var dataList = GetRerollData();
-                _matchView.Reroll(dataList);
-                _matchField.GetWaveCoin(boxPos);
-            }));
+            var dataList = GetRerollData();
+            _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), dataList));
         }
 
         private void OnClickReroll()
@@ -236,7 +228,7 @@ namespace BabyNightmare.Match
             return dataDict.Values.ToList();
         }
 
-        private void GetCoin(int coin, Vector3 worldPos)
+        private void GetCoinInField(int coin, Vector3 worldPos)
         {
             CoinHUD.SetSpreadPoint(worldPos, _matchField.RenderCamera, _matchView.FieldImage);
             PlayerData.Instance.Coin += coin;

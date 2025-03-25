@@ -76,7 +76,7 @@ namespace BabyNightmare.Match
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
         private MatchViewContext _context = null;
-        private Action<Vector3> _onOpenBox = null;
+        private List<EquipmentData> _boxRerollDataList = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
@@ -211,7 +211,6 @@ namespace BabyNightmare.Match
         public void OnClickStart()
         {
             StartCoroutine(Co_StartSequence());
-
         }
 
         private IEnumerator Co_StartSequence()
@@ -230,7 +229,7 @@ namespace BabyNightmare.Match
                     yield return waiter.Wait();
                 }
             }
-            
+
             _bag.TryAdd(_context.InitEquipment);
 
             _rerollCVG.gameObject.SetActive(true);
@@ -243,14 +242,17 @@ namespace BabyNightmare.Match
             _canvasGroup.blocksRaycasts = true;
         }
 
-        public void ShowBox(EBoxType type, Action<Vector3> onOpenBox)
+        public void ShowBox(EBoxType type, int waveCoin, List<EquipmentData> boxRerollDataList)
         {
             ChangeRectPos(false, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
 
-            _onOpenBox = onOpenBox;
+            _boxRerollDataList = boxRerollDataList;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
             _boxGO.SetActive(true);
+
+            CoinHUD.SetSpreadPoint(_boxGO.transform.position);
+            PlayerData.Instance.Coin += waveCoin;
 
             if (type == EBoxType.Gold)
             {
@@ -265,7 +267,9 @@ namespace BabyNightmare.Match
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
-            _onOpenBox?.Invoke(_boxGO.transform.position);
+
+            Reroll(_boxRerollDataList);
+            _boxRerollDataList = null;
         }
 
         public void OnClickReroll()

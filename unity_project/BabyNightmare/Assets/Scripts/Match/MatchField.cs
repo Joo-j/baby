@@ -62,6 +62,7 @@ namespace BabyNightmare.Match
         private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
         private const string PATH_COIN = "Match/Coin";
+        private const float COIN_DAMP = 0.5f;
 
         private Transform _fieldTF;
         private RenderTexture _rt = null;
@@ -122,6 +123,8 @@ namespace BabyNightmare.Match
 
         public void StartWave(List<EnemyData> enemyDataList)
         {
+            _waveCoin = 0;
+
             _aliveEnemies.Clear();
 
             _enemySpawnCount = enemyDataList.Count;
@@ -266,14 +269,14 @@ namespace BabyNightmare.Match
             }
         }
 
-        public void GetWaveCoin(Vector3 coinGenPos)
+        public int GetWaveCoin()
         {
-            _waveCoin = Mathf.CeilToInt(_waveCoin * 0.5f);
+            var totalCoin = Mathf.CeilToInt(_waveCoin * COIN_DAMP);
             var talentCoin = TalentManager.Instance.GetValue(ETalentType.Coin_Earn_Percentage);
-            _waveCoin += Mathf.CeilToInt(_waveCoin * talentCoin);
+            totalCoin += Mathf.CeilToInt(_waveCoin * talentCoin);
 
-            _context.GetCoin?.Invoke(_waveCoin, coinGenPos);
-            _waveCoin = 0;
+            return _waveCoin;
+
         }
 
         private Transform GetSpawnTF(ESpawnOrder order)
