@@ -122,8 +122,8 @@ MonoBehaviour:
   _playerAttackRadius: 10
   _areaAttackRadius: 4.5
   _cameraMoveDuration: 0.5
-  _cameraShakeAmount: 0.02
-  _cameraShakeDuraton: 0.02
+  _cameraShakeAmount: 0.04
+  _cameraShakeDuraton: 0.01
 --- !u!1 &2173026360070404481
 GameObject:
   m_ObjectHideFlags: 0
