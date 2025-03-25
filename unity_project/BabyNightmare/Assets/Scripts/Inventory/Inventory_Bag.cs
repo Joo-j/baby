@@ -18,9 +18,9 @@ namespace BabyNightmare.InventorySystem
         [SerializeField] private Color _cellEnableColor;
         [SerializeField] private Color _cellOverlappedColor;
         [SerializeField] private Color _cellUpgradableColor;
-        [SerializeField] private Color _cellAddableColor;
 
         private const string PATH_CELL = "Inventory/Cell";
+        private const string PATH_CELL_ADDABLE = "Inventory/Cell_Addable";
         private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
         private Vector2Int _gridSize = default;
         private Vector2Int _gridOffset = default;
@@ -64,6 +64,15 @@ namespace BabyNightmare.InventorySystem
         private Cell CreateCell(Vector2Int index)
         {
             var cell = ObjectUtil.LoadAndInstantiate<Cell>(PATH_CELL, transform);
+            cell.RTF.sizeDelta = _cellSize;
+            cell.RTF.anchoredPosition = GetLocalPos(index);
+            cell.RefreshColor(_cellClearColor);
+            return cell;
+        }
+
+        private Cell CreateCell_Addable(Vector2Int index)
+        {
+            var cell = ObjectUtil.LoadAndInstantiate<Cell>(PATH_CELL_ADDABLE, transform);
             cell.RTF.sizeDelta = _cellSize;
             cell.RTF.anchoredPosition = GetLocalPos(index);
             cell.RefreshColor(_cellClearColor);
@@ -147,8 +156,7 @@ namespace BabyNightmare.InventorySystem
                 if (true == _cellDict.ContainsKey(index))
                     continue;
 
-                var cell = CreateCell(index);
-                cell.RefreshColor(_cellAddableColor);
+                var cell = CreateCell_Addable(index);
                 cell.AddButton(() => OnClickButton(index));
                 addableCells.Add(cell);
             }

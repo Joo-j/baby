@@ -308,6 +308,7 @@ namespace BabyNightmare.Match
 
             CoinHUD.SetSpreadPoint(_boxGO.transform.position);
             PlayerData.Instance.Coin += waveCoin;
+            AudioManager.PlaySFX("AudioClip/Coin");
 
             if (type == EBoxType.Gold)
             {
@@ -361,6 +362,7 @@ namespace BabyNightmare.Match
                     var equipment = lootEquipmentList[i];
                     CoinHUD.SetSpreadPoint(equipment.transform.position);
                     PlayerData.Instance.Coin += EQUIPMENT_PRICE;
+                    AudioManager.PlaySFX("AudioClip/Coin");
                     yield return null;
                 }
 
