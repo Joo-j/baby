@@ -401,8 +401,8 @@ MonoBehaviour:
   _hitPoint: {fileID: 6826247166837779252}
   _ownColor: {r: 1, g: 0, b: 0.57734966, a: 1}
   _model: {fileID: 9051232029631449991}
+  _startHP: 200
   _throwStartTF: {fileID: 5497047235258197999}
-  _hitRadius: 4.5
   _shieldImage: {fileID: 339239031504297590}
   _shieldText: {fileID: 2972978012783211422}
 --- !u!1001 &202125535568705775
@@ -1599,14 +1599,17 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4605988707445597181}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6513444777938993050, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8543725099143450266}
   m_SourcePrefab: {fileID: 100100000, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
 --- !u!114 &1093458915853520808 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3273095020475951253, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
   m_PrefabInstance: {fileID: 2468220550510503741}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 8657191750371268775}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b041b308ddfb4cee8f4fde430e8f4ff, type: 3}
@@ -1617,3 +1620,21 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
   m_PrefabInstance: {fileID: 2468220550510503741}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8657191750371268775 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6513444777938993050, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
+  m_PrefabInstance: {fileID: 2468220550510503741}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8543725099143450266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8657191750371268775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f34b40019b3991f43a87329a71ce4fac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _eulerAngle: {x: 0, y: 0, z: 0}
