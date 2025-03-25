@@ -140,10 +140,8 @@ namespace BabyNightmare.Talent
             switch (data.ValueType)
             {
                 case EValueType.Amount:
-                    Debug.Log($"Talent GetValue {type} {data.ValueType} : {level * data.IncreaseValue}");
                     return level * data.IncreaseValue;
                 case EValueType.Percentage:
-                    Debug.Log($"Talent GetValue {type} {data.ValueType} : {level * data.IncreaseValue * 0.01f}");
                     return level * data.IncreaseValue * 0.01f;
                 default: return level * data.IncreaseValue;
             }

@@ -222,24 +222,22 @@ namespace BabyNightmare.Character
                                             enemies[j]?.ReceiveAttack(value, isCritical);
                                         }
                                         _context.ShakeCamera?.Invoke();
+                                        break;
+                                }
 
-                                        switch (equipmentData.Type)
-                                        {
-                                            case EEquipmentType.Bomb:
-                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, enemy.HitPoint.position);
-                                                AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
-                                                break;
-                                            case EEquipmentType.Missile:
-                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
-                                                AudioManager.PlaySFX("AudioClip/Projectile_Missile");
-                                                break;
-                                            case EEquipmentType.WaterGun:
-                                                FXPool.Instance.ShowTemporary(EFXType.Projectile_WaterGun, enemy.HitPoint.position);
-                                                AudioManager.PlaySFX("AudioClip/Projectile_Missile");
-                                                break;
-                                        }
-
-
+                                switch (equipmentData.Type)
+                                {
+                                    case EEquipmentType.Bomb:
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, enemy.HitPoint.position);
+                                        AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
+                                        break;
+                                    case EEquipmentType.Missile:
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
+                                        AudioManager.PlaySFX("AudioClip/Projectile_Missile");
+                                        break;
+                                    case EEquipmentType.WaterGun:
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_WaterGun, enemy.HitPoint.position);
+                                        AudioManager.PlaySFX("AudioClip/Projectile_WaterGun");
                                         break;
                                 }
                             }
