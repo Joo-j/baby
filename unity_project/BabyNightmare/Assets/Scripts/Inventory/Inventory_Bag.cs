@@ -23,6 +23,7 @@ namespace BabyNightmare.InventorySystem
         private const string PATH_CELL = "Inventory/Cell";
         private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
         private Vector2Int _gridSize = default;
+        private Vector2Int _gridOffset = default;
         private Dictionary<Vector2Int, Cell> _cellDict = null;
         private HashSet<Equipment> _equipmentSet = null;
         private Inventory _outsideInventory = null;
@@ -30,8 +31,8 @@ namespace BabyNightmare.InventorySystem
 
         public void Init
         (
-                Inventory outsideInventory,
-                Action<EquipmentData, bool> onEquip
+            Inventory outsideInventory,
+            Action<EquipmentData, bool> onEquip
         )
         {
             _outsideInventory = outsideInventory;
@@ -72,13 +73,39 @@ namespace BabyNightmare.InventorySystem
 
         public void AddCell(Vector2Int index)
         {
-            if (_cellDict.ContainsKey(index))
+            if (true == _cellDict.ContainsKey(index))
             {
                 Debug.Log($"{index}에 이미 cell이 들어있습니다.");
                 return;
             }
 
-            if (index.x >= _gridSize.x || index.y >= _gridSize.y)
+            if (index.x < 0 || index.y < 0)
+            {
+                var offset = new Vector2Int(index.x < 0 ? -index.x : 0, index.y < 0 ? -index.y : 0);
+                var newDict = new Dictionary<Vector2Int, Cell>();
+
+                foreach (var pair in _cellDict)
+                {
+                    var newIndex = pair.Key + offset;
+                    newDict.Add(newIndex, pair.Value);
+                    pair.Value.RTF.anchoredPosition = GetLocalPos(newIndex);
+                }
+
+                _cellDict = newDict;
+                _gridOffset += offset;
+                _gridSize += offset;
+                index += offset;
+
+                var width = _gridSize.x * _cellSize.x;
+                var height = _gridSize.y * _cellSize.y;
+                _rtf.sizeDelta = new Vector2(width, height);
+
+                foreach (var pair in _cellDict)
+                {
+                    pair.Value.RTF.anchoredPosition = GetLocalPos(pair.Key);
+                }
+            }
+            else if (index.x >= _gridSize.x || index.y >= _gridSize.y)
             {
                 _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
 
@@ -89,24 +116,31 @@ namespace BabyNightmare.InventorySystem
                 foreach (var pair in _cellDict)
                 {
                     pair.Value.RTF.anchoredPosition = GetLocalPos(pair.Key);
-                    Debug.Log($"{pair.Key} {GetLocalPos(pair.Key)}");
                 }
             }
 
-            var cell = CreateCell(index);
-            _cellDict.Add(index, cell);
+            // 새 셀 추가
+            var newCell = CreateCell(index);
+            _cellDict.Add(index, newCell);
         }
+
 
         public void ShowAddableCell(Action doneCallback)
         {
             var addableCells = new List<Cell>();
             var addableIndexList = new List<Vector2Int>();
 
-            var minLength = Mathf.Min(_gridSize.x, _gridSize.y);
+            var minLength = Mathf.Min(_gridSize.x - _gridOffset.x, _gridSize.y - _gridOffset.y);
 
-            for (int y = 0; y < minLength; y++)
+            for (var x = _gridOffset.x; x < _gridOffset.x + minLength; x++)
             {
-                addableIndexList.Add(new Vector2Int(minLength, y)); // 오른쪽
+                addableIndexList.Add(new Vector2Int(x, _gridOffset.y - 1)); // 아래
+            }
+
+            for (var y = _gridOffset.y; y < _gridOffset.y + minLength; y++)
+            {
+                addableIndexList.Add(new Vector2Int(_gridOffset.x - 1, y)); // 왼쪽
+                addableIndexList.Add(new Vector2Int(_gridOffset.x + minLength, y)); // 오른쪽
             }
 
             foreach (var index in addableIndexList)
@@ -255,21 +289,18 @@ namespace BabyNightmare.InventorySystem
             return true;
         }
 
-        public override void Equip(Equipment equipment, Vector2Int index)
-        {
-            equipment.transform.SetParent(transform);
-            equipment.Index = index;
-            equipment.RTF.anchoredPosition = GetLocalPos(index, equipment.Data);
-            _equipmentSet.Add(equipment);
-            _onEquip?.Invoke(equipment.Data, true);
-        }
-
-        public override void Equip(Equipment equipment)
+        public override void Equip(Equipment equipment, bool immediate)
         {
             var data = equipment.Data;
             if (false == TryGetRandomIndex(data, out var randomIndex))
             {
                 Debug.Log($"빈자리가 없습니다.");
+                return;
+            }
+
+            if (true == immediate)
+            {
+                Equip(equipment, randomIndex);
                 return;
             }
 
@@ -279,6 +310,15 @@ namespace BabyNightmare.InventorySystem
 
             var targetPos = GetLocalPos(randomIndex, equipment.Data);
             equipment.Move(targetPos, () => _onEquip?.Invoke(equipment.Data, true));
+        }
+
+        public override void Equip(Equipment equipment, Vector2Int index)
+        {
+            equipment.transform.SetParent(transform);
+            equipment.Index = index;
+            equipment.RTF.anchoredPosition = GetLocalPos(index, equipment.Data);
+            _equipmentSet.Add(equipment);
+            _onEquip?.Invoke(equipment.Data, true);
         }
 
         private void Remove(Equipment equipment)
@@ -323,7 +363,7 @@ namespace BabyNightmare.InventorySystem
             _equipmentSet.Remove(equipment);
             _onEquip?.Invoke(equipment.Data, false);
 
-            _outsideInventory.Equip(equipment);
+            _outsideInventory.Equip(equipment, false);
         }
 
         public override Equipment Get(Vector2 screenPos)

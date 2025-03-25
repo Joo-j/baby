@@ -15,6 +15,6 @@ MonoBehaviour:
   TalentType: 9
   IncreaseValue: 1
   ValueType: 1
-  MaxLevel: 3
+  MaxLevel: 9
   Prob: 1
   Order: 8

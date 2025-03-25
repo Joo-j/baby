@@ -26,27 +26,27 @@ namespace BabyNightmare.InventorySystem
                 {
                     Remove(getEquipment);
                     equipment.Refresh(upgradeData, true);
-                    Equip(equipment);
+                    Equip(equipment, false);
                     _showMergeMessage?.Invoke(equipment.transform, $"LV {upgradeData.Level}!");
                 }
                 else
                 {
-                    Equip(equipment);
+                    Equip(equipment, false);
                 }
 
                 return true;
             }
 
-            Equip(equipment);
+            Equip(equipment, false);
             return true;
         }
 
         public override void Equip(Equipment equipment, Vector2Int targetIndex)
         {
-            Equip(equipment);
+            Equip(equipment, false);
         }
 
-        public override void Equip(Equipment equipment)
+        public override void Equip(Equipment equipment, bool immediate)
         {
             equipment.RTF.SetParent(transform);
             _equipmentList.Add(equipment);

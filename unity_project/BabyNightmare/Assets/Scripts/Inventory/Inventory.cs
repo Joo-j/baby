@@ -23,9 +23,9 @@ namespace BabyNightmare.InventorySystem
         protected static Equipment _draggedEquipment = null;
         protected static PointerEventData _dragEventData = null;
 
+        public abstract void Equip(Equipment equipment, bool immediate);
         public abstract bool TryEquip(Equipment equipment, Vector2 screenPos);
         public abstract void Equip(Equipment equipment, Vector2Int targetIndex);
-        public abstract void Equip(Equipment equipment);
         public abstract Equipment Unequip(Vector2 screenPos);
         public abstract Equipment Get(Vector2 screenPos);
         public abstract HashSet<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
@@ -57,7 +57,7 @@ namespace BabyNightmare.InventorySystem
         {
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
             equipment.Refresh(data, false);
-            Equip(equipment);
+            Equip(equipment, true);
         }
 
         public void OnPointerEnter(PointerEventData eventData)

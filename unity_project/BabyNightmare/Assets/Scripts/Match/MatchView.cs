@@ -123,8 +123,6 @@ namespace BabyNightmare.Match
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
-
-            _bag.TryAdd(_context.InitEquipment);
         }
 
         public void RefreshWave(int curWave, int maxWave, EBoxType boxType)
@@ -232,6 +230,8 @@ namespace BabyNightmare.Match
                     yield return waiter.Wait();
                 }
             }
+            
+            _bag.TryAdd(_context.InitEquipment);
 
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
