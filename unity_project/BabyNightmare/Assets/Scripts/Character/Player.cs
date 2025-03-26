@@ -221,13 +221,16 @@ namespace BabyNightmare.Character
 
                             void OnThrow()
                             {
+                                var pos = enemy.HitPoint.position;
+
                                 switch (equipmentData.DamageType)
                                 {
                                     case EDamageType.Direct:
                                         enemy?.ReceiveAttack(value, isCritical);
                                         break;
                                     case EDamageType.Area:
-                                        var enemies = _context.GetEnemiesInArea?.Invoke(enemy.HitPoint.position);
+                                        pos.y = 0;
+                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos);
                                         for (var j = 0; j < enemies.Count; j++)
                                         {
                                             enemies[j]?.ReceiveAttack(value, isCritical);
@@ -239,11 +242,11 @@ namespace BabyNightmare.Character
                                 switch (equipmentData.Type)
                                 {
                                     case EEquipmentType.Bomb:
-                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, enemy.HitPoint.position);
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, pos);
                                         AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
                                         break;
                                     case EEquipmentType.Missile:
-                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, enemy.HitPoint.position);
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, pos);
                                         AudioManager.PlaySFX("AudioClip/Projectile_Missile");
                                         break;
                                     case EEquipmentType.WaterGun:
