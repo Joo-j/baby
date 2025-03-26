@@ -349,6 +349,12 @@ namespace BabyNightmare.Character
                 yield return null;
             }
 
+            if (null == targetTF)
+            {
+                ProjectilePool.Instance.Return(pt);
+                yield break;
+            }
+
             pt.TF.position = targetTF.position;
             ProjectilePool.Instance.Return(pt);
 
