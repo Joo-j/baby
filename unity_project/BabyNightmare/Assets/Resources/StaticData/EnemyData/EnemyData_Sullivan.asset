@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EnemyData_Sullivan
   m_EditorClassIdentifier: 
   ID: 101
-  Name: Sullivan
+  Type: 7
   Damage: 28
-  Health: 100
+  Health: 120
   Attack_Interval: 3
   Move_Step_Duration: 1.5
   Move_Step_Speed: 2
@@ -25,4 +25,4 @@ MonoBehaviour:
   Coin_Max: 20
   SpawnOrder: 3
   Spawn_Delay_Min: 3
-  Spawn_Delay_Max: 4
+  Spawn_Delay_Max: 3.5

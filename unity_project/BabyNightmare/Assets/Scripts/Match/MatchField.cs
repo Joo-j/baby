@@ -135,7 +135,7 @@ namespace BabyNightmare.Match
                 var spawnOrder = data.SpawnOrder;
                 var spawnTF = GetSpawnTF(spawnOrder);
 
-                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Name}", spawnTF);
+                var enemy = ObjectUtil.LoadAndInstantiate<EnemyBase>($"{PATH_ENEMY}{data.Type}", spawnTF);
                 var enemyContext = new EnemyContext(
                                 data,
                                 _player,

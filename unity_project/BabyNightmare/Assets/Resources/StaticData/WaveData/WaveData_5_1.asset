@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 24
   Group: 501
-  EnemySpawnDataID: 4
+  EnemySpawnDataID: 6
   BoxType: 0
   EnableBagSizeUp: 0

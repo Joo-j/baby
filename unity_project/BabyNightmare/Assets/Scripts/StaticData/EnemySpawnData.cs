@@ -9,5 +9,6 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public List<int> EnemyIDList;
+        public List<EEnemyType> EnemyTypeList;
     }
 }

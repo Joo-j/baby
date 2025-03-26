@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyData_Slime_Green
   m_EditorClassIdentifier: 
   ID: 104
-  Name: Slime_Green
+  Type: 1
   Damage: 4.8
   Health: 24
   Attack_Interval: 1.9
@@ -24,5 +24,5 @@ MonoBehaviour:
   Coin_Min: 3
   Coin_Max: 10
   SpawnOrder: 1
-  Spawn_Delay_Min: 1
-  Spawn_Delay_Max: 2
+  Spawn_Delay_Min: 0.8
+  Spawn_Delay_Max: 1.8

@@ -163,10 +163,17 @@ namespace BabyNightmare.Match
             }
 
             var enemyDataList = new List<EnemyData>();
-            var idList = enemySpanwData.EnemyIDList;
-            for (var i = 0; i < idList.Count; i++)
+            var typeList = enemySpanwData.EnemyTypeList;
+            for (var i = 0; i < typeList.Count; i++)
             {
-                var enemyData = StaticDataManager.Instance.GetEnemyData(idList[i]);
+                var type = typeList[i];
+                var enemyData = StaticDataManager.Instance.GetEnemyData(type);
+                if (null == enemyData)
+                {
+                    Debug.LogError($"{type} enemy is null");
+                    continue;
+                }
+                
                 enemyDataList.Add(enemyData);
             }
 
@@ -224,7 +231,7 @@ namespace BabyNightmare.Match
             switch (waveData.BoxType)
             {
                 case EBoxType.Blue:
-                    weightFactor = 5;
+                    weightFactor = 6;
                     break;
                 case EBoxType.Gold:
                     weightFactor = 3;

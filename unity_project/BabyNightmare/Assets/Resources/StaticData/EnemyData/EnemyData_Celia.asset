@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EnemyData_Celia
   m_EditorClassIdentifier: 
   ID: 108
-  Name: Celia
+  Type: 6
   Damage: 24
-  Health: 60
+  Health: 80
   Attack_Interval: 2.5
   Move_Step_Duration: 1.5
   Move_Step_Speed: 2
@@ -25,4 +25,4 @@ MonoBehaviour:
   Coin_Max: 14
   SpawnOrder: 2
   Spawn_Delay_Min: 2
-  Spawn_Delay_Max: 3
+  Spawn_Delay_Max: 2.5

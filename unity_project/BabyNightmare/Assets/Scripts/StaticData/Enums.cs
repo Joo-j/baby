@@ -117,11 +117,32 @@ namespace BabyNightmare.StaticData
         Bomb,
         Missile,
     }
-    
+
     public enum EDamageType
     {
         Direct,
         Area,
+    }
+
+    public enum EEnemyType
+    {
+        Slime_Blue,
+        Slime_Green,
+        Slime_Orange,
+        Slime_Purple,
+        Slime_Yellow,
+        Mike,
+        Celia,
+        Sullivan,
+        
+        Slime_Blue_LV2,
+        Slime_Green_LV2,
+        Slime_Orange_LV2,
+        Slime_Purple_LV2,
+        Slime_Yellow_LV2,
+        Mike_LV2,
+        Celia_LV2,
+        Sullivan_LV2,
     }
 
 }

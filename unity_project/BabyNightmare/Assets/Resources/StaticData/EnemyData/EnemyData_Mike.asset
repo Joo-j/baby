@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: EnemyData_Mike
   m_EditorClassIdentifier: 
   ID: 102
-  Name: Mike
+  Type: 5
   Damage: 12
-  Health: 40
+  Health: 50
   Attack_Interval: 2.5
   Move_Step_Duration: 0.8
   Move_Step_Speed: 2
@@ -25,4 +25,4 @@ MonoBehaviour:
   Coin_Max: 13
   SpawnOrder: 2
   Spawn_Delay_Min: 2
-  Spawn_Delay_Max: 3
+  Spawn_Delay_Max: 2.5

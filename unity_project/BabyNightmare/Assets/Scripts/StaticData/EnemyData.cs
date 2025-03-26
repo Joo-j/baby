@@ -9,7 +9,7 @@ namespace BabyNightmare.StaticData
     public class EnemyData : ScriptableObject
     {
         public int ID;
-        public string Name;
+        public EEnemyType Type;
         public float Damage;
         public int Health;
         public float Attack_Interval;

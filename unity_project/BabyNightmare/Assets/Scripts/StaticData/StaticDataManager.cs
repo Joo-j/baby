@@ -18,7 +18,7 @@ namespace BabyNightmare.StaticData
         private Dictionary<int, ChapterData> _chapterDataDict = null;
         private Dictionary<int, List<WaveData>> _waveDataDict = null;
         private Dictionary<int, EquipmentData> _equipmentDataDict = null;
-        private Dictionary<int, EnemyData> _enemyDataDict = null;
+        private Dictionary<EEnemyType, EnemyData> _enemyDataDict = null;
         private Dictionary<int, EnemySpawnData> _enemySpawnDataDict = null;
 
         public int LastChapter { get; private set; }
@@ -129,12 +129,12 @@ namespace BabyNightmare.StaticData
                 return;
             }
 
-            _enemyDataDict = new Dictionary<int, EnemyData>();
+            _enemyDataDict = new Dictionary<EEnemyType, EnemyData>();
 
             for (var i = 0; i < enemyDataArr.Length; i++)
             {
                 var data = enemyDataArr[i];
-                _enemyDataDict.Add(data.ID, data);
+                _enemyDataDict.Add(data.Type, data);
             }
         }
 
@@ -193,11 +193,11 @@ namespace BabyNightmare.StaticData
             return data;
         }
 
-        public EnemyData GetEnemyData(int id)
+        public EnemyData GetEnemyData(EEnemyType type)
         {
-            if (false == _enemyDataDict.TryGetValue(id, out var data))
+            if (false == _enemyDataDict.TryGetValue(type, out var data))
             {
-                Debug.LogError($"{id} enemy data is null");
+                Debug.LogError($"{type} enemy data is null");
                 return null;
             }
 
