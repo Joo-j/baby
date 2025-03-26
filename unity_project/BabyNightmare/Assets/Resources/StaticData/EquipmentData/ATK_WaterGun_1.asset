@@ -26,5 +26,5 @@ MonoBehaviour:
   Shape:
     _column: 2
     _row: 2
-    _shape: 01010101
+    _shape: 01010100
   Desc: Sprays imaginary water that melts nightmares.
