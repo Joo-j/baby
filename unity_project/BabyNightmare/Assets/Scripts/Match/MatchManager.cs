@@ -161,7 +161,6 @@ namespace BabyNightmare.Match
             }
 
             var enemyDataList = new List<EnemyData>();
-
             var idList = enemySpanwData.EnemyIDList;
             for (var i = 0; i < idList.Count; i++)
             {
@@ -175,9 +174,7 @@ namespace BabyNightmare.Match
 
         private void OnClearWave()
         {
-            ++_currentWave;
-
-            if (_currentWave >= _maxWave)
+            if (_currentWave + 1 >= _maxWave)
             {
                 OnCompleteMatch();
                 return;
@@ -190,6 +187,9 @@ namespace BabyNightmare.Match
             var dataList = GetRerollData();
             _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), waveData.EnableBagSizeUp, dataList));
             AudioManager.PlaySFX("AudioClip/Clear_Wave");
+
+            ++_currentWave;
+
         }
 
         private void OnClickReroll()
