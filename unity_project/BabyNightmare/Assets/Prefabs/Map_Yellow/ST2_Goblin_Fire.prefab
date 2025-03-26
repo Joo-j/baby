@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 8033164519990226986}
   - component: {fileID: 2674865569021810731}
   - component: {fileID: 7230576097239186333}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ST2_Goblin_Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &8033164519990226986
 Transform:
@@ -95,12 +95,12 @@ GameObject:
   - component: {fileID: 6098297921364781945}
   - component: {fileID: 7729820703493014036}
   - component: {fileID: 7495459049298478158}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6098297921364781945
 Transform:
@@ -4962,12 +4962,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3766754892031256019}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Fire_effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3766754892031256019
 Transform:
