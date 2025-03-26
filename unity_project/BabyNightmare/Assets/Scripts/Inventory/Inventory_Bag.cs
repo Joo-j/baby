@@ -99,6 +99,12 @@ namespace BabyNightmare.InventorySystem
                     pair.Value.RTF.anchoredPosition = GetLocalPos(newIndex);
                 }
 
+                foreach (var equipment in _equipmentSet)
+                {
+                    var newIndex = equipment.Index + offset;
+                    equipment.Index = newIndex;
+                }
+
                 _cellDict = newDict;
                 _gridOffset += offset;
                 _gridSize += offset;
@@ -111,6 +117,11 @@ namespace BabyNightmare.InventorySystem
                 foreach (var pair in _cellDict)
                 {
                     pair.Value.RTF.anchoredPosition = GetLocalPos(pair.Key);
+                }
+
+                foreach (var equipment in _equipmentSet)
+                {
+                    equipment.RTF.anchoredPosition = GetLocalPos(equipment.Index, equipment.Data);
                 }
             }
             else if (index.x >= _gridSize.x || index.y >= _gridSize.y)
@@ -167,11 +178,6 @@ namespace BabyNightmare.InventorySystem
                 foreach (var cell in addableCells)
                 {
                     Destroy(cell.gameObject);
-                }
-
-                foreach (var equipment in _equipmentSet)
-                {
-                    equipment.RTF.anchoredPosition = GetLocalPos(equipment.Index, equipment.Data);
                 }
 
                 doneCallback?.Invoke();
