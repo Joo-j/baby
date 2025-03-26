@@ -8,6 +8,7 @@ using BabyNightmare.Match;
 using BabyNightmare.HUD;
 using BabyNightmare.Talent;
 using BabyNightmare.CustomShop;
+using BabyNightmare.Util;
 
 namespace BabyNightmare
 {
@@ -42,8 +43,11 @@ namespace BabyNightmare
             HUDManager.Instance.ActiveHUD(EHUDType.Coin, true);
             LobbyManager.Instance.Exit();
 
-            var chapter = PlayerData.Instance.Chapter;
-            MatchManager.Instance.StartMatch(chapter);
+            TempViewHelper.ShowLoadingView(() =>
+            {
+                var chapter = PlayerData.Instance.Chapter;
+                MatchManager.Instance.StartMatch(chapter);
+            });
         }
     }
 }

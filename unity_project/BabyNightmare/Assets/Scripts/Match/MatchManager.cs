@@ -63,6 +63,8 @@ namespace BabyNightmare.Match
             _maxWave = _waveDataList.Count;
             _rerollCount = 0;
             _rerollPrice = 0;
+            _bagSizeUpCount = 0;
+            _bagSizeUpPrice = 0;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             var matchFieldContext = new MatchFieldContext(
