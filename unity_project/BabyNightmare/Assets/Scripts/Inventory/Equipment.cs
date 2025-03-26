@@ -35,7 +35,7 @@ namespace BabyNightmare.InventorySystem
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             if (null != _levelFX)
             {

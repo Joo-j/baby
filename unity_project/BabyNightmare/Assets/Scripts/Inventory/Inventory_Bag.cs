@@ -337,7 +337,7 @@ namespace BabyNightmare.InventorySystem
             if (false == _equipmentSet.Contains(equipment))
                 return;
 
-            Destroy(equipment.gameObject);
+            DestroyImmediate(equipment.gameObject);
             _equipmentSet.Remove(equipment);
             _onEquip?.Invoke(equipment.Data, false);
         }
