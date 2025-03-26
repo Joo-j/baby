@@ -19,7 +19,7 @@ MonoBehaviour:
   StatDataList:
   - Type: 2
     Value: 4
-  CoolTime: 3.9
+  CoolTime: 5.5
   DamageType: 0
   Shape:
     _column: 1
