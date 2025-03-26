@@ -8,7 +8,7 @@ using BabyNightmare.HUD;
 
 namespace BabyNightmare.Match
 {
-    public class MatchCompleteView : MatchFailView_Base
+    public class MatchCompleteView : MatchComleteView_Base
     {
         [SerializeField] private AnimationCurve _sizeLerpCurve;
         [SerializeField] private AnimationCurve _bounceCurve;
