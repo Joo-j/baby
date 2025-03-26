@@ -38,13 +38,12 @@ namespace BabyNightmare.InventorySystem
             _outsideInventory = outsideInventory;
             _onEquip = onEquip;
 
+            _equipmentSet = new HashSet<Equipment>();
             _cellDict = new Dictionary<Vector2Int, Cell>();
 
             for (int y = 0; y < DEFAULT_GRID_SIZE.y; y++)
                 for (int x = 0; x < DEFAULT_GRID_SIZE.x; x++)
                     AddCell(new Vector2Int(x, y));
-
-            _equipmentSet = new HashSet<Equipment>();
         }
 
         protected override void OnEnable()
@@ -135,6 +134,11 @@ namespace BabyNightmare.InventorySystem
                 foreach (var pair in _cellDict)
                 {
                     pair.Value.RTF.anchoredPosition = GetLocalPos(pair.Key);
+                }
+            
+                foreach (var equipment in _equipmentSet)
+                {
+                    equipment.RTF.anchoredPosition = GetLocalPos(equipment.Index, equipment.Data);
                 }
             }
 
