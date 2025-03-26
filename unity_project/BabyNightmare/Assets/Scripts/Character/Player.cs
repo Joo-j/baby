@@ -140,7 +140,11 @@ namespace BabyNightmare.Character
             PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), message, Color.white);
 
             base.ReceiveAttack(damage, isCritical);
-            AudioManager.PlaySFX("AudioClip/Player_ReceiveAttack");
+
+            if (Random.value > 0.5)
+                AudioManager.PlaySFX("AudioClip/Player_ReceiveAttack_1");
+            else
+                AudioManager.PlaySFX("AudioClip/Player_ReceiveAttack_2");
         }
 
         public void UseEquipment(EquipmentData equipmentData, ICharacter enemy)
@@ -202,6 +206,13 @@ namespace BabyNightmare.Character
 
                             if (equipmentData.DamageType == EDamageType.Direct)
                                 enemy.ReserveDamage(value);
+
+                            switch (equipmentData.Type)
+                            {
+                                case EEquipmentType.Horse:
+                                    AudioManager.PlaySFX("AudioClip/Projectile_Horse");
+                                    break;
+                            }
 
                             if (i == 0)
                                 StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
