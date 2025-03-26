@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa0f6935fcbb4e4986131bbe16aab7a, type: 3}
   m_Name: WaveData_6_4
   m_EditorClassIdentifier: 
-  ID: 18
-  Group: 301
+  ID: 36
+  Group: 601
   EnemySpawnDataID: 7
   BoxType: 1
+  EnableBagSizeUp: 0

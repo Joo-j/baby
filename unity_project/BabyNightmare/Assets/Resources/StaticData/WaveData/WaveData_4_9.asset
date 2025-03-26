@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: WaveData_4_9
   m_EditorClassIdentifier: 
   ID: 23
-  Group: 301
+  Group: 401
   EnemySpawnDataID: 9
   BoxType: 0
+  EnableBagSizeUp: 0
