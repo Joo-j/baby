@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
   m_Name: EnemyData_Celia_LV2
   m_EditorClassIdentifier: 
-  ID: 108
+  ID: 116
   Type: 14
   Damage: 36
   Health: 120

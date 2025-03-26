@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
   m_Name: EnemyData_Sullivan_LV2
   m_EditorClassIdentifier: 
-  ID: 101
+  ID: 109
   Type: 15
   Damage: 42
   Health: 180

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
   m_Name: EnemyData_Slime_Orange_LV2
   m_EditorClassIdentifier: 
-  ID: 105
+  ID: 113
   Type: 10
   Damage: 8.4
   Health: 42
