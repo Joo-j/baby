@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1104
   Type: 3
   Level: 2
-  Prob: 5
+  CoolTime: 2.8
   StatDataList:
   - Type: 1
     Value: 16
-  CoolTime: 1.64
+  Desc: A plastic play-knife that cuts shadows.
+  Prob: 5
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 2
     _row: 1
     _shape: 0101
-  Desc: A plastic play-knife that cuts shadows.
   Mesh: {fileID: -4018155990571316277, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

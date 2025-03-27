@@ -25,6 +25,7 @@ namespace BabyNightmare.Match
 
         Defense,
         Receive_Damage_2,
+        Die,
     }
 
     public class FXPool : SingletonBase<FXPool>

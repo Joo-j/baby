@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1108
   Type: 7
   Level: 2
-  Prob: 1
+  CoolTime: 7.5
   StatDataList:
   - Type: 1
     Value: 52
-  CoolTime: 4.5
+  Desc: A toy robot that zaps with tiny lasers.
+  Prob: 1
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 2
     _row: 2
     _shape: 01010101
-  Desc: A toy robot that zaps with tiny lasers.
   Mesh: {fileID: -137719647996746220, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1110
   Type: 9
   Level: 2
-  Prob: 3
+  CoolTime: 3.5
   StatDataList:
   - Type: 3
     Value: 3
-  CoolTime: 3.5
+  Desc: "Baby\u2019s pouch\u2014throws random stuff with force."
+  Prob: 3
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: "Baby\u2019s pouch\u2014throws random stuff with force."
   Mesh: {fileID: -1590431103925662409, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

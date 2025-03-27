@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1006
   Type: 5
   Level: 1
-  Prob: 3
+  CoolTime: 3.65
   StatDataList:
   - Type: 1
     Value: 16
-  CoolTime: 3.65
+  Desc: A plush toy that hops and slaps enemies.
+  Prob: 3
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 2
     _shape: 0101
-  Desc: A plush toy that hops and slaps enemies.
   Mesh: {fileID: 8187699967798865774, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}
