@@ -193,7 +193,7 @@ namespace BabyNightmare.Match
                 _loot.TryAdd(dataList[i]);
             }
 
-            AudioManager.PlaySFX("AudioClip/Reroll");
+            AudioManager.PlaySFX("AudioClip/Inventory_Reroll");
         }
 
         public void SizeUpBag()
@@ -333,7 +333,6 @@ namespace BabyNightmare.Match
 
             Reroll(_boxRerollDataList);
             _boxRerollDataList = null;
-            AudioManager.PlaySFX("AudioClip/Reroll");
             HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
         }
 

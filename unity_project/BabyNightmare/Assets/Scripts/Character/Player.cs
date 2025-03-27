@@ -136,9 +136,10 @@ namespace BabyNightmare.Character
             AddDef(-blocked);
             damage -= blocked;
 
-            if (damage <= 0)
+            if (blocked > 0)
             {
                 FXPool.Instance.ShowTemporary(EFXType.Defense, transform.position);
+                AudioManager.PlaySFX("AudioClip/Player_Defense");
             }
 
             var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
@@ -326,7 +327,7 @@ namespace BabyNightmare.Character
                             void OnThrow()
                             {
                                 _context.GetCoin?.Invoke((int)value, transform.position);
-                                AudioManager.PlaySFX("AudioClip/Field_Coin");
+                                AudioManager.PlaySFX("AudioClip/Coin");
                             }
                             break;
                         }
