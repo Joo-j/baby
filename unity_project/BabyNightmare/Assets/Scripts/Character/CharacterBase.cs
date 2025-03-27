@@ -34,7 +34,7 @@ namespace BabyNightmare.Character
         [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
         [SerializeField] protected Transform _hitPoint;
-        [SerializeField] private Color _ownColor;
+        [SerializeField] protected Color _ownColor;
         [SerializeField] protected ESizeType _sizeType = ESizeType.Mid;
 
         protected static readonly int KEY_EMISSION_COLOR = Shader.PropertyToID("_EmissionColor");

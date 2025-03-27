@@ -167,9 +167,9 @@ namespace BabyNightmare.Character
                     break;
             }
 
-            PopupTextPool.Instance.ShowTemporary(EPopupTextType.Damage, 
-                                                transform.position, 
-                                                Quaternion.Euler(_context.CameraForward), 
+            PopupTextPool.Instance.ShowTemporary(EPopupTextType.Damage,
+                                                transform.position,
+                                                Quaternion.Euler(_context.CameraForward),
                                                 textSize, $"{Mathf.RoundToInt(damage)}"
                                                 );
 
@@ -184,6 +184,10 @@ namespace BabyNightmare.Character
 
             _context.OnDie?.Invoke();
             _isDead = true;
+
+            var pos = transform.position;
+            pos.y = 0.1f;
+            FXPool.Instance.ShowTemporary(EFXType.Die, pos, _ownColor);
         }
 
         public int GetRandomCoin()
