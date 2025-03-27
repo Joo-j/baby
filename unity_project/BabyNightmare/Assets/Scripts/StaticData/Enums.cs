@@ -134,7 +134,7 @@ namespace BabyNightmare.StaticData
         Mike,
         Celia,
         Sullivan,
-        
+
         Slime_Blue_LV2,
         Slime_Green_LV2,
         Slime_Orange_LV2,
@@ -143,6 +143,13 @@ namespace BabyNightmare.StaticData
         Mike_LV2,
         Celia_LV2,
         Sullivan_LV2,
+    }
+
+    public enum ESizeType
+    {
+        Big,
+        Mid,
+        Small,
     }
 
 }

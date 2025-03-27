@@ -26,3 +26,4 @@ MonoBehaviour:
     _row: 1
     _shape: 01
   Desc: A spinning ring stack that knocks enemies down.
+  Mesh: {fileID: -580435312966353321, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

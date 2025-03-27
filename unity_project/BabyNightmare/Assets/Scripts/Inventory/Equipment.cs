@@ -22,7 +22,6 @@ namespace BabyNightmare.InventorySystem
 
         private const string PATH_EQUIPMENT_ICON_OUTLINE = "Inventory/Equipment_Icon_Outline/";
         private const string PATH_EQUIPMENT_ICON = "Inventory/Equipment_Icon/";
-        private const string PATH_PROJECTILE_DATA = "StaticData/ProjectileData/ProjectileData_";
         private readonly Vector2 MERGE_FX_SCALE = Vector3.one * 80f;
         private readonly Vector2 LEVEL_FX_SCALE_1X1 = Vector3.one * 55f;
         private readonly Vector2 LEVEL_FX_SCALE_2X2 = Vector3.one * 70f;
@@ -73,11 +72,7 @@ namespace BabyNightmare.InventorySystem
                 _levelFX = FXPool.Instance.Get(levelFXType);
                 _levelFX.transform.SetParent(_fxTF);
                 _levelFX.transform.localPosition = Vector3.zero;
-
-                var ptPath = $"{PATH_PROJECTILE_DATA}{data.ID}";
-                var ptData = Resources.Load<ProjectileData>(ptPath);
-
-                _levelFX.ChangeShapeMesh(ptData.Mesh);
+                _levelFX.ChangeShapeMesh(Data.Mesh);
 
                 if (data.Shape.Column >= 2 && data.Shape.Row >= 2)
                     _levelFX.transform.localScale = LEVEL_FX_SCALE_2X2;

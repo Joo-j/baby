@@ -15,14 +15,16 @@ MonoBehaviour:
   ID: 1116
   Type: 15
   Level: 2
-  Prob: 1
+  CoolTime: 8
   StatDataList:
   - Type: 1
     Value: 50
-  CoolTime: 8
+  Desc: Pacifier missile that sparkles on hit.
+  Prob: 1
   DamageType: 1
+  Radius: 7
   Shape:
     _column: 2
     _row: 1
     _shape: 0101
-  Desc: Pacifier missile that sparkles on hit.
+  Mesh: {fileID: 7974274528869907733, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

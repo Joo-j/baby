@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedAppIndex: 0
   clientTokens:
-  - 6a09406847e705a9fec8d5c4aa22fd83
+  - ae7b92a9950e347d35fb04d7ad56b20e
   appIds:
-  - 784998043500310
+  - 3532737697027668
   appLabels:
-  - SC Guide Sample
+  - ToyBag Hero
   cookie: 1
   logging: 1
   status: 1

@@ -26,3 +26,4 @@ MonoBehaviour:
     _row: 3
     _shape: 010101
   Desc: ' A rocking horse spirit that charges forward.'
+  Mesh: {fileID: 422595455621684716, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

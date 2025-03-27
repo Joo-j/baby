@@ -21,7 +21,7 @@ namespace BabyNightmare.Character
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
-        public Func<Vector3, List<EnemyBase>> GetEnemiesInArea { get; }
+        public Func<Vector3, float, List<EnemyBase>> GetEnemiesInArea { get; }
         public Action ShakeCamera { get; }
 
         public PlayerContext(
@@ -29,7 +29,7 @@ namespace BabyNightmare.Character
         Vector3 cameraForward,
         Action onDiePlayer,
         Action<int, Vector3> getCoin,
-        Func<Vector3, List<EnemyBase>> getEnemiesInArea,
+        Func<Vector3, float, List<EnemyBase>> getEnemiesInArea,
         Action shakeCamera)
         {
             this.HP = hp;
@@ -114,6 +114,7 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
             _isDead = true;
             AudioManager.PlaySFX("AudioClip/Player_Die");
+            HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.HeavyImpact);
         }
 
         private void AddDef(float value)
@@ -123,7 +124,7 @@ namespace BabyNightmare.Character
 
             _shieldImage.gameObject.SetActive(_def > 0);
             _shieldText.gameObject.SetActive(_def > 0);
-            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{_def}"));
+            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.2f, CurveHelper.Preset.EaseOut, 0.1f, () => _shieldText.text = $"{_def}"));
         }
 
         public override void ReceiveAttack(float damage, bool isCritical)
@@ -137,7 +138,13 @@ namespace BabyNightmare.Character
 
             var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), message, Color.white);
+            PopupTextPool.Instance.ShowTemporary(
+                                                EPopupTextType.Damage,
+                                                 transform.position, 
+                                                Quaternion.Euler(_context.CameraForward), 
+                                                Vector3.one, 
+                                                message
+                                                );
 
             base.ReceiveAttack(damage, isCritical);
 
@@ -230,7 +237,7 @@ namespace BabyNightmare.Character
                                         break;
                                     case EDamageType.Area:
                                         pos.y = 0;
-                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos);
+                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos, equipmentData.Radius);
                                         for (var j = 0; j < enemies.Count; j++)
                                         {
                                             enemies[j]?.ReceiveAttack(value, isCritical);
@@ -273,6 +280,13 @@ namespace BabyNightmare.Character
                                 var pos = transform.position;
                                 pos.y = 0.01f;
                                 FXPool.Instance.ShowTemporary(EFXType.Heal, pos);
+                                PopupTextPool.Instance.ShowTemporary(
+                                                                    EPopupTextType.Heal,
+                                                                    _hitPoint.position + Vector3.up * 3,
+                                                                    Quaternion.Euler(_context.CameraForward),
+                                                                    Vector3.one,
+                                                                    $"+{value}"
+                                                                    );
                                 AudioManager.PlaySFX("AudioClip/Player_Heal");
                             }
                             break;

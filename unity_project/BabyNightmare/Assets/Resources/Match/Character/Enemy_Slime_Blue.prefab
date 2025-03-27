@@ -107,6 +107,7 @@ MonoBehaviour:
   _hpBar: {fileID: 3118656889983358828}
   _hitPoint: {fileID: 2326459163640908479}
   _ownColor: {r: 0.22352937, g: 0.79640645, b: 0.972549, a: 1}
+  _sizeType: 2
   _moveCurve:
     serializedVersion: 2
     m_Curve:

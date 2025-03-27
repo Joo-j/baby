@@ -156,7 +156,22 @@ namespace BabyNightmare.Character
             if (null == gameObject)
                 return;
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), $"{Mathf.RoundToInt(damage)}", Color.white);
+            var textSize = Vector3.one;
+            switch (_sizeType)
+            {
+                case ESizeType.Big:
+                    textSize = Vector3.one * 1.2f;
+                    break;
+                case ESizeType.Small:
+                    textSize = Vector3.one * 0.7f;
+                    break;
+            }
+
+            PopupTextPool.Instance.ShowTemporary(EPopupTextType.Damage, 
+                                                transform.position, 
+                                                Quaternion.Euler(_context.CameraForward), 
+                                                textSize, $"{Mathf.RoundToInt(damage)}"
+                                                );
 
             base.ReceiveAttack(damage, isCritical);
             AudioManager.PlaySFX("AudioClip/Enemy_ReceiveAttack");
