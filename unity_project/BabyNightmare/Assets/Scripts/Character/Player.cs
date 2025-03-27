@@ -114,6 +114,7 @@ namespace BabyNightmare.Character
             _context.OnDiePlayer?.Invoke();
             _isDead = true;
             AudioManager.PlaySFX("AudioClip/Player_Die");
+            HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.HeavyImpact);
         }
 
         private void AddDef(float value)

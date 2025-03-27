@@ -6,6 +6,7 @@ using BabyNightmare.HUD;
 using BabyNightmare.InventorySystem;
 using BabyNightmare.StaticData;
 using BabyNightmare.Talent;
+using BabyNightmare.Util;
 using Supercent.Core.Audio;
 using Supercent.Util;
 using TMPro;
@@ -333,18 +334,21 @@ namespace BabyNightmare.Match
             Reroll(_boxRerollDataList);
             _boxRerollDataList = null;
             AudioManager.PlaySFX("AudioClip/Reroll");
+            HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
         }
 
         public void OnClickReroll()
         {
             _context.OnClickReroll?.Invoke();
             AudioManager.PlaySFX("AudioClip/Click");
+            HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
         }
 
         public void OnClickSizeUpBag()
         {
             _context.OnClickBagSizeUp.Invoke();
             AudioManager.PlaySFX("AudioClip/Click");
+            HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
         }
 
 

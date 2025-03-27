@@ -135,7 +135,7 @@ namespace BabyNightmare.InventorySystem
                 {
                     pair.Value.RTF.anchoredPosition = GetLocalPos(pair.Key);
                 }
-            
+
                 foreach (var equipment in _equipmentSet)
                 {
                     equipment.RTF.anchoredPosition = GetLocalPos(equipment.Index, equipment.Data);
@@ -288,6 +288,7 @@ namespace BabyNightmare.InventorySystem
                     equipment.Refresh(upgradeData, true);
                     Equip(equipment, targetIndex);
                     AudioManager.PlaySFX("AudioClip/Inventory_Merge");
+                    HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
                     _showMergeMessage?.Invoke(equipment.transform, $"LV {upgradeData.Level}!");
                     return true;
                 }
