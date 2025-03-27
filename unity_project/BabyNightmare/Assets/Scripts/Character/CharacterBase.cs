@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using BabyNightmare.Match;
 using Supercent.Util;
+using BabyNightmare.StaticData;
+using BabyNightmare.Match;
 using BabyNightmare.Util;
 using UnityEngine;
 
@@ -34,6 +35,7 @@ namespace BabyNightmare.Character
         [SerializeField] protected SimpleProgress _hpBar = null;
         [SerializeField] private Transform _hitPoint;
         [SerializeField] private Color _ownColor;
+        [SerializeField] protected ESizeType _sizeType = ESizeType.Mid;
 
         protected static readonly int KEY_EMISSION_COLOR = Shader.PropertyToID("_EmissionColor");
         protected static readonly int HASH_ANI_IDLE = Animator.StringToHash("Idle");

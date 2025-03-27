@@ -137,7 +137,13 @@ namespace BabyNightmare.Character
 
             var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), Vector3.one, message, Color.white);
+            PopupTextPool.Instance.ShowTemporary(
+                                                EPopupTextType.Damage,
+                                                 transform.position, 
+                                                Quaternion.Euler(_context.CameraForward), 
+                                                Vector3.one, 
+                                                message
+                                                );
 
             base.ReceiveAttack(damage, isCritical);
 
@@ -273,6 +279,13 @@ namespace BabyNightmare.Character
                                 var pos = transform.position;
                                 pos.y = 0.01f;
                                 FXPool.Instance.ShowTemporary(EFXType.Heal, pos);
+                                PopupTextPool.Instance.ShowTemporary(
+                                                                    EPopupTextType.Heal,
+                                                                    transform.position + Vector3.up * 3,
+                                                                    Quaternion.Euler(_context.CameraForward),
+                                                                    Vector3.one,
+                                                                    $"+{value}"
+                                                                    );
                                 AudioManager.PlaySFX("AudioClip/Player_Heal");
                             }
                             break;

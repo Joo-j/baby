@@ -157,7 +157,7 @@ namespace BabyNightmare.Character
                 return;
 
             var textSize = Vector3.one;
-            switch (_context.EnemyData.SizeType)
+            switch (_sizeType)
             {
                 case ESizeType.Big:
                     textSize = Vector3.one * 1.2f;
@@ -167,7 +167,11 @@ namespace BabyNightmare.Character
                     break;
             }
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), textSize, $"{Mathf.RoundToInt(damage)}", Color.white);
+            PopupTextPool.Instance.ShowTemporary(EPopupTextType.Damage, 
+                                                transform.position, 
+                                                Quaternion.Euler(_context.CameraForward), 
+                                                textSize, $"{Mathf.RoundToInt(damage)}"
+                                                );
 
             base.ReceiveAttack(damage, isCritical);
             AudioManager.PlaySFX("AudioClip/Enemy_ReceiveAttack");
