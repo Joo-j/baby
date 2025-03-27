@@ -14,7 +14,7 @@ namespace BabyNightmare.Character
     {
         public EnemyData EnemyData { get; }
         public ICharacter Player { get; }
-        public Action OnDie { get; }
+        public Action<EnemyBase, int> OnDie { get; }
 
         public float HP { get; }
         public Vector3 CameraForward { get; }
@@ -24,7 +24,7 @@ namespace BabyNightmare.Character
         (
             EnemyData enemyData,
             ICharacter player,
-            Action onDie,
+            Action<EnemyBase, int> onDie,
             Vector3 cameraForward,
             float delay
         )
@@ -182,17 +182,13 @@ namespace BabyNightmare.Character
             if (true == _isDead)
                 return;
 
-            _context.OnDie?.Invoke();
+            var coin = Random.Range(_context.EnemyData.Coin_Min, _context.EnemyData.Coin_Max); ;
+            _context.OnDie?.Invoke(this, coin);
             _isDead = true;
 
             var pos = transform.position;
-            pos.y = 0.1f;
+            pos.y = 0.001f;
             FXPool.Instance.ShowTemporary(EFXType.Die, pos, _ownColor);
-        }
-
-        public int GetRandomCoin()
-        {
-            return UnityEngine.Random.Range(_context.EnemyData.Coin_Min, _context.EnemyData.Coin_Max);
         }
     }
 }

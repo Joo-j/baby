@@ -138,7 +138,7 @@ namespace BabyNightmare.Match
                 var enemyContext = new EnemyContext(
                                 data,
                                 _player,
-                                () => OnDieEnemy(enemy),
+                                OnDieEnemy,
                                 CameraForward,
                                 delay);
 
@@ -153,13 +153,12 @@ namespace BabyNightmare.Match
             _context.OnFailWave?.Invoke();
         }
 
-        private void OnDieEnemy(EnemyBase enemy)
+        private void OnDieEnemy(EnemyBase enemy, int coin)
         {
             var pos = enemy.transform.position;
 
-            var dieCoin = enemy.GetRandomCoin();
-            StartCoroutine(Co_SpawnCoin(pos, dieCoin));
-            _waveCoin += dieCoin;
+            StartCoroutine(Co_SpawnCoin(pos, coin));
+            _waveCoin += coin;
 
             _aliveEnemies.Remove(enemy);
             Destroy(enemy.GO);
