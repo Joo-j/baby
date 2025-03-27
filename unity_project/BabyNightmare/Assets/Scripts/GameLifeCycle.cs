@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using GameAnalyticsSDK;
 using UnityEngine;
 
 namespace BabyNightmare
@@ -20,6 +21,7 @@ namespace BabyNightmare
 
         private void Start()
         {
+            GameAnalytics.Initialize();
             GameFlowManager.Instance.AppOpen();
         }
 
