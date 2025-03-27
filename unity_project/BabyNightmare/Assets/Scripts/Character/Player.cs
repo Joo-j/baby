@@ -174,11 +174,7 @@ namespace BabyNightmare.Character
                 enemyPos.y = transform.position.y;
                 transform.LookAt(enemyPos);
                 _animator.Play(HASH_ANI_ATTACK);
-
-                if (Random.value > 0)
-                    AudioManager.PlaySFX("AudioClip/Player_Throw_1");
-                else
-                    AudioManager.PlaySFX("AudioClip/Player_Throw_2");
+                AudioManager.PlaySFX("AudioClip/Player_Throw");
             }
         }
 
