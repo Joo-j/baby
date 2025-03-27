@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 107
   Type: 4
+  SizeType: 2
   Damage: 6.4
   Health: 32
   Attack_Interval: 1.9
