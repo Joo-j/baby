@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 1015
   Type: 14
   Level: 1
-  CoolTime: 5
+  CoolTime: 4.8
   StatDataList:
   - Type: 1
     Value: 16

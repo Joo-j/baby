@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1102
   Type: 1
   Level: 2
-  Prob: 2
+  CoolTime: 4.5
   StatDataList:
   - Type: 1
     Value: 28
-  CoolTime: 3.5
+  Desc: Loops through enemies and returns with a giggle.
+  Prob: 2
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 2
     _row: 2
     _shape: 01010001
-  Desc: Loops through enemies and returns with a giggle.
   Mesh: {fileID: -3447228150587195326, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

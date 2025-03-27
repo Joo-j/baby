@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1105
   Type: 4
   Level: 2
-  Prob: 5
+  CoolTime: 1.9
   StatDataList:
   - Type: 1
     Value: 16
-  CoolTime: 2.7
+  Desc: "Scattered blocks that hurt to step on\u2014perfect trap."
+  Prob: 5
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: "Scattered blocks that hurt to step on\u2014perfect trap."
   Mesh: {fileID: 4433351901142392511, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

@@ -538,15 +538,21 @@ namespace BabyNightmare.InventorySystem
 
         public void StartUseEquipment(Action<EquipmentData> onCoolDown, float speed)
         {
-            foreach (var equipment in _equipmentSet)
-            {
-                var data = equipment.Data;
-                var coolTime = data.CoolTime;
-                coolTime -= coolTime * speed;
-                this.Invoke(CoroutineUtil.WaitForSeconds(0.1f), () => equipment.StartCoolDown(coolTime, () => onCoolDown?.Invoke(data)));
-            }
-
             _canvasGroup.interactable = false;
+
+            StartCoroutine(Co_StartUseEquipment());
+
+            IEnumerator Co_StartUseEquipment()
+            {
+                foreach (var equipment in _equipmentSet)
+                {
+                    var data = equipment.Data;
+                    var coolTime = data.CoolTime;
+                    coolTime -= coolTime * speed;
+                    yield return CoroutineUtil.WaitForSeconds(0.1f);
+                    equipment.StartCoolDown(coolTime, () => onCoolDown?.Invoke(data));
+                }
+            }
         }
 
         public void StopUseEquipment()

@@ -15,15 +15,16 @@ MonoBehaviour:
   ID: 1101
   Type: 0
   Level: 2
-  Prob: 5
+  CoolTime: 2.2
   StatDataList:
   - Type: 1
     Value: 20
-  CoolTime: 2.6
+  Desc: ' A soft baseball thrown hard enough to hurt in dreams.'
+  Prob: 5
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: ' A soft baseball thrown hard enough to hurt in dreams.'
   Mesh: {fileID: -1897332500295183892, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}
