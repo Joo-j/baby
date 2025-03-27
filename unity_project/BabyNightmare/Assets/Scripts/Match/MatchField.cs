@@ -53,7 +53,6 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _boxSpawnTF;
         [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _playerAttackRadius = 10f;
-        [SerializeField] private float _areaAttackRadius = 3f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
         [SerializeField] private float _cameraShakeAmount = 0.2f;
         [SerializeField] private float _cameraShakeDuraton = 0.2f;
@@ -215,7 +214,7 @@ namespace BabyNightmare.Match
             _player.UseEquipment(equipmentData, randomEnemy);
         }
 
-        private List<EnemyBase> GetEnemiesInArea(Vector3 areaPos)
+        private List<EnemyBase> GetEnemiesInArea(Vector3 areaPos, float radius)
         {
             var enemies = new List<EnemyBase>();
             for (var i = 0; i < _aliveEnemies.Count; i++)
@@ -228,7 +227,7 @@ namespace BabyNightmare.Match
                     continue;
 
                 dist = Vector3.Distance(areaPos, enemyPos);
-                if (dist > _areaAttackRadius)
+                if (dist > radius)
                     continue;
 
                 enemies.Add(enemy);

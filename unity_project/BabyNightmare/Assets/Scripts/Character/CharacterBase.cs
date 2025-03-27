@@ -33,7 +33,7 @@ namespace BabyNightmare.Character
         [SerializeField] protected Animator _animator;
         [SerializeField] protected AnimationTrigger _animationTrigger;
         [SerializeField] protected SimpleProgress _hpBar = null;
-        [SerializeField] private Transform _hitPoint;
+        [SerializeField] protected Transform _hitPoint;
         [SerializeField] private Color _ownColor;
         [SerializeField] protected ESizeType _sizeType = ESizeType.Mid;
 

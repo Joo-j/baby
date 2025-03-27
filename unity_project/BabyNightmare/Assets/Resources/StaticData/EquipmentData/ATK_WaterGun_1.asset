@@ -28,3 +28,4 @@ MonoBehaviour:
     _row: 2
     _shape: 01010100
   Desc: Sprays imaginary water that melts nightmares.
+  Mesh: {fileID: -8164593146407768451, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

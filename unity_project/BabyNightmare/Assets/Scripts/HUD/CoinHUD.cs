@@ -95,7 +95,7 @@ namespace BabyNightmare.HUD
 
         public void OnClickCheat()
         {
-            PlayerData.Instance.Coin += 100;
+            PlayerData.Instance.Coin += 10000;
         }
     }
 }

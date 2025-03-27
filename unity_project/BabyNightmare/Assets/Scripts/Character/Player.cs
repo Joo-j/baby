@@ -21,7 +21,7 @@ namespace BabyNightmare.Character
         public Vector3 CameraForward { get; }
         public Action OnDiePlayer { get; }
         public Action<int, Vector3> GetCoin { get; }
-        public Func<Vector3, List<EnemyBase>> GetEnemiesInArea { get; }
+        public Func<Vector3, float, List<EnemyBase>> GetEnemiesInArea { get; }
         public Action ShakeCamera { get; }
 
         public PlayerContext(
@@ -29,7 +29,7 @@ namespace BabyNightmare.Character
         Vector3 cameraForward,
         Action onDiePlayer,
         Action<int, Vector3> getCoin,
-        Func<Vector3, List<EnemyBase>> getEnemiesInArea,
+        Func<Vector3, float, List<EnemyBase>> getEnemiesInArea,
         Action shakeCamera)
         {
             this.HP = hp;
@@ -236,7 +236,7 @@ namespace BabyNightmare.Character
                                         break;
                                     case EDamageType.Area:
                                         pos.y = 0;
-                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos);
+                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos, equipmentData.Radius);
                                         for (var j = 0; j < enemies.Count; j++)
                                         {
                                             enemies[j]?.ReceiveAttack(value, isCritical);
@@ -281,7 +281,7 @@ namespace BabyNightmare.Character
                                 FXPool.Instance.ShowTemporary(EFXType.Heal, pos);
                                 PopupTextPool.Instance.ShowTemporary(
                                                                     EPopupTextType.Heal,
-                                                                    transform.position + Vector3.up * 3,
+                                                                    _hitPoint.position + Vector3.up * 3,
                                                                     Quaternion.Euler(_context.CameraForward),
                                                                     Vector3.one,
                                                                     $"+{value}"

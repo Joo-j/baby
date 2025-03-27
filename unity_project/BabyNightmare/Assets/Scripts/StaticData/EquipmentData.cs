@@ -18,12 +18,14 @@ namespace BabyNightmare.StaticData
         public int ID;
         public EEquipmentType Type;
         public int Level;
-        public int Prob = 1;
-        public List<StatData> StatDataList;
         public float CoolTime;
-        public EDamageType DamageType = EDamageType.Direct;
-        public RectShape Shape;
+        public List<StatData> StatDataList;
         public String Desc;
+        public int Prob = 1;
+        public EDamageType DamageType = EDamageType.Direct;
+        public float Radius = 1;
+        public RectShape Shape;
+        public Mesh Mesh;
 
         public int GetStatValueByCool(float value)
         {

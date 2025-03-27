@@ -15,14 +15,16 @@ MonoBehaviour:
   ID: 1115
   Type: 14
   Level: 2
-  Prob: 3
+  CoolTime: 5
   StatDataList:
   - Type: 1
     Value: 22
-  CoolTime: 5
+  Desc: Rattling toy bomb with a powdery boom.
+  Prob: 3
   DamageType: 1
+  Radius: 5
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: Rattling toy bomb with a powdery boom.
+  Mesh: {fileID: -3524550680002807326, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

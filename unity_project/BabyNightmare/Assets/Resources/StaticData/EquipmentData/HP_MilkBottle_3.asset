@@ -15,16 +15,18 @@ MonoBehaviour:
   ID: 1214
   Type: 13
   Level: 3
-  Prob: 2
+  CoolTime: 5.2
   StatDataList:
   - Type: 0
     Value: 11
   - Type: 1
     Value: 10
-  CoolTime: 5.2
+  Desc: Thrown bottle that explodes on impact.
+  Prob: 2
   DamageType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 2
     _shape: 0101
-  Desc: Thrown bottle that explodes on impact.
+  Mesh: {fileID: -4906668483575743339, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}
