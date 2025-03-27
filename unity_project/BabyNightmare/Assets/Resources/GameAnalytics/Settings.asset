@@ -26,22 +26,22 @@ MonoBehaviour:
   UserMessagesFailed: 0
   CustomArea: 
   gameKey:
-  - 73fee6baad23d5e413be2ceacbdeb134
+  - d2aae90a06eec16d041140aa103ee597
   - 1bf4f00d7e66ccc471f216dbe77c2b37
   secretKey:
-  - 8dbaf23ecb9d76aaae35f54515e4886e66692051
+  - 9873026b0ce57d0a41dbb290c43d0e9714a17ba5
   - bcbfdecab54f6566c6e7ece77b8ee67f90c46072
   Build:
   - 0.1
   - 0.1
   SelectedPlatformOrganization:
-  - Supercent
+  - 
   - Supercent
   SelectedPlatformStudio:
-  - supercent
+  - 
   - supercent
   SelectedPlatformGame:
-  - SC Guide Sample (Android)
+  - 
   - SC Guide Sample (iOS)
   SelectedPlatformGameID: 0c82040009820400
   SelectedOrganization: 0100000001000000
