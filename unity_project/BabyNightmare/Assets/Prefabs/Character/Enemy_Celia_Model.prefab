@@ -278,7 +278,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a0cde6978cae84b5287b1e1ff5e90afb, type: 3}
       propertyPath: m_Name
-      value: Enemy_Celia
+      value: Enemy_Celia_Model
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: a0cde6978cae84b5287b1e1ff5e90afb, type: 3}
       propertyPath: m_Layer
