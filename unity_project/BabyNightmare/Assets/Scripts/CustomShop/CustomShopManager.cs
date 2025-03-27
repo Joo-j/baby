@@ -176,7 +176,9 @@ namespace BabyNightmare.CustomShop
 
             Save();
             GlobalEventManager.AddValue(EGlobalEventType.Purchase_CustomItem, 1);
-            AudioManager.PlaySFX("AudioClip/CustomItem_Purchase");
+
+            if (null != _customShopView && true == _customShopView.gameObject.activeSelf)
+                AudioManager.PlaySFX("AudioClip/CustomItem_Purchase");
 
             _printer.Log("Purchase", $"Item ID {itemID} 구매 완료");
         }
@@ -200,7 +202,9 @@ namespace BabyNightmare.CustomShop
             _customShopView?.OnEquip();
             _customShopView?.RefreshSelect(itemID);
             RemoveNewItem(itemID);
-            AudioManager.PlaySFX("AudioClip/CustomItem_Equip");
+
+            if (null != _customShopView && true == _customShopView.gameObject.activeSelf)
+                AudioManager.PlaySFX("AudioClip/CustomItem_Equip");
         }
 
         public CustomItemData GetItemData(int itemID)
