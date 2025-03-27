@@ -29,11 +29,12 @@ namespace BabyNightmare.Match
             _pool.Return(pt);
         }
 
-        public void ShowTemporary(Vector3 pos, Quaternion rot, string text, Color color)
+        public void ShowTemporary(Vector3 pos, Quaternion rot, Vector3 scale, string text, Color color)
         {
             var pt = Get();
             pt.transform.position = pos + Vector3.forward * -2;
             pt.transform.rotation = rot;
+            pt.transform.localScale = scale;
             pt.Refresh(text, color, () => Return(pt));
         }
 

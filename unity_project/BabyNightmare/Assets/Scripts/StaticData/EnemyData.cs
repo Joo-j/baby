@@ -10,6 +10,7 @@ namespace BabyNightmare.StaticData
     {
         public int ID;
         public EEnemyType Type;
+        public ESizeType SizeType = ESizeType.Mid;
         public float Damage;
         public int Health;
         public float Attack_Interval;

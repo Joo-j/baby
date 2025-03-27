@@ -123,7 +123,7 @@ namespace BabyNightmare.Character
 
             _shieldImage.gameObject.SetActive(_def > 0);
             _shieldText.gameObject.SetActive(_def > 0);
-            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.1f, CurveHelper.Preset.EaseOut, 0.05f, () => _shieldText.text = $"{_def}"));
+            StartCoroutine(SimpleLerp.Co_BounceScale(_shieldText.transform, Vector3.one * 1.2f, CurveHelper.Preset.EaseOut, 0.1f, () => _shieldText.text = $"{_def}"));
         }
 
         public override void ReceiveAttack(float damage, bool isCritical)
@@ -137,7 +137,7 @@ namespace BabyNightmare.Character
 
             var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
 
-            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), message, Color.white);
+            PopupTextPool.Instance.ShowTemporary(transform.position, Quaternion.Euler(_context.CameraForward), Vector3.one, message, Color.white);
 
             base.ReceiveAttack(damage, isCritical);
 
