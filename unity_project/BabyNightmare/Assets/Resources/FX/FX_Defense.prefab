@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 6540576282455631533}
   - component: {fileID: 5108552615735867505}
   - component: {fileID: 6140571372307291300}
+  - component: {fileID: 8382684146216757977}
   m_Layer: 9
-  m_Name: FX_Shield
+  m_Name: FX_Defense
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4900,3 +4901,19 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &8382684146216757977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4019735517056061299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b234dca513a498798756155f488600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _psArr:
+  - {fileID: 5108552615735867505}
+  _type: 11
+  _appearDuration: 3

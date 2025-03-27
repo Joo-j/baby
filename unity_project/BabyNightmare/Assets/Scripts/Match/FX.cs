@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace BabyNightmare.Match
 {
-
     public class FX : BehaviourBase
     {
         [SerializeField] private ParticleSystem[] _psArr;

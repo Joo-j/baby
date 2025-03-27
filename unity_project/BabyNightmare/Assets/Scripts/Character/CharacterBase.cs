@@ -73,6 +73,7 @@ namespace BabyNightmare.Character
             if (isCritical)
                 fxColor = Color.yellow;
 
+            FXPool.Instance.ShowTemporary(EFXType.Receive_Damage_2, HitPoint.position);
             FXPool.Instance.ShowTemporary(EFXType.Receive_Damage, HitPoint.position, fxColor);
 
             if (_hp <= 0)

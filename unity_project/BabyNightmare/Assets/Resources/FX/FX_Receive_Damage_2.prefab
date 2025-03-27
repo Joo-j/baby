@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2728072053933330896}
   - component: {fileID: 8253759462299058347}
   - component: {fileID: 1614971699636792633}
-  m_Layer: 19
-  m_Name: FX_Projectile_Hit
+  - component: {fileID: 5654999478931149658}
+  m_Layer: 9
+  m_Name: FX_Receive_Damage_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4831,6 +4832,27 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5654999478931149658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606289334591106099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6b234dca513a498798756155f488600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _psArr:
+  - {fileID: 8253759462299058347}
+  - {fileID: 2780030870256046312}
+  - {fileID: 5099034769504311099}
+  - {fileID: 4516671867067875696}
+  - {fileID: 5099034769504301601}
+  - {fileID: 411783785014349718}
+  _type: 12
+  _appearDuration: 2
 --- !u!1 &1613202338154909948
 GameObject:
   m_ObjectHideFlags: 0
@@ -4842,7 +4864,7 @@ GameObject:
   - component: {fileID: 6408051777689212443}
   - component: {fileID: 4916866811104475296}
   - component: {fileID: 7532124878961099605}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9652,7 +9674,7 @@ GameObject:
   - component: {fileID: 5099034769484904467}
   - component: {fileID: 5099034769504225495}
   - component: {fileID: 5099034769504869183}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Nova
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14453,7 +14475,7 @@ GameObject:
   - component: {fileID: 5099034769484816825}
   - component: {fileID: 5099034769504223633}
   - component: {fileID: 5099034769504903999}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19281,7 +19303,7 @@ GameObject:
   - component: {fileID: 5099034769484810519}
   - component: {fileID: 5099034769504301601}
   - component: {fileID: 5099034769504286983}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: StarDust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24136,7 +24158,7 @@ GameObject:
   - component: {fileID: 5099034769484839519}
   - component: {fileID: 5099034769504311099}
   - component: {fileID: 5099034769504284597}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: CentralADD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28982,7 +29004,7 @@ GameObject:
   - component: {fileID: 3747155383427629456}
   - component: {fileID: 4516671867067875696}
   - component: {fileID: 8644081607211738872}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: CentralAP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33828,7 +33850,7 @@ GameObject:
   - component: {fileID: 4621668274641768225}
   - component: {fileID: 2780030870256046312}
   - component: {fileID: 276237650562045883}
-  m_Layer: 19
+  m_Layer: 9
   m_Name: Scaler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38710,6 +38732,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skill_Range_Circle
       objectReference: {fileID: 0}
+    - target: {fileID: 7318057764685011402, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 7318057764715712409, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
       propertyPath: InitialModule.startSize.scalar
       value: 5
@@ -38717,6 +38743,10 @@ PrefabInstance:
     - target: {fileID: 7318057764715712409, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7318057764715712412, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7318057764715712412, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
       propertyPath: m_IsActive
@@ -38730,5 +38760,10 @@ PrefabInstance:
 --- !u!4 &411783785014349717 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7318057764685011399, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
+  m_PrefabInstance: {fileID: 6933298120660686418}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &411783785014349718 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7318057764685011396, guid: 4420fa98dd93a4ac9a5400a2285caf23, type: 3}
   m_PrefabInstance: {fileID: 6933298120660686418}
   m_PrefabAsset: {fileID: 0}

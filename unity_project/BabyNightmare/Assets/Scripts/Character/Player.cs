@@ -136,13 +136,18 @@ namespace BabyNightmare.Character
             AddDef(-blocked);
             damage -= blocked;
 
+            if (damage <= 0)
+            {
+                FXPool.Instance.ShowTemporary(EFXType.Defense, transform.position);
+            }
+
             var message = damage <= 0 ? "Block" : $"{Mathf.RoundToInt(damage)}";
 
             PopupTextPool.Instance.ShowTemporary(
                                                 EPopupTextType.Damage,
-                                                 transform.position, 
-                                                Quaternion.Euler(_context.CameraForward), 
-                                                Vector3.one, 
+                                                 transform.position,
+                                                Quaternion.Euler(_context.CameraForward),
+                                                Vector3.one,
                                                 message
                                                 );
 
