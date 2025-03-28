@@ -143,6 +143,8 @@ namespace BabyNightmare.StaticData
         Mike_LV2,
         Celia_LV2,
         Sullivan_LV2,
+
+        Mike_AD,
     }
 
     public enum ESizeType

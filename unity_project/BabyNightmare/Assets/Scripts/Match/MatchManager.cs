@@ -59,6 +59,12 @@ namespace BabyNightmare.Match
                 return;
             }
 
+            if (true == DevManager.Instance.EnableADSetting)
+            {
+                chapterData = StaticDataManager.Instance.GetChapterData(10000);
+                _waveDataList = StaticDataManager.Instance.GetWaveDataList(chapterData.WaveDataGroup);
+            }
+
             _currentWave = 0;
             _maxWave = _waveDataList.Count;
             _rerollCount = 0;
@@ -79,6 +85,7 @@ namespace BabyNightmare.Match
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(INITIAL_EQUIPMENT_ID);
             var matchViewContext = new MatchViewContext(
+                                        DevManager.Instance.EnableADSetting,
                                         _matchField.RT,
                                         initEM,
                                         GetRerollData,

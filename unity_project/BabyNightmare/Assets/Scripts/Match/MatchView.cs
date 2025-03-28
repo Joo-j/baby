@@ -17,6 +17,7 @@ namespace BabyNightmare.Match
 {
     public class MatchViewContext
     {
+        public bool Enable_AD { get; }
         public RenderTexture RT { get; }
         public EquipmentData InitEquipment { get; }
         public Func<List<EquipmentData>> GetRerollData { get; }
@@ -28,6 +29,7 @@ namespace BabyNightmare.Match
         public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
 
         public MatchViewContext(
+        bool enable_AD,
         RenderTexture rt,
         EquipmentData initEquipment,
         Func<List<EquipmentData>> getRerollData,
@@ -38,6 +40,7 @@ namespace BabyNightmare.Match
         Action<ECameraPosType> moveCameraPos,
         Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
         {
+            this.Enable_AD = enable_AD;
             this.RT = rt;
             this.InitEquipment = initEquipment;
             this.GetRerollData = getRerollData;
@@ -52,8 +55,8 @@ namespace BabyNightmare.Match
 
     public class MatchView : MonoBehaviour
     {
-        [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private RectTransform _rtf;
+        [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private RectTransform _topRTF;
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
@@ -61,11 +64,12 @@ namespace BabyNightmare.Match
         [SerializeField] private Image _waveProgressIMG;
         [SerializeField] private Image _waveBoxBGIMG;
         [SerializeField] private GameObject _twincle;
-        [SerializeField] private Inventory_Bag _bag;
-        [SerializeField] private Inventory_Loot _loot;
+        [SerializeField] private Transform _bagTF;
+        [SerializeField] private Transform _lootTF;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private float _rectChangeDruation = 0.4f;
+        [SerializeField] private GameObject _buttonGO;
         [SerializeField] private GameObject _startGO;
         [SerializeField] private CanvasGroup _rerollCVG;
         [SerializeField] private GameObject _rerollIcon;
@@ -82,10 +86,16 @@ namespace BabyNightmare.Match
         [SerializeField] private Sprite _blueBoxBG;
         [SerializeField] private Sprite _goldBoxBG;
 
+        private const string PATH_INVENTORY_BAG = "Inventory/Inventory_Bag";
+        private const string PATH_INVENTORY_BAG_AD = "Inventory/Inventory_Bag_AD";
+        private const string PATH_INVENTORY_LOOT = "Inventory/Inventory_Loot";
         private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
+
         private MatchViewContext _context = null;
+        private Inventory_Bag _bag = null;
+        private Inventory_Loot _loot = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
@@ -115,12 +125,45 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _loot.InitBase(context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
-            _bag.InitBase(context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
+            _loot = ObjectUtil.LoadAndInstantiate<Inventory_Loot>(PATH_INVENTORY_LOOT, _lootTF);
+            if (null == _loot)
+            {
+                Debug.LogError($"{PATH_INVENTORY_LOOT} no prefab");
+                return;
+            }
+
+            _loot.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
+
+            if (true == context.Enable_AD)
+                _bag = ObjectUtil.LoadAndInstantiate<Inventory_Bag>(PATH_INVENTORY_BAG_AD, _bagTF);
+            else
+                _bag = ObjectUtil.LoadAndInstantiate<Inventory_Bag>(PATH_INVENTORY_BAG, _bagTF);
+
+            if (null == _bag)
+            {
+                Debug.LogError($"{PATH_INVENTORY_BAG_AD} no prefab");
+                return;
+            }
+
+            _bag.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
 
             _bag.Init(_loot, AddStat);
 
+            if (true == context.Enable_AD)
+            {
+                _buttonGO.SetActive(false);
+
+                var dataList = _context.GetRerollData?.Invoke();
+                for (var i = 0; i < dataList.Count; i++)
+                {
+                    _bag.TryAdd(dataList[i]);
+                }
+            }
+            else
+            {
                 _bag.TryAdd(_context.InitEquipment);
+            }
+
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
             _bagSizeUpCVG.gameObject.SetActive(false);
@@ -532,5 +575,19 @@ namespace BabyNightmare.Match
                 pair.Value.RefreshChangeValue(_statChangeDict[pair.Key]);
             }
         }
+
+#if UNITY_EDITOR
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                OnClickReroll();
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                OnClickFight();
+            }
+        }
+#endif
     }
 }

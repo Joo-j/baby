@@ -8,7 +8,6 @@ namespace BabyNightmare.StaticData
     public class EnemySpawnData : ScriptableObject
     {
         public int ID;
-        public List<int> EnemyIDList;
         public List<EEnemyType> EnemyTypeList;
     }
 }
