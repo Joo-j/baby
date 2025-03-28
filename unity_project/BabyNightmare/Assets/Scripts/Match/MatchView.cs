@@ -19,6 +19,7 @@ namespace BabyNightmare.Match
     {
         public RenderTexture RT { get; }
         public EquipmentData InitEquipment { get; }
+        public Func<List<EquipmentData>> GetRerollData { get; }
         public Action OnClickReroll { get; }
         public Action OnClickBagSizeUp { get; }
         public Action StartWave { get; }
@@ -29,6 +30,7 @@ namespace BabyNightmare.Match
         public MatchViewContext(
         RenderTexture rt,
         EquipmentData initEquipment,
+        Func<List<EquipmentData>> getRerollData,
         Action onClickReroll,
         Action onClickBagSizeUp,
         Action startWave,
@@ -38,6 +40,7 @@ namespace BabyNightmare.Match
         {
             this.RT = rt;
             this.InitEquipment = initEquipment;
+            this.GetRerollData = getRerollData;
             this.OnClickReroll = onClickReroll;
             this.OnClickBagSizeUp = onClickBagSizeUp;
             this.StartWave = startWave;
@@ -117,6 +120,7 @@ namespace BabyNightmare.Match
 
             _bag.Init(_loot, AddStat);
 
+                _bag.TryAdd(_context.InitEquipment);
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
             _bagSizeUpCVG.gameObject.SetActive(false);
@@ -184,39 +188,6 @@ namespace BabyNightmare.Match
                 }
 
                 _waveProgressIMG.rectTransform.sizeDelta = targetSize;
-            }
-        }
-
-        public void Reroll(List<EquipmentData> dataList)
-        {
-            _loot.RemoveAll();
-
-            for (var i = 0; i < dataList.Count; i++)
-            {
-                _loot.TryAdd(dataList[i]);
-            }
-
-            AudioManager.PlaySFX("AudioClip/Inventory_Reroll");
-        }
-
-        public void SizeUpBag()
-        {
-            _bagSizeUpCVG.gameObject.SetActive(false);
-            _rerollCVG.gameObject.SetActive(false);
-            _fightGO.SetActive(false);
-            _loot.gameObject.SetActive(false);
-
-            StartCoroutine(Co_BagSizeUp());
-            IEnumerator Co_BagSizeUp()
-            {
-                var waiter = new CoroutineWaiter();
-                _bag.ShowAddableCell(waiter.Signal);
-                yield return waiter.Wait();
-
-                _bagSizeUpCVG.gameObject.SetActive(_bag.TryGetAddableIndexs(out var addableIndexs));
-                _rerollCVG.gameObject.SetActive(true);
-                _fightGO.SetActive(true);
-                _loot.gameObject.SetActive(true);
             }
         }
 
@@ -292,8 +263,6 @@ namespace BabyNightmare.Match
                 }
             }
 
-            _bag.TryAdd(_context.InitEquipment);
-
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
             _bagSizeUpCVG.gameObject.SetActive(true);
@@ -335,23 +304,57 @@ namespace BabyNightmare.Match
             PlayerData.Instance.Coin += _waveCoin;
             AudioManager.PlaySFX("AudioClip/Coin");
 
-            Reroll(_boxRerollDataList);
+            _loot.RemoveAll();
+
+            for (var i = 0; i < _boxRerollDataList.Count; i++)
+            {
+                _loot.TryAdd(_boxRerollDataList[i]);
+            }
+
             _boxRerollDataList = null;
             HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
         }
 
         public void OnClickReroll()
         {
-            _context.OnClickReroll?.Invoke();
+            _loot.RemoveAll();
+
+            var dataList = _context.GetRerollData?.Invoke();
+            for (var i = 0; i < dataList.Count; i++)
+            {
+                _loot.TryAdd(dataList[i]);
+            }
+
             AudioManager.PlaySFX("AudioClip/Click");
+            AudioManager.PlaySFX("AudioClip/Inventory_Reroll");
             HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
+
+            _context.OnClickReroll?.Invoke();
         }
 
         public void OnClickSizeUpBag()
         {
-            _context.OnClickBagSizeUp.Invoke();
+            _bagSizeUpCVG.gameObject.SetActive(false);
+            _rerollCVG.gameObject.SetActive(false);
+            _fightGO.SetActive(false);
+            _loot.gameObject.SetActive(false);
             AudioManager.PlaySFX("AudioClip/Click");
             HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.MediumImpact);
+
+            _context.OnClickBagSizeUp?.Invoke();
+
+            StartCoroutine(Co_BagSizeUp());
+            IEnumerator Co_BagSizeUp()
+            {
+                var waiter = new CoroutineWaiter();
+                _bag.ShowAddableCell(waiter.Signal);
+                yield return waiter.Wait();
+
+                _bagSizeUpCVG.gameObject.SetActive(_bag.TryGetAddableIndexs(out var addableIndexs));
+                _rerollCVG.gameObject.SetActive(true);
+                _fightGO.SetActive(true);
+                _loot.gameObject.SetActive(true);
+            }
         }
 
 

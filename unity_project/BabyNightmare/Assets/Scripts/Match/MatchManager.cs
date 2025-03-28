@@ -19,6 +19,7 @@ namespace BabyNightmare.Match
         private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
 
+        private const int INITIAL_EQUIPMENT_ID = 1001;
         private const int EQUIPMENT_MAX_LEVEL = 3;
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int MATCH_START_COIN = 10;
@@ -76,10 +77,11 @@ namespace BabyNightmare.Match
 
             _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
-            var initEM = StaticDataManager.Instance.GetEquipmentData(1001);
+            var initEM = StaticDataManager.Instance.GetEquipmentData(INITIAL_EQUIPMENT_ID);
             var matchViewContext = new MatchViewContext(
                                         _matchField.RT,
                                         initEM,
+                                        GetRerollData,
                                         OnClickReroll,
                                         OnClickBagSizeUp,
                                         OnStartWave,
@@ -205,9 +207,6 @@ namespace BabyNightmare.Match
 
         private void OnClickReroll()
         {
-            var dataList = GetRerollData();
-            _matchView.Reroll(dataList);
-
             var prePrice = _rerollPrice;
             ++_rerollCount;
             _rerollPrice = BASE_REROLL_PRICE * (int)Mathf.Pow(_rerollCount, 2);
@@ -217,8 +216,6 @@ namespace BabyNightmare.Match
 
         private void OnClickBagSizeUp()
         {
-            _matchView.SizeUpBag();
-
             var prePrice = _bagSizeUpPrice;
             ++_bagSizeUpCount;
             _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * (_bagSizeUpCount + 1);

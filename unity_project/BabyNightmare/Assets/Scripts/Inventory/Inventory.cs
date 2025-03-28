@@ -11,9 +11,10 @@ namespace BabyNightmare.InventorySystem
 {
     public abstract class Inventory : MonoBehaviour, IPointerEnterHandler, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
+        [SerializeField] protected RectTransform _rtf;
+
         private const string PATH_EQUIPMENT = "Inventory/Equipment";
 
-        protected RectTransform _rtf = null;
         protected RectTransform _canvasRTF = null;
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
         protected Action<Transform, String> _showMergeMessage = null;
@@ -31,12 +32,6 @@ namespace BabyNightmare.InventorySystem
         public abstract Equipment Get(Vector2 screenPos);
         public abstract HashSet<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
 
-        private void Awake()
-        {
-            _rtf = GetComponent<RectTransform>();
-            _canvasRTF = GetComponentInParent<Canvas>().transform as RectTransform;
-        }
-
         protected virtual void OnEnable()
         {
             StartCoroutine(Co_Refresh());
@@ -44,11 +39,13 @@ namespace BabyNightmare.InventorySystem
 
         public void InitBase
         (
+            RectTransform canvasRTF,
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
             Action<Transform, String> showMergeMessage,
             Action<Equipment, HashSet<Equipment>> refreshChangeStat
         )
         {
+            _canvasRTF = canvasRTF;
             _getUpgradeData = getUpgradeData;
             _showMergeMessage = showMergeMessage;
             _refreshChangeStat = refreshChangeStat;

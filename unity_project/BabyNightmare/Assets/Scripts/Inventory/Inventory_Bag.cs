@@ -13,7 +13,7 @@ namespace BabyNightmare.InventorySystem
     public class Inventory_Bag : Inventory
     {
         [SerializeField] private CanvasGroup _canvasGroup;
-        [SerializeField] private Vector2 _cellSize = default;
+        [SerializeField] private Vector2Int _defaultGridSize = new Vector2Int(3, 3);
         [SerializeField] private Color _cellClearColor;
         [SerializeField] private Color _cellEnableColor;
         [SerializeField] private Color _cellOverlappedColor;
@@ -21,7 +21,7 @@ namespace BabyNightmare.InventorySystem
 
         private const string PATH_CELL = "Inventory/Cell";
         private const string PATH_CELL_ADDABLE = "Inventory/Cell_Addable";
-        private readonly Vector2Int DEFAULT_GRID_SIZE = new Vector2Int(3, 3);
+        private const float CELL_LENGTH = 100;
         private Vector2Int _gridSize = default;
         private Vector2Int _gridOffset = default;
         private Dictionary<Vector2Int, Cell> _cellDict = null;
@@ -41,8 +41,8 @@ namespace BabyNightmare.InventorySystem
             _equipmentSet = new HashSet<Equipment>();
             _cellDict = new Dictionary<Vector2Int, Cell>();
 
-            for (int y = 0; y < DEFAULT_GRID_SIZE.y; y++)
-                for (int x = 0; x < DEFAULT_GRID_SIZE.x; x++)
+            for (int y = 0; y < _defaultGridSize.y; y++)
+                for (int x = 0; x < _defaultGridSize.x; x++)
                     AddCell(new Vector2Int(x, y));
         }
 
@@ -63,7 +63,7 @@ namespace BabyNightmare.InventorySystem
         private Cell CreateCell(Vector2Int index)
         {
             var cell = ObjectUtil.LoadAndInstantiate<Cell>(PATH_CELL, transform);
-            cell.RTF.sizeDelta = _cellSize;
+            cell.RTF.sizeDelta = new Vector2(CELL_LENGTH, CELL_LENGTH);
             cell.RTF.anchoredPosition = GetLocalPos(index);
             cell.RefreshColor(_cellClearColor);
             return cell;
@@ -72,7 +72,7 @@ namespace BabyNightmare.InventorySystem
         private Cell CreateCell_Addable(Vector2Int index)
         {
             var cell = ObjectUtil.LoadAndInstantiate<Cell>(PATH_CELL_ADDABLE, transform);
-            cell.RTF.sizeDelta = _cellSize;
+            cell.RTF.sizeDelta = new Vector2(CELL_LENGTH, CELL_LENGTH);
             cell.RTF.anchoredPosition = GetLocalPos(index);
             cell.RefreshColor(_cellClearColor);
             return cell;
@@ -109,8 +109,8 @@ namespace BabyNightmare.InventorySystem
                 _gridSize += offset;
                 index += offset;
 
-                var width = _gridSize.x * _cellSize.x;
-                var height = _gridSize.y * _cellSize.y;
+                var width = _gridSize.x * CELL_LENGTH;
+                var height = _gridSize.y * CELL_LENGTH;
                 _rtf.sizeDelta = new Vector2(width, height);
 
                 foreach (var pair in _cellDict)
@@ -127,8 +127,8 @@ namespace BabyNightmare.InventorySystem
             {
                 _gridSize = new Vector2Int(Mathf.Max(_gridSize.x, index.x + 1), Mathf.Max(_gridSize.y, index.y + 1));
 
-                var width = _gridSize.x * _cellSize.x;
-                var height = _gridSize.y * _cellSize.y;
+                var width = _gridSize.x * CELL_LENGTH;
+                var height = _gridSize.y * CELL_LENGTH;
                 _rtf.sizeDelta = new Vector2(width, height);
 
                 foreach (var pair in _cellDict)
@@ -218,8 +218,8 @@ namespace BabyNightmare.InventorySystem
                 var data = _draggedEquipment.Data;
                 var validList = data.Shape.ValidIndexList;
 
-                var halfSize = _cellSize * 0.5f;
-                var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
+                var halfLength = CELL_LENGTH * 0.5f;
+                var offset = new Vector2((1 - data.Shape.Column) * halfLength, (1 - data.Shape.Row) * halfLength);
                 var targetIndex = GetIndex(_dragEventData.position + offset);
 
                 for (var i = 0; i < validList.Count; i++)
@@ -259,8 +259,8 @@ namespace BabyNightmare.InventorySystem
         public override bool TryEquip(Equipment equipment, Vector2 screenPos)
         {
             var data = equipment.Data;
-            var halfSize = _cellSize * 0.5f;
-            var offset = new Vector2((1 - data.Shape.Column) * halfSize.x, (1 - data.Shape.Row) * halfSize.y);
+            var halfLength = CELL_LENGTH * 0.5f;
+            var offset = new Vector2((1 - data.Shape.Column) * halfLength, (1 - data.Shape.Row) * halfLength);
             var targetIndex = GetIndex(screenPos + offset);
 
             var validList = data.Shape.ValidIndexList;
@@ -526,8 +526,8 @@ namespace BabyNightmare.InventorySystem
         {
             RectTransformUtility.ScreenPointToLocalPointInRectangle(_rtf, screenPos, null, out var anchoredPos);
             var pos = anchoredPos + _rtf.sizeDelta * 0.5f; //가운데를 기준으로 하기 때문에 왼쪽 아래로 기준을 맞추기 위해 더해주는 작업
-            var x = Mathf.FloorToInt(pos.x / _cellSize.x);
-            var y = Mathf.FloorToInt(pos.y / _cellSize.y);
+            var x = Mathf.FloorToInt(pos.x / CELL_LENGTH);
+            var y = Mathf.FloorToInt(pos.y / CELL_LENGTH);
             var index = new Vector2Int(x, y);
 
             return index;
@@ -536,15 +536,15 @@ namespace BabyNightmare.InventorySystem
 
         private Vector2 GetLocalPos(Vector2 index)
         {
-            var x = (index.x * _cellSize.x) + (-_rtf.sizeDelta.x * 0.5f) + (_cellSize.x * 0.5f);
-            var y = (index.y * _cellSize.y) + (-_rtf.sizeDelta.y * 0.5f) + (_cellSize.y * 0.5f);
+            var x = (index.x * CELL_LENGTH) + (-_rtf.sizeDelta.x * 0.5f) + (CELL_LENGTH * 0.5f);
+            var y = (index.y * CELL_LENGTH) + (-_rtf.sizeDelta.y * 0.5f) + (CELL_LENGTH * 0.5f);
             return new Vector2(x, y);
         }
 
         private Vector2 GetLocalPos(Vector2Int index, EquipmentData data)
         {
             var offset = (new Vector2(data.Shape.Column, data.Shape.Row) - _gridSize) * 0.5f;
-            return (index + offset) * _cellSize;
+            return (index + offset) * new Vector2(CELL_LENGTH, CELL_LENGTH);
         }
 
         public void StartUseEquipment(Action<EquipmentData> onCoolDown, float speed)
