@@ -91,7 +91,6 @@ namespace BabyNightmare.Match
         private Vector2 _progressSize;
 
         private int _waveCoin = 0;
-        private bool _enableBagSizeUp = false;
         private List<EquipmentData> _boxRerollDataList = null;
 
         public RectTransform FieldImage => _fieldIMG.rectTransform;
@@ -215,6 +214,7 @@ namespace BabyNightmare.Match
                 _bag.ShowAddableCell(waiter.Signal);
                 yield return waiter.Wait();
 
+                _bagSizeUpCVG.gameObject.SetActive(true);
                 _rerollCVG.gameObject.SetActive(true);
                 _fightGO.SetActive(true);
                 _loot.gameObject.SetActive(true);
@@ -297,6 +297,7 @@ namespace BabyNightmare.Match
 
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
+            _bagSizeUpCVG.gameObject.SetActive(true);
         }
 
         public void OnClearWave()
@@ -305,10 +306,9 @@ namespace BabyNightmare.Match
             _canvasGroup.blocksRaycasts = true;
         }
 
-        public void ShowBox(EBoxType type, int waveCoin, bool enableBagSizeUp, List<EquipmentData> boxRerollDataList)
+        public void ShowBox(EBoxType type, int waveCoin, List<EquipmentData> boxRerollDataList)
         {
             ChangeRectPos(false, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.High));
-            _enableBagSizeUp = enableBagSizeUp;
             _boxRerollDataList = boxRerollDataList;
             var iconPath = $"{PATH_EQUIPMENT_BOX_ICON}{type}";
             _boxIMG.sprite = Resources.Load<Sprite>(iconPath);
@@ -329,7 +329,7 @@ namespace BabyNightmare.Match
             _boxGO.SetActive(false);
             _rerollCVG.gameObject.SetActive(true);
             _fightGO.SetActive(true);
-            _bagSizeUpCVG.gameObject.SetActive(_enableBagSizeUp);
+            _bagSizeUpCVG.gameObject.SetActive(true);
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
 
             CoinHUD.SetSpreadPoint(_boxGO.transform.position);

@@ -11,6 +11,5 @@ namespace BabyNightmare.StaticData
         public int Group;
         public int EnemySpawnDataID;
         public EBoxType BoxType = EBoxType.Blue;
-        public bool EnableBagSizeUp = false;
     }
 }

@@ -7,7 +7,6 @@ using BabyNightmare.Util;
 using BabyNightmare.HUD;
 using Random = UnityEngine.Random;
 using BabyNightmare.Talent;
-using UnityEngine.AI;
 using System.Linq;
 using Supercent.Core.Audio;
 
@@ -100,39 +99,6 @@ namespace BabyNightmare.Match
 
         }
 
-        private void OnChangeCoin(int coin)
-        {
-            _matchView?.RefreshRerollPrice(_rerollPrice, coin);
-            _matchView?.RefreshBagSizeUpPrice(_bagSizeUpPrice, coin);
-        }
-
-        private void OnFailMatch()
-        {
-            _matchView.Release();
-
-            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
-            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
-            gem += Mathf.CeilToInt(gem * talentGem);
-
-            var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
-            failView.Init(gem, CloseMatch);
-            AudioManager.PlaySFX("AudioClip/Match_Fail");
-        }
-
-        private void OnCompleteMatch()
-        {
-            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
-            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
-            gem += Mathf.CeilToInt(gem * talentGem);
-
-            var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
-            completeView.Init(gem, CloseMatch);
-
-            ++PlayerData.Instance.Chapter;
-            PlayerData.Instance.Save();
-            AudioManager.PlaySFX("AudioClip/Match_Complete");
-        }
-
         private void CloseMatch()
         {
             PlayerData.Instance.OnChangedCoinEvent.RemoveListener(OnChangeCoin);
@@ -147,9 +113,42 @@ namespace BabyNightmare.Match
             GameObject.Destroy(_matchView.gameObject);
             _matchView = null;
 
-            _enterLobby?.Invoke();
+        }
 
+        private void OnChangeCoin(int coin)
+        {
+            _matchView?.RefreshRerollPrice(_rerollPrice, coin);
+            _matchView?.RefreshBagSizeUpPrice(_bagSizeUpPrice, coin);
+        }
+
+        private void OnFailMatch()
+        {
+            CloseMatch();
+
+            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
+            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
+            gem += Mathf.CeilToInt(gem * talentGem);
             PlayerData.Instance.Save();
+
+            var failView = ObjectUtil.LoadAndInstantiate<MatchFailView>(PATH_MATCH_FAIL_VIEW, null);
+            failView.Init(gem, _enterLobby);
+            AudioManager.PlaySFX("AudioClip/Match_Fail");
+        }
+
+        private void OnCompleteMatch()
+        {
+            CloseMatch();
+
+            var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
+            var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
+            gem += Mathf.CeilToInt(gem * talentGem);
+
+            var completeView = ObjectUtil.LoadAndInstantiate<MatchCompleteView>(PATH_MATCH_COMPLETE_VIEW, null);
+            completeView.Init(gem, _enterLobby);
+
+            ++PlayerData.Instance.Chapter;
+            PlayerData.Instance.Save();
+            AudioManager.PlaySFX("AudioClip/Match_Complete");
         }
 
         private void OnStartWave()
@@ -175,7 +174,7 @@ namespace BabyNightmare.Match
                     Debug.LogError($"{type} enemy is null");
                     continue;
                 }
-                
+
                 enemyDataList.Add(enemyData);
             }
 
@@ -196,7 +195,7 @@ namespace BabyNightmare.Match
             _matchView.OnClearWave();
 
             var dataList = GetRerollData();
-            _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), waveData.EnableBagSizeUp, dataList));
+            _matchField.EncounterBox(waveData.BoxType, () => _matchView.ShowBox(waveData.BoxType, _matchField.GetWaveCoin(), dataList));
             AudioManager.PlaySFX("AudioClip/Clear_Wave");
 
             ++_currentWave;
@@ -221,7 +220,7 @@ namespace BabyNightmare.Match
 
             var preCost = _bagSizeUpPrice;
             ++_bagSizeUpCount;
-            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * (int)Mathf.Pow(_bagSizeUpCount, 2);
+            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * _bagSizeUpCount;
 
             PlayerData.Instance.Coin -= preCost;
         }
@@ -248,7 +247,6 @@ namespace BabyNightmare.Match
                 var data = equipmentDataList[i];
                 var prob = data.Prob * Mathf.RoundToInt(Mathf.Pow(EQUIPMENT_MAX_LEVEL - data.Level + 1, weightFactor));
                 randomPicker.Add(data, prob);
-                Debug.Log($"{weightFactor} {data.Type} {prob}");
             }
 
             var dataDict = new Dictionary<EEquipmentType, EquipmentData>();
