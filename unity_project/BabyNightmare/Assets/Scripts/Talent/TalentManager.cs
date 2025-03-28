@@ -20,11 +20,13 @@ namespace BabyNightmare.Talent
         private Dictionary<ETalentType, int> _levelDict = null;
         private TalentView _talentView = null;
 
+        private int Price => (int)Mathf.Pow(_levelDict.Values.Sum(), 2) * 10;
         public int ShowCount
         {
             get => PlayerPrefs.GetInt(KEY_SHOW_COUNT);
             set => PlayerPrefs.SetInt(KEY_SHOW_COUNT, value);
         }
+
 
         public void Init()
         {
@@ -68,7 +70,7 @@ namespace BabyNightmare.Talent
             }
 
             _talentView.gameObject.SetActive(true);
-            _talentView.RefreshButton(PlayerData.Instance.Gem, GetPrice());
+            _talentView.RefreshButton(PlayerData.Instance.Gem, Price);
 
             if (ShowCount == 0)
             {
@@ -81,18 +83,6 @@ namespace BabyNightmare.Talent
         public void Hide()
         {
             _talentView.gameObject.SetActive(false);
-        }
-
-        private int GetPrice()
-        {
-            var totalLevel = 0;
-            var levelList = _levelDict.Values.ToList();
-            for (var i = 0; i < levelList.Count; i++)
-            {
-                totalLevel += levelList[i];
-            }
-
-            return (int)Mathf.Pow(totalLevel, 2) * 10;
         }
 
         private void Upgrade()
@@ -109,19 +99,19 @@ namespace BabyNightmare.Talent
                 randomPicker.Add(data, data.Prob);
             }
 
+            PlayerData.Instance.Gem -= Price;
+
             var pickData = randomPicker.RandomPick();
             var upgradeType = pickData.TalentType;
             ++_levelDict[upgradeType];
 
-            var price = GetPrice();
-            PlayerData.Instance.Gem -= price;
             PlayerData.Instance.Save();
-            _talentView.RefreshButton(PlayerData.Instance.Gem, price);
+            _talentView.RefreshButton(PlayerData.Instance.Gem, Price);
 
             _talentView.ShowGacha(() =>
             {
                 _talentView.RefreshLevel(_levelDict, true);
-                _talentView.RefreshButton(PlayerData.Instance.Gem, price);
+                _talentView.RefreshButton(PlayerData.Instance.Gem, Price);
             });
 
             Debug.Log($"{upgradeType}타입 업그레이드");
@@ -149,7 +139,7 @@ namespace BabyNightmare.Talent
 
         public bool IsRedDot()
         {
-            return PlayerData.Instance.Gem >= GetPrice();
+            return PlayerData.Instance.Gem >= Price;
         }
 
         private void Save()

@@ -136,6 +136,11 @@ namespace BabyNightmare.Match
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
         }
 
+        public void Release()
+        {
+            StopAllCoroutines();
+        }
+
         public void RefreshWave(int curWave, int maxWave, EBoxType boxType)
         {
             _waveTMP.text = $"Wave {curWave}/{maxWave}";

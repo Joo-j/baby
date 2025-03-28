@@ -110,7 +110,7 @@ namespace BabyNightmare.Character
         {
             if (true == _isDead)
                 return;
-
+            
             _context.OnDiePlayer?.Invoke();
             _isDead = true;
             AudioManager.PlaySFX("AudioClip/Player_Die");

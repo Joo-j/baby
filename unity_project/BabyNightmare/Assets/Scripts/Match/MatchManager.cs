@@ -108,6 +108,8 @@ namespace BabyNightmare.Match
 
         private void OnFailMatch()
         {
+            _matchView.Release();
+
             var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;
             var talentGem = TalentManager.Instance.GetValue(ETalentType.Gem_Earn_Percentage);
             gem += Mathf.CeilToInt(gem * talentGem);
@@ -246,7 +248,7 @@ namespace BabyNightmare.Match
                 var data = equipmentDataList[i];
                 var prob = data.Prob * Mathf.RoundToInt(Mathf.Pow(EQUIPMENT_MAX_LEVEL - data.Level + 1, weightFactor));
                 randomPicker.Add(data, prob);
-
+                Debug.Log($"{weightFactor} {data.Type} {prob}");
             }
 
             var dataDict = new Dictionary<EEquipmentType, EquipmentData>();
