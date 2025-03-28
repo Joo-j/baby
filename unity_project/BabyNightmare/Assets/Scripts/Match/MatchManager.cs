@@ -97,6 +97,7 @@ namespace BabyNightmare.Match
             PlayerData.Instance.Coin = MATCH_START_COIN;
             CoinHUD.UseFX(true);
 
+            AudioManager.PlaySFX("AudioClip/Start_Match");
         }
 
         private void CloseMatch()
