@@ -233,7 +233,7 @@ namespace BabyNightmare.Match
             switch (waveData.BoxType)
             {
                 case EBoxType.Blue:
-                    weightFactor = 6;
+                    weightFactor = 7;
                     break;
                 case EBoxType.Gold:
                     weightFactor = 3;
