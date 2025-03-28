@@ -147,30 +147,41 @@ namespace BabyNightmare.InventorySystem
             _cellDict.Add(index, newCell);
         }
 
-
-        public void ShowAddableCell(Action doneCallback)
+        public bool TryGetAddableIndexs(out List<Vector2Int> addableIndexs)
         {
-            var addableCells = new List<Cell>();
-            var addableIndexList = new List<Vector2Int>();
+            addableIndexs = new List<Vector2Int>();
 
             var minLength = Mathf.Min(_gridSize.x - _gridOffset.x, _gridSize.y - _gridOffset.y);
-
             for (var x = _gridOffset.x; x < _gridOffset.x + minLength; x++)
             {
-                addableIndexList.Add(new Vector2Int(x, _gridOffset.y - 1)); // 아래
+                var index = new Vector2Int(x, _gridOffset.y - 1);
+                if (false == _cellDict.ContainsKey(index))
+                    addableIndexs.Add(index); // 아래
             }
 
             for (var y = _gridOffset.y; y < _gridOffset.y + minLength; y++)
             {
-                addableIndexList.Add(new Vector2Int(_gridOffset.x - 1, y)); // 왼쪽
-                addableIndexList.Add(new Vector2Int(_gridOffset.x + minLength, y)); // 오른쪽
+                var leftIndex = new Vector2Int(_gridOffset.x - 1, y);
+                if (false == _cellDict.ContainsKey(leftIndex))
+                    addableIndexs.Add(leftIndex); // 왼쪽
+
+                var rightIndex = new Vector2Int(_gridOffset.x + minLength, y);
+                if (false == _cellDict.ContainsKey(rightIndex))
+                    addableIndexs.Add(rightIndex); // 오른쪽
             }
 
-            foreach (var index in addableIndexList)
-            {
-                if (true == _cellDict.ContainsKey(index))
-                    continue;
+            return addableIndexs.Count > 0;
+        }
 
+        public void ShowAddableCell(Action doneCallback)
+        {
+            if (false == TryGetAddableIndexs(out var addableIndexs))
+                return;
+
+            var addableCells = new List<Cell>();
+
+            foreach (var index in addableIndexs)
+            {
                 var cell = CreateCell_Addable(index);
                 cell.AddButton(() => OnClickButton(index));
                 addableCells.Add(cell);

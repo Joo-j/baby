@@ -89,7 +89,6 @@ namespace BabyNightmare.Match
         private Dictionary<EStatType, int> _statDict = null;
         private Dictionary<EStatType, int> _statChangeDict = null;
         private Vector2 _progressSize;
-
         private int _waveCoin = 0;
         private List<EquipmentData> _boxRerollDataList = null;
 
@@ -214,7 +213,7 @@ namespace BabyNightmare.Match
                 _bag.ShowAddableCell(waiter.Signal);
                 yield return waiter.Wait();
 
-                _bagSizeUpCVG.gameObject.SetActive(true);
+                _bagSizeUpCVG.gameObject.SetActive(_bag.TryGetAddableIndexs(out var addableIndexs));
                 _rerollCVG.gameObject.SetActive(true);
                 _fightGO.SetActive(true);
                 _loot.gameObject.SetActive(true);

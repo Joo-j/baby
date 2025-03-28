@@ -23,7 +23,7 @@ namespace BabyNightmare.Match
         private const int REROLL_EQUIPMENT_COUNT = 3;
         private const int MATCH_START_COIN = 10;
         private const int BASE_REROLL_PRICE = 10;
-        private const int BASE_BAG_SIZE_UP_PRICE = 100;
+        private const int BASE_BAG_SIZE_UP_PRICE = 150;
         private const int BASE_REWARD_GEM = 10;
 
         private MatchField _matchField = null;
@@ -34,7 +34,7 @@ namespace BabyNightmare.Match
         private int _maxWave = 0;
         private int _rerollCount = 0;
         private int _rerollPrice = 0;
-        private int _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE;
+        private int _bagSizeUpPrice = 0;
         private int _bagSizeUpCount = 0;
 
         public void Init(Action enterLobby)
@@ -63,7 +63,7 @@ namespace BabyNightmare.Match
             _rerollCount = 0;
             _rerollPrice = 0;
             _bagSizeUpCount = 0;
-            _bagSizeUpPrice = 0;
+            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE;
 
             _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
             var matchFieldContext = new MatchFieldContext(
@@ -207,22 +207,22 @@ namespace BabyNightmare.Match
             var dataList = GetRerollData();
             _matchView.Reroll(dataList);
 
-            var preCost = _rerollPrice;
+            var prePrice = _rerollPrice;
             ++_rerollCount;
             _rerollPrice = BASE_REROLL_PRICE * (int)Mathf.Pow(_rerollCount, 2);
 
-            PlayerData.Instance.Coin -= preCost;
+            PlayerData.Instance.Coin -= prePrice;
         }
 
         private void OnClickBagSizeUp()
         {
             _matchView.SizeUpBag();
 
-            var preCost = _bagSizeUpPrice;
+            var prePrice = _bagSizeUpPrice;
             ++_bagSizeUpCount;
-            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * _bagSizeUpCount;
+            _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE * (_bagSizeUpCount + 1);
 
-            PlayerData.Instance.Coin -= preCost;
+            PlayerData.Instance.Coin -= prePrice;
         }
 
         private List<EquipmentData> GetRerollData()
