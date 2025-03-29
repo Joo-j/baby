@@ -77,7 +77,7 @@ namespace BabyNightmare.Character
                 return true;
             }
         }
-
+ 
         public void Init(PlayerContext context)
         {
             _context = context;
