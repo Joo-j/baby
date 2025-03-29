@@ -231,17 +231,12 @@ namespace BabyNightmare.Match
                 if (false == enemy.IsAttackable)
                     continue;
 
-                var enemyPos = enemy.TF.position;
-
-                var dist = Vector3.Distance(areaPos, enemyPos);
-                Debug.Log($"{i} {dist} > {radius}");
+                var dist = Vector3.Distance(areaPos, enemy.TF.position);
                 if (dist > radius)
                     continue;
 
                 enemies.Add(enemy);
             }
-
-            Debug.Log($"@@ GetEnemiesInArea {enemies.Count} / {_aliveEnemies.Count}");
 
             return enemies;
         }

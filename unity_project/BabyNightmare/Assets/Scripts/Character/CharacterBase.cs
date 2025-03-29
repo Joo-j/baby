@@ -14,7 +14,6 @@ namespace BabyNightmare.Character
         public Transform TF { get; }
         public Transform HitPoint { get; }
         public bool IsAttackable { get; }
-        public void ReserveDamage(float damage);
         public void ReceiveAttack(float damage, bool isCritical);
     }
     public enum EAniType
@@ -46,7 +45,6 @@ namespace BabyNightmare.Character
         protected Coroutine _coAct = null;
         private Coroutine _coFlash = null;
         protected Color _originEmissionColor;
-        protected float _reserveDamage = 0f;
         protected bool _isDead = false;
 
         public GameObject GO => gameObject;
@@ -57,14 +55,10 @@ namespace BabyNightmare.Character
         public abstract bool IsAttackable { get; }
         public abstract void Die();
 
-        public void ReserveDamage(float damage) => _reserveDamage += damage;
-
         public virtual void ReceiveAttack(float damage, bool isCritical)
         {
             if (damage <= 0)
                 return;
-
-            _reserveDamage = 0;
 
             _hp = Mathf.Max(0, _hp - damage);
 

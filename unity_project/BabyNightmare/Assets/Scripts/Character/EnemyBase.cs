@@ -54,8 +54,6 @@ namespace BabyNightmare.Character
                     return false;
                 if (_hp <= 0)
                     return false;
-                if (_hp - _reserveDamage <= 0)
-                    return false;
 
                 return true;
             }
@@ -68,6 +66,8 @@ namespace BabyNightmare.Character
             _originEmissionColor = _mainRenderer.material.GetColor(KEY_EMISSION_COLOR);
 
             _hp = _maxHealth = context.HP;
+
+            _isStartMove = false;
 
             _hpBar.transform.rotation = Quaternion.LookRotation(context.CameraForward);
             _hpBar.Refresh(_hp, _maxHealth, true);

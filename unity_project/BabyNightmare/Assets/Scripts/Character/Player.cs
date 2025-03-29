@@ -74,9 +74,6 @@ namespace BabyNightmare.Character
                     return false;
                 if (_hp <= 0)
                     return false;
-                if (_hp - _reserveDamage <= 0)
-                    return false;
-
                 return true;
             }
         }
@@ -235,9 +232,6 @@ namespace BabyNightmare.Character
 
                                 isCritical = true;
                             }
-
-                            if (equipmentData.DamageType == EDamageType.Direct)
-                                enemy.ReserveDamage(value);
 
                             switch (equipmentData.Type)
                             {
