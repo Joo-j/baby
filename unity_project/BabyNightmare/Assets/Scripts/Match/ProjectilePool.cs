@@ -26,6 +26,7 @@ namespace BabyNightmare.Match
 
         public void Return(Projectile pj)
         {
+            pj.transform.SetParent(_poolTF);
             _pool.Return(pj);
         }
 

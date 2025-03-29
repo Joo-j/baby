@@ -38,7 +38,10 @@ namespace BabyNightmare.Util
             _itemList.RemoveAt(_itemList.Count - 1);
 
             if (null == item || null == item.gameObject)
+            {
+                Debug.Log($"Pool Get item is null");
                 return Get();
+            }
 
             _activeList.Add(item);
             item.gameObject.SetActive(true);

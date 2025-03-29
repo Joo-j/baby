@@ -66,6 +66,8 @@ namespace BabyNightmare.Match
             if (false == _poolDict.TryGetValue(fx.Type, out var pool))
                 return;
 
+            fx.transform.SetParent(_poolTF);
+
             pool.Return(fx);
         }
 

@@ -182,7 +182,11 @@ namespace BabyNightmare.Match
             {
                 var coin = _coinPool.Get();
                 coin.transform.position = pos;
-                coin.Init(randDir, randForce, () => _coinPool.Return(coin));
+                coin.Init(randDir, randForce, () =>
+                {
+                    coin.transform.SetParent(transform);
+                    _coinPool.Return(coin);
+                });
                 yield return null;
             }
         }
