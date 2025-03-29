@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1105
   Type: 4
   Level: 2
-  CoolTime: 1.9
+  CoolTime: 1.2
   StatDataList:
   - Type: 1
     Value: 16
   Desc: "Scattered blocks that hurt to step on\u2014perfect trap."
   Prob: 5
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1

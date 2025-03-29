@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1107
   Type: 6
   Level: 2
-  CoolTime: 2.5
+  CoolTime: 1
   StatDataList:
   - Type: 1
     Value: 14
   Desc: A spinning ring stack that knocks enemies down.
   Prob: 5
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1

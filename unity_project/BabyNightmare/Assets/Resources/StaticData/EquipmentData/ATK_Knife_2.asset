@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1104
   Type: 3
   Level: 2
-  CoolTime: 2.8
+  CoolTime: 1.5
   StatDataList:
   - Type: 1
     Value: 16
   Desc: A plastic play-knife that cuts shadows.
   Prob: 5
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 2
