@@ -28,6 +28,7 @@ namespace BabyNightmare.InventorySystem
         private HashSet<Equipment> _equipmentSet = null;
         private Inventory _outsideInventory = null;
         private Action<EquipmentData, bool> _onEquip = null;
+        private bool _isUsing = false;
 
         public void Init
         (
@@ -326,10 +327,7 @@ namespace BabyNightmare.InventorySystem
         {
             var data = equipment.Data;
             if (false == TryGetRandomIndex(data, out var randomIndex))
-            {
-                Debug.Log($"빈자리가 없습니다.");
                 return;
-            }
 
             if (true == immediate)
             {
@@ -347,6 +345,9 @@ namespace BabyNightmare.InventorySystem
 
         public override void Equip(Equipment equipment, Vector2Int index)
         {
+            if (true == _isUsing)
+                equipment.StartCoolDown();
+
             equipment.transform.SetParent(transform);
             equipment.Index = index;
             equipment.RTF.anchoredPosition = GetLocalPos(index, equipment.Data);
@@ -373,6 +374,9 @@ namespace BabyNightmare.InventorySystem
             if (false == _equipmentSet.Contains(equipment))
                 return null;
 
+            if (true == _isUsing)
+                equipment.StopCoolDown();
+
             _equipmentSet.Remove(equipment);
             _onEquip?.Invoke(equipment.Data, false);
             return equipment;
@@ -392,6 +396,9 @@ namespace BabyNightmare.InventorySystem
         {
             if (false == _equipmentSet.Contains(equipment))
                 return;
+
+            if (true == _isUsing)
+                equipment.StopCoolDown();
 
             _equipmentSet.Remove(equipment);
             _onEquip?.Invoke(equipment.Data, false);
@@ -494,6 +501,8 @@ namespace BabyNightmare.InventorySystem
             return ovelapSet;
         }
 
+        public override bool IsAddable(EquipmentData data) => TryGetRandomIndex(data, out var index);
+
         private bool TryGetRandomIndex(EquipmentData data, out Vector2Int index)
         {
             index = Vector2Int.zero;
@@ -547,23 +556,14 @@ namespace BabyNightmare.InventorySystem
             return (index + offset) * new Vector2(CELL_LENGTH, CELL_LENGTH);
         }
 
-        public void StartUseEquipment(Action<EquipmentData> onCoolDown, float speed)
+        public void StartUseEquipment()
         {
-            _canvasGroup.interactable = false;
-
-            StartCoroutine(Co_StartUseEquipment());
-
-            IEnumerator Co_StartUseEquipment()
+            foreach (var equipment in _equipmentSet)
             {
-                foreach (var equipment in _equipmentSet)
-                {
-                    var data = equipment.Data;
-                    var coolTime = data.CoolTime;
-                    coolTime -= coolTime * speed;
-                    yield return CoroutineUtil.WaitForSeconds(0.1f);
-                    equipment.StartCoolDown(coolTime, () => onCoolDown?.Invoke(data));
-                }
+                equipment.StartCoolDown();
             }
+
+            _isUsing = true;
         }
 
         public void StopUseEquipment()
@@ -573,7 +573,7 @@ namespace BabyNightmare.InventorySystem
                 equipment.StopCoolDown();
             }
 
-            _canvasGroup.interactable = true;
+            _isUsing = false;
         }
     }
 }

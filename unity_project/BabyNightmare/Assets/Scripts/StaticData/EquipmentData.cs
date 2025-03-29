@@ -23,6 +23,7 @@ namespace BabyNightmare.StaticData
         public String Desc;
         public int Prob = 1;
         public EDamageType DamageType = EDamageType.Direct;
+        public ETargetType TargetType = ETargetType.Random;
         public float Radius = 1;
         public RectShape Shape;
         public Mesh Mesh;

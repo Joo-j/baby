@@ -154,4 +154,12 @@ namespace BabyNightmare.StaticData
         Small,
     }
 
+    public enum ETargetType
+    {
+        Random,
+        Nearest,
+        Farthest,
+        LowestHP,
+        HightstHP,
+    }
 }

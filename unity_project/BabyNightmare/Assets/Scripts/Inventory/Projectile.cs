@@ -30,21 +30,18 @@ namespace BabyNightmare.Match
 
             if (level >= 2)
             {
+                if (null != _levelFX)
+                {
+                    FXPool.Instance.Return(_levelFX);
+                    _levelFX = null;
+                }
+
                 var levelFXType = level == 2 ? EFXType.Projectile_Level_2 : EFXType.Projectile_Level_3;
 
                 _levelFX = FXPool.Instance.Get(levelFXType);
                 _levelFX.transform.SetParent(transform);
                 _levelFX.transform.localPosition = Vector3.zero;
                 _levelFX.ChangeShapeMesh(data.Mesh);
-            }
-        }
-
-        void OnDisable()
-        {
-            if (null != _levelFX)
-            {
-                FXPool.Instance.Return(_levelFX);
-                _levelFX = null;
             }
         }
     }

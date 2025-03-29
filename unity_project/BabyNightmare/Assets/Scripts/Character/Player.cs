@@ -66,6 +66,19 @@ namespace BabyNightmare.Character
         private Queue<EquipmentUseInfo> _useInfoQueue = null;
         private float _def = 0f;
 
+        public override bool IsAttackable
+        {
+            get
+            {
+                if (_hp <= 0)
+                    return false;
+                if (_hp - _reserveDamage <= 0)
+                    return false;
+
+                return true;
+            }
+        }
+
         public void Init(PlayerContext context)
         {
             _context = context;
@@ -110,11 +123,15 @@ namespace BabyNightmare.Character
         {
             if (true == _isDead)
                 return;
-            
-            _context.OnDiePlayer?.Invoke();
+
             _isDead = true;
+
+            gameObject.SetActive(false);
+
             AudioManager.PlaySFX("AudioClip/Player_Die");
             HapticHelper.Haptic(Lofelt.NiceVibrations.HapticPatterns.PresetType.HeavyImpact);
+
+            _context.OnDiePlayer?.Invoke();
         }
 
         private void AddDef(float value)
@@ -129,7 +146,7 @@ namespace BabyNightmare.Character
 
         public override void ReceiveAttack(float damage, bool isCritical)
         {
-            if (null == gameObject)
+            if (false == IsAttackable)
                 return;
 
             var blocked = Mathf.Min(_def, damage);

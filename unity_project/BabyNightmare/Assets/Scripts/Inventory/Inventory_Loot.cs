@@ -122,6 +122,7 @@ namespace BabyNightmare.InventorySystem
             return null;
         }
 
+        public override bool IsAddable(EquipmentData data) => true;
 
         private void Refresh()
         {

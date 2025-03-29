@@ -107,6 +107,7 @@ MonoBehaviour:
   _hpBar: {fileID: 7575229609088098271}
   _hitPoint: {fileID: 1273834155102348162}
   _ownColor: {r: 0.627451, g: 0.9254902, b: 0.15294118, a: 1}
+  _sizeType: 1
   _moveCurve:
     serializedVersion: 2
     m_Curve:
@@ -240,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.5
+      value: 2.03
       objectReference: {fileID: 0}
     - target: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -509,15 +510,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.7
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.7
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.7
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 2536520959497798329, guid: c84bf325a02af4f54982afbe5ee5075c, type: 3}
       propertyPath: m_LocalPosition.x

@@ -51,6 +51,9 @@ namespace BabyNightmare.Match
         [SerializeField] private Transform _midSpawnTF;
         [SerializeField] private Transform _farSpawnTF;
         [SerializeField] private Transform _boxSpawnTF;
+        [SerializeField] private Vector3 _lowCameraPos;
+        [SerializeField] private Vector3 _midCameraPos;
+        [SerializeField] private Vector3 _hightCameraPos;
         [SerializeField] private float _groundMoveAmount = 5f;
         [SerializeField] private float _playerAttackRadius = 10f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
@@ -161,7 +164,6 @@ namespace BabyNightmare.Match
             _waveCoin += coin;
 
             _aliveEnemies.Remove(enemy);
-            Destroy(enemy.GO);
 
             var progressFactor = 1 - ((float)_aliveEnemies.Count / _enemySpawnCount);
             _context.RefreshProgress?.Invoke(progressFactor, false);
@@ -182,23 +184,19 @@ namespace BabyNightmare.Match
             {
                 var coin = _coinPool.Get();
                 coin.transform.position = pos;
-                coin.Init(randDir, randForce, () =>
-                {
-                    coin.transform.SetParent(transform);
-                    _coinPool.Return(coin);
-                });
+                coin.Init(randDir, randForce, () => _coinPool.Return(coin));
                 yield return null;
             }
         }
 
-        public void AttackEnemy(EquipmentData equipmentData)
+        public void UseEquipment(EquipmentData equipmentData)
         {
             var attackableEnemies = new List<EnemyBase>();
 
             for (var i = 0; i < _aliveEnemies.Count; i++)
             {
                 var enemy = _aliveEnemies[i];
-                if (enemy.HP <= 0)
+                if (false == enemy.IsAttackable)
                     continue;
 
                 var dist = Vector3.Distance(_player.TF.position, enemy.TF.position);
@@ -211,10 +209,32 @@ namespace BabyNightmare.Match
             if (attackableEnemies.Count == 0)
                 return;
 
-            var rand = Random.Range(0, attackableEnemies.Count);
-            var randomEnemy = attackableEnemies[rand];
+            EnemyBase target = null;
 
-            _player.UseEquipment(equipmentData, randomEnemy);
+            var targetType = equipmentData.TargetType;
+            switch (targetType)
+            {
+                case ETargetType.Nearest:
+                    target = attackableEnemies[0];
+                    break;
+                case ETargetType.Random:
+                    var rand = Random.Range(0, attackableEnemies.Count);
+                    target = attackableEnemies[rand];
+                    break;
+                case ETargetType.Farthest:
+                    target = attackableEnemies[attackableEnemies.Count - 1];
+                    break;
+                case ETargetType.LowestHP:
+                    attackableEnemies.Sort();
+                    target = attackableEnemies[0];
+                    break;
+                case ETargetType.HightstHP:
+                    attackableEnemies.Sort();
+                    target = attackableEnemies[attackableEnemies.Count - 1];
+                    break;
+            }
+
+            _player.UseEquipment(equipmentData, target);
         }
 
         private List<EnemyBase> GetEnemiesInArea(Vector3 areaPos, float radius)
@@ -302,13 +322,13 @@ namespace BabyNightmare.Match
             switch (type)
             {
                 case ECameraPosType.Low:
-                    targetPos = new Vector3(0, 7f, -10);
+                    targetPos = _lowCameraPos;
                     break;
                 case ECameraPosType.Mid:
-                    targetPos = new Vector3(0, 9, -10);
+                    targetPos = _midCameraPos;
                     break;
                 case ECameraPosType.High:
-                    targetPos = new Vector3(0, 11f, -10);
+                    targetPos = _hightCameraPos;
                     break;
             }
 

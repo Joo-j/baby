@@ -17,37 +17,34 @@ namespace BabyNightmare.Match
 {
     public class MatchViewContext
     {
-        public bool Enable_AD { get; }
         public RenderTexture RT { get; }
         public EquipmentData InitEquipment { get; }
         public Func<List<EquipmentData>> GetRerollData { get; }
         public Action OnClickReroll { get; }
         public Action OnClickBagSizeUp { get; }
         public Action StartWave { get; }
-        public Action<EquipmentData> OnCoolDown { get; }
+        public Action<EquipmentData> UseEquipment { get; }
         public Action<ECameraPosType> MoveCameraPos { get; }
         public Func<EquipmentData, EquipmentData, EquipmentData> GetUpgradeData { get; }
 
         public MatchViewContext(
-        bool enable_AD,
         RenderTexture rt,
         EquipmentData initEquipment,
         Func<List<EquipmentData>> getRerollData,
         Action onClickReroll,
         Action onClickBagSizeUp,
         Action startWave,
-        Action<EquipmentData> onCooldown,
+        Action<EquipmentData> useEquipment,
         Action<ECameraPosType> moveCameraPos,
         Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData)
         {
-            this.Enable_AD = enable_AD;
             this.RT = rt;
             this.InitEquipment = initEquipment;
             this.GetRerollData = getRerollData;
             this.OnClickReroll = onClickReroll;
             this.OnClickBagSizeUp = onClickBagSizeUp;
             this.StartWave = startWave;
-            this.OnCoolDown = onCooldown;
+            this.UseEquipment = useEquipment;
             this.MoveCameraPos = moveCameraPos;
             this.GetUpgradeData = getUpgradeData;
         }
@@ -60,12 +57,13 @@ namespace BabyNightmare.Match
         [SerializeField] private RectTransform _topRTF;
         [SerializeField] private RectTransform _botRTF;
         [SerializeField] private RawImage _fieldIMG;
+        [SerializeField] private GameObject _waveGO;
         [SerializeField] private TextMeshProUGUI _waveTMP;
         [SerializeField] private Image _waveProgressIMG;
         [SerializeField] private Image _waveBoxBGIMG;
         [SerializeField] private GameObject _twincle;
-        [SerializeField] private Transform _bagTF;
-        [SerializeField] private Transform _lootTF;
+        [SerializeField] private Inventory_Bag _bag = null;
+        [SerializeField] private Inventory_Loot _loot = null;
         [SerializeField] private Vector2 _topYPosRange = new Vector2(285, 0);
         [SerializeField] private Vector2 _botYPosRange = new Vector2(495, 780);
         [SerializeField] private float _rectChangeDruation = 0.4f;
@@ -86,16 +84,11 @@ namespace BabyNightmare.Match
         [SerializeField] private Sprite _blueBoxBG;
         [SerializeField] private Sprite _goldBoxBG;
 
-        private const string PATH_INVENTORY_BAG = "Inventory/Inventory_Bag";
-        private const string PATH_INVENTORY_BAG_AD = "Inventory/Inventory_Bag_AD";
-        private const string PATH_INVENTORY_LOOT = "Inventory/Inventory_Loot";
         private const string PATH_STAT_ITEM_VIEW = "Match/Stat/StatItemView";
         private const string PATH_EQUIPMENT_BOX_ICON = "Match/EquipmentBox/ICN_EquipmentBox_";
         private const int EQUIPMENT_PRICE = 10;
 
         private MatchViewContext _context = null;
-        private Inventory_Bag _bag = null;
-        private Inventory_Loot _loot = null;
         private Coroutine _coChangeRect = null;
         private Coroutine _coRefreshProgress = null;
         private Dictionary<EStatType, StatItemView> _statItemViewDict = null;
@@ -125,44 +118,11 @@ namespace BabyNightmare.Match
 
             _fieldIMG.texture = _context.RT;
 
-            _loot = ObjectUtil.LoadAndInstantiate<Inventory_Loot>(PATH_INVENTORY_LOOT, _lootTF);
-            if (null == _loot)
-            {
-                Debug.LogError($"{PATH_INVENTORY_LOOT} no prefab");
-                return;
-            }
-
-            _loot.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
-
-            if (true == context.Enable_AD)
-                _bag = ObjectUtil.LoadAndInstantiate<Inventory_Bag>(PATH_INVENTORY_BAG_AD, _bagTF);
-            else
-                _bag = ObjectUtil.LoadAndInstantiate<Inventory_Bag>(PATH_INVENTORY_BAG, _bagTF);
-
-            if (null == _bag)
-            {
-                Debug.LogError($"{PATH_INVENTORY_BAG_AD} no prefab");
-                return;
-            }
-
-            _bag.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange);
+            _loot.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange, _context.UseEquipment);
+            _bag.InitBase(_rtf, context.GetUpgradeData, ShowEquipmentMergeMessage, RefreshStatChange, _context.UseEquipment);
 
             _bag.Init(_loot, AddStat);
-
-            if (true == context.Enable_AD)
-            {
-                _buttonGO.SetActive(false);
-
-                var dataList = _context.GetRerollData?.Invoke();
-                for (var i = 0; i < dataList.Count; i++)
-                {
-                    _bag.TryAdd(dataList[i]);
-                }
-            }
-            else
-            {
-                _bag.TryAdd(_context.InitEquipment);
-            }
+            _bag.TryAdd(_context.InitEquipment);
 
             _rerollCVG.gameObject.SetActive(false);
             _fightGO.SetActive(false);
@@ -179,11 +139,19 @@ namespace BabyNightmare.Match
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
+
+            if (DevManager.Instance.EnableADSetting)
+            {
+                _buttonGO.SetActive(!_buttonGO.activeSelf);
+
+                _waveGO.SetActive(false);
+                HUDManager.Instance.SetState(EHUDState.Hide, "");
+            }
         }
 
         public void Release()
         {
-            StopAllCoroutines();
+            _bag.StopUseEquipment();            
         }
 
         public void RefreshWave(int curWave, int maxWave, EBoxType boxType)
@@ -427,9 +395,10 @@ namespace BabyNightmare.Match
 
                 _loot.RemoveAll();
 
-                var speed = TalentManager.Instance.GetValue(ETalentType.Attack_Speed_Percentage);
-                _bag.StartUseEquipment(_context.OnCoolDown, speed);
-                _canvasGroup.blocksRaycasts = false;
+                _bag.StartUseEquipment();
+
+                if (false == DevManager.Instance.EnableADSetting)
+                    _canvasGroup.blocksRaycasts = false;
 
                 ChangeRectPos(true, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.Mid));
 
@@ -579,13 +548,42 @@ namespace BabyNightmare.Match
 #if UNITY_EDITOR
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                OnClickReroll();
-            }
-            else if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 OnClickFight();
+            }
+            else if (Input.GetKeyDown(KeyCode.A))
+            {
+                var dataList = _context.GetRerollData?.Invoke();
+                for (var i = 0; i < dataList.Count; i++)
+                {
+                    _bag.TryAdd(dataList[i]);
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.R))
+            {
+                _loot.RemoveAll();
+
+                var dataList = _context.GetRerollData?.Invoke();
+                for (var i = 0; i < dataList.Count; i++)
+                {
+                    _loot.TryAdd(dataList[i]);
+                }
+            }
+            else if (Input.GetKeyDown(KeyCode.M))
+            {
+                _loot.RemoveAll();
+
+                var dataList = _context.GetRerollData?.Invoke();
+                dataList.RemoveAt(0);
+
+                var missleData = StaticDataManager.Instance.GetEquipmentData(10000);
+                dataList.Add(missleData);
+
+                for (var i = 0; i < dataList.Count; i++)
+                {
+                    _loot.TryAdd(dataList[i]);
+                }
             }
         }
 #endif

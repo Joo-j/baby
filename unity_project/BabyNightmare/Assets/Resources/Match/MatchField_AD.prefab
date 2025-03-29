@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 1007121268096010164}
   - component: {fileID: 2715085025300745633}
   m_Layer: 9
-  m_Name: MatchField
+  m_Name: MatchField_AD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -119,10 +119,10 @@ MonoBehaviour:
   _farSpawnTF: {fileID: 65903232235624344}
   _boxSpawnTF: {fileID: 8339263573230450734}
   _lowCameraPos: {x: 0, y: 7, z: -10}
-  _midCameraPos: {x: 0, y: 9, z: -10}
+  _midCameraPos: {x: 0, y: 10, z: -10}
   _hightCameraPos: {x: 0, y: 11, z: -10}
   _groundMoveAmount: 5
-  _playerAttackRadius: 10
+  _playerAttackRadius: 11
   _cameraMoveDuration: 0.5
   _cameraShakeAmount: 0.04
   _cameraShakeDuraton: 0.01

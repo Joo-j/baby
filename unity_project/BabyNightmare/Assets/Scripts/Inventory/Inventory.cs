@@ -19,6 +19,7 @@ namespace BabyNightmare.InventorySystem
         protected Func<EquipmentData, EquipmentData, EquipmentData> _getUpgradeData = null;
         protected Action<Transform, String> _showMergeMessage = null;
         protected Action<Equipment, HashSet<Equipment>> _refreshChangeStat = null;
+        private Action<EquipmentData> _useEquipment = null;
 
         private static Inventory _dragStartInventory = null;
         private static Inventory _currentInventory = null;
@@ -31,6 +32,7 @@ namespace BabyNightmare.InventorySystem
         public abstract Equipment Unequip(Vector2 screenPos);
         public abstract Equipment Get(Vector2 screenPos);
         public abstract HashSet<Equipment> TryGetOverlap(Equipment equipment, Vector2 screenPos);
+        public abstract bool IsAddable(EquipmentData data);
 
         protected virtual void OnEnable()
         {
@@ -42,18 +44,27 @@ namespace BabyNightmare.InventorySystem
             RectTransform canvasRTF,
             Func<EquipmentData, EquipmentData, EquipmentData> getUpgradeData,
             Action<Transform, String> showMergeMessage,
-            Action<Equipment, HashSet<Equipment>> refreshChangeStat
+            Action<Equipment, HashSet<Equipment>> refreshChangeStat,
+            Action<EquipmentData> useEquipment
         )
         {
             _canvasRTF = canvasRTF;
             _getUpgradeData = getUpgradeData;
             _showMergeMessage = showMergeMessage;
             _refreshChangeStat = refreshChangeStat;
+            _useEquipment = useEquipment;
         }
 
         public void TryAdd(EquipmentData data)
         {
+            if (false == IsAddable(data))
+            {
+                Debug.Log($"{data.Type}을 더할 여유가 없습니다.");
+                return;
+            }
+
             var equipment = ObjectUtil.LoadAndInstantiate<Equipment>(PATH_EQUIPMENT, transform);
+            equipment.Init(_useEquipment);
             equipment.Refresh(data, false);
             Equip(equipment, true);
         }

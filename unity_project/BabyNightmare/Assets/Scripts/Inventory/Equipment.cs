@@ -2,9 +2,11 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Supercent.Util;
 using BabyNightmare.StaticData;
 using BabyNightmare.Util;
 using BabyNightmare.Match;
+using BabyNightmare.Talent;
 using TMPro;
 
 namespace BabyNightmare.InventorySystem
@@ -25,6 +27,7 @@ namespace BabyNightmare.InventorySystem
         private readonly Vector2 MERGE_FX_SCALE = Vector3.one * 80f;
         private readonly Vector2 LEVEL_FX_SCALE_1X1 = Vector3.one * 55f;
         private readonly Vector2 LEVEL_FX_SCALE_2X2 = Vector3.one * 70f;
+        private Action<EquipmentData> _useEquipment = null;
         private Coroutine _coCoolDown = null;
         private Coroutine _coSwing = null;
         private FX _levelFX = null;
@@ -33,6 +36,11 @@ namespace BabyNightmare.InventorySystem
         public EquipmentData Data { get; private set; }
         public Vector2Int Index { get; set; }
         public RectTransform RTF => _rtf;
+
+        public void Init(Action<EquipmentData> useEquipment)
+        {
+            _useEquipment = useEquipment;
+        }
 
         private void OnDestroy()
         {
@@ -113,11 +121,21 @@ namespace BabyNightmare.InventorySystem
             _coSwing = null;
         }
 
-        public void StartCoolDown(float coolTime, Action onCoolDown)
+        public void StartCoolDown()
         {
-            _coCoolDown = StartCoroutine(Co_CoolDown(coolTime, onCoolDown));
-            IEnumerator Co_CoolDown(float coolTime, Action onCoolDown)
+            if (null != _coCoolDown)
+                return;
+
+            var coolTime = Data.CoolTime;
+            var speed = TalentManager.Instance.GetValue(ETalentType.Attack_Speed_Percentage);
+            coolTime -= coolTime * speed;
+
+            _coCoolDown = StartCoroutine(Co_CoolDown());
+            IEnumerator Co_CoolDown()
             {
+                var rand = UnityEngine.Random.Range(0f, 0.2f);
+                yield return CoroutineUtil.WaitForSeconds(rand);
+
                 while (true)
                 {
                     var elapsed = 0f;
@@ -129,7 +147,7 @@ namespace BabyNightmare.InventorySystem
                     }
 
                     StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.2f, _swingCurve, 0.15f));
-                    onCoolDown?.Invoke();
+                    _useEquipment?.Invoke(Data);
                 }
             }
         }

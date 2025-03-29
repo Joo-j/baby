@@ -15,7 +15,9 @@ namespace BabyNightmare.Match
     public class MatchManager : SingletonBase<MatchManager>
     {
         private const string PATH_MATCH_FIELD = "Match/MatchField";
+        private const string PATH_MATCH_FIELD_AD = "Match/MatchField_AD";
         private const string PATH_MATCH_VIEW = "Match/UI/MatchView";
+        private const string PATH_MATCH_VIEW_AD = "Match/UI/MatchView_AD";
         private const string PATH_MATCH_FAIL_VIEW = "Match/UI/MatchFailView";
         private const string PATH_MATCH_COMPLETE_VIEW = "Match/UI/MatchCompleteView";
 
@@ -72,7 +74,11 @@ namespace BabyNightmare.Match
             _bagSizeUpCount = 0;
             _bagSizeUpPrice = BASE_BAG_SIZE_UP_PRICE;
 
-            _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
+            if (true == DevManager.Instance.EnableADSetting)
+                _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD_AD, null);
+            else
+                _matchField = ObjectUtil.LoadAndInstantiate<MatchField>(PATH_MATCH_FIELD, null);
+
             var matchFieldContext = new MatchFieldContext(
                                         chapterData,
                                         GetCoinInField,
@@ -81,18 +87,20 @@ namespace BabyNightmare.Match
                                         OnFailMatch);
             _matchField.Init(matchFieldContext);
 
-            _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
+            if (true == DevManager.Instance.EnableADSetting)
+                _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW_AD, null);
+            else
+                _matchView = ObjectUtil.LoadAndInstantiate<MatchView>(PATH_MATCH_VIEW, null);
 
             var initEM = StaticDataManager.Instance.GetEquipmentData(INITIAL_EQUIPMENT_ID);
             var matchViewContext = new MatchViewContext(
-                                        DevManager.Instance.EnableADSetting,
                                         _matchField.RT,
                                         initEM,
                                         GetRerollData,
                                         OnClickReroll,
                                         OnClickBagSizeUp,
                                         OnStartWave,
-                                        _matchField.AttackEnemy,
+                                        _matchField.UseEquipment,
                                         _matchField.MoveCamera,
                                         GetUpgradeData);
             _matchView.Init(matchViewContext);
@@ -133,6 +141,11 @@ namespace BabyNightmare.Match
 
         private void OnFailMatch()
         {
+            _matchView.Release();
+
+            if (DevManager.Instance.EnableADSetting)
+                return;
+
             CloseMatch();
 
             var gem = PlayerData.Instance.Chapter * BASE_REWARD_GEM;

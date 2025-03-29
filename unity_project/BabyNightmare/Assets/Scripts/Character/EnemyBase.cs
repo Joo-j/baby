@@ -39,11 +39,27 @@ namespace BabyNightmare.Character
         }
     }
 
-    public class EnemyBase : CharacterBase
+    public class EnemyBase : CharacterBase, IComparable<EnemyBase>
     {
         [SerializeField] private AnimationCurve _moveCurve;
 
         private EnemyContext _context = null;
+        private bool _isStartMove = false;
+
+        public override bool IsAttackable
+        {
+            get
+            {
+                if (false == _isStartMove)
+                    return false;
+                if (_hp <= 0)
+                    return false;
+                if (_hp - _reserveDamage <= 0)
+                    return false;
+
+                return true;
+            }
+        }
 
         public void Init(EnemyContext context)
         {
@@ -68,6 +84,8 @@ namespace BabyNightmare.Character
 
                 _hpBar.gameObject.SetActive(true);
                 StartMove();
+
+                _isStartMove = true;
             }));
         }
 
@@ -91,7 +109,7 @@ namespace BabyNightmare.Character
             var stopStepDuration = _context.EnemyData.Stop_Step_Duration;
             var attackRadius = _context.EnemyData.Attack_Radius;
 
-            while (true)
+            while (true == player.IsAttackable)
             {
                 var elapsed = 0f;
                 var startPos_interval = transform.position;
@@ -132,14 +150,12 @@ namespace BabyNightmare.Character
 
             var interval = _context.EnemyData.Attack_Interval;
             var player = _context.Player;
-            if (player.HP <= 0)
-                return;
 
             _coAct = StartCoroutine(Co_Attack());
 
             IEnumerator Co_Attack()
             {
-                while (true)
+                while (true == player.IsAttackable)
                 {
                     _animationTrigger.Clear();
                     _animationTrigger.AddAction(1, () => player.ReceiveAttack(_context.EnemyData.Damage, false));
@@ -148,12 +164,14 @@ namespace BabyNightmare.Character
 
                     yield return new WaitForSeconds(interval);
                 }
+
+                _animator.Play(HASH_ANI_IDLE);
             }
         }
 
         public override void ReceiveAttack(float damage, bool isCritical)
         {
-            if (null == gameObject)
+            if (false == IsAttackable)
                 return;
 
             var textSize = Vector3.one;
@@ -167,7 +185,8 @@ namespace BabyNightmare.Character
                     break;
             }
 
-            PopupTextPool.Instance.ShowTemporary(EPopupTextType.Damage,
+            PopupTextPool.Instance.ShowTemporary(
+                                                EPopupTextType.Damage,
                                                 transform.position,
                                                 Quaternion.Euler(_context.CameraForward),
                                                 textSize, $"{Mathf.RoundToInt(damage)}"
@@ -185,10 +204,16 @@ namespace BabyNightmare.Character
             var coin = Random.Range(_context.EnemyData.Coin_Min, _context.EnemyData.Coin_Max); ;
             _context.OnDie?.Invoke(this, coin);
             _isDead = true;
+            Destroy(gameObject);
 
             var pos = transform.position;
             pos.y = 0.001f;
             FXPool.Instance.ShowTemporary(EFXType.Die, pos, _ownColor);
+        }
+
+        public int CompareTo(EnemyBase other)
+        {
+            return _hp.CompareTo(other.HP);
         }
     }
 }

@@ -46,8 +46,8 @@ namespace BabyNightmare
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.Currency, "Set Gem", "set gem amount", SetGem);
 
             CheatManager<ECheatGroup>.Instance.RegisterCheckBox(ECheatGroup.ADSetting, "Enable AD Setting", "enable AD Setting", (on) => EnableADSetting = on);
-
         }
+        
         private string GetTimeText(float seconds)
         {
             int hour = (int)seconds / 3600;
