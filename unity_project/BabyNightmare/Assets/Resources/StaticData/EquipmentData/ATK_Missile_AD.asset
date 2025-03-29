@@ -23,7 +23,7 @@ MonoBehaviour:
   Prob: 1
   DamageType: 1
   TargetType: 1
-  Radius: 50
+  Radius: 1000
   Shape:
     _column: 2
     _row: 1
