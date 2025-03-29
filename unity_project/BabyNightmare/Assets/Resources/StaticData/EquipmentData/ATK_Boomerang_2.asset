@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1102
   Type: 1
   Level: 2
-  CoolTime: 4.5
+  CoolTime: 2
   StatDataList:
   - Type: 1
     Value: 28
   Desc: Loops through enemies and returns with a giggle.
   Prob: 2
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 2

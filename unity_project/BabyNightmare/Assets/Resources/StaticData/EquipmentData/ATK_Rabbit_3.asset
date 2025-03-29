@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1206
   Type: 5
   Level: 3
-  CoolTime: 3.65
+  CoolTime: 2
   StatDataList:
   - Type: 1
     Value: 32
   Desc: A plush toy that hops and slaps enemies.
   Prob: 3
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1

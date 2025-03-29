@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1101
   Type: 0
   Level: 2
-  CoolTime: 2.2
+  CoolTime: 1
   StatDataList:
   - Type: 1
     Value: 20
   Desc: ' A soft baseball thrown hard enough to hurt in dreams.'
   Prob: 5
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1

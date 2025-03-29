@@ -15,15 +15,17 @@ MonoBehaviour:
   ID: 1113
   Type: 12
   Level: 2
-  Prob: 4
+  CoolTime: 3
   StatDataList:
   - Type: 0
     Value: 6
-  CoolTime: 4
+  Desc: Restores warmth and blasts with milk light.
+  Prob: 4
   DamageType: 0
+  TargetType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: Restores warmth and blasts with milk light.
   Mesh: {fileID: -6547738688100139571, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

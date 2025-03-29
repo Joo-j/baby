@@ -199,7 +199,7 @@ namespace BabyNightmare.Match
             var targetType = equipmentData.TargetType;
             if (DevManager.Instance.EnableADSetting)
                 targetType = ETargetType.Nearest;
-                
+
             switch (targetType)
             {
                 case ETargetType.Random:
@@ -207,7 +207,8 @@ namespace BabyNightmare.Match
                     target = enemies[rand];
                     break;
                 case ETargetType.Nearest:
-                    target = enemies[enemies.Count - 1];
+                    var count = enemies.Count;
+                    target = enemies[Random.Range(count / 2, count)];
                     break;
                 case ETargetType.Farthest:
                     target = enemies[0];

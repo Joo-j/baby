@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 1209
   Type: 8
   Level: 3
-  CoolTime: 4.5
+  CoolTime: 2
   StatDataList:
   - Type: 1
     Value: 38
@@ -24,6 +24,7 @@ MonoBehaviour:
   Desc: Sprays imaginary water that melts nightmares.
   Prob: 2
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 2
