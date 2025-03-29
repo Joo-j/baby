@@ -17,6 +17,7 @@ namespace BabyNightmare.Match
         public void Init(Vector3 dir, float amount, Action returnPool)
         {
             transform.localScale = Vector3.one;
+            _rigidbody.useGravity = true;
             _rigidbody.AddForce(dir * amount);
             _rigidbody.AddTorque(dir * amount);
 
@@ -26,8 +27,9 @@ namespace BabyNightmare.Match
         private IEnumerator Co_Hide(Action doneCallback)
         {
             yield return CoroutineUtil.WaitForSeconds(_appearDuration);
-            
+
             yield return SimpleLerp.Co_LerpScale(transform, Vector3.one, Vector3.zero, _scaleCurve, _hideDuration);
+            _rigidbody.useGravity = false;
 
             doneCallback?.Invoke();
         }

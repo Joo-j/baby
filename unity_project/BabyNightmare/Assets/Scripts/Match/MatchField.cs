@@ -175,20 +175,6 @@ namespace BabyNightmare.Match
             }
         }
 
-
-        private IEnumerator Co_SpawnCoin(Vector3 pos, int count)
-        {
-            var randDir = new Vector3(Random.Range(0f, 0.5f), 1f, Random.Range(0f, 0.5f));
-            var randForce = Random.Range(30f, 60f);
-            for (var i = 0; i < count; i++)
-            {
-                var coin = _coinPool.Get();
-                coin.transform.position = pos;
-                coin.Init(randDir, randForce, () => _coinPool.Return(coin));
-                yield return null;
-            }
-        }
-
         public void UseEquipment(EquipmentData equipmentData)
         {
             var attackableEnemies = new List<EnemyBase>();
@@ -288,6 +274,19 @@ namespace BabyNightmare.Match
                 _player.ReadyOpenBox();
 
                 box.Open(doneCallback);
+            }
+        }
+
+        private IEnumerator Co_SpawnCoin(Vector3 pos, int count)
+        {
+            var randDir = new Vector3(Random.Range(0f, 0.5f), 1f, Random.Range(0f, 0.5f));
+            var randForce = Random.Range(30f, 60f);
+            for (var i = 0; i < count; i++)
+            {
+                var coin = _coinPool.Get();
+                coin.transform.position = pos;
+                coin.Init(randDir, randForce, () => _coinPool.Return(coin));
+                yield return null;
             }
         }
 
