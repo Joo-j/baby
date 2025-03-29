@@ -146,12 +146,17 @@ namespace BabyNightmare.Match
 
                 _waveGO.SetActive(false);
                 HUDManager.Instance.SetState(EHUDState.Hide, "");
+
+                foreach (var pair in _statItemViewDict)
+                {
+                    pair.Value.gameObject.SetActive(false);
+                }
             }
         }
 
         public void Release()
         {
-            _bag.StopUseEquipment();            
+            _bag.StopUseEquipment();
         }
 
         public void RefreshWave(int curWave, int maxWave, EBoxType boxType)

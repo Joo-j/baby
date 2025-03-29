@@ -64,6 +64,9 @@ namespace BabyNightmare.Match
             if (value == 0)
                 return;
 
+            if (false == gameObject.activeInHierarchy)
+                return;
+
             if (null != _coBounce)
                 StopCoroutine(_coBounce);
 

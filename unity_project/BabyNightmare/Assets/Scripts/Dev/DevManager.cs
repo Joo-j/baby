@@ -18,7 +18,7 @@ namespace BabyNightmare
 
     public class DevManager : SingletonBase<DevManager>
     {
-        public bool EnableADSetting { get; private set; }
+        public bool EnableADSetting { get; private set; } = true;
 
         public void Init()
         {
@@ -47,7 +47,7 @@ namespace BabyNightmare
 
             CheatManager<ECheatGroup>.Instance.RegisterCheckBox(ECheatGroup.ADSetting, "Enable AD Setting", "enable AD Setting", (on) => EnableADSetting = on);
         }
-        
+
         private string GetTimeText(float seconds)
         {
             int hour = (int)seconds / 3600;

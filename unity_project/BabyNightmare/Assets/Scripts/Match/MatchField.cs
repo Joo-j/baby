@@ -197,6 +197,9 @@ namespace BabyNightmare.Match
             EnemyBase target = null;
 
             var targetType = equipmentData.TargetType;
+            if (DevManager.Instance.EnableADSetting)
+                targetType = ETargetType.Nearest;
+                
             switch (targetType)
             {
                 case ETargetType.Random:
