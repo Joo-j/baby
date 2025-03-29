@@ -15,14 +15,15 @@ MonoBehaviour:
   ID: 10000
   Type: 15
   Level: 1
-  CoolTime: 8
+  CoolTime: 5
   StatDataList:
   - Type: 1
     Value: 70
   Desc: Pacifier missile that sparkles on hit.
   Prob: 1
   DamageType: 1
-  Radius: 7
+  TargetType: 1
+  Radius: 50
   Shape:
     _column: 2
     _row: 1
