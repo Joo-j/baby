@@ -139,14 +139,6 @@ namespace BabyNightmare.Match
 
             _progressSize = _waveProgressIMG.rectTransform.rect.size;
             _waveProgressIMG.rectTransform.sizeDelta = new Vector2(0, _progressSize.y);
-
-            if (DevManager.Instance.EnableADSetting)
-            {
-                _buttonGO.SetActive(!_buttonGO.activeSelf);
-
-                _waveGO.SetActive(false);
-                HUDManager.Instance.SetState(EHUDState.Hide, "");
-            }
         }
 
         public void Release()
@@ -396,10 +388,7 @@ namespace BabyNightmare.Match
                 _loot.RemoveAll();
 
                 _bag.StartUseEquipment();
-
-                if (false == DevManager.Instance.EnableADSetting)
-                    _canvasGroup.blocksRaycasts = false;
-
+                
                 ChangeRectPos(true, false, () => _context.MoveCameraPos?.Invoke(ECameraPosType.Mid));
 
                 yield return CoroutineUtil.WaitForSeconds(1f);

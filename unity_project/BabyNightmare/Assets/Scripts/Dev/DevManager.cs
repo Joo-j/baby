@@ -18,8 +18,6 @@ namespace BabyNightmare
 
     public class DevManager : SingletonBase<DevManager>
     {
-        public bool EnableADSetting { get; private set; }
-
         public void Init()
         {
             //CheatManager<ECheatGroup>.Instance.RegisterLabel(ECheatGroup.GameSetting, "IsDev", "is dev version", () => $"{BuildSetting.IS_DEV}");
@@ -44,8 +42,6 @@ namespace BabyNightmare
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.Currency, "Set Coin", "set coin amount", SetCoin);
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.Currency, "Add Gem", "add gem amount", AddGem);
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.Currency, "Set Gem", "set gem amount", SetGem);
-
-            CheatManager<ECheatGroup>.Instance.RegisterCheckBox(ECheatGroup.ADSetting, "Enable AD Setting", "enable AD Setting", (on) => EnableADSetting = on);
         }
         
         private string GetTimeText(float seconds)

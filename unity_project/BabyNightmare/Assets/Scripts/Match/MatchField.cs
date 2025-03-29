@@ -60,7 +60,6 @@ namespace BabyNightmare.Match
         [SerializeField] private float _cameraShakeDuraton = 0.2f;
 
         private const string PATH_PLAYER = "Match/Character/Player";
-        private const string PATH_PLAYER_AD = "Match/Character/Player_AD";
         private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
         private const string PATH_COIN = "Match/Coin";
@@ -98,10 +97,7 @@ namespace BabyNightmare.Match
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
 
-            if (DevManager.Instance.EnableADSetting)
-                _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER_AD, _playerTF);
-            else
-                _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
+            _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
             var playerContext = new PlayerContext(
                                     PlayerData.Instance.HP,
