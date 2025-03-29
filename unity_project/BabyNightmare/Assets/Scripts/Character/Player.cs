@@ -70,6 +70,8 @@ namespace BabyNightmare.Character
         {
             get
             {
+                if (_isDead)
+                    return false;
                 if (_hp <= 0)
                     return false;
                 if (_hp - _reserveDamage <= 0)

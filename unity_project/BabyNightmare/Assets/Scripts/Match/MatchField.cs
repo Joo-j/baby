@@ -55,12 +55,12 @@ namespace BabyNightmare.Match
         [SerializeField] private Vector3 _midCameraPos;
         [SerializeField] private Vector3 _hightCameraPos;
         [SerializeField] private float _groundMoveAmount = 5f;
-        [SerializeField] private float _playerAttackRadius = 10f;
         [SerializeField] private float _cameraMoveDuration = 0.01f;
         [SerializeField] private float _cameraShakeAmount = 0.2f;
         [SerializeField] private float _cameraShakeDuraton = 0.2f;
 
         private const string PATH_PLAYER = "Match/Character/Player";
+        private const string PATH_PLAYER_AD = "Match/Character/Player_AD";
         private const string PATH_ENEMY = "Match/Character/Enemy_";
         private const string PATH_EQUIPMENT_BOX = "Match/EquipmentBox/EquipmentBox_";
         private const string PATH_COIN = "Match/Coin";
@@ -98,7 +98,10 @@ namespace BabyNightmare.Match
             _rt = new RenderTexture(1024, 1024, 24, RenderTextureFormat.ARGB32);
             _renderCamera.targetTexture = _rt;
 
-            _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
+            if (DevManager.Instance.EnableADSetting)
+                _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER_AD, _playerTF);
+            else
+                _player = ObjectUtil.LoadAndInstantiate<Player>(PATH_PLAYER, _playerTF);
 
             var playerContext = new PlayerContext(
                                     PlayerData.Instance.HP,
@@ -177,7 +180,7 @@ namespace BabyNightmare.Match
 
         public void UseEquipment(EquipmentData equipmentData)
         {
-            var attackableEnemies = new List<EnemyBase>();
+            var enemies = new List<EnemyBase>();
 
             for (var i = 0; i < _aliveEnemies.Count; i++)
             {
@@ -185,14 +188,10 @@ namespace BabyNightmare.Match
                 if (false == enemy.IsAttackable)
                     continue;
 
-                var dist = Vector3.Distance(_player.TF.position, enemy.TF.position);
-                if (dist > _playerAttackRadius)
-                    continue;
-
-                attackableEnemies.Add(enemy);
+                enemies.Add(enemy);
             }
 
-            if (attackableEnemies.Count == 0)
+            if (enemies.Count == 0)
                 return;
 
             EnemyBase target = null;
@@ -200,23 +199,23 @@ namespace BabyNightmare.Match
             var targetType = equipmentData.TargetType;
             switch (targetType)
             {
-                case ETargetType.Nearest:
-                    target = attackableEnemies[0];
-                    break;
                 case ETargetType.Random:
-                    var rand = Random.Range(0, attackableEnemies.Count);
-                    target = attackableEnemies[rand];
+                    var rand = Random.Range(0, enemies.Count);
+                    target = enemies[rand];
+                    break;
+                case ETargetType.Nearest:
+                    target = enemies[enemies.Count - 1];
                     break;
                 case ETargetType.Farthest:
-                    target = attackableEnemies[attackableEnemies.Count - 1];
+                    target = enemies[0];
                     break;
                 case ETargetType.LowestHP:
-                    attackableEnemies.Sort();
-                    target = attackableEnemies[0];
+                    enemies.Sort();
+                    target = enemies[enemies.Count - 1];
                     break;
                 case ETargetType.HightstHP:
-                    attackableEnemies.Sort();
-                    target = attackableEnemies[attackableEnemies.Count - 1];
+                    enemies.Sort();
+                    target = enemies[0];
                     break;
             }
 
@@ -229,18 +228,20 @@ namespace BabyNightmare.Match
             for (var i = 0; i < _aliveEnemies.Count; i++)
             {
                 var enemy = _aliveEnemies[i];
-                var playerPos = _player.TF.position;
-                var enemyPos = enemy.TF.position;
-                var dist = Vector3.Distance(playerPos, enemyPos);
-                if (dist > _playerAttackRadius)
+                if (false == enemy.IsAttackable)
                     continue;
 
-                dist = Vector3.Distance(areaPos, enemyPos);
+                var enemyPos = enemy.TF.position;
+
+                var dist = Vector3.Distance(areaPos, enemyPos);
+                Debug.Log($"{i} {dist} > {radius}");
                 if (dist > radius)
                     continue;
 
                 enemies.Add(enemy);
             }
+
+            Debug.Log($"@@ GetEnemiesInArea {enemies.Count} / {_aliveEnemies.Count}");
 
             return enemies;
         }
