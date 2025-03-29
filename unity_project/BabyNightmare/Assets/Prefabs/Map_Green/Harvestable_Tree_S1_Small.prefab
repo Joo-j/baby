@@ -122,6 +122,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2662928274835220858}
     m_Modifications:
+    - target: {fileID: 3341901277079249416, guid: 9c3c0ded0b9be944a8f2e7f133936933, type: 3}
+      propertyPath: m_Name
+      value: Tree_H_Small
+      objectReference: {fileID: 0}
+    - target: {fileID: 4833400730865479749, guid: 9c3c0ded0b9be944a8f2e7f133936933, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 7131945598728336205, guid: 7a2c42706b7ec4fcb90f6e885b245c3b, type: 3}
     - target: {fileID: 5552673802331861090, guid: 9c3c0ded0b9be944a8f2e7f133936933, type: 3}
       propertyPath: m_RootOrder
       value: 0
