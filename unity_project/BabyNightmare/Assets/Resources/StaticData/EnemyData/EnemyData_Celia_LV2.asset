@@ -24,5 +24,5 @@ MonoBehaviour:
   Coin_Min: 12
   Coin_Max: 21
   SpawnOrder: 2
-  Spawn_Delay_Min: 2
-  Spawn_Delay_Max: 2.5
+  Spawn_Delay_Min: 1.2
+  Spawn_Delay_Max: 1.8
