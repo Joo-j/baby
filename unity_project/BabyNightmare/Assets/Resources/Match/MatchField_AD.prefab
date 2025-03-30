@@ -122,7 +122,6 @@ MonoBehaviour:
   _midCameraPos: {x: 0, y: 10, z: -10}
   _hightCameraPos: {x: 0, y: 11, z: -10}
   _groundMoveAmount: 5
-  _playerAttackRadius: 11
   _cameraMoveDuration: 0.5
   _cameraShakeAmount: 0.04
   _cameraShakeDuraton: 0.01
@@ -286,7 +285,7 @@ Camera:
   far clip plane: 300
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 7.6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
