@@ -208,10 +208,10 @@ namespace BabyNightmare.Match
                     break;
                 case ETargetType.Nearest:
                     var count = enemies.Count;
-                    target = enemies[Random.Range(count / 2, count)];
+                    target = enemies[Random.Range(0, count / 2)];
                     break;
                 case ETargetType.Farthest:
-                    target = enemies[0];
+                    target = enemies[enemies.Count - 1];
                     break;
                 case ETargetType.LowestHP:
                     enemies.Sort();
