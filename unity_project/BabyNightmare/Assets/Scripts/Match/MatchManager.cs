@@ -63,7 +63,7 @@ namespace BabyNightmare.Match
 
             if (true == DevManager.Instance.EnableADSetting)
             {
-                chapterData = StaticDataManager.Instance.GetChapterData(10000);
+                chapterData = StaticDataManager.Instance.GetChapterData(DevManager.Instance.ADSettingNumber);
                 _waveDataList = StaticDataManager.Instance.GetWaveDataList(chapterData.WaveDataGroup);
             }
 

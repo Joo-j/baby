@@ -19,6 +19,7 @@ namespace BabyNightmare
     public class DevManager : SingletonBase<DevManager>
     {
         public bool EnableADSetting { get; private set; } = true;
+        public int ADSettingNumber { get; private set; } = 10000;
 
         public void Init()
         {
@@ -46,6 +47,8 @@ namespace BabyNightmare
             CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.Currency, "Set Gem", "set gem amount", SetGem);
 
             CheatManager<ECheatGroup>.Instance.RegisterCheckBox(ECheatGroup.ADSetting, "Enable AD Setting", "enable AD Setting", (on) => EnableADSetting = on);
+            CheatManager<ECheatGroup>.Instance.RegisterInputField(ECheatGroup.ADSetting, "Set AD Setting Number", "10000 or 10001", (text) => ADSettingNumber = int.Parse(text));
+
         }
 
         private string GetTimeText(float seconds)
