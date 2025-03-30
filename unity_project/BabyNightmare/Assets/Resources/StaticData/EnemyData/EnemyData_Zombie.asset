@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13cc793ec93e943269ccc7d7862892d4, type: 3}
+  m_Name: EnemyData_Zombie
+  m_EditorClassIdentifier: 
+  ID: 117
+  Type: 18
+  Damage: 18
+  Health: 25
+  Attack_Interval: 2.5
+  Move_Step_Duration: 0.8
+  Move_Step_Speed: 1.4
+  Stop_Step_Duration: 1.1
+  Attack_Radius: 4
+  Coin_Min: 10
+  Coin_Max: 19
+  SpawnOrder: 4
+  Spawn_Delay_Min: 0.1
+  Spawn_Delay_Max: 0.5
