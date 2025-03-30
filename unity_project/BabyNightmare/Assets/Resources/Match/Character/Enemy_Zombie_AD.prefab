@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 4.5
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 4911859585667069030, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -253,6 +253,18 @@ PrefabInstance:
       value: Zombie
       objectReference: {fileID: 0}
     - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -291,6 +303,10 @@ PrefabInstance:
     - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 657633904645577163, guid: e6b243c7d2d204189b11006445a6ce63, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

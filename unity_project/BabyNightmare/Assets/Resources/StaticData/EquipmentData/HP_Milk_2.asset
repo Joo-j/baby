@@ -20,7 +20,7 @@ MonoBehaviour:
   - Type: 0
     Value: 6
   Desc: Restores warmth and blasts with milk light.
-  Prob: 4
+  Prob: 0
   DamageType: 0
   TargetType: 0
   Radius: 1

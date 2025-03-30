@@ -15,15 +15,17 @@ MonoBehaviour:
   ID: 1112
   Type: 11
   Level: 2
-  Prob: 3
+  CoolTime: 7
   StatDataList:
   - Type: 2
     Value: 5
-  CoolTime: 7
+  Desc: Pillow shield that blocks with dreamy power.
+  Prob: 0
   DamageType: 0
+  TargetType: 0
+  Radius: 1
   Shape:
     _column: 1
     _row: 1
     _shape: 01
-  Desc: Pillow shield that blocks with dreamy power.
   Mesh: {fileID: 7266657207723659057, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

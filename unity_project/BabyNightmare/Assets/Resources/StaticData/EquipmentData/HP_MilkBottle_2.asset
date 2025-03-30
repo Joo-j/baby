@@ -22,11 +22,12 @@ MonoBehaviour:
   - Type: 1
     Value: 8
   Desc: Thrown bottle that explodes on impact.
-  Prob: 2
+  Prob: 0
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1
     _row: 2
-    _shape: 0101
+    _shape: 01
   Mesh: {fileID: -4906668483575743339, guid: b4336cb43c630430cbbb9a1a0cd6ffb5, type: 3}

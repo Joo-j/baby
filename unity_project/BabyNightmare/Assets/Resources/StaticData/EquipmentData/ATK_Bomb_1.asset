@@ -18,7 +18,7 @@ MonoBehaviour:
   CoolTime: 3
   StatDataList:
   - Type: 1
-    Value: 16
+    Value: 10
   Desc: Rattling toy bomb with a powdery boom.
   Prob: 3
   DamageType: 1

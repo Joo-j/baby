@@ -148,6 +148,8 @@ namespace BabyNightmare.StaticData
         Zombie_AD,
 
         Zombie,
+
+        Sullivan_AD,
     }
 
     public enum ESizeType

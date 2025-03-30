@@ -20,8 +20,9 @@ MonoBehaviour:
   - Type: 3
     Value: 4
   Desc: "Baby\u2019s pouch\u2014throws random stuff with force."
-  Prob: 3
+  Prob: 0
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1
