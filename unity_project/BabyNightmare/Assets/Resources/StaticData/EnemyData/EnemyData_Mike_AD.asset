@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 10000
   Type: 16
-  Damage: 18
+  Damage: 3
   Health: 25
   Attack_Interval: 2.5
-  Move_Step_Duration: 0.8
-  Move_Step_Speed: 1.4
+  Move_Step_Duration: 1
+  Move_Step_Speed: 1.1
   Stop_Step_Duration: 1.1
   Attack_Radius: 4
   Coin_Min: 10

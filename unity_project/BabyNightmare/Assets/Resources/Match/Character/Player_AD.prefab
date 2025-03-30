@@ -1568,9 +1568,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6513444777938993050, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8543725099143450266}
-    - targetCorrespondingSourceObject: {fileID: 6513444777938993050, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5217716635517741925}
   m_SourcePrefab: {fileID: 100100000, guid: 5c2707e11086841cd871869155e62eb3, type: 3}
 --- !u!114 &1093458915853520808 stripped
 MonoBehaviour:
@@ -1606,15 +1603,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _eulerAngle: {x: 0, y: 0, z: 0}
---- !u!225 &5217716635517741925
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8657191750371268775}
-  m_Enabled: 1
-  m_Alpha: 0
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
