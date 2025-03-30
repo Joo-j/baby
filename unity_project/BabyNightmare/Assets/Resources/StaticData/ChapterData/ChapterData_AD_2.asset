@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a6cbd1490e424a66803dfaf4ba6b97d, type: 3}
-  m_Name: ChapterData_AD
+  m_Name: ChapterData_AD_2
   m_EditorClassIdentifier: 
-  Chapter: 10000
+  Chapter: 10001
   Title: AD
   Field: {fileID: 3245723489211131335, guid: b1a56cc93a42045a59a8d1a389dc53dd, type: 3}
   Icon: {fileID: 21300000, guid: ea0c63c8f5d0c443cb66b41cbd062133, type: 3}
-  WaveDataGroup: 10000
+  WaveDataGroup: 10001
