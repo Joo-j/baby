@@ -53,6 +53,12 @@ namespace BabyNightmare
             _titleTMP.text = _titleText;
             _levelTMP.text = $"LV.{level}";
 
+            if (null != _fx && null != _fx.gameObject)
+            {
+                FXPool.Instance.Return(_fx);
+                _fx = null;
+            }
+
             if (level > _level && true == showFX)
             {
                 StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.2f, CurveHelper.Preset.Linear, 0.1f));
@@ -72,12 +78,6 @@ namespace BabyNightmare
             _bg.sprite = on ? _focusBG : _normalBG;
             if (on)
                 StartCoroutine(SimpleLerp.Co_BounceScale(transform, Vector3.one * 1.1f, CurveHelper.Preset.Linear, 0.1f));
-        }
-
-        private void OnDisable()
-        {
-            if (null != _fx)
-                FXPool.Instance.Return(_fx);
         }
     }
 }
