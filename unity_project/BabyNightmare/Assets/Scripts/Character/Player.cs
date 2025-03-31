@@ -240,23 +240,36 @@ namespace BabyNightmare.Character
                                     break;
                             }
 
+                            var targetPos = enemy.HitPoint.position;
+
                             if (i == 0)
-                                StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
+                            {
+                                switch (equipmentData.DamageType)
+                                {
+                                    case EDamageType.Direct:
+                                        StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
+                                        break;
+                                    case EDamageType.Area:
+                                        StartCoroutine(Co_ThrowProjectile(equipmentData, targetPos, OnThrow));
+                                        break;
+                                    default:
+                                        StartCoroutine(Co_ThrowProjectile(equipmentData, enemy.HitPoint, OnThrow));
+                                        break;
+                                }
+                            }
                             else
                                 OnThrow();
 
                             void OnThrow()
                             {
-                                var pos = enemy.HitPoint.position;
-
                                 switch (equipmentData.DamageType)
                                 {
                                     case EDamageType.Direct:
                                         enemy?.ReceiveAttack(value, isCritical);
                                         break;
                                     case EDamageType.Area:
-                                        pos.y = 0;
-                                        var enemies = _context.GetEnemiesInArea?.Invoke(pos, equipmentData.Radius);
+                                        targetPos.y = 0;
+                                        var enemies = _context.GetEnemiesInArea?.Invoke(targetPos, equipmentData.Radius);
                                         for (var j = 0; j < enemies.Count; j++)
                                         {
                                             enemies[j]?.ReceiveAttack(value, isCritical);
@@ -267,17 +280,17 @@ namespace BabyNightmare.Character
 
                                 switch (equipmentData.Type)
                                 {
-                                    case EEquipmentType.Bomb:
-                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, pos);
-                                        AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
-                                        break;
-                                    case EEquipmentType.Missile:
-                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, pos);
-                                        AudioManager.PlaySFX("AudioClip/Projectile_Missile");
-                                        break;
                                     case EEquipmentType.WaterGun:
                                         FXPool.Instance.ShowTemporary(EFXType.Projectile_WaterGun, enemy.HitPoint.position);
                                         AudioManager.PlaySFX("AudioClip/Projectile_WaterGun");
+                                        break;
+                                    case EEquipmentType.Bomb:
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Bomb, targetPos);
+                                        AudioManager.PlaySFX("AudioClip/Projectile_Bomb");
+                                        break;
+                                    case EEquipmentType.Missile:
+                                        FXPool.Instance.ShowTemporary(EFXType.Projectile_Missle, targetPos);
+                                        AudioManager.PlaySFX("AudioClip/Projectile_Missile");
                                         break;
                                 }
                             }
@@ -317,8 +330,6 @@ namespace BabyNightmare.Character
                                 StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
                             else
                                 OnThrow();
-
-                            StartCoroutine(Co_ThrowProjectile(equipmentData, transform, OnThrow));
 
                             void OnThrow()
                             {
@@ -392,6 +403,43 @@ namespace BabyNightmare.Character
             }
 
             pt.TF.position = targetTF.position;
+            ProjectilePool.Instance.Return(pt);
+
+            doneCallback?.Invoke();
+        }
+
+
+
+        private IEnumerator Co_ThrowProjectile(EquipmentData data, Vector3 targetPos, Action doneCallback)
+        {
+            var ptPath = $"{PATH_PROJECTILE_DATA}{data.ID}";
+            var ptData = Resources.Load<ProjectileData>(ptPath);
+
+            var pt = ProjectilePool.Instance.Get();
+            pt.TF.position = _throwStartTF.position;
+            pt.TF.rotation = Quaternion.identity;
+            pt.Init(ptData, data.Level);
+
+            var duration = pt.Duration;
+            var curve = pt.Curve;
+            var startAngle = Vector3.zero;
+            var targetAngle = pt.TargetAngle;
+            var startPos = pt.TF.position;
+
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                var factor = curve.Evaluate(elapsed / duration);
+                var midPos = Vector3.Lerp(startPos, targetPos, 0.5f);
+
+                midPos.y += pt.BezierHeight;
+                pt.TF.position = VectorExtensions.CalcBezier(startPos, midPos, targetPos, factor);
+                pt.TF.eulerAngles = Vector3.Lerp(startAngle, targetAngle, factor);
+                yield return null;
+            }
+
+            pt.TF.position = targetPos;
             ProjectilePool.Instance.Return(pt);
 
             doneCallback?.Invoke();
