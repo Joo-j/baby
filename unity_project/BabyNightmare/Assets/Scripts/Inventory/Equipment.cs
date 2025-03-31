@@ -47,11 +47,13 @@ namespace BabyNightmare.InventorySystem
             if (null != _levelFX)
             {
                 FXPool.Instance.Return(_levelFX);
+                _levelFX = null;
             }
 
             if (null != _mergeFX)
             {
                 FXPool.Instance.Return(_mergeFX);
+                _mergeFX = null;
             }
         }
 
@@ -72,6 +74,18 @@ namespace BabyNightmare.InventorySystem
             _iconOutline.sprite = icon_outline;
             _icon.sprite = Resources.Load<Sprite>(iconPath);
             _levelTMP.text = $"LV.{Data.Level}";
+
+            if (null != _levelFX)
+            {
+                FXPool.Instance.Return(_levelFX);
+                _levelFX = null;
+            }
+
+            if (null != _mergeFX)
+            {
+                FXPool.Instance.Return(_mergeFX);
+                _mergeFX = null;
+            }
 
             if (data.Level >= 2)
             {
