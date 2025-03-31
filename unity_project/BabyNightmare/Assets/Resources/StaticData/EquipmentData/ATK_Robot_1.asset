@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1008
   Type: 7
   Level: 1
-  CoolTime: 7.5
+  CoolTime: 5.5
   StatDataList:
   - Type: 1
     Value: 40
   Desc: A toy robot that zaps with tiny lasers.
   Prob: 1
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 2

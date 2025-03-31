@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 115
   Type: 12
-  SizeType: 2
   Damage: 9.6
-  Health: 48
+  Health: 52
   Attack_Interval: 1.9
   Move_Step_Duration: 0.9
   Move_Step_Speed: 3.15

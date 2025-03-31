@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 103
   Type: 0
-  SizeType: 2
   Damage: 4
-  Health: 20
+  Health: 25
   Attack_Interval: 1.9
   Move_Step_Duration: 1.2
   Move_Step_Speed: 2.1

@@ -15,13 +15,14 @@ MonoBehaviour:
   ID: 1003
   Type: 2
   Level: 1
-  CoolTime: 4.3
+  CoolTime: 4.6
   StatDataList:
   - Type: 1
     Value: 28
   Desc: ' A rocking horse spirit that charges forward.'
   Prob: 2
   DamageType: 0
+  TargetType: 0
   Radius: 1
   Shape:
     _column: 1
