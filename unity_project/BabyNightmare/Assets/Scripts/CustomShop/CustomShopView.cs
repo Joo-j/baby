@@ -141,12 +141,15 @@ namespace BabyNightmare.CustomShop
             gameObject.SetActive(false);
         }
 
-        public void RefreshPurchase(HashSet<int> hasItemSet)
+        public void RefreshPurchase(HashSet<int> hasItemSet, int playerGem)
         {
-            foreach (var id in hasItemSet)
+            foreach (var pair_1 in _itemViewDict)
             {
-                var itemView = GetItemView(id);
-                itemView.RefreshPurchase(true);
+                var typeDict = pair_1.Value;
+                foreach (var pair_2 in typeDict)
+                {
+                    pair_2.Value.RefreshPurchase(hasItemSet.Contains(pair_2.Key), playerGem);
+                }
             }
         }
 

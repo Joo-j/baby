@@ -108,7 +108,7 @@ namespace BabyNightmare.CustomShop
             }
 
             _customShopView.Show();
-            _customShopView.RefreshPurchase(_hasItems);
+            _customShopView?.RefreshPurchase(_hasItems, PlayerData.Instance.Gem);
 
             foreach (var id in _equipItems)
             {
@@ -172,7 +172,7 @@ namespace BabyNightmare.CustomShop
             if (true == equip)
                 Equip(itemID);
 
-            _customShopView?.RefreshPurchase(_hasItems);
+            _customShopView?.RefreshPurchase(_hasItems, PlayerData.Instance.Gem);
 
             Save();
             GlobalEventManager.AddValue(EGlobalEventType.Purchase_CustomItem, 1);

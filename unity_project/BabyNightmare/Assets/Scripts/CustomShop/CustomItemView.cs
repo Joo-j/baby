@@ -61,7 +61,19 @@ namespace BabyNightmare.CustomShop
             else
                 IMG_Price_NoPurchase.sprite = currencyIcon;
 
-            RefreshPurchase(false);
+
+            switch (_shopData.CurrencyType)
+            {
+                case ECurrencyType.Gem:
+                    TMP_Price_Purchase.text = $"{_shopData.Price_Value}";
+                    TMP_Price_No_Purchase.text = $"{_shopData.Price_Value}";
+                    break;
+
+                default:
+                    TMP_Price_Purchase.gameObject.SetActive(false);
+                    TMP_Price_No_Purchase.gameObject.SetActive(false);
+                    break;
+            }
         }
 
         public void RefreshSelect(bool isSelect)
@@ -74,7 +86,7 @@ namespace BabyNightmare.CustomShop
             GO_Purchased.SetActive(isEquip);
         }
 
-        public void RefreshPurchase(bool purchased)
+        public void RefreshPurchase(bool purchased, int playerGem)
         {
             if (purchased == true)
             {
@@ -84,25 +96,10 @@ namespace BabyNightmare.CustomShop
                 return;
             }
 
-            GO_PurchaseButton.gameObject.SetActive(true);
-            var price = _shopData.Price_Value;
-
-            var isPurchasable = PlayerData.Instance.Gem >= price;
+            Debug.Log($"{playerGem} >= {_shopData.Price_Value}");
+            var isPurchasable = playerGem >= _shopData.Price_Value;
             GO_PurchaseButton.SetActive(isPurchasable);
             GO_NoPurchaseButton.SetActive(!isPurchasable);
-
-            switch (_shopData.CurrencyType)
-            {
-                case ECurrencyType.Gem:
-                    TMP_Price_Purchase.text = $"{price}";
-                    TMP_Price_No_Purchase.text = $"{price}";
-                    break;
-
-                default:
-                    TMP_Price_Purchase.gameObject.SetActive(false);
-                    TMP_Price_No_Purchase.gameObject.SetActive(false);
-                    break;
-            }
         }
 
         public void SetActive_RedDot(bool active)
