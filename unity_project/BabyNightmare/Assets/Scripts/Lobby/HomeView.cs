@@ -19,6 +19,7 @@ namespace BabyNightmare.Lobby
         [SerializeField] private TextMeshProUGUI _titleTMP;
         [SerializeField] private Transform _buttonTF;
         [SerializeField] private AnimationCurve _bounceCurve;
+        [SerializeField] private GameObject _cheatButtonGO;
 
         private Action _startGame = null;
         private bool _isStarted = false;
@@ -26,6 +27,11 @@ namespace BabyNightmare.Lobby
         public void Init(Action startGame)
         {
             _startGame = startGame;
+
+#if UNITY_EDITOR
+            _cheatButtonGO.SetActive(true);
+#endif
+
         }
 
         public void Refresh(ChapterData chapterData)
